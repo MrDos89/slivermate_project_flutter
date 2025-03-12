@@ -42,7 +42,7 @@ class _CategoryPageState extends State<CategoryPage> {
       } else {
         showIndoor = isIndoor;
         showOutdoor = !isIndoor;
-        movedToTop = true; // 버튼을 상단으로 이동
+        movedToTop = true; // 버튼을 상단으로 이동하
       }
     });
   }
