@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
 /// 장바구니 아이템 예시용 클래스
 class CartItem {
@@ -70,40 +71,43 @@ class _PurchasePageState extends State<PurchasePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // 상단 AppBar
-      appBar: AppBar(
-        title: const Text('결제화면'),
-        centerTitle: true,
-        backgroundColor: Colors.pink,
-      ),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // 메인 내용: 스크롤 가능 영역
-            SingleChildScrollView(
-              padding: const EdgeInsets.only(bottom: 100),
-              child: Column(
-                children: [
-                  // 상품 목록 + 수량 조절
-                  _buildCartList(),
-                  const Divider(thickness: 1),
-                  // 가격 요약
-                  _buildPriceSummary(),
-                  const Divider(thickness: 1),
-                  // 결제수단 선택
-                  _buildPaymentMethods(),
-                ],
+    return MainLayout(
+      // 🔹 MainLayout 적용 (푸터 추가됨)
+      child: Scaffold(
+        // 상단 AppBar
+        appBar: AppBar(
+          title: const Text('결제화면'),
+          centerTitle: true,
+          backgroundColor: Colors.pink,
+        ),
+        body: SafeArea(
+          child: Stack(
+            children: [
+              // 메인 내용: 스크롤 가능 영역
+              SingleChildScrollView(
+                padding: const EdgeInsets.only(bottom: 100),
+                child: Column(
+                  children: [
+                    // 상품 목록 + 수량 조절
+                    _buildCartList(),
+                    const Divider(thickness: 1),
+                    // 가격 요약
+                    _buildPriceSummary(),
+                    const Divider(thickness: 1),
+                    // 결제수단 선택
+                    _buildPaymentMethods(),
+                  ],
+                ),
               ),
-            ),
-            // 하단 고정: 총 결제금액 버튼
-            Positioned(
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: _buildBottomBar(context),
-            ),
-          ],
+              // 하단 고정: 총 결제금액 버튼
+              Positioned(
+                left: 0,
+                right: 0,
+                bottom: 0,
+                child: _buildBottomBar(context),
+              ),
+            ],
+          ),
         ),
       ),
     );
