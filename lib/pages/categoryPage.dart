@@ -49,6 +49,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    // 풋터 적용
     return MainLayout(
       child: Scaffold(
         appBar: AppBar(title: const Text("카테고리 선택")),
