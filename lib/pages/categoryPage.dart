@@ -68,14 +68,19 @@ class _CategoryPageState extends State<CategoryPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _buildCategoryButton(
-                    "실내 활동",
-                    () => _onCategorySelected(true),
-                  ),
-                  const SizedBox(height: 15), // 큰버튼 간격 조정
-                  _buildCategoryButton(
-                    "실외 활동",
-                    () => _onCategorySelected(false),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildCategoryButton(
+                        "실내 활동",
+                        () => _onCategorySelected(true),
+                      ),
+                      const SizedBox(width: 20), // 버튼 사이 간격 추가
+                      _buildCategoryButton(
+                        "실외 활동",
+                        () => _onCategorySelected(false),
+                      ),
+                    ],
                   ),
                   if (movedToTop)
                     const SizedBox(height: 30), // 큰버튼과 카드 버튼 사이 간격 추가
@@ -120,8 +125,11 @@ class _CategoryPageState extends State<CategoryPage> {
     return Center(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          minimumSize: const Size(220, 55), // 큰버튼 크기 유지
-          textStyle: const TextStyle(fontSize: 18),
+          minimumSize: const Size(150, 120), // 버튼 크기 유지
+          textStyle: const TextStyle(fontSize: 18), // 버튼 내부 텍스트 크기 유지
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero, // 🔴 버튼을 완전 각지게 설정
+          ),
         ),
         onPressed: onPressed,
         child: Text(title),
