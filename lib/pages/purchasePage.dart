@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
-/// 장바구니 아이템 예시용 클래스
+/// 강의 영상(또는 상품) 데이터 모델
 class CartItem {
   String name;
   int price;
@@ -14,6 +14,16 @@ class CartItem {
     required this.quantity,
     required this.imageUrl,
   });
+
+  // 실제 API 응답 JSON을 객체로 변환할 때 사용
+  factory CartItem.fromJson(Map<String, dynamic> json) {
+    return CartItem(
+      name: json['name'],
+      price: json['price'],
+      quantity: json['quantity'] ?? 1,
+      imageUrl: json['imageUrl'],
+    );
+  }
 }
 
 class PurchasePage extends StatefulWidget {
@@ -24,15 +34,7 @@ class PurchasePage extends StatefulWidget {
 }
 
 class _PurchasePageState extends State<PurchasePage> {
-  // 예시 상품 목록
-  final List<CartItem> cartItems = [
-    CartItem(
-      name: '골프 강의 영상',
-      price: 18000,
-      quantity: 1,
-      imageUrl: 'https://via.placeholder.com/60', // 썸넬 이미지 or 썸넬 영상
-    ),
-  ];
+  List<CartItem> cartItems = []; // 선택한 강의 영상 데이터가 들어감
 
   // 결제수단 분류
   final List<String> creditCards = [
@@ -59,7 +61,7 @@ class _PurchasePageState extends State<PurchasePage> {
     return sum;
   }
 
-  /// 최종 결제금액 (배송비가 없다면 itemsTotal만 사용)
+  /// 최종 결제금액 (배송비 없음 → itemsTotal만 사용)
   int get totalPayment => itemsTotal;
 
   /// 결제수단을 선택했을 때
@@ -69,12 +71,37 @@ class _PurchasePageState extends State<PurchasePage> {
     });
   }
 
+  /// 실제 데이터를 가져오기 위한 코드
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    /// IntroducePage에서 선택한 강의 영상 데이터를 arguments로 받음
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args != null && args is Map<String, dynamic>) {
+      final selectedLecture = CartItem.fromJson(args);
+      setState(() {
+        cartItems = [selectedLecture];
+      });
+    } else {
+      // 만약 arguments가 없다면 기본 데이터 사용 (테스트용)(데이터가없으므로 창에구현)
+      setState(() {
+        cartItems = [
+          CartItem(
+            name: '골프 강의 영상',
+            price: 18000,
+            quantity: 1,
+            imageUrl: 'https://via.placeholder.com/60',
+          ),
+        ];
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      // 🔹 MainLayout 적용 (푸터 추가됨)
       child: Scaffold(
-        // 상단 AppBar
         appBar: AppBar(
           title: const Text('결제화면'),
           centerTitle: true,
@@ -113,7 +140,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 장바구니 상품 목록
+  /// 장바구니 상품 목록 (수량 조절 가능)
   Widget _buildCartList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -183,7 +210,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 결제수단 목록
+  /// 결제수단 목록 (카드형식)
   Widget _buildPaymentMethods() {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -248,7 +275,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 하단: 총 결제금액 & 결제 버튼
+  /// 하단: 총 결제금액 & 결제하기 버튼
   Widget _buildBottomBar(BuildContext context) {
     return Container(
       height: 80,
@@ -256,7 +283,6 @@ class _PurchasePageState extends State<PurchasePage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Row(
         children: [
-          // 총 결제금액
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,7 +302,6 @@ class _PurchasePageState extends State<PurchasePage> {
               ],
             ),
           ),
-          // 결제하기 버튼
           ElevatedButton(
             onPressed: () {
               if (selectedPaymentMethod == null) {
