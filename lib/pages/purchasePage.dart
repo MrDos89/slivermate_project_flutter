@@ -84,7 +84,7 @@ class _PurchasePageState extends State<PurchasePage> {
         cartItems = [selectedLecture];
       });
     } else {
-      // 만약 arguments가 없다면 기본 데이터 사용 (테스트용)(데이터가없으므로 창에구현)
+      // 만약 arguments가 없다면 기본 데이터 사용 (테스트용)
       setState(() {
         cartItems = [
           CartItem(
@@ -108,39 +108,27 @@ class _PurchasePageState extends State<PurchasePage> {
           backgroundColor: Colors.pink,
         ),
         body: SafeArea(
-          child: Stack(
-            children: [
-              // 메인 내용: 스크롤 가능 영역
-              SingleChildScrollView(
-                padding: const EdgeInsets.only(bottom: 100),
-                child: Column(
-                  children: [
-                    // 상품 목록 + 수량 조절
-                    _buildCartList(),
-                    const Divider(thickness: 1),
-                    // 가격 요약
-                    _buildPriceSummary(),
-                    const Divider(thickness: 1),
-                    // 결제수단 선택
-                    _buildPaymentMethods(),
-                  ],
-                ),
-              ),
-              // 하단 고정: 총 결제금액 버튼
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: _buildBottomBar(context),
-              ),
-            ],
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(vertical: 16),
+            child: Column(
+              children: [
+                // 상품 목록 (수량 조절 기능 제거)
+                _buildCartList(),
+                const Divider(thickness: 1),
+                // 결제수단 선택
+                _buildPaymentMethods(),
+                const Divider(thickness: 1),
+                // 가격 요약 (총상품금액, 총결제예상금액)
+                _buildPriceSummary(),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  /// 장바구니 상품 목록 (수량 조절 가능)
+  /// 장바구니 상품 목록 (수량 조절 제거)
   Widget _buildCartList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -151,62 +139,10 @@ class _PurchasePageState extends State<PurchasePage> {
         return ListTile(
           leading: Image.network(item.imageUrl, width: 60, height: 60),
           title: Text(item.name, style: const TextStyle(fontSize: 16)),
+          // 수량 조절 기능 제거 → subtitle만 가격 표시
           subtitle: Text('${item.price}원'),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                icon: const Icon(Icons.remove),
-                onPressed: () {
-                  setState(() {
-                    if (item.quantity > 1) {
-                      item.quantity--;
-                    }
-                  });
-                },
-              ),
-              Text('${item.quantity}'),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  setState(() {
-                    item.quantity++;
-                  });
-                },
-              ),
-            ],
-          ),
         );
       },
-    );
-  }
-
-  /// 가격 요약: 상품 합계, 총 결제금액
-  Widget _buildPriceSummary() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Column(
-        children: [
-          _buildRowItem('총 상품금액', '$itemsTotal원'),
-          const SizedBox(height: 8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                '총 결제예상금액',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Text(
-                '$totalPayment원',
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 
@@ -275,58 +211,29 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 하단: 총 결제금액 & 결제하기 버튼
-  Widget _buildBottomBar(BuildContext context) {
-    return Container(
-      height: 80,
-      color: Colors.white,
+  /// 가격 요약: (총 상품금액, 총 결제예상금액)
+  Widget _buildPriceSummary() {
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Row(
+      child: Column(
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '총 결제금액',
-                  style: TextStyle(fontSize: 14, color: Colors.grey),
+          _buildRowItem('총 상품금액', '$itemsTotal원'),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '총 결제예상금액',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              Text(
+                '$totalPayment원',
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  '$totalPayment원',
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (selectedPaymentMethod == null) {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text('결제수단을 선택해주세요.')));
-                return;
-              }
-              // 실제 결제 로직 추가
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    '[$selectedPaymentMethod]로 결제 진행 (${totalPayment}원)',
-                  ),
-                ),
-              );
-            },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.pink,
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-            ),
-            child: Text(
-              '총 ${totalPayment}원 결제하기',
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
+              ),
+            ],
           ),
         ],
       ),
