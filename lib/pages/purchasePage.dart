@@ -139,7 +139,7 @@ class _PurchasePageState extends State<PurchasePage> {
           // 기존: Image.network(item.imageUrl)
           // 변경: Image.asset('lib/images/골프.jpg')
           leading: Image.asset(
-            'lib/images/골프.jpg', // pubspec.yaml에 등록한 경로
+            'lib/images/골프.jpg', // 임시 골프 이미지 등록
             width: 60,
             height: 60,
             fit: BoxFit.cover,
