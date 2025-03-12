@@ -73,6 +73,7 @@ flutter:
 #    - lib/images/surfing.jpg
     - lib/images/default.jpg
     - lib/images/dnl.jpg
+    - lib/images/골프.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
-/// 강의 영상(또는 상품) 데이터 모델
 class CartItem {
   String name;
   int price;
@@ -15,7 +14,6 @@ class CartItem {
     required this.imageUrl,
   });
 
-  // 실제 API 응답 JSON을 객체로 변환할 때 사용
   factory CartItem.fromJson(Map<String, dynamic> json) {
     return CartItem(
       name: json['name'],
@@ -34,7 +32,7 @@ class PurchasePage extends StatefulWidget {
 }
 
 class _PurchasePageState extends State<PurchasePage> {
-  List<CartItem> cartItems = []; // 선택한 강의 영상 데이터가 들어감
+  List<CartItem> cartItems = []; // 선택한 강의 영상 데이터
 
   // 결제수단 분류
   final List<String> creditCards = [
@@ -49,7 +47,6 @@ class _PurchasePageState extends State<PurchasePage> {
   final List<String> pays = ['카카오페이', '삼성페이', '네이버페이', '애플페이'];
   final List<String> etc = ['QR코드 결제', '핸드폰 결제'];
 
-  // 선택된 결제수단
   String? selectedPaymentMethod;
 
   /// 장바구니 총합
@@ -61,22 +58,21 @@ class _PurchasePageState extends State<PurchasePage> {
     return sum;
   }
 
-  /// 최종 결제금액 (배송비 없음 → itemsTotal만 사용)
+  /// 최종 결제금액
   int get totalPayment => itemsTotal;
 
-  /// 결제수단을 선택했을 때
+  /// 결제수단 선택
   void onPaymentMethodSelected(String method) {
     setState(() {
       selectedPaymentMethod = method;
     });
   }
 
-  /// 실제 데이터를 가져오기 위한 코드
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    /// IntroducePage에서 선택한 강의 영상 데이터를 arguments로 받음
+    // IntroducePage에서 넘어온 데이터 확인
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args != null && args is Map<String, dynamic>) {
       final selectedLecture = CartItem.fromJson(args);
@@ -84,13 +80,14 @@ class _PurchasePageState extends State<PurchasePage> {
         cartItems = [selectedLecture];
       });
     } else {
-      // 만약 arguments가 없다면 기본 데이터 사용 (테스트용)
+      // 테스트용 기본 데이터
       setState(() {
         cartItems = [
           CartItem(
             name: '골프 강의 영상',
             price: 18000,
             quantity: 1,
+            // 실제 사용 시 imageUrl 무시
             imageUrl: 'https://via.placeholder.com/60',
           ),
         ];
@@ -103,7 +100,7 @@ class _PurchasePageState extends State<PurchasePage> {
     return MainLayout(
       child: Scaffold(
         appBar: AppBar(
-          leading: null, // 뒤로가기 버튼 지우기
+          leading: null, // 뒤로가기 버튼 제거
           automaticallyImplyLeading: false,
           title: const Text('결제화면'),
           centerTitle: true,
@@ -114,13 +111,13 @@ class _PurchasePageState extends State<PurchasePage> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
               children: [
-                // 상품 목록 (수량 조절 기능 제거)
+                // 상품 목록
                 _buildCartList(),
                 const Divider(thickness: 1),
-                // 결제수단 선택
+                // 결제수단
                 _buildPaymentMethods(),
                 const Divider(thickness: 1),
-                // 가격 요약 (총상품금액, 총결제예상금액)
+                // 가격 요약
                 _buildPriceSummary(),
               ],
             ),
@@ -130,7 +127,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 장바구니 상품 목록 (수량 조절 제거)
+  /// 상품 목록 (수량 조절 제거)
   Widget _buildCartList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -139,16 +136,21 @@ class _PurchasePageState extends State<PurchasePage> {
       itemBuilder: (context, index) {
         final item = cartItems[index];
         return ListTile(
-          leading: Image.network(item.imageUrl, width: 60, height: 60),
+          // 기존: Image.network(item.imageUrl)
+          // 변경: Image.asset('lib/images/골프.jpg')
+          leading: Image.asset(
+            'lib/images/골프.jpg', // pubspec.yaml에 등록한 경로
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+          ),
           title: Text(item.name, style: const TextStyle(fontSize: 16)),
-          // 수량 조절 기능 제거 → subtitle만 가격 표시
           subtitle: Text('${item.price}원'),
         );
       },
     );
   }
 
-  /// 결제수단 목록 (카드형식)
   Widget _buildPaymentMethods() {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -160,13 +162,12 @@ class _PurchasePageState extends State<PurchasePage> {
           const SizedBox(height: 16),
           _buildPaymentCategory('페이', pays),
           const SizedBox(height: 16),
-          _buildPaymentCategory('기타', etc), // QR, 핸드폰 결제
+          _buildPaymentCategory('기타', etc),
         ],
       ),
     );
   }
 
-  /// 결제수단을 카드형식으로 보여주는 함수
   Widget _buildPaymentCategory(String title, List<String> methods) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -213,7 +214,6 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 가격 요약: (총 상품금액, 총 결제예상금액)
   Widget _buildPriceSummary() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -242,7 +242,6 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// (레이블, 값) 한 줄 표시
   Widget _buildRowItem(String label, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
