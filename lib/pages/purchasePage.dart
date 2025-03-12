@@ -103,6 +103,8 @@ class _PurchasePageState extends State<PurchasePage> {
     return MainLayout(
       child: Scaffold(
         appBar: AppBar(
+          leading: null, // 뒤로가기 버튼 지우기
+          automaticallyImplyLeading: false,
           title: const Text('결제화면'),
           centerTitle: true,
           backgroundColor: Colors.pink,
