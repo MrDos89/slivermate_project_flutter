@@ -58,6 +58,8 @@ class PayModal extends StatelessWidget {
               final item = cartItems[index];
               return ListTile(
                 leading: const Icon(Icons.shopping_cart),
+
+                ///  임시아이콘
                 title: Text(item.name),
                 subtitle: Text('${item.price}원'),
               );
