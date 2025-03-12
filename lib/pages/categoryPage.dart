@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});
@@ -48,59 +49,68 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("카테고리 선택")),
-      body: Stack(
-        children: [
-          AnimatedPositioned(
-            duration: const Duration(milliseconds: 500),
-            curve: Curves.easeInOut,
-            top:
-                movedToTop
-                    ? 50
-                    : MediaQuery.of(context).size.height / 2 - 120, // 버튼 위치 조정
-            left: 0,
-            right: 0,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                _buildCategoryButton("실내 활동", () => _onCategorySelected(true)),
-                const SizedBox(height: 15), // 큰버튼 간격 조정
-                _buildCategoryButton("실외 활동", () => _onCategorySelected(false)),
-                if (movedToTop)
-                  const SizedBox(height: 30), // 큰버튼과 카드 버튼 사이 간격 추가
-              ],
-            ),
-          ),
-          Positioned(
-            top:
-                movedToTop
-                    ? 200
-                    : MediaQuery.of(context).size.height, // 카드 위로 조정
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: AnimatedOpacity(
+    return MainLayout(
+      child: Scaffold(
+        appBar: AppBar(title: const Text("카테고리 선택")),
+        body: Stack(
+          children: [
+            AnimatedPositioned(
               duration: const Duration(milliseconds: 500),
               curve: Curves.easeInOut,
-              opacity: movedToTop ? 1.0 : 0.0, // 애니메이션 효과 추가
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16.0,
-                    vertical: 2.0,
-                  ), // 카드와 버튼 간격 조정
-                  child: Column(
-                    children: [
-                      if (showIndoor) _buildHobbyGrid(indoorHobbies),
-                      if (showOutdoor) _buildHobbyGrid(outdoorHobbies),
-                    ],
+              top:
+                  movedToTop
+                      ? 50
+                      : MediaQuery.of(context).size.height / 2 -
+                          120, // 버튼 위치 조정
+              left: 0,
+              right: 0,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _buildCategoryButton(
+                    "실내 활동",
+                    () => _onCategorySelected(true),
+                  ),
+                  const SizedBox(height: 15), // 큰버튼 간격 조정
+                  _buildCategoryButton(
+                    "실외 활동",
+                    () => _onCategorySelected(false),
+                  ),
+                  if (movedToTop)
+                    const SizedBox(height: 30), // 큰버튼과 카드 버튼 사이 간격 추가
+                ],
+              ),
+            ),
+            Positioned(
+              top:
+                  movedToTop
+                      ? 200
+                      : MediaQuery.of(context).size.height, // 카드 위로 조정
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                opacity: movedToTop ? 1.0 : 0.0, // 애니메이션 효과 추가
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0,
+                      vertical: 2.0,
+                    ), // 카드와 버튼 간격 조정
+                    child: Column(
+                      children: [
+                        if (showIndoor) _buildHobbyGrid(indoorHobbies),
+                        if (showOutdoor) _buildHobbyGrid(outdoorHobbies),
+                      ],
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
