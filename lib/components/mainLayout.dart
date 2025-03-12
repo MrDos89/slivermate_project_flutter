@@ -26,12 +26,12 @@ class MainLayout extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Color(0xFFE6E6FA), // 배경색 (어두운 회색)
         boxShadow: [
-          BoxShadow(
-            color: Colors.black26,
-            blurRadius: 4,
-            spreadRadius: 1,
-            offset: Offset(0, -2),
-          ),
+          // BoxShadow(
+          //   color: Colors.black26,
+          //   blurRadius: 4,
+          //   spreadRadius: 1,
+          //   offset: Offset(0, -2),
+          // ),
         ],
       ),
       child: Row(
