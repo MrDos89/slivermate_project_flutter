@@ -71,6 +71,7 @@ flutter:
 #    - lib/images/running.jpg
 #    - lib/images/surfing.jpg
     - lib/images/default.jpg
+    - lib/images/dnl.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
