@@ -1,27 +1,5 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(KioskApp());
-}
-
-class KioskApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: '키오스크 결제',
-      debugShowCheckedModeBanner: false,
-      home: PurchasePage(),
-    );
-  }
-}
-
-class PurchasePage extends StatefulWidget {
-  const PurchasePage({super.key});
-
-  @override
-  _PurchasePageState createState() => _PurchasePageState();
-}
-
 /// 장바구니 아이템 예시용 클래스
 class CartItem {
   String name;
@@ -37,6 +15,13 @@ class CartItem {
   });
 }
 
+class PurchasePage extends StatefulWidget {
+  const PurchasePage({Key? key}) : super(key: key);
+
+  @override
+  _PurchasePageState createState() => _PurchasePageState();
+}
+
 class _PurchasePageState extends State<PurchasePage> {
   // 예시 상품 목록
   final List<CartItem> cartItems = [
@@ -44,20 +29,8 @@ class _PurchasePageState extends State<PurchasePage> {
       name: '골프 강의 영상',
       price: 18000,
       quantity: 1,
-      imageUrl: 'https://via.placeholder.com/60', // 샘플 이미지  // 썸네일 이미지 사용
+      imageUrl: 'https://via.placeholder.com/60', // 썸넬 이미지 or 썸넬 영상
     ),
-    // CartItem(
-    //   name: '낚시 강의 영상',
-    //   price: 25000,
-    //   quantity: 1,
-    //   imageUrl: 'https://via.placeholder.com/60',
-    // ),
-    // CartItem(
-    //   name: '기본 청바지',
-    //   price: 60000,
-    //   quantity: 1,
-    //   imageUrl: 'https://via.placeholder.com/60',
-    // ),
   ];
 
   // 결제수단 분류
@@ -85,7 +58,7 @@ class _PurchasePageState extends State<PurchasePage> {
     return sum;
   }
 
-  /// 최종 결제금액 (상품 합계 + 배송비)
+  /// 최종 결제금액 (배송비가 없다면 itemsTotal만 사용)
   int get totalPayment => itemsTotal;
 
   /// 결제수단을 선택했을 때
@@ -98,7 +71,7 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 상단 AppBar 대신 직접 제목을 배치하거나, AppBar 사용해도 무방
+      // 상단 AppBar
       appBar: AppBar(
         title: const Text('결제화면'),
         centerTitle: true,
@@ -177,15 +150,13 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 가격 요약: 상품 합계, 배송비, 총 결제예상금액
+  /// 가격 요약: 상품 합계, 총 결제금액
   Widget _buildPriceSummary() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         children: [
           _buildRowItem('총 상품금액', '$itemsTotal원'),
-          const SizedBox(height: 5),
-          // _buildRowItem('배송비', '$shippingCost원'),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
