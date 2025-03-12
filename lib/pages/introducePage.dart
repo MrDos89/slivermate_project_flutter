@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
 class IntroducePage extends StatefulWidget {
   final String category;
@@ -40,135 +41,129 @@ class _IntroducePageState extends State<IntroducePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color(0xFFE6E6FA), // 연보라색 적용 (라벤더)
-        title: Column(
+    return MainLayout(
+      // 메인 레이아웃 적용
+      showPaymentButton: true,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: Color(0xFFE6E6FA),
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                '${widget.category} / ${widget.subCategory}',
+                style: const TextStyle(
+                  fontSize: 16,
+                  color: Colors.white70,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                widget.lectureTitle,
+                style: const TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
+            onPressed: () => Navigator.pop(context),
+          ),
+        ),
+        body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              '${widget.category} / ${widget.subCategory}', // 대분류 / 소분류
-              style: const TextStyle(
-                fontSize: 16,
-                color: Colors.white70,
-                fontWeight: FontWeight.w600,
+            Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 3,
+              color: Colors.grey[300],
+              alignment: Alignment.center,
+              child: const Text(
+                '📌 강의 영상 자리',
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black54,
+                ),
               ),
             ),
-            const SizedBox(height: 4),
-            Text(
-              widget.lectureTitle, // 강의 제목
-              style: const TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child:
+                  isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          const Icon(
+                            Icons.attach_money,
+                            color: Colors.deepPurple,
+                            size: 30,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '${lecturePrice != null ? '${lecturePrice!.toString()}원' : '무료 강의'}',
+                            style: const TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.deepPurple,
+                            ),
+                          ),
+                        ],
+                      ),
+            ),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                child: Container(
+                  padding: const EdgeInsets.all(16.0),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black26,
+                        blurRadius: 6,
+                        spreadRadius: 2,
+                        offset: const Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  child:
+                      isLoading
+                          ? const Center(child: CircularProgressIndicator())
+                          : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                '📖 강의 설명',
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.deepPurple,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              SingleChildScrollView(
+                                child: Text(
+                                  lectureDescription ?? '강의 설명을 불러오지 못했습니다.',
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black87,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                ),
               ),
             ),
           ],
         ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 강의 영상 자리 (현재는 빈 박스)
-          Container(
-            width: double.infinity,
-            height: MediaQuery.of(context).size.height / 3, // 화면의 1/3 크기
-            color: Colors.grey[300], // 임시 배경색
-            alignment: Alignment.center,
-            child: Text(
-              '📌 강의 영상 자리',
-              style: TextStyle(
-                fontSize: 22, //
-                fontWeight: FontWeight.bold,
-                color: Colors.black54,
-              ),
-            ),
-          ),
-          //  강의 금액 (우측 정렬)
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child:
-                isLoading
-                    ? const Center(
-                      child: CircularProgressIndicator(),
-                    ) // 로딩 중이면 인디케이터 표시
-                    : Row(
-                      mainAxisAlignment: MainAxisAlignment.end, // 우측 정렬
-                      children: [
-                        const Icon(
-                          Icons.price_check,
-                          color: Colors.deepPurple,
-                          size: 30,
-                        ),
-                        const SizedBox(width: 8), // 아이콘과 텍스트 간격 조정
-                        Text(
-                          '${lecturePrice != null ? '${lecturePrice!.toString()}원' : '무료 강의'}',
-                          style: const TextStyle(
-                            fontSize: 22, // 🔺 기존 18 → 22으로 키움
-                            fontWeight: FontWeight.bold,
-                            color: Colors.deepPurple, // 동일한 색상 적용
-                          ),
-                        ),
-                      ],
-                    ),
-          ),
-
-          // 📌 강의 설명 (컨테이너 안에 배치)
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Container(
-                padding: const EdgeInsets.all(16.0),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(12),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black26, // 기존보다 더 자연스러운 그림자
-                      blurRadius: 6,
-                      spreadRadius: 2,
-                      offset: const Offset(0, 3),
-                    ),
-                  ],
-                ),
-                child:
-                    isLoading
-                        ? const Center(
-                          child: CircularProgressIndicator(),
-                        ) // 로딩 중이면 인디케이터 표시
-                        : Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            // 📌 강의 설명 제목 추가
-                            Text(
-                              '📖 강의 설명',
-                              style: TextStyle(
-                                fontSize: 22,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.deepPurple, // 연보라색 계열 적용
-                              ),
-                            ),
-                            const SizedBox(height: 10), // 설명과 간격 추가
-                            SingleChildScrollView(
-                              child: Text(
-                                lectureDescription ??
-                                    '강의 설명을 불러오지 못했습니다.', // 설명이 없을 경우 대비
-                                style: const TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black87, // 대비가 높은 검은색으로 설정
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
