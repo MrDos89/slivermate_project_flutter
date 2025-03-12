@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class IntroducePage extends StatefulWidget {
   final String category;
@@ -19,7 +20,9 @@ class IntroducePage extends StatefulWidget {
 
 class _IntroducePageState extends State<IntroducePage> {
   String? lectureDescription; // 강의 설명
-  int? lecturePrice; // 강의 금액 (서버에서 불러올 예정)
+  int? lecturePrice; // 강의 금액
+  int? userId; // 강의 올린 사람 ID
+  DateTime? registerDate; // 강의 등록 시간
   bool isLoading = true; // 로딩 상태
 
   @override
@@ -28,13 +31,15 @@ class _IntroducePageState extends State<IntroducePage> {
     _fetchLectureData(); // 강의 데이터 불러오기
   }
 
-  // 📌 나중에 서버 연결 시, API 호출 부분
+  // 📌 서버에서 강의 데이터 가져오는 함수 (예제)
   Future<void> _fetchLectureData() async {
     await Future.delayed(const Duration(seconds: 2)); // 서버 요청 시뮬레이션 (2초 딜레이)
     setState(() {
       lectureDescription =
           "이 강의는 기초 요가 스트레칭을 배우는 과정으로, 몸의 유연성을 기르고 건강을 유지하는 데 도움을 줍니다.";
       lecturePrice = 15000; // 예제 데이터 (서버에서 받아올 값)
+      userId = 101; // 강의 등록한 사용자 ID (예제)
+      registerDate = DateTime.parse("2024-03-10"); // 강의 등록일 (예제)
       isLoading = false;
     });
   }
@@ -42,11 +47,12 @@ class _IntroducePageState extends State<IntroducePage> {
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      // 메인 레이아웃 적용
       showPaymentButton: true,
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Color(0xFFE6E6FA),
+          leading: null, // 뒤로가기 버튼 지우기
+          automaticallyImplyLeading: false,
           title: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -69,14 +75,11 @@ class _IntroducePageState extends State<IntroducePage> {
               ),
             ],
           ),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.white, size: 28),
-            onPressed: () => Navigator.pop(context),
-          ),
         ),
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            // 📌 강의 영상 자리 (임시)
             Container(
               width: double.infinity,
               height: MediaQuery.of(context).size.height / 3,
@@ -91,31 +94,60 @@ class _IntroducePageState extends State<IntroducePage> {
                 ),
               ),
             ),
+
+            // 📌 강사 정보 & 등록일 & 강의 금액
             Padding(
               padding: const EdgeInsets.all(16.0),
               child:
                   isLoading
                       ? const Center(child: CircularProgressIndicator())
                       : Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Icon(
-                            Icons.attach_money,
-                            color: Colors.deepPurple,
-                            size: 30,
+                          // 👤 등록자 정보 (왼쪽 정렬)
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "강사: User #$userId",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "등록일: ${registerDate != null ? registerDate!.toString().split(" ")[0] : "알 수 없음"}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '${lecturePrice != null ? '${lecturePrice!.toString()}원' : '무료 강의'}',
-                            style: const TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.deepPurple,
-                            ),
+                          // 강의 가격 (오른쪽 정렬)
+                          Row(
+                            children: [
+                              const FaIcon(
+                                FontAwesomeIcons.wonSign,
+                                color: Colors.deepPurple,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 8),
+                              Text(
+                                '${lecturePrice != null ? '${lecturePrice!.toString()}원' : '무료 강의'}',
+                                style: const TextStyle(
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.deepPurple,
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
             ),
+
+            // 📌 강의 설명
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
