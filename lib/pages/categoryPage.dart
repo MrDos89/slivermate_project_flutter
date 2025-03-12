@@ -72,29 +72,19 @@ class _CategoryPageState extends State<CategoryPage> {
     return MainLayout(
       child: Scaffold(
         appBar: PreferredSize(
-          preferredSize: const Size.fromHeight(
-            73,
-          ), // 🔥 원하는 높이 설정 (기본 56 → 150)
+          preferredSize: const Size.fromHeight(73), // 🔥 원하는 높이 설정
           child: AppBar(
+            leading: null, // 뒤로가기 버튼 지우기
+            automaticallyImplyLeading: false,
             title: const Text(
               "카테고리 선택",
               style: TextStyle(
-                color: Colors.white, // 글씨를 흰색으로 변경
+                color: Colors.white, // ✅ 기존 글씨색 유지
                 fontWeight: FontWeight.bold,
               ),
             ),
-            // centerTitle: true, // 제목 중앙 정렬
-            backgroundColor: Colors.transparent, // 배경 투명
+            backgroundColor: Color(0xFFE6E6FA), // ✅ 배경색 설정
             elevation: 0, // 그림자 제거
-            flexibleSpace: Container(
-              height: 150, // 🔥 AppBar 높이에 맞게 설정
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage("lib/images/dnl.jpg"), // 배경 이미지 설정
-                  fit: BoxFit.cover, // 화면에 꽉 차도록 설정
-                ),
-              ),
-            ),
           ),
         ),
 
@@ -106,7 +96,7 @@ class _CategoryPageState extends State<CategoryPage> {
               top:
                   movedToTop
                       ? 50
-                      : MediaQuery.of(context).size.height / 2 - 120,
+                      : MediaQuery.of(context).size.height / 2 - 167,
               left: 0,
               right: 0,
               child: Column(
@@ -170,6 +160,7 @@ class _CategoryPageState extends State<CategoryPage> {
     return Center(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
+          backgroundColor: const Color(0xFFE6E6FA), // ✅ 버튼 배경색 변경
           minimumSize: const Size(150, 120),
           textStyle: const TextStyle(fontSize: 18),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),

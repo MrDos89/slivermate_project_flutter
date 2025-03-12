@@ -202,8 +202,8 @@ class _IntroducePageState extends State<IntroducePage> {
         BoxShadow(
           color: Colors.black26,
           blurRadius: 6,
-          spreadRadius: 2,
-          offset: Offset(0, 3), // 🔥 아래쪽으로만 그림자 추가
+          spreadRadius: 0.8,
+          offset: Offset(0, 2), // 🔥 아래쪽으로만 그림자 추가
         ),
       ],
     );
