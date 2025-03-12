@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+// 모달 파일들 임포트
+import 'package:slivermate_project_flutter/components/purchaseModal/CreditCardModal.dart';
+import 'package:slivermate_project_flutter/components/purchaseModal/CheckCardModal.dart';
+import 'package:slivermate_project_flutter/components/purchaseModal/PayModal.dart';
+import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dart';
 
+/// 강의 영상(또는 상품) 데이터 모델
 class CartItem {
   String name;
   int price;
@@ -66,6 +72,45 @@ class _PurchasePageState extends State<PurchasePage> {
     setState(() {
       selectedPaymentMethod = method;
     });
+
+    // 결제수단에 따라 모달창을 띄우는 로직
+    if (creditCards.contains(method)) {
+      // 신용카드 모달
+      showDialog(
+        context: context,
+        builder:
+            (context) => CreditCardModal(
+              cartItems: cartItems,
+              totalPayment: totalPayment,
+            ),
+      );
+    } else if (checkCards.contains(method)) {
+      // 체크카드 모달
+      showDialog(
+        context: context,
+        builder:
+            (context) => CheckCardModal(
+              cartItems: cartItems,
+              totalPayment: totalPayment,
+            ),
+      );
+    } else if (pays.contains(method)) {
+      // 페이 모달
+      showDialog(
+        context: context,
+        builder:
+            (context) =>
+                PayModal(cartItems: cartItems, totalPayment: totalPayment),
+      );
+    } else if (etc.contains(method)) {
+      // 기타(QR코드, 핸드폰결제) 모달
+      showDialog(
+        context: context,
+        builder:
+            (context) =>
+                EtcModal(cartItems: cartItems, totalPayment: totalPayment),
+      );
+    }
   }
 
   @override
@@ -87,7 +132,6 @@ class _PurchasePageState extends State<PurchasePage> {
             name: '골프 강의 영상',
             price: 18000,
             quantity: 1,
-            // 실제 사용 시 imageUrl 무시
             imageUrl: 'https://via.placeholder.com/60',
           ),
         ];
@@ -136,10 +180,8 @@ class _PurchasePageState extends State<PurchasePage> {
       itemBuilder: (context, index) {
         final item = cartItems[index];
         return ListTile(
-          // 기존: Image.network(item.imageUrl)
-          // 변경: Image.asset('lib/images/골프.jpg')
           leading: Image.asset(
-            'lib/images/골프.jpg', // 임시 골프 이미지 등록
+            'lib/images/골프.jpg', // 임시 골프 이미지
             width: 60,
             height: 60,
             fit: BoxFit.cover,
@@ -151,6 +193,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
+  /// 결제수단 목록 (카드형식)
   Widget _buildPaymentMethods() {
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -168,6 +211,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
+  /// 결제수단 분류 UI
   Widget _buildPaymentCategory(String title, List<String> methods) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -214,6 +258,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
+  /// 가격 요약
   Widget _buildPriceSummary() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
