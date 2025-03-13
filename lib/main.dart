@@ -3,6 +3,7 @@ import 'package:slivermate_project_flutter/pages/mainPage.dart';
 import 'package:slivermate_project_flutter/pages/introducePage.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
+import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
         "/category": (context) => CategoryPage(),
         "/introduce": (context) => IntroducePage(),
         "/purchase": (context) => PurchasePage(),
+        "/call": (context) => CallStaffPage(),
       },
     );
   }
