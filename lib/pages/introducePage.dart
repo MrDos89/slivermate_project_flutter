@@ -47,132 +47,137 @@ class _IntroducePageState extends State<IntroducePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      showPaymentButton: true,
-      child: Scaffold(
-        appBar: AppBar(
-          backgroundColor: const Color(0xFFE6E6FA),
-          automaticallyImplyLeading: false,
-          title: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                '${widget.category} / ${widget.subCategory}',
-                style: const TextStyle(
-                  fontSize: 16,
-                  color: Color(0xFF212121),
-                  fontWeight: FontWeight.w600,
-                ),
+    return YoutubePlayerBuilder(
+      player: YoutubePlayer(controller: _controller),
+      builder: (context, player) {
+        return MainLayout(
+          showPaymentButton: true,
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: const Color(0xFFE6E6FA),
+              automaticallyImplyLeading: false,
+              title: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${widget.category} / ${widget.subCategory}',
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Color(0xFF212121),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    widget.lectureTitle,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF4E342E),
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text(
-                widget.lectureTitle,
-                style: const TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xFF4E342E),
-                ),
+            ),
+            body: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: 10.0,
+                vertical: 5,
               ),
-            ],
-          ),
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 🔥 유튜브 영상 플레이어
-              YoutubePlayerBuilder(
-                player: YoutubePlayer(controller: _controller),
-                builder: (context, player) {
-                  return Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
                     width: double.infinity,
                     height: MediaQuery.of(context).size.height / 3.2,
                     decoration: _boxDecorationWithShadow(),
-                    child: player,
-                  );
-                },
-              ),
-              const SizedBox(height: 10),
-              // 강사 정보 & 등록일 & 강의 금액
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: _boxDecorationWithShadow(),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "강사: User #101",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const Text(
-                          "등록일: 2024-03-10",
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.black54,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        const FaIcon(
-                          FontAwesomeIcons.wonSign,
-                          color: Color(0xFF4E342E),
-                          size: 18,
-                        ),
-                        const SizedBox(width: 8),
-                        const Text(
-                          '15,000원',
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Color(0xFF4E342E),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-              // 강의 설명
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: _boxDecorationWithShadow(),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        '📖 강의 설명',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF4E342E),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      const SingleChildScrollView(
-                        child: Text(
-                          "이 강의는 기초 요가 스트레칭을 배우는 과정으로, 몸의 유연성을 기르고 건강을 유지하는 데 도움을 줍니다.",
-                          style: TextStyle(fontSize: 18, color: Colors.black87),
-                        ),
-                      ),
-                    ],
+                    child: player, // 여기에 player 삽입
                   ),
-                ),
+                  const SizedBox(height: 10),
+                  Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: _boxDecorationWithShadow(),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const Text(
+                              "강사: User #101",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            const Text(
+                              "등록일: 2024-03-10",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.wonSign,
+                              color: Color(0xFF4E342E),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              '15,000원',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF4E342E),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: _boxDecorationWithShadow(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '📖 강의 설명',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4E342E),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          const Expanded(
+                            child: SingleChildScrollView(
+                              child: Text(
+                                "이 강의는 기초 요가 스트레칭을 배우는 과정으로, 몸의 유연성을 기르고 건강을 유지하는 데 도움을 줍니다.",
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
