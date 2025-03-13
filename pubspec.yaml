@@ -59,21 +59,28 @@ flutter:
   uses-material-design: true
 
   assets:
-#    - lib/images/knitting.jpg
-#    - lib/images/drawing.jpg
-#    - lib/images/reading.jpg
-#    - lib/images/movie.jpg
-#    - lib/images/puzzle.jpg
-#    - lib/images/cooking.jpg
-#    - lib/images/hiking.jpg
-#    - lib/images/cycling.jpg
-#    - lib/images/camping.jpg
-#    - lib/images/fishing.jpg
-#    - lib/images/running.jpg
-#    - lib/images/surfing.jpg
-    - lib/images/default.jpg
+    - lib/images/knitting.jpg
+    - lib/images/drawing.jpg
+    - lib/images/reading.jpg
+    - lib/images/movie.jpg
+    - lib/images/puzzle.jpg
+    - lib/images/cooking.jpg
+    - lib/images/hiking.jpg
+    - lib/images/cycling.jpg
+    - lib/images/camping.jpg
+    - lib/images/fishing.jpg
+    - lib/images/running.jpg
+    - lib/images/surfing.jpg
+    - lib/images/cofl.jpg
     - lib/images/dnl.jpg
     - lib/images/골프.jpg
+    - lib/images/unnamed.png
+    - lib/images/guitar.jpg
+    - lib/images/billiards.jpg
+    - lib/images/go.jpg
+    - lib/images/golf.jpg
+    - lib/images/tennis.jpg
+    - lib/images/foot.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
