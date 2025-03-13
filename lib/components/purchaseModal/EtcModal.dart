@@ -57,9 +57,7 @@ class EtcModal extends StatelessWidget {
             itemBuilder: (context, index) {
               final item = cartItems[index];
               return ListTile(
-                leading: const Icon(Icons.shopping_cart),
-
-                /// 임시 아이콘
+                leading: const Icon(Icons.shopping_cart), /// 결제할 상품목록
                 title: Text(item.name),
                 subtitle: Text('${item.price}원'),
               );
