@@ -4,6 +4,7 @@ import 'package:slivermate_project_flutter/pages/introducePage.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
+import 'package:slivermate_project_flutter/pages/NotificationPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -27,6 +28,7 @@ class MyApp extends StatelessWidget {
         "/introduce": (context) => IntroducePage(),
         "/purchase": (context) => PurchasePage(),
         "/call": (context) => CallStaffPage(),
+        "/notifications": (context) => NotificationPage(),
       },
     );
   }
