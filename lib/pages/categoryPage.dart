@@ -22,8 +22,11 @@ class _CategoryPageState extends State<CategoryPage> {
     {"id": 2, "name": "그림", "image": "lib/images/drawing.jpg"},
     {"id": 3, "name": "독서", "image": "lib/images/reading.jpg"},
     {"id": 4, "name": "영화 감상", "image": "lib/images/movie.jpg"},
-    {"id": 5, "name": "퍼즐 맞추기", "image": "lib/images/puzzle.jpg"},
+    {"id": 5, "name": "퍼즐", "image": "lib/images/puzzle.jpg"},
     {"id": 6, "name": "요리", "image": "lib/images/cooking.jpg"},
+    {"id": 7, "name": "통기타", "image": "lib/images/guitar.jpg"},
+    {"id": 8, "name": "당구", "image": "lib/images/billiards.jpg"},
+    {"id": 9, "name": "바둑", "image": "lib/images/go.jpg"},
   ];
 
   final List<Map<String, dynamic>> outdoorHobbies = [
@@ -31,8 +34,11 @@ class _CategoryPageState extends State<CategoryPage> {
     {"id": 2, "name": "자전거", "image": "lib/images/cycling.jpg"},
     {"id": 3, "name": "캠핑", "image": "lib/images/camping.jpg"},
     {"id": 4, "name": "낚시", "image": "lib/images/fishing.jpg"},
-    {"id": 5, "name": "러닝", "image": "lib/images/running.jpg"},
-    {"id": 6, "name": "서핑", "image": "lib/images/surfing.jpg"},
+    {"id": 5, "name": "러닝/마라톤", "image": "lib/images/running.jpg"},
+    {"id": 6, "name": "수영", "image": "lib/images/surfing.jpg"},
+    {"id": 7, "name": "골프", "image": "lib/images/golf.jpg"},
+    {"id": 8, "name": "테니스", "image": "lib/images/tennis.jpg"},
+    {"id": 9, "name": "족구", "image": "lib/images/foot.jpg"},
   ];
 
   void _onCategorySelected(bool isIndoor) {
@@ -204,7 +210,7 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.4),
+            color: Colors.black.withOpacity(0.25),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
@@ -223,7 +229,7 @@ class _CategoryPageState extends State<CategoryPage> {
   /// 📌 이미지가 없으면 기본 이미지 사용
   ImageProvider _getImage(String? path) {
     if (path == null || path.isEmpty) {
-      return const AssetImage("lib/images/default.jpg"); // 기본 이미지 설정
+      return const AssetImage("lib/images/cofl.jpg"); // 기본 이미지 설정
     }
     return AssetImage(path);
   }
