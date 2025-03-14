@@ -100,6 +100,7 @@ class _IntroducePageState extends State<IntroducePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
+                        // 🔥 이미지를 텍스트와 묶어주는 Row
                         Row(
                           children: [
                             CircleAvatar(
@@ -108,7 +109,7 @@ class _IntroducePageState extends State<IntroducePage> {
                                 'assets/images/instructor.png',
                               ),
                             ),
-                            const SizedBox(width: 4),
+                            const SizedBox(width: 8), // 이 값으로 간격 조정 가능
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: const [
@@ -128,59 +129,45 @@ class _IntroducePageState extends State<IntroducePage> {
                                 ),
                               ],
                             ),
-                            // 💰 강의 가격 (오른쪽 정렬)
-                            Row(
-                              children: [
-                                const FaIcon(
-                                  FontAwesomeIcons.wonSign,
-                                  color: Color(0xFF4E342E),
-                                  size: 18,
-                                ),
-                                const SizedBox(width: 8),
-                                Text(
-                                  '${lecturePrice != null ? '${lecturePrice!.toString()}원' : '무료 강의'}',
-                                  style: const TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFF4E342E),
-                                  ),
-                                ),
-                              ],
+                          ],
+                        ), // 🔥 이미지와 강사정보 묶는 Row의 끝
+
+                        Row(
+                          children: [
+                            const FaIcon(
+                              FontAwesomeIcons.wonSign,
+                              color: Color(0xFF4E342E),
+                              size: 18,
+                            ),
+                            const SizedBox(width: 8),
+                            const Text(
+                              '15,000원',
+                              style: TextStyle(
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF4E342E),
+                              ),
                             ),
                           ],
                         ),
-              ),
-              const SizedBox(height: 10), // 🔹 간격 줄이기
-              // 📌 강의 설명 (아래쪽 그림자 추가)
-              Expanded(
-                child: Container(
-                  padding: const EdgeInsets.all(12.0),
-                  decoration: _boxDecorationWithShadow(),
-                  child:
-                      isLoading
-                          ? const Center(child: CircularProgressIndicator())
-                          : Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                '📖 강의 설명',
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xFF4E342E),
-                                ),
-                              ),
-                              const SizedBox(height: 8), // 🔹 간격 줄이기
-                              SingleChildScrollView(
-                                child: Text(
-                                  lectureDescription ?? '강의 설명을 불러오지 못했습니다.',
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    color: Colors.black87,
-                                  ),
-                                ),
-                              ),
-                            ],
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  Expanded(
+                    child: Container(
+                      padding: const EdgeInsets.all(12.0),
+                      decoration: _boxDecorationWithShadow(),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            '📖 강의 설명',
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF4E342E),
+                            ),
                           ),
                           const SizedBox(height: 8),
                           const Expanded(
