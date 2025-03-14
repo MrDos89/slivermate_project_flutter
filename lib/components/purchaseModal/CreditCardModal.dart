@@ -19,10 +19,11 @@ class _CreditCardModalState extends State<CreditCardModal> {
   bool _cardInserted = false; // 카드 삽입 여부
   bool _paymentProcessing = false; // 결제 진행 여부
   bool _paymentCompleted = false; // 결제 완료 여부
-  bool _acknowledged = false; // 결제 완료 후 안내를 받았는지 여부
+  bool _acknowledged = false; // 결제 완료 후 안내 확인 여부
 
-  /// 카드 삽입 애니메이션 및 결제 진행 시뮬레이션 (3초)
+  /// 카드 삽입 + 결제 로딩 시뮬레이션
   Future<void> _simulateCardInsertion() async {
+    // 이미 결제 중이거나 완료된 상태면 중복 실행 막기
     if (_paymentProcessing || _paymentCompleted) return;
 
     setState(() {
@@ -32,7 +33,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
       _acknowledged = false;
     });
 
-    // 3초 동안 결제 진행 애니메이션(로딩) 실행
+    // 3초 동안 결제 로딩
     await Future.delayed(const Duration(seconds: 3));
 
     setState(() {
@@ -40,10 +41,27 @@ class _CreditCardModalState extends State<CreditCardModal> {
       _paymentCompleted = true;
     });
 
-    // 결제 완료 안내 메시지 (모달은 바로 닫히지 않음)
+    // 결제 완료 안내 (모달은 자동으로 닫히지 않음)
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text("결제가 완료되었습니다. 단말기에서 카드를 빼주세요")),
     );
+  }
+
+  /// 카드의 최종 위치
+  /// - 삽입 전: 키오스크 하단 밖
+  /// - 결제 중: 더 깊이(마그네틱 부분이 완전히 안 보이도록)
+  /// - 결제 완료 or 삽입 완료: 약간만 들어가 마그네틱 부분이 살짝 보이거나 거의 안 보이게
+  double _getCardTopPosition(double kioskHeight) {
+    // 아직 삽입되지 않은 상태
+    if (!_cardInserted) {
+      return kioskHeight + 40; // 화면 아래쪽
+    }
+    // 결제 진행 중(카드 상단 전혀 안 보이도록 좀 더 위로)
+    if (_paymentProcessing) {
+      return kioskHeight - 55; // 더 깊숙이
+    }
+    // 삽입 완료(결제 전) 또는 결제 완료 후
+    return kioskHeight - 35; // 약간만 보이거나 거의 안 보이게
   }
 
   @override
@@ -53,9 +71,9 @@ class _CreditCardModalState extends State<CreditCardModal> {
       child: SafeArea(
         child: SingleChildScrollView(
           child: Column(
-            mainAxisSize: MainAxisSize.min, // 내용에 맞춰 높이 조절
+            mainAxisSize: MainAxisSize.min,
             children: [
-              // (1) 상단 타이틀 영역
+              // (1) 상단 타이틀
               Container(
                 padding: const EdgeInsets.all(16),
                 color: Colors.pink,
@@ -66,11 +84,11 @@ class _CreditCardModalState extends State<CreditCardModal> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              // (2) 상단: 상품 목록(왼쪽) + 상품 제목(오른쪽) + 총 결제금액 + 구분선
+              // (2) 상품 목록, 결제금액
               _buildTopSection(),
-              // (3) 카드 단말기 시뮬레이션 영역
-              _buildCardSimulationSection(),
-              // (4) 하단 버튼: 결제하기, 취소하기
+              // (3) 키오스크 + 카드 삽입 시뮬레이션
+              _buildKioskSimulationSection(),
+              // (4) 결제하기, 취소하기 버튼
               _buildBottomActions(context),
             ],
           ),
@@ -79,7 +97,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
     );
   }
 
-  /// (2) 상단 영역: 상품 목록, 상품 제목, 총 결제금액, 구분선 표시
+  /// (2) 상품 목록, 상품 제목, 총 결제금액
   Widget _buildTopSection() {
     final productListString = widget.cartItems
         .map((item) => item.name)
@@ -91,10 +109,10 @@ class _CreditCardModalState extends State<CreditCardModal> {
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
+          // 상품 목록 + 제목
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 왼쪽: 상품 목록
               Expanded(
                 child: Text(
                   productListString.isNotEmpty
@@ -103,7 +121,6 @@ class _CreditCardModalState extends State<CreditCardModal> {
                   style: const TextStyle(fontSize: 16),
                 ),
               ),
-              // 오른쪽: 상품 제목
               Text(
                 productTitle,
                 style: const TextStyle(
@@ -114,6 +131,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
             ],
           ),
           const SizedBox(height: 8),
+          // 총 결제금액
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -137,13 +155,12 @@ class _CreditCardModalState extends State<CreditCardModal> {
     );
   }
 
-  /// (3) 카드 단말기 시뮬레이션 영역
-  Widget _buildCardSimulationSection() {
+  /// (3) 키오스크 UI + 카드 삽입
+  Widget _buildKioskSimulationSection() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 16.0),
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
       child: Column(
         children: [
-          // 안내 문구: 결제 전/완료 상태에 따라 변경
           Text(
             _paymentCompleted
                 ? "결제가 완료되었습니다. 단말기에서 카드를 빼주세요"
@@ -152,9 +169,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
             style: const TextStyle(fontSize: 16),
           ),
           const SizedBox(height: 20),
-          // 단말기 슬롯(네모칸) 및 카드 아이콘 (두 군데 모두 탭하면 시뮬레이션 실행)
-          _buildCardSlotWidget(),
-          // 결제 진행 중이면 로딩 및 안내 표시
+          _buildKioskUI(),
           if (_paymentProcessing) ...[
             const SizedBox(height: 16),
             const CircularProgressIndicator(),
@@ -166,48 +181,162 @@ class _CreditCardModalState extends State<CreditCardModal> {
     );
   }
 
-  /// (A) 단말기 슬롯(네모칸)와 카드 아이콘 (슬롯 전체에 GestureDetector 적용)
-  Widget _buildCardSlotWidget() {
-    return Center(
-      child: GestureDetector(
-        onTap: () {
-          if (!_cardInserted && !_paymentProcessing && !_paymentCompleted) {
-            _simulateCardInsertion();
-          }
-        },
-        child: SizedBox(
-          width: 200,
-          height: 60,
-          child: Stack(
-            alignment: Alignment.center,
-            children: [
-              // 네모칸 슬롯
-              Container(
-                width: 200,
-                height: 50,
+  /// (A) 키오스크 본체 + 어두운 슬롯 + 카드 삽입
+  Widget _buildKioskUI() {
+    final double kioskWidth = 200;
+    final double kioskHeight = 280;
+
+    final double cardLeft = (kioskWidth - 50) / 2;
+    final double cardTop = _getCardTopPosition(kioskHeight);
+
+    return GestureDetector(
+      onTap: () {
+        // 키오스크 탭 시 삽입
+        if (!_cardInserted && !_paymentProcessing && !_paymentCompleted) {
+          _simulateCardInsertion();
+        }
+      },
+      child: SizedBox(
+        width: kioskWidth,
+        height: kioskHeight + 100, // 카드가 아래로 나올 공간
+        child: Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // (1) 키오스크 본체
+            Positioned(
+              top: 0,
+              left: 0,
+              child: Container(
+                width: kioskWidth,
+                height: kioskHeight,
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black45),
-                  borderRadius: BorderRadius.circular(8),
+                  color: const Color(0xFF7C8FA7),
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black26,
+                      blurRadius: 4,
+                      offset: const Offset(2, 2),
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    // 스크린
+                    Positioned(
+                      top: 20,
+                      left: (kioskWidth - 140) / 2,
+                      child: Container(
+                        width: 140,
+                        height: 80,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFB2C7D9),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                      ),
+                    ),
+                    // 하단 스탠드
+                    Positioned(
+                      bottom: 0,
+                      left: (kioskWidth - 100) / 2,
+                      child: Container(
+                        width: 100,
+                        height: 40,
+                        decoration: BoxDecoration(
+                          color: const Color(0xFF5B6E7D),
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(12),
+                            topRight: Radius.circular(12),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              // 카드 아이콘 (AnimatedAlign 이동 효과)
-              AnimatedAlign(
-                duration: const Duration(milliseconds: 500),
-                alignment:
-                    _cardInserted ? Alignment.center : const Alignment(-1.5, 0),
-                child: Icon(Icons.credit_card, size: 40, color: Colors.grey),
+            ),
+
+            // (2) AnimatedPositioned 카드
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 2000), // 2초
+              curve: Curves.easeInOut,
+              left: cardLeft,
+              top: cardTop,
+              child: _buildCardWidget(),
+            ),
+
+            // (3) 어두운색 슬롯 (본체 하단부)
+            //     카드가 뒤로 들어가서 상단이 안 보이도록
+            //     이 사각형이 카드 위에 오므로, 카드 상단이 가려짐
+            Positioned(
+              // 슬롯을 본체 하단부에 맞춰서 배치
+              top: kioskHeight - 50, // 하단 근처
+              left: (kioskWidth - 80) / 2,
+              child: Container(
+                width: 80,
+                height: 50,
+                decoration: BoxDecoration(
+                  color: const Color(0xFF4A4A4A), // 어두운 색 (투명도 X)
+                  borderRadius: BorderRadius.circular(6),
+                ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  /// (4) 하단 액션 버튼: 결제하기, 취소하기
+  /// (B) 세로 방향 카드 (노란색 마그네틱)
+  Widget _buildCardWidget() {
+    return GestureDetector(
+      onTap: () {
+        if (!_cardInserted && !_paymentProcessing && !_paymentCompleted) {
+          _simulateCardInsertion();
+        }
+      },
+      child: Container(
+        width: 50,
+        height: 80,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(6),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black26,
+              blurRadius: 4,
+              offset: const Offset(2, 2),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            // 상단 마그네틱 띠 (노란색, 중앙)
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
+                  width: 20,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    color: Colors.yellow,
+                    borderRadius: BorderRadius.circular(2),
+                  ),
+                ),
+              ],
+            ),
+            const Spacer(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// (4) 결제하기 / 취소하기
   Widget _buildBottomActions(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+      padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
       child: Column(
         children: [
           // 결제하기 버튼
@@ -219,19 +348,19 @@ class _CreditCardModalState extends State<CreditCardModal> {
                 minimumSize: const Size(double.infinity, 48),
               ),
               onPressed: () async {
-                // 카드가 아직 삽입되지 않았다면 시뮬레이션 실행
+                // 아직 삽입 전이면 자동 삽입
                 if (!_cardInserted) {
                   await _simulateCardInsertion();
                   return;
                 }
-                // 결제 진행 중이면 안내 후 종료
+                // 결제 중이면 안내
                 if (_paymentProcessing) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text("결제가 진행 중입니다. 잠시만 기다려주세요.")),
                   );
                   return;
                 }
-                // 결제가 완료된 상태
+                // 이미 완료된 상태
                 if (_paymentCompleted) {
                   if (!_acknowledged) {
                     setState(() {
@@ -240,7 +369,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(
                         content: Text(
-                          "결제가 완료되었습니다. 단말기에서 카드를 빼주세요. 버튼을 다시 누르면 창이 닫힙니다.",
+                          "결제가 완료되었습니다. 단말기에서 카드를 빼주세요.\n버튼을 다시 누르면 창이 닫힙니다.",
                         ),
                       ),
                     );
@@ -255,7 +384,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
             ),
           ),
           const SizedBox(height: 8),
-          // 취소하기 버튼 (누르면 바로 모달창 닫힘)
+          // 취소하기 버튼
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(

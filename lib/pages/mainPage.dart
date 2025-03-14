@@ -23,6 +23,8 @@ class _MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<_MainPage> {
+  bool isDebugMode = false; // 🔥 디버그 모드 상태
+
   @override
   Widget build(BuildContext context) {
     return Container(
