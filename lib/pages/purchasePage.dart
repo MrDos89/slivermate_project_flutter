@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
-// 모달 파일들 임포트
+
+// 모달 파일들
 import 'package:slivermate_project_flutter/components/purchaseModal/CreditCardModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/PayModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dart';
+// MP4 아이콘
+import 'package:slivermate_project_flutter/components/purchaseModal/AnimatedMp4Icon.dart';
 
 /// 강의 영상(또는 상품) 데이터 모델
 class CartItem {
@@ -37,9 +40,8 @@ class PurchasePage extends StatefulWidget {
 }
 
 class _PurchasePageState extends State<PurchasePage> {
-  List<CartItem> cartItems = []; // 선택한 강의 영상 데이터
+  List<CartItem> cartItems = [];
 
-  /// 장바구니 총합
   int get itemsTotal {
     int sum = 0;
     for (var item in cartItems) {
@@ -48,14 +50,12 @@ class _PurchasePageState extends State<PurchasePage> {
     return sum;
   }
 
-  /// 최종 결제금액
   int get totalPayment => itemsTotal;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    // IntroducePage에서 넘어온 데이터 확인
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args != null && args is Map<String, dynamic>) {
       final selectedLecture = CartItem.fromJson(args);
@@ -63,7 +63,6 @@ class _PurchasePageState extends State<PurchasePage> {
         cartItems = [selectedLecture];
       });
     } else {
-      // 테스트용 기본 데이터
       setState(() {
         cartItems = [
           CartItem(
@@ -77,31 +76,34 @@ class _PurchasePageState extends State<PurchasePage> {
     }
   }
 
-  /// 결제수단 4가지
+  /// 결제수단 4가지 (카드 결제만 mp4 사용)
   final List<_PaymentMethod> paymentMethods = [
     _PaymentMethod(
       label: '카드 결제',
-      icon: Icons.credit_card,
+      mp4AssetPath: 'lib/videos/credit_card.mp4', // MP4 경로 (영문 파일명 권장)
+      icon: null,
       modalType: _ModalType.card,
     ),
     _PaymentMethod(
       label: '페이 결제',
+      mp4AssetPath: null,
       icon: Icons.payment,
       modalType: _ModalType.pay,
     ),
     _PaymentMethod(
       label: '핸드폰 결제',
+      mp4AssetPath: null,
       icon: Icons.phone_android,
       modalType: _ModalType.phone,
     ),
     _PaymentMethod(
       label: 'QR 결제',
+      mp4AssetPath: null,
       icon: Icons.qr_code,
       modalType: _ModalType.qr,
     ),
   ];
 
-  /// 결제수단 선택 시 모달 띄우기
   void _onPaymentMethodSelected(_ModalType type) {
     switch (type) {
       case _ModalType.card:
@@ -124,7 +126,6 @@ class _PurchasePageState extends State<PurchasePage> {
         break;
       case _ModalType.phone:
       case _ModalType.qr:
-        // phone, qr 등은 EtcModal 재활용 예시
         showDialog(
           context: context,
           builder:
@@ -140,7 +141,7 @@ class _PurchasePageState extends State<PurchasePage> {
     return MainLayout(
       child: Scaffold(
         appBar: AppBar(
-          leading: null, // 뒤로가기 버튼 제거
+          leading: null,
           automaticallyImplyLeading: false,
           title: const Text('결제화면'),
           centerTitle: true,
@@ -151,13 +152,10 @@ class _PurchasePageState extends State<PurchasePage> {
             padding: const EdgeInsets.symmetric(vertical: 16),
             child: Column(
               children: [
-                // 상품 목록
                 _buildCartList(),
                 const Divider(thickness: 1),
-                // 결제수단 (2번째 사진처럼 아이콘 + 라벨 4개)
                 _buildPaymentOptions(),
                 const Divider(thickness: 1),
-                // 가격 요약 (텍스트 크기 키움)
                 _buildPriceSummary(),
               ],
             ),
@@ -167,7 +165,6 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 상품 목록 (수량 조절 제거)
   Widget _buildCartList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -177,7 +174,7 @@ class _PurchasePageState extends State<PurchasePage> {
         final item = cartItems[index];
         return ListTile(
           leading: Image.asset(
-            'lib/images/골프.jpg', // 임시 골프 이미지
+            'lib/images/골프.jpg',
             width: 60,
             height: 60,
             fit: BoxFit.cover,
@@ -189,26 +186,24 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 4가지 결제수단을 아이콘+텍스트 큰 버튼으로 표현
+  /// 결제수단 버튼 (카드결제는 mp4, 나머지는 아이콘)
   Widget _buildPaymentOptions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         children: [
-          // 상단 안내 문구
           const Text(
             '결제수단을 선택해 주세요',
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
-          // 2x2 Grid 형태로 4개 버튼
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
-            childAspectRatio: 1.1, // 아이콘+텍스트 비율
+            childAspectRatio: 1.1,
             children:
                 paymentMethods.map((method) {
                   return GestureDetector(
@@ -228,7 +223,16 @@ class _PurchasePageState extends State<PurchasePage> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(method.icon, size: 48, color: Colors.black54),
+                          if (method.mp4AssetPath != null)
+                            // MP4 아이콘
+                            AnimatedMp4Icon(
+                              assetPath: method.mp4AssetPath!,
+                              width: 120,
+                              height: 120,
+                            )
+                          else
+                            // 일반 아이콘
+                            Icon(method.icon, size: 48, color: Colors.black54),
                           const SizedBox(height: 8),
                           Text(
                             method.label,
@@ -249,21 +253,18 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 가격 요약 (텍스트 크기 키워서 2번째 그림 느낌)
   Widget _buildPriceSummary() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         children: [
-          // "총 상품금액" (일반 크기)
           _buildRowItem(
             '총 상품금액',
             '${itemsTotal}원',
-            fontSize: 16,
+            fontSize: 20,
             fontWeight: FontWeight.normal,
           ),
           const SizedBox(height: 8),
-          // "총 결제예상금액" (크게)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -274,7 +275,7 @@ class _PurchasePageState extends State<PurchasePage> {
               Text(
                 '$totalPayment원',
                 style: const TextStyle(
-                  fontSize: 20,
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -307,18 +308,18 @@ class _PurchasePageState extends State<PurchasePage> {
   }
 }
 
-/// 결제수단 종류 구분
 enum _ModalType { card, pay, phone, qr }
 
-/// 결제수단 데이터 모델
 class _PaymentMethod {
   final String label;
-  final IconData icon;
+  final IconData? icon; // null이면 mp4 사용
+  final String? mp4AssetPath; // null이면 icon 사용
   final _ModalType modalType;
 
   _PaymentMethod({
     required this.label,
-    required this.icon,
+    this.icon,
+    this.mp4AssetPath,
     required this.modalType,
   });
 }
