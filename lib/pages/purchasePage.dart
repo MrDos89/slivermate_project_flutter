@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 // 모달 파일들 임포트
 import 'package:slivermate_project_flutter/components/purchaseModal/CreditCardModal.dart';
-import 'package:slivermate_project_flutter/components/purchaseModal/CheckCardModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/PayModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dart';
 
@@ -40,21 +39,6 @@ class PurchasePage extends StatefulWidget {
 class _PurchasePageState extends State<PurchasePage> {
   List<CartItem> cartItems = []; // 선택한 강의 영상 데이터
 
-  // 결제수단 분류
-  final List<String> creditCards = [
-    '국민카드',
-    '신한카드',
-    '농협카드',
-    '현대카드',
-    '삼성카드',
-    '롯데카드',
-  ];
-  final List<String> checkCards = ['국민은행', '신한은행', '기업은행', '농협은행'];
-  final List<String> pays = ['카카오페이', '삼성페이', '네이버페이', '애플페이'];
-  final List<String> etc = ['QR코드 결제', '핸드폰 결제'];
-
-  String? selectedPaymentMethod;
-
   /// 장바구니 총합
   int get itemsTotal {
     int sum = 0;
@@ -66,52 +50,6 @@ class _PurchasePageState extends State<PurchasePage> {
 
   /// 최종 결제금액
   int get totalPayment => itemsTotal;
-
-  /// 결제수단 선택
-  void onPaymentMethodSelected(String method) {
-    setState(() {
-      selectedPaymentMethod = method;
-    });
-
-    // 결제수단에 따라 모달창을 띄우는 로직
-    if (creditCards.contains(method)) {
-      // 신용카드 모달
-      showDialog(
-        context: context,
-        builder:
-            (context) => CreditCardModal(
-              cartItems: cartItems,
-              totalPayment: totalPayment,
-            ),
-      );
-    } else if (checkCards.contains(method)) {
-      // 체크카드 모달
-      showDialog(
-        context: context,
-        builder:
-            (context) => CheckCardModal(
-              cartItems: cartItems,
-              totalPayment: totalPayment,
-            ),
-      );
-    } else if (pays.contains(method)) {
-      // 페이 모달
-      showDialog(
-        context: context,
-        builder:
-            (context) =>
-                PayModal(cartItems: cartItems, totalPayment: totalPayment),
-      );
-    } else if (etc.contains(method)) {
-      // 기타(QR코드, 핸드폰결제) 모달
-      showDialog(
-        context: context,
-        builder:
-            (context) =>
-                EtcModal(cartItems: cartItems, totalPayment: totalPayment),
-      );
-    }
-  }
 
   @override
   void didChangeDependencies() {
@@ -139,6 +77,64 @@ class _PurchasePageState extends State<PurchasePage> {
     }
   }
 
+  /// 결제수단 4가지
+  final List<_PaymentMethod> paymentMethods = [
+    _PaymentMethod(
+      label: '카드 결제',
+      icon: Icons.credit_card,
+      modalType: _ModalType.card,
+    ),
+    _PaymentMethod(
+      label: '페이 결제',
+      icon: Icons.payment,
+      modalType: _ModalType.pay,
+    ),
+    _PaymentMethod(
+      label: '핸드폰 결제',
+      icon: Icons.phone_android,
+      modalType: _ModalType.phone,
+    ),
+    _PaymentMethod(
+      label: 'QR 결제',
+      icon: Icons.qr_code,
+      modalType: _ModalType.qr,
+    ),
+  ];
+
+  /// 결제수단 선택 시 모달 띄우기
+  void _onPaymentMethodSelected(_ModalType type) {
+    switch (type) {
+      case _ModalType.card:
+        showDialog(
+          context: context,
+          builder:
+              (context) => CreditCardModal(
+                cartItems: cartItems,
+                totalPayment: totalPayment,
+              ),
+        );
+        break;
+      case _ModalType.pay:
+        showDialog(
+          context: context,
+          builder:
+              (context) =>
+                  PayModal(cartItems: cartItems, totalPayment: totalPayment),
+        );
+        break;
+      case _ModalType.phone:
+      case _ModalType.qr:
+        // phone, qr 등은 EtcModal 재활용 예시
+        showDialog(
+          context: context,
+          builder:
+              (context) =>
+                  EtcModal(cartItems: cartItems, totalPayment: totalPayment),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MainLayout(
@@ -158,10 +154,10 @@ class _PurchasePageState extends State<PurchasePage> {
                 // 상품 목록
                 _buildCartList(),
                 const Divider(thickness: 1),
-                // 결제수단
-                _buildPaymentMethods(),
+                // 결제수단 (2번째 사진처럼 아이콘 + 라벨 4개)
+                _buildPaymentOptions(),
                 const Divider(thickness: 1),
-                // 가격 요약
+                // 가격 요약 (텍스트 크기 키움)
                 _buildPriceSummary(),
               ],
             ),
@@ -193,90 +189,92 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 결제수단 목록 (카드형식)
-  Widget _buildPaymentMethods() {
+  /// 4가지 결제수단을 아이콘+텍스트 큰 버튼으로 표현
+  Widget _buildPaymentOptions() {
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         children: [
-          _buildPaymentCategory('신용카드', creditCards),
+          // 상단 안내 문구
+          const Text(
+            '결제수단을 선택해 주세요',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 16),
-          _buildPaymentCategory('체크카드', checkCards),
-          const SizedBox(height: 16),
-          _buildPaymentCategory('페이', pays),
-          const SizedBox(height: 16),
-          _buildPaymentCategory('기타', etc),
+          // 2x2 Grid 형태로 4개 버튼
+          GridView.count(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            crossAxisCount: 2,
+            mainAxisSpacing: 16,
+            crossAxisSpacing: 16,
+            childAspectRatio: 1.1, // 아이콘+텍스트 비율
+            children:
+                paymentMethods.map((method) {
+                  return GestureDetector(
+                    onTap: () => _onPaymentMethodSelected(method.modalType),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: const Offset(2, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(method.icon, size: 48, color: Colors.black54),
+                          const SizedBox(height: 8),
+                          Text(
+                            method.label,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+          ),
         ],
       ),
     );
   }
 
-  /// 결제수단 분류 UI
-  Widget _buildPaymentCategory(String title, List<String> methods) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          title,
-          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 8),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children:
-              methods.map((method) {
-                final isSelected = (selectedPaymentMethod == method);
-                return GestureDetector(
-                  onTap: () => onPaymentMethodSelected(method),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 8,
-                    ),
-                    decoration: BoxDecoration(
-                      color: isSelected ? Colors.pink[50] : Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: isSelected ? Colors.pink : Colors.grey,
-                        width: 2,
-                      ),
-                    ),
-                    child: Text(
-                      method,
-                      style: TextStyle(
-                        color: isSelected ? Colors.pink : Colors.black87,
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.normal,
-                      ),
-                    ),
-                  ),
-                );
-              }).toList(),
-        ),
-      ],
-    );
-  }
-
-  /// 가격 요약
+  /// 가격 요약 (텍스트 크기 키워서 2번째 그림 느낌)
   Widget _buildPriceSummary() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         children: [
-          _buildRowItem('총 상품금액', '$itemsTotal원'),
+          // "총 상품금액" (일반 크기)
+          _buildRowItem(
+            '총 상품금액',
+            '${itemsTotal}원',
+            fontSize: 16,
+            fontWeight: FontWeight.normal,
+          ),
           const SizedBox(height: 8),
+          // "총 결제예상금액" (크게)
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
-                '총 결제예상금액',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                '총 결제금액',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Text(
                 '$totalPayment원',
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -287,10 +285,40 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  Widget _buildRowItem(String label, String value) {
+  Widget _buildRowItem(
+    String label,
+    String value, {
+    double fontSize = 16,
+    FontWeight fontWeight = FontWeight.normal,
+  }) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [Text(label), Text(value)],
+      children: [
+        Text(
+          label,
+          style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+        ),
+        Text(
+          value,
+          style: TextStyle(fontSize: fontSize, fontWeight: fontWeight),
+        ),
+      ],
     );
   }
+}
+
+/// 결제수단 종류 구분
+enum _ModalType { card, pay, phone, qr }
+
+/// 결제수단 데이터 모델
+class _PaymentMethod {
+  final String label;
+  final IconData icon;
+  final _ModalType modalType;
+
+  _PaymentMethod({
+    required this.label,
+    required this.icon,
+    required this.modalType,
+  });
 }
