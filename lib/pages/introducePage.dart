@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:dio/dio.dart';
 
 class IntroducePage extends StatefulWidget {
   final String category;
@@ -23,25 +25,73 @@ class IntroducePage extends StatefulWidget {
 
 class _IntroducePageState extends State<IntroducePage> {
   late YoutubePlayerController _controller;
+  LessonVO? lesson;
+  static const String apiEndpoint =
+      "http://13.125.197.66:18090/api/lesson"; // 🔥 서버 주소
+  final Dio dio = Dio();
+
+  // 더미 데이터 (서버 데이터 없을 시 사용)
+  final LessonVO dummyLesson = LessonVO(
+    lessonId: 0,
+    userId: 101,
+    lessonName: "기초 요가 스트레칭",
+    lessonDesc: "기초적인 요가 동작을 통해 스트레칭 하는 법을 배워봅시다.",
+    lessonCategory: 1,
+    lessonSubCategory: 2,
+    lessonFreeLecture: "https://youtu.be/Ei3eoqXmkjU?si=W60TzlwbXhJErL4F",
+    lessonCostLecture: "",
+    lessonThumbnail: "",
+    lessonPrice: 15000,
+    registerDate: "2024-03-10",
+    isHidden: false,
+    updDate: "2024-03-10",
+    userName: "User #101",
+    userThumbnail: "assets/images/instructor.png",
+  );
 
   @override
   void initState() {
     super.initState();
+    fetchLessonData(0); // 데이터 불러오기
+  }
 
-    final videoId = YoutubePlayer.convertUrlToId(widget.youtubeUrl);
+  // 🔥서버 데이터 호출하고, 없으면 더미 사용
+  Future<void> fetchLessonData(int lessonId) async {
+    final dio = Dio();
+    try {
+      final response = await dio.get('$apiEndpoint/$lessonId');
 
+      if (response.statusCode == 200 && response.data != null) {
+        setState(() {
+          lesson = LessonVO.fromJson(response.data);
+          initializeYoutubePlayer(lesson!.lessonFreeLecture);
+        });
+      } else {
+        setState(() {
+          lesson = dummyLesson;
+          initializeYoutubePlayer(dummyLesson.lessonFreeLecture);
+        });
+      }
+    } catch (e) {
+      print('API 오류: $e');
+      setState(() {
+        lesson = dummyLesson;
+        initializeYoutubePlayer(dummyLesson.lessonFreeLecture);
+      });
+    }
+  }
+
+  void initializeYoutubePlayer(String youtubeUrl) {
+    final videoId = YoutubePlayer.convertUrlToId(youtubeUrl) ?? "";
     _controller = YoutubePlayerController(
-      initialVideoId: videoId ?? "",
-      flags: const YoutubePlayerFlags(
-        autoPlay: false, // 🔥 자동 재생 OFF
-        mute: false, // 🔥 음소거 해제
-      ),
+      initialVideoId: videoId,
+      flags: const YoutubePlayerFlags(autoPlay: false),
     );
   }
 
   @override
   void dispose() {
-    _controller.dispose(); // 🔥 컨트롤러 정리
+    _controller.dispose();
     super.dispose();
   }
 
