@@ -4,6 +4,7 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/pages/introducePage.dart';
 
 import 'package:video_player/video_player.dart';
+import 'dart:math';
 
 class CategoryPage extends StatefulWidget {
   const CategoryPage({super.key});
@@ -45,16 +46,53 @@ class _CategoryPageState extends State<CategoryPage> {
     {"id": 9, "name": "족구", "image": "lib/images/foot.jpg"},
   ];
 
+  // 🔹 (추가됨) 사용할 영상 목록
+  final List<String> videoPaths = [
+    "lib/images/skan.mp4",
+    "lib/images/skan04.mp4",
+    "lib/images/skan09.mp4",
+  ];
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   _controller = VideoPlayerController.asset("lib/images/skan.mp4") // ✅ 추가
+  //     // _controller = VideoPlayerController.asset("lib/animations/back.mp4") // ✅ 추가
+  //     ..initialize().then((_) {
+  //       setState(() {});
+  //       _controller.setLooping(true);
+  //       _controller.play();
+  //     });
+  // }
+
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.asset("lib/images/tree.mp4") // ✅ 추가
-      // _controller = VideoPlayerController.asset("lib/animations/back.mp4") // ✅ 추가
+    _initializeVideo(); // 🔹 (추가됨) 초기 영상도 랜덤하게 설정
+  }
+
+  /// 🔹 (추가됨) 랜덤한 영상 선택 함수
+  String _getRandomVideoPath() {
+    final random = Random();
+    return videoPaths[random.nextInt(videoPaths.length)];
+  }
+
+  /// 🔹 (추가됨) 배경 영상 초기화
+  void _initializeVideo() {
+    _controller = VideoPlayerController.asset(_getRandomVideoPath())
       ..initialize().then((_) {
         setState(() {});
         _controller.setLooping(true);
         _controller.play();
       });
+  }
+
+  /// 🔹 (추가됨) 배경 클릭 시 랜덤 영상으로 변경
+  void _changeVideo() {
+    setState(() {
+      _controller.dispose(); // 기존 영상 해제
+      _initializeVideo(); // 새 랜덤 영상 설정
+    });
   }
 
   @override
@@ -99,143 +137,172 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      child: Stack(
-        children: [
-          /// 🎥 **배경 영상 추가 (비율 유지)**
-          Positioned.fill(
-            child:
-                _controller.value.isInitialized
-                    ? FittedBox(
-                      fit: BoxFit.cover, // ✅ 비율 유지
-                      child: SizedBox(
-                        width: _controller.value.size.width,
-                        height: _controller.value.size.height,
-                        child: VideoPlayer(_controller),
-                      ),
-                    )
-                    : Container(color: Colors.black),
-          ),
-
-          /// 🌟 **기존 Scaffold 유지**
-          Scaffold(
-            backgroundColor: Colors.white.withOpacity(0.2), // ✅ 흰색 + 투명도 조절
-            // * 카드 버튼 나오면 흰색
-            // backgroundColor:
-            //     showGrid
-            //         ? Colors.white
-            //         : Colors.white.withOpacity(0.2), // ✅ 변경된 부분
-            appBar: PreferredSize(
-              preferredSize: const Size.fromHeight(73), // 🔥 원하는 높이 설정
-              child: AppBar(
-                leading: null, // 뒤로가기 버튼 지우기
-                automaticallyImplyLeading: false,
-                centerTitle: false, // 🔥 제목을 왼쪽 정렬로 유지**
-                title: Transform.translate(
-                  offset: const Offset(0, 8), // 🔥 아래로 6픽셀 이동 (조절 가능)
-                  child: const Text(
-                    "카테고리 선택",
-                    style: TextStyle(
-                      color: Color(0xFF4E342E), // ✅ 기존 글씨색 유지
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                // backgroundColor: Color(0xFFE6E6FA), // ✅ 배경색 설정
-                backgroundColor: Colors.white.withOpacity(0.7),
-                elevation: 0, // 그림자 제거
-              ),
+      child: GestureDetector(
+        onTap: _changeVideo, // 🔹 배경 클릭하면 랜덤 영상 변경
+        child: Stack(
+          children: [
+            /// 🎥 **배경 영상 추가 (기존 유지)**
+            Positioned.fill(
+              child:
+                  _controller.value.isInitialized
+                      ? FittedBox(
+                        fit: BoxFit.cover,
+                        child: SizedBox(
+                          width: _controller.value.size.width,
+                          height: _controller.value.size.height,
+                          child: VideoPlayer(_controller),
+                        ),
+                      )
+                      : Container(color: Colors.black),
             ),
 
-            body: Stack(
-              children: [
-                AnimatedPositioned(
-                  duration: const Duration(milliseconds: 500),
-                  curve: Curves.easeInOut,
-                  top:
-                      movedToTop
-                          ? 50
-                          : MediaQuery.of(context).size.height / 2 - 167,
-                  left: 0,
-                  right: 0,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildCategoryButton(
-                            "실내 활동",
-                            () => _onCategorySelected(true),
-                          ),
-                          const SizedBox(width: 20),
-                          _buildCategoryButton(
-                            "실외 활동",
-                            () => _onCategorySelected(false),
-                          ),
-                        ],
+            /// 🎨 **영상 위에 반투명한 오버레이 추가**
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              curve: Curves.easeInOut,
+              color: Colors.white.withOpacity(showGrid ? 0.6 : 0.2), // ✅ 투명도 조절
+            ),
+
+            /// 🌟 **기존 Scaffold 유지**
+            Scaffold(
+              backgroundColor: Colors.transparent, // ✅ 배경 투명하게 설정
+              appBar: PreferredSize(
+                preferredSize: const Size.fromHeight(73),
+                child: AppBar(
+                  leading: null, // 뒤로가기 버튼 지우기
+                  automaticallyImplyLeading: false,
+                  centerTitle: false, // 🔥 제목을 왼쪽 정렬로 유지**
+                  title: Transform.translate(
+                    offset: const Offset(0, 8), // 🔥 아래로 6픽셀 이동 (조절 가능)
+                    child: const Text(
+                      "카테고리 선택",
+                      style: TextStyle(
+                        // color: Color(0xFF4E342E), // ✅ 기존 글씨색 유지
+                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.bold,
                       ),
-                      if (movedToTop) const SizedBox(height: 30),
-                    ],
+                    ),
                   ),
+                  // backgroundColor: Color(0xFFE6E6FA), // ✅ 배경색 설정
+                  // backgroundColor: Colors.white.withOpacity(0.7),
+                  backgroundColor: Color(0xFF044E00).withOpacity(0.5),
+                  elevation: 0, // 그림자 제거
                 ),
-                Positioned(
-                  top: movedToTop ? 200 : MediaQuery.of(context).size.height,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: AnimatedOpacity(
+              ),
+
+              body: Stack(
+                children: [
+                  AnimatedPositioned(
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.easeInOut,
-                    opacity: movedToTop ? 1.0 : 0.0,
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16.0,
-                          vertical: 2.0,
-                        ),
-                        child: Column(
+                    top:
+                        movedToTop
+                            ? 50
+                            : MediaQuery.of(context).size.height / 2 - 167,
+                    left: 0,
+                    right: 0,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (showIndoor)
-                              _buildHobbyGrid(
-                                indoorHobbies,
-                                categoryIds["실내 활동"]!,
-                              ),
-                            if (showOutdoor)
-                              _buildHobbyGrid(
-                                outdoorHobbies,
-                                categoryIds["실외 활동"]!,
-                              ),
+                            _buildCategoryButton(
+                              "실내 활동",
+                              () => _onCategorySelected(true),
+                              Icons.home, // ✅ 실내 활동 아이콘
+                            ),
+                            const SizedBox(width: 20),
+                            _buildCategoryButton(
+                              "실외 활동",
+                              () => _onCategorySelected(false),
+                              Icons.park, // ✅ 실외 활동 아이콘
+                            ),
                           ],
+                        ),
+
+                        if (movedToTop) const SizedBox(height: 30),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    top: movedToTop ? 200 : MediaQuery.of(context).size.height,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: AnimatedOpacity(
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.easeInOut,
+                      opacity: movedToTop ? 1.0 : 0.0,
+                      child: SingleChildScrollView(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16.0,
+                            vertical: 2.0,
+                          ),
+                          child: Column(
+                            children: [
+                              if (showIndoor)
+                                _buildHobbyGrid(
+                                  indoorHobbies,
+                                  categoryIds["실내 활동"]!,
+                                ),
+                              if (showOutdoor)
+                                _buildHobbyGrid(
+                                  outdoorHobbies,
+                                  categoryIds["실외 활동"]!,
+                                ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
-    );
+    ); // ✅ `MainLayout`의 닫는 `)` 추가
   }
 
-  Widget _buildCategoryButton(String title, VoidCallback onPressed) {
+  Widget _buildCategoryButton(
+    String title,
+    VoidCallback onPressed,
+    IconData icon,
+  ) {
     return Center(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           // backgroundColor: const Color(0xFFE6E6FA), // ✅ 버튼 배경색 변경
-          backgroundColor: Colors.white.withOpacity(0.7),
+          // backgroundColor: Colors.white.withOpacity(0.7),
+          // backgroundColor: Color(0xFF000000).withOpacity(0.4),
+          // backgroundColor: Color(0xFF00A8A8).withOpacity(0.6),
+          backgroundColor: Color(0xFF044E00).withOpacity(0.6),
           minimumSize: const Size(150, 120),
           textStyle: const TextStyle(fontSize: 18),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         ),
         onPressed: onPressed,
-        child: Text(
-          title,
-          style: const TextStyle(
-            color: Color(0xFF4E342E),
-            fontWeight: FontWeight.bold,
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              icon,
+              color: Colors.white,
+              size: 36, // 아이콘 크기 조절
+            ),
+            const SizedBox(height: 8), // 아이콘과 텍스트 간격
+            Text(
+              title,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 23,
+              ),
+            ),
+          ],
         ),
       ),
     );

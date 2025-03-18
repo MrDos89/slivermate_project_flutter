@@ -40,7 +40,8 @@ class MainLayout extends StatelessWidget {
       height: 70, // 높이 증가
       padding: const EdgeInsets.symmetric(vertical: 15), // 내부 패딩 증가
       decoration: const BoxDecoration(
-        color: Color(0xFFE6E6FA), // 배경색 (어두운 회색)
+        // color: Color(0xFFE6E6FA), // 배경색 (어두운 회색)
+        color: Color(0xFFFFFFFF),
         boxShadow: [
           // BoxShadow(
           //   color: Colors.black26,
@@ -50,6 +51,7 @@ class MainLayout extends StatelessWidget {
           // ),
         ],
       ),
+
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -57,7 +59,8 @@ class MainLayout extends StatelessWidget {
           IconButton(
             icon: const Icon(
               Icons.arrow_back,
-              color: Colors.lightBlueAccent,
+              // color: Colors.lightBlueAccent,
+              color: Color(0xFF229F3B),
               size: 36,
             ),
             onPressed: () {
@@ -70,7 +73,8 @@ class MainLayout extends StatelessWidget {
           IconButton(
             icon: const Icon(
               Icons.home,
-              color: Colors.lightBlueAccent,
+              // color: Colors.lightBlueAccent,
+              color: Color(0xFF229F3B),
               size: 36,
             ),
             onPressed: () {
@@ -81,8 +85,7 @@ class MainLayout extends StatelessWidget {
           IconButton(
             icon: Icon(
               showAlertButton ? Icons.notifications : Icons.person_pin,
-              color:
-                  showAlertButton ? Colors.redAccent : Colors.lightBlueAccent,
+              color: showAlertButton ? Color(0xFF229F3B) : Color(0xFF229F3B),
               size: 36,
             ),
             onPressed: () {
@@ -99,7 +102,8 @@ class MainLayout extends StatelessWidget {
               ? IconButton(
                 icon: const Icon(
                   Icons.payment,
-                  color: Colors.lightBlueAccent,
+                  // color: Colors.lightBlueAccent,
+                  color: Color(0xFF229F3B),
                   size: 36,
                 ),
                 onPressed: () {
