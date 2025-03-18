@@ -46,11 +46,10 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    final lesson = ModalRoute.of(context)?.settings.arguments;
-    if (lesson != null && lesson is LessonVo) {
-      final selectedLecture = lesson;
+    final args = ModalRoute.of(context)?.settings.arguments;
+    if (args != null && args is LessonVo) {
       setState(() {
-        this.lesson = selectedLecture;
+        lesson = args;
       });
     } else {
       // 테스트용 기본 데이터
