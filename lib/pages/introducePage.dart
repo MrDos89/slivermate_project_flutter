@@ -6,18 +6,19 @@ import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:dio/dio.dart';
 
 class IntroducePage extends StatefulWidget {
-  final String category;
-  final String subCategory;
-  final String lectureTitle;
-  final String youtubeUrl;
+  LessonVo? lesson;
+  int lessonCategory;
+  int lessonSubCategory;
 
-  const IntroducePage({
+  IntroducePage({
     super.key,
-    this.category = "실내",
-    this.subCategory = "요가",
-    this.lectureTitle = "기초 요가 스트레칭",
-    this.youtubeUrl = "https://youtu.be/Ei3eoqXmkjU?si=W60TzlwbXhJErL4F",
-  });
+    required this.lessonCategory,
+    required this.lessonSubCategory,
+  }) {
+    print(
+      "IntroducePage 찍힌 카데고리 번호: (카테고리 ID: $lessonCategory, 취미 ID: $lessonSubCategory)",
+    );
+  }
 
   @override
   _IntroducePageState createState() => _IntroducePageState();
@@ -25,58 +26,70 @@ class IntroducePage extends StatefulWidget {
 
 class _IntroducePageState extends State<IntroducePage> {
   late YoutubePlayerController _controller;
-  LessonVO? lesson;
-  static const String apiEndpoint =
-      "http://13.125.197.66:18090/api/lesson"; // 🔥 서버 주소
-  final Dio dio = Dio();
+  LessonVo? lesson;
+
+  // static const String apiEndpoint =
+  //     "http://13.125.197.66:18090/api/lesson/sc/${widget.lesson.lessonCategory}/${lessonSubCategory}"; // 🔥 서버 주소
+  // final Dio dio = Dio();
 
   // 더미 데이터 (서버 데이터 없을 시 사용)
-  final LessonVO dummyLesson = LessonVO(
-    lessonId: 0,
-    userId: 101,
-    lessonName: "기초 요가 스트레칭",
-    lessonDesc: "기초적인 요가 동작을 통해 스트레칭 하는 법을 배워봅시다.",
-    lessonCategory: 1,
-    lessonSubCategory: 2,
-    lessonFreeLecture: "https://youtu.be/Ei3eoqXmkjU?si=W60TzlwbXhJErL4F",
-    lessonCostLecture: "",
-    lessonThumbnail: "",
-    lessonPrice: 15000,
-    registerDate: "2024-03-10",
-    isHidden: false,
-    updDate: "2024-03-10",
-    userName: "User #101",
-    userThumbnail: "assets/images/instructor.png",
-  );
+  // final LessonVO dummyLesson = LessonVO(
+  //   lessonId: 0,
+  //   userId: 101,
+  //   lessonName: "기초 요가 스트레칭",
+  //   lessonDesc: "기초적인 요가 동작을 통해 스트레칭 하는 법을 배워봅시다.",
+  //   lessonCategory: 1,
+  //   lessonSubCategory: 2,
+  //   lessonFreeLecture: "https://youtu.be/Ei3eoqXmkjU?si=W60TzlwbXhJErL4F",
+  //   lessonCostLecture: "",
+  //   lessonThumbnail: "",
+  //   lessonPrice: 15000,
+  //   registerDate: "2024-03-10",
+  //   isHidden: false,
+  //   updDate: "2024-03-10",
+  //   userName: "User #101",
+  //   userThumbnail: "assets/images/instructor.png",
+  // );
 
   @override
   void initState() {
+    print("야 initState 들어간다");
     super.initState();
-    fetchLessonData(0); // 데이터 불러오기
+    fetchLessonData(); // ✅ API 호출 (초기에는 값이 없을 수도 있음)
   }
 
-  // 🔥서버 데이터 호출하고, 없으면 더미 사용
-  Future<void> fetchLessonData(int lessonId) async {
-    final dio = Dio();
-    try {
-      final response = await dio.get('$apiEndpoint/$lessonId');
+  // ✅ lessonCategory와 lessonSubCategory가 설정된 후 API 호출
+  void updateCategory(int category, int subCategory) {
+    setState(() {
+      widget.lessonCategory = category;
+      widget.lessonSubCategory = subCategory;
+    });
 
-      if (response.statusCode == 200 && response.data != null) {
-        setState(() {
-          lesson = LessonVO.fromJson(response.data);
-          initializeYoutubePlayer(lesson!.lessonFreeLecture);
-        });
-      } else {
-        setState(() {
-          lesson = dummyLesson;
-          initializeYoutubePlayer(dummyLesson.lessonFreeLecture);
-        });
-      }
-    } catch (e) {
-      print('API 오류: $e');
+    print(
+      "🎯 [카테고리 업데이트] lessonCategory: ${widget.lessonCategory}, lessonSubCategory: ${widget.lessonSubCategory}",
+    );
+
+    // ✅ 값이 설정된 후 API 호출
+    fetchLessonData();
+  }
+
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   fetchLessonData(0); // 데이터 불러오기
+  // }
+
+  // ✅ API 데이터 가져오기
+  Future<void> fetchLessonData() async {
+    final fetchedLesson = await LessonService.fetchLessonData(
+      widget.lessonCategory,
+      widget.lessonSubCategory,
+    );
+
+    if (fetchedLesson != null) {
       setState(() {
-        lesson = dummyLesson;
-        initializeYoutubePlayer(dummyLesson.lessonFreeLecture);
+        lesson = fetchedLesson;
+        initializeYoutubePlayer(lesson!.lessonFreeLecture);
       });
     }
   }
@@ -110,7 +123,7 @@ class _IntroducePageState extends State<IntroducePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${widget.category} / ${widget.subCategory}',
+                    '${lesson!.lessonCategory} / ${lesson!.lessonSubCategory}',
                     style: const TextStyle(
                       fontSize: 16,
                       color: Color(0xFF212121),
@@ -119,7 +132,7 @@ class _IntroducePageState extends State<IntroducePage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    widget.lectureTitle,
+                    lesson!.lessonName,
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,

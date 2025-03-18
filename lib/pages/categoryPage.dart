@@ -81,17 +81,16 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   /// 📌 취미 버튼을 클릭하면 강의 페이지로 이동 (현재는 주석 처리)
-  void _onHobbySelected(int categoryId, int hobbyId, String hobbyName) {
-    print("선택한 취미: $hobbyName (카테고리 ID: $categoryId, 취미 ID: $hobbyId)");
+  void _onHobbySelected(int categoryId, int subCategoryId, String hobbyName) {
+    print("선택한 취미: $hobbyName (카테고리 ID: $categoryId, 취미 ID: $subCategoryId)");
 
     Navigator.push(
       context,
       MaterialPageRoute(
         builder:
             (context) => IntroducePage(
-              category: categoryId == 1 ? "실내" : "실외", // ✅ 실내 / 실외 분류
-              subCategory: hobbyName, // ✅ 선택한 취미명
-              lectureTitle: "$hobbyName 강의", // ✅ 강의명 설정
+              lessonCategory: categoryId, // ✅ 실내 / 실외 분류
+              lessonSubCategory: subCategoryId, // ✅ 선택한 취미명
             ),
       ),
     );

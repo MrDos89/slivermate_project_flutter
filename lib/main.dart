@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/": (context) => MainPage(),
         "/category": (context) => CategoryPage(),
-        "/introduce": (context) => IntroducePage(),
+        "/introduce": (context) => IntroducePage(lessonCategory: 1, lessonSubCategory: 1),
         "/purchase": (context) => PurchasePage(),
         "/call": (context) => CallStaffPage(),
         "/notifications": (context) => NotificationPage(),
