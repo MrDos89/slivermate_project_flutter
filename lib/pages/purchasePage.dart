@@ -131,10 +131,7 @@ class _PurchasePageState extends State<PurchasePage> {
     return MainLayout(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text(
-            '결제화면',
-            style: TextStyle(fontSize: 22), // Larger title text
-          ),
+          title: const Text('결제화면'),
           centerTitle: true,
           backgroundColor: Colors.pink,
         ),
@@ -186,17 +183,18 @@ class _PurchasePageState extends State<PurchasePage> {
         children: [
           const Text(
             '결제수단을 선택해 주세요',
-            style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
+          // Grid of Lottie animations
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
-            // Lower childAspectRatio for bigger text
-            childAspectRatio: 0.65,
+            // Give even more vertical space
+            childAspectRatio: 0.7,
             children:
                 paymentMethods.map((method) {
                   return InkWell(
@@ -229,12 +227,11 @@ class _PurchasePageState extends State<PurchasePage> {
                                       color: Colors.red,
                                     ),
                           ),
-                          const SizedBox(height: 10),
-                          // Larger label font
+                          const SizedBox(height: 8),
                           Text(
                             method.label,
                             style: const TextStyle(
-                              fontSize: 22,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.black87,
                             ),
@@ -263,12 +260,12 @@ class _PurchasePageState extends State<PurchasePage> {
             children: [
               const Text(
                 '총 결제금액',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
               ),
               Text(
                 '$totalPayment원',
                 style: const TextStyle(
-                  fontSize: 40, // Big text for emphasis
+                  fontSize: 35,
                   fontWeight: FontWeight.bold,
                 ),
               ),
