@@ -6,7 +6,7 @@ import 'package:slivermate_project_flutter/components/purchaseModal/CreditCardMo
 import 'package:slivermate_project_flutter/components/purchaseModal/PayModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dart';
 // MP4 아이콘
-import 'package:slivermate_project_flutter/components/purchaseModal/AnimatedMp4Icon.dart';
+// import 'package:slivermate_project_flutter/components/purchaseModal/AnimatedMp4Icon.dart';
 
 /// 강의 영상(또는 상품) 데이터 모델
 class CartItem {
@@ -62,6 +62,7 @@ class _PurchasePageState extends State<PurchasePage> {
         cartItems = [selectedLecture];
       });
     } else {
+      // 테스트용
       setState(() {
         cartItems = [
           CartItem(
@@ -75,36 +76,30 @@ class _PurchasePageState extends State<PurchasePage> {
     }
   }
 
-  /// 결제수단 4가지
-  /// - 카드 결제, 페이 결제, 핸드폰 결제, QR 결제 모두 MP4 동영상 사용
+  /// 4가지 결제수단(모두 MP4)
   final List<_PaymentMethod> paymentMethods = [
     _PaymentMethod(
       label: '카드 결제',
       mp4AssetPath: 'lib/videos/credit_card.mp4',
-      icon: null,
       modalType: _ModalType.card,
     ),
     _PaymentMethod(
       label: '페이 결제',
       mp4AssetPath: 'lib/videos/pay_card.mp4',
-      icon: null,
       modalType: _ModalType.pay,
     ),
     _PaymentMethod(
       label: '핸드폰 결제',
-      mp4AssetPath: 'lib/videos/phone_pay.mp4', // 핸드폰 결제 동영상
-      icon: null,
+      mp4AssetPath: 'lib/videos/phone_pay.mp4',
       modalType: _ModalType.phone,
     ),
     _PaymentMethod(
       label: 'QR 결제',
       mp4AssetPath: 'lib/videos/qr_scan.mp4',
-      icon: null,
       modalType: _ModalType.qr,
     ),
   ];
 
-  /// 결제수단별 모달 열기
   void _openModal(_ModalType type) {
     switch (type) {
       case _ModalType.card:
@@ -142,8 +137,6 @@ class _PurchasePageState extends State<PurchasePage> {
     return MainLayout(
       child: Scaffold(
         appBar: AppBar(
-          leading: null,
-          automaticallyImplyLeading: false,
           title: const Text('결제화면'),
           centerTitle: true,
           backgroundColor: Colors.pink,
@@ -187,7 +180,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 결제수단 버튼 (동영상은 자동 재생, 탭하면 모달 열기)
+  /// 4개의 MP4 아이콘 모두 자동 재생
   Widget _buildPaymentOptions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -222,12 +215,12 @@ class _PurchasePageState extends State<PurchasePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        AnimatedMp4Icon(
-                          assetPath: method.mp4AssetPath!,
-                          width: 120,
-                          height: 120,
-                          onTap: () => _openModal(method.modalType),
-                        ),
+                        // AnimatedMp4Icon(
+                        //   assetPath: method.mp4AssetPath,
+                        //   width: 120,
+                        //   height: 120,
+                        //   onTap: () => _openModal(method.modalType),
+                        // ),
                         const SizedBox(height: 8),
                         Text(
                           method.label,
@@ -306,14 +299,12 @@ enum _ModalType { card, pay, phone, qr }
 
 class _PaymentMethod {
   final String label;
-  final IconData? icon; // null이면 mp4 사용
-  final String? mp4AssetPath; // null이면 icon 사용
+  final String mp4AssetPath;
   final _ModalType modalType;
 
   _PaymentMethod({
     required this.label,
-    this.icon,
-    this.mp4AssetPath,
+    required this.mp4AssetPath,
     required this.modalType,
   });
 }
