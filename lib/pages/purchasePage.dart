@@ -7,29 +7,7 @@ import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dar
 // Lottie
 import 'package:lottie/lottie.dart';
 
-/// 강의 영상(또는 상품) 데이터 모델
-class CartItem {
-  String name;
-  int price;
-  int quantity;
-  String imageUrl;
-
-  CartItem({
-    required this.name,
-    required this.price,
-    required this.quantity,
-    required this.imageUrl,
-  });
-
-  factory CartItem.fromJson(Map<String, dynamic> json) {
-    return CartItem(
-      name: json['name'],
-      price: json['price'],
-      quantity: json['quantity'] ?? 1,
-      imageUrl: json['imageUrl'],
-    );
-  }
-}
+import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 
 /// 결제수단 타입
 enum _ModalType { card, pay, phone, qr }
@@ -55,15 +33,11 @@ class PurchasePage extends StatefulWidget {
 }
 
 class _PurchasePageState extends State<PurchasePage> {
-  List<CartItem> cartItems = [];
+  late LessonVo lesson;
 
   /// 장바구니 총합
   int get itemsTotal {
-    int sum = 0;
-    for (var item in cartItems) {
-      sum += item.price * item.quantity;
-    }
-    return sum;
+    return lesson.lessonPrice;
   }
 
   /// 최종 결제금액
@@ -73,22 +47,30 @@ class _PurchasePageState extends State<PurchasePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
-    if (args != null && args is Map<String, dynamic>) {
-      final selectedLecture = CartItem.fromJson(args);
+    if (args != null && args is LessonVo) {
       setState(() {
-        cartItems = [selectedLecture];
+        lesson = args;
       });
     } else {
       // 테스트용 기본 데이터
       setState(() {
-        cartItems = [
-          CartItem(
-            name: '골프 강의 영상',
-            price: 18000,
-            quantity: 1,
-            imageUrl: 'https://via.placeholder.com/60',
-          ),
-        ];
+        this.lesson = LessonVo(
+          lessonId: 1,
+          userId: 1,
+          lessonName: 'test',
+          lessonDesc: 'test',
+          lessonCategory: 1,
+          lessonSubCategory: 1,
+          lessonFreeLecture: "test",
+          lessonCostLecture: 'test',
+          lessonThumbnail: 'https://via.placeholder.com/60',
+          lessonPrice: 18000,
+          registerDate: "2025-03-18",
+          isHidden: false,
+          updDate: '골프 강의 영상',
+          userName: "test",
+          userThumbnail: "test",
+        );
       });
     }
   }
@@ -124,25 +106,21 @@ class _PurchasePageState extends State<PurchasePage> {
         showDialog(
           context: context,
           builder:
-              (_) => CreditCardModal(
-                cartItems: cartItems,
-                totalPayment: totalPayment,
-              ),
+              (_) =>
+                  CreditCardModal(lesson: lesson, totalPayment: totalPayment),
         );
         break;
       case _ModalType.pay:
         showDialog(
           context: context,
-          builder:
-              (_) => PayModal(cartItems: cartItems, totalPayment: totalPayment),
+          builder: (_) => PayModal(lesson: lesson, totalPayment: totalPayment),
         );
         break;
       case _ModalType.phone:
       case _ModalType.qr:
         showDialog(
           context: context,
-          builder:
-              (_) => EtcModal(cartItems: cartItems, totalPayment: totalPayment),
+          builder: (_) => EtcModal(lesson: lesson, totalPayment: totalPayment),
         );
         break;
     }
@@ -184,26 +162,17 @@ class _PurchasePageState extends State<PurchasePage> {
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: cartItems.length,
+      itemCount: 1,
       itemBuilder: (context, index) {
-        final item = cartItems[index];
         return ListTile(
-          leading: Image.asset(
-            'lib/images/골프.jpg',
-            width: 60,
-            height: 60,
+          leading: Image.network(
+            'https://img.cpbc.co.kr/newsimg/upload/2024/09/25/R5B1727229411206.jpg',
+            width: 105,
+            height: 80,
             fit: BoxFit.cover,
           ),
-          // Increase item name font size
-          title: Text(
-            item.name,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-          ),
-          // Increase subtitle font size
-          subtitle: Text(
-            '${item.price}원',
-            style: const TextStyle(fontSize: 16),
-          ),
+          title: Text(lesson.lessonName, style: const TextStyle(fontSize: 16)),
+          subtitle: Text('${lesson.lessonPrice}원'),
         );
       },
     );
@@ -287,12 +256,8 @@ class _PurchasePageState extends State<PurchasePage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         children: [
-          _buildRowItem(
-            '총 상품금액',
-            '${itemsTotal}원',
-            fontSize: 22, // Larger text
-          ),
-          const SizedBox(height: 12),
+          _buildRowItem('총 상품금액', '$itemsTotal원', fontSize: 20),
+          const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

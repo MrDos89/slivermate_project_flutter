@@ -108,7 +108,7 @@ class MainLayout extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       "/purchase",
-                      arguments: {"lesson": lesson},
+                      arguments: lesson,
                     );
                   } else {
                     print("🚨 [오류] lesson 데이터가 없습니다! 결제 페이지로 이동할 수 없음.");
