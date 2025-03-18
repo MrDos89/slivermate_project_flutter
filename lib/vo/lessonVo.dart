@@ -1,6 +1,7 @@
 import 'dart:convert';
+import 'package:dio/dio.dart';
 
-class LessonVO {
+class LessonVo {
   final int lessonId;
   final int userId;
   final String lessonName;
@@ -17,7 +18,7 @@ class LessonVO {
   final String userName;
   final String userThumbnail;
 
-  LessonVO({
+  LessonVo({
     required this.lessonId,
     required this.userId,
     required this.lessonName,
@@ -35,28 +36,28 @@ class LessonVO {
     required this.userThumbnail,
   });
 
-  // 🔥 JSON → LessonVO 변환
-  factory LessonVO.fromJson(Map<String, dynamic> json) {
-    return LessonVO(
-      lessonId: json['lesson_id'] as int,
-      userId: json['user_id'] as int,
-      lessonName: json['lesson_name'] as String,
-      lessonDesc: json['lesson_desc'] as String,
-      lessonCategory: json['lesson_category'] as int,
-      lessonSubCategory: json['lesson_sub_category'] as int,
-      lessonFreeLecture: json['lesson_free_lecture'] as String,
-      lessonCostLecture: json['lesson_cost_lecture'] as String,
-      lessonThumbnail: json['lesson_thumbnail'] as String,
-      lessonPrice: json['lesson_price'] as int,
-      registerDate: json['register_date'] as String,
-      isHidden: json['is_hidden'] as bool,
-      updDate: json['upd_date'] as String,
-      userName: json['user_name'] as String,
-      userThumbnail: json['user_thumbnail'] as String,
+  // ✅ JSON → LessonVO 변환
+  factory LessonVo.fromJson(Map<String, dynamic> json) {
+    return LessonVo(
+      lessonId: json['lesson_id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      lessonName: json['lesson_name'] ?? "없음",
+      lessonDesc: json['lesson_desc'] ?? "설명이 없습니다.",
+      lessonCategory: json['lesson_category'] ?? 0,
+      lessonSubCategory: json['lesson_sub_category'] ?? 0,
+      lessonFreeLecture: json['lesson_free_lecture'] ?? "",
+      lessonCostLecture: json['lesson_cost_lecture'] ?? "",
+      lessonThumbnail: json['lesson_thumbnail'] ?? "",
+      lessonPrice: json['lesson_price'] ?? 0,
+      registerDate: json['register_date'] ?? "없음",
+      isHidden: json['is_hidden'] ?? false,
+      updDate: json['upd_date'] ?? "없음",
+      userName: json['user_name'] ?? "미정",
+      userThumbnail: json['user_thumbnail'] ?? "",
     );
   }
 
-  // 🔥 LessonVO → JSON 변환 (결제 서버로 보낼 때 사용)
+  // ✅ LessonVO → JSON 변환
   Map<String, dynamic> toJson() {
     return {
       'lesson_id': lessonId,
@@ -75,5 +76,44 @@ class LessonVO {
       'user_name': userName,
       'user_thumbnail': userThumbnail,
     };
+  }
+}
+
+// ✅ API 요청을 처리하는 함수
+class LessonService {
+  static const String apiEndpoint = "http://13.125.197.66:18090/api/lesson";
+  static final Dio dio = Dio();
+
+  static Future<LessonVo?> fetchLessonData(
+    int lessonCategory,
+    int lessonSubCategory,
+  ) async {
+    final String url = "$apiEndpoint/sc/$lessonCategory/$lessonSubCategory";
+
+    print('📌 [API 요청 시작] 요청 URL: $url');
+
+    try {
+      final response = await dio.get(url);
+
+      print('✅ [API 응답 성공] 상태 코드: ${response.statusCode}');
+      print('📩 [API 응답 데이터]: ${response.data}');
+
+      if (response.statusCode == 200 && response.data != null) {
+        if (response.data is List && response.data.isNotEmpty) {
+          final parsedLesson = LessonVo.fromJson(response.data[0]);
+          print('✅ [JSON 파싱 성공]');
+          return parsedLesson;
+        } else {
+          print('⚠ [서버 응답 데이터 없음]');
+          return null;
+        }
+      } else {
+        print('⚠ [서버 응답 이상] 코드: ${response.statusCode}');
+        return null;
+      }
+    } catch (e) {
+      print('🚨 [API 요청 실패] 오류 발생: $e');
+      return null;
+    }
   }
 }
