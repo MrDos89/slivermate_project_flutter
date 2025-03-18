@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
+import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 
 class CreditCardModal extends StatefulWidget {
-  final List<CartItem> cartItems; // 상품 목록
+  final LessonVo lesson; // 상품 목록
   final int totalPayment; // 총 결제금액
 
   const CreditCardModal({
     Key? key,
-    required this.cartItems,
+    required this.lesson,
     required this.totalPayment,
   }) : super(key: key);
 
@@ -99,11 +100,8 @@ class _CreditCardModalState extends State<CreditCardModal> {
 
   /// (2) 상품 목록, 상품 제목, 총 결제금액
   Widget _buildTopSection() {
-    final productListString = widget.cartItems
-        .map((item) => item.name)
-        .join(', ');
-    final productTitle =
-        widget.cartItems.isNotEmpty ? widget.cartItems[0].name : "상품 제목";
+    final productListString = widget.lesson.lessonName;
+    final productTitle = widget.lesson.lessonName ?? "상품 제목";
 
     return Padding(
       padding: const EdgeInsets.all(16.0),

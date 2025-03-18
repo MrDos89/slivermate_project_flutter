@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
+import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 
 class EtcModal extends StatelessWidget {
-  final List<CartItem> cartItems;
+  final LessonVo lesson;
   final int totalPayment;
 
-  const EtcModal({
-    Key? key,
-    required this.cartItems,
-    required this.totalPayment,
-  }) : super(key: key);
+  const EtcModal({Key? key, required this.lesson, required this.totalPayment})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +51,14 @@ class EtcModal extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: cartItems.length,
+            itemCount: 1,
             itemBuilder: (context, index) {
-              final item = cartItems[index];
               return ListTile(
-                leading: const Icon(Icons.shopping_cart), /// 결제할 상품목록
-                title: Text(item.name),
-                subtitle: Text('${item.price}원'),
+                leading: const Icon(Icons.shopping_cart),
+
+                /// 결제할 상품목록
+                title: Text(lesson.lessonName),
+                subtitle: Text('${lesson.lessonPrice}원'),
               );
             },
           ),

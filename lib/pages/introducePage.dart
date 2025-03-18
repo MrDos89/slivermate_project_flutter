@@ -141,7 +141,8 @@ class _IntroducePageState extends State<IntroducePage> {
       player: YoutubePlayer(controller: _controller),
       builder: (context, player) {
         return MainLayout(
-          showPaymentButton: true,
+          showPaymentButton: lesson != null,
+          lesson: lesson,
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: const Color(0xFFE6E6FA),
@@ -212,7 +213,7 @@ class _IntroducePageState extends State<IntroducePage> {
                                   ),
                                 ),
                                 Text(
-                                  lesson!.registerDate,
+                                  lesson!.getFormattedDate(), // ✅ 변환된 날짜 표시
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.black54,

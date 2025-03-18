@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
+import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 
 class CheckCardModal extends StatelessWidget {
-  final List<CartItem> cartItems;
+  final LessonVo lesson;
   final int totalPayment;
 
   const CheckCardModal({
     Key? key,
-    required this.cartItems,
+    required this.lesson,
     required this.totalPayment,
   }) : super(key: key);
 
@@ -53,15 +54,15 @@ class CheckCardModal extends StatelessWidget {
           ListView.builder(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: cartItems.length,
+            itemCount: 1,
             itemBuilder: (context, index) {
-              final item = cartItems[index];
+              final item = lesson;
               return ListTile(
                 leading: const Icon(Icons.shopping_cart),
 
                 /// 임시 아이콘
-                title: Text(item.name),
-                subtitle: Text('${item.price}원'),
+                title: Text(lesson.lessonName),
+                subtitle: Text('${lesson.lessonPrice}원'),
               );
             },
           ),

@@ -57,6 +57,17 @@ class LessonVo {
     );
   }
 
+  // 🔥 날짜 변환 함수 추가
+  String getFormattedDate() {
+    if (registerDate.isEmpty || registerDate == "없음") return "날짜 없음"; // 빈 값 처리
+    try {
+      DateTime dateTime = DateTime.parse(registerDate);
+      return "${dateTime.year}-${dateTime.month.toString().padLeft(2, '0')}-${dateTime.day.toString().padLeft(2, '0')}";
+    } catch (e) {
+      return "날짜 없음"; // 변환 실패 시 기본값
+    }
+  }
+
   // ✅ LessonVO → JSON 변환
   Map<String, dynamic> toJson() {
     return {
