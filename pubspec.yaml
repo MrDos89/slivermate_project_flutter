@@ -90,8 +90,8 @@ flutter:
     - lib/images/foot.jpg
     - lib/animations/credit_card.json # lottie 애니메이션 전환
     - lib/animations/pay_card.json # lottie 애니메이션 전환
-    - lib/animations/qr_scan.json  #
-#    - lib/animations/phone_pay.json #
+    - lib/animations/qr_scan.json  # lottie 애니메이션 전환
+    - lib/animations/phone_pay.json # lottie 애니메이션 전환
 #    - lib/animations/back.mp4
     - lib/images/tree.mp4
 

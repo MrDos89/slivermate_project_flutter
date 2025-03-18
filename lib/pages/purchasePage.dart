@@ -4,7 +4,7 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/CreditCardModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/PayModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dart';
-// Lottie 애니메이션 위젯
+// Lottie
 import 'package:lottie/lottie.dart';
 
 /// 강의 영상(또는 상품) 데이터 모델
@@ -31,6 +31,22 @@ class CartItem {
   }
 }
 
+/// 결제수단 타입
+enum _ModalType { card, pay, phone, qr }
+
+/// 결제수단 데이터 모델
+class _PaymentMethod {
+  final String label;
+  final String? lottieAssetPath;
+  final _ModalType modalType;
+
+  _PaymentMethod({
+    required this.label,
+    this.lottieAssetPath,
+    required this.modalType,
+  });
+}
+
 class PurchasePage extends StatefulWidget {
   const PurchasePage({Key? key}) : super(key: key);
 
@@ -41,6 +57,7 @@ class PurchasePage extends StatefulWidget {
 class _PurchasePageState extends State<PurchasePage> {
   List<CartItem> cartItems = [];
 
+  /// 장바구니 총합
   int get itemsTotal {
     int sum = 0;
     for (var item in cartItems) {
@@ -49,6 +66,7 @@ class _PurchasePageState extends State<PurchasePage> {
     return sum;
   }
 
+  /// 최종 결제금액
   int get totalPayment => itemsTotal;
 
   @override
@@ -61,6 +79,7 @@ class _PurchasePageState extends State<PurchasePage> {
         cartItems = [selectedLecture];
       });
     } else {
+      // 테스트용 기본 데이터
       setState(() {
         cartItems = [
           CartItem(
@@ -74,7 +93,7 @@ class _PurchasePageState extends State<PurchasePage> {
     }
   }
 
-  /// 결제수단 4가지 모두 Lottie 애니메이션 사용
+  /// 결제수단 4가지
   final List<_PaymentMethod> paymentMethods = [
     _PaymentMethod(
       label: '카드 결제',
@@ -98,14 +117,14 @@ class _PurchasePageState extends State<PurchasePage> {
     ),
   ];
 
-  /// 결제수단별 모달 열기
+  /// 결제수단 선택 시 모달 띄우기
   void _openModal(_ModalType type) {
     switch (type) {
       case _ModalType.card:
         showDialog(
           context: context,
           builder:
-              (context) => CreditCardModal(
+              (_) => CreditCardModal(
                 cartItems: cartItems,
                 totalPayment: totalPayment,
               ),
@@ -115,8 +134,7 @@ class _PurchasePageState extends State<PurchasePage> {
         showDialog(
           context: context,
           builder:
-              (context) =>
-                  PayModal(cartItems: cartItems, totalPayment: totalPayment),
+              (_) => PayModal(cartItems: cartItems, totalPayment: totalPayment),
         );
         break;
       case _ModalType.phone:
@@ -124,8 +142,7 @@ class _PurchasePageState extends State<PurchasePage> {
         showDialog(
           context: context,
           builder:
-              (context) =>
-                  EtcModal(cartItems: cartItems, totalPayment: totalPayment),
+              (_) => EtcModal(cartItems: cartItems, totalPayment: totalPayment),
         );
         break;
     }
@@ -142,7 +159,8 @@ class _PurchasePageState extends State<PurchasePage> {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            // Extra bottom padding so the price summary isn't cut off
+            padding: const EdgeInsets.only(top: 16, bottom: 60),
             child: Column(
               children: [
                 _buildCartList(),
@@ -158,6 +176,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
+  /// (1) 상품 목록
   Widget _buildCartList() {
     return ListView.builder(
       shrinkWrap: true,
@@ -179,7 +198,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 결제수단 버튼 (Lottie 애니메이션 사용)
+  /// (2) 결제수단 Grid
   Widget _buildPaymentOptions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -190,51 +209,58 @@ class _PurchasePageState extends State<PurchasePage> {
             style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 16),
+          // Grid of Lottie animations
           GridView.count(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
             crossAxisCount: 2,
             mainAxisSpacing: 16,
             crossAxisSpacing: 16,
-            childAspectRatio: 1.1,
+            // Give even more vertical space
+            childAspectRatio: 0.7,
             children:
                 paymentMethods.map((method) {
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                          offset: const Offset(2, 2),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        // Lottie 애니메이션 위젯 사용
-                        GestureDetector(
-                          onTap: () => _openModal(method.modalType),
-                          child: Lottie.asset(
-                            method.lottieAssetPath!,
-                            width: 150,
-                            height: 150,
-                            repeat: true,
-                            animate: true,
+                  return InkWell(
+                    onTap: () => _openModal(method.modalType),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 4,
+                            offset: Offset(2, 2),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          method.label,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black87,
+                        ],
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          // Slightly smaller Lottie for safe spacing
+                          SizedBox(
+                            width: 100,
+                            height: 100,
+                            child:
+                                method.lottieAssetPath != null
+                                    ? Lottie.asset(method.lottieAssetPath!)
+                                    : const Icon(
+                                      Icons.warning,
+                                      size: 60,
+                                      color: Colors.red,
+                                    ),
                           ),
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(
+                            method.label,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   );
                 }).toList(),
@@ -244,17 +270,13 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
+  /// (3) 가격 요약
   Widget _buildPriceSummary() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         children: [
-          _buildRowItem(
-            '총 상품금액',
-            '${itemsTotal}원',
-            fontSize: 20,
-            fontWeight: FontWeight.normal,
-          ),
+          _buildRowItem('총 상품금액', '${itemsTotal}원', fontSize: 20),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -297,18 +319,4 @@ class _PurchasePageState extends State<PurchasePage> {
       ],
     );
   }
-}
-
-enum _ModalType { card, pay, phone, qr }
-
-class _PaymentMethod {
-  final String label;
-  final String? lottieAssetPath;
-  final _ModalType modalType;
-
-  _PaymentMethod({
-    required this.label,
-    this.lottieAssetPath,
-    required this.modalType,
-  });
 }

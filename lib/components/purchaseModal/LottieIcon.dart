@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieIcon extends StatelessWidget {
-  final String assetPath; // 예: 'lib/animations/credit_card.json'
+  final String assetPath; // e.g. 'lib/animations/credit_card.json'
   final double width;
   final double height;
   final VoidCallback? onTap;
