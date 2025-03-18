@@ -37,6 +37,9 @@ dependencies:
   font_awesome_flutter: ^10.8.0
   youtube_player_flutter: ^9.1.1
   dio: ^5.8.0+1
+  # video_player 패키지 추가
+  video_player: ^2.5.5
+
   # lottie 패키지 추가
   lottie: ^2.2.0  #최신 버전을 pub.dev에서 확인 후 사용
 
@@ -86,9 +89,11 @@ flutter:
     - lib/images/tennis.jpg
     - lib/images/foot.jpg
     - lib/animations/credit_card.json # lottie 애니메이션 전환
-    - lib/animations/pay_card.json # 페이 결제용 mp4 파일 추가
-    - lib/animations/qr_scan.json  # qr 결제용 mp4 파일 추가
-    - lib/animations/phone_pay.json # 핸드폰 결제용 mp4 파일 추가
+    - lib/animations/pay_card.json # lottie 애니메이션 전환
+    - lib/animations/qr_scan.json  #
+#    - lib/animations/phone_pay.json #
+#    - lib/animations/back.mp4
+    - lib/images/tree.mp4
 
   # To add assets to your application, add an assets section, like this:
   # assets:

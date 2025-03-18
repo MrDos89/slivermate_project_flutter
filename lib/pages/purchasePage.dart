@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
-
 // 모달 파일들
 import 'package:slivermate_project_flutter/components/purchaseModal/CreditCardModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/PayModal.dart';
 import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dart';
-// MP4 아이콘
-// import 'package:slivermate_project_flutter/components/purchaseModal/AnimatedMp4Icon.dart';
+// Lottie 애니메이션 위젯
+import 'package:lottie/lottie.dart';
 
 /// 강의 영상(또는 상품) 데이터 모델
 class CartItem {
@@ -62,7 +61,6 @@ class _PurchasePageState extends State<PurchasePage> {
         cartItems = [selectedLecture];
       });
     } else {
-      // 테스트용
       setState(() {
         cartItems = [
           CartItem(
@@ -76,30 +74,31 @@ class _PurchasePageState extends State<PurchasePage> {
     }
   }
 
-  /// 4가지 결제수단(모두 MP4)
+  /// 결제수단 4가지 모두 Lottie 애니메이션 사용
   final List<_PaymentMethod> paymentMethods = [
     _PaymentMethod(
       label: '카드 결제',
-      mp4AssetPath: 'lib/videos/credit_card.mp4',
+      lottieAssetPath: 'lib/animations/credit_card.json',
       modalType: _ModalType.card,
     ),
     _PaymentMethod(
       label: '페이 결제',
-      mp4AssetPath: 'lib/videos/pay_card.mp4',
+      lottieAssetPath: 'lib/animations/pay_card.json',
       modalType: _ModalType.pay,
     ),
     _PaymentMethod(
       label: '핸드폰 결제',
-      mp4AssetPath: 'lib/videos/phone_pay.mp4',
+      lottieAssetPath: 'lib/animations/phone_pay.json',
       modalType: _ModalType.phone,
     ),
     _PaymentMethod(
       label: 'QR 결제',
-      mp4AssetPath: 'lib/videos/qr_scan.mp4',
+      lottieAssetPath: 'lib/animations/qr_scan.json',
       modalType: _ModalType.qr,
     ),
   ];
 
+  /// 결제수단별 모달 열기
   void _openModal(_ModalType type) {
     switch (type) {
       case _ModalType.card:
@@ -180,7 +179,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 4개의 MP4 아이콘 모두 자동 재생
+  /// 결제수단 버튼 (Lottie 애니메이션 사용)
   Widget _buildPaymentOptions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -215,12 +214,17 @@ class _PurchasePageState extends State<PurchasePage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // AnimatedMp4Icon(
-                        //   assetPath: method.mp4AssetPath,
-                        //   width: 120,
-                        //   height: 120,
-                        //   onTap: () => _openModal(method.modalType),
-                        // ),
+                        // Lottie 애니메이션 위젯 사용
+                        GestureDetector(
+                          onTap: () => _openModal(method.modalType),
+                          child: Lottie.asset(
+                            method.lottieAssetPath!,
+                            width: 150,
+                            height: 150,
+                            repeat: true,
+                            animate: true,
+                          ),
+                        ),
                         const SizedBox(height: 8),
                         Text(
                           method.label,
@@ -299,12 +303,12 @@ enum _ModalType { card, pay, phone, qr }
 
 class _PaymentMethod {
   final String label;
-  final String mp4AssetPath;
+  final String? lottieAssetPath;
   final _ModalType modalType;
 
   _PaymentMethod({
     required this.label,
-    required this.mp4AssetPath,
+    this.lottieAssetPath,
     required this.modalType,
   });
 }
