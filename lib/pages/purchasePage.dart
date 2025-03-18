@@ -162,10 +162,10 @@ class _PurchasePageState extends State<PurchasePage> {
       itemCount: 1,
       itemBuilder: (context, index) {
         return ListTile(
-          leading: Image.asset(
-            'lib/images/골프.jpg',
-            width: 60,
-            height: 60,
+          leading: Image.network(
+            'https://img.cpbc.co.kr/newsimg/upload/2024/09/25/R5B1727229411206.jpg',
+            width: 105,
+            height: 80,
             fit: BoxFit.cover,
           ),
           title: Text(lesson.lessonName, style: const TextStyle(fontSize: 16)),
