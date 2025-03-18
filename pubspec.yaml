@@ -86,6 +86,8 @@ flutter:
     - lib/images/tennis.jpg
     - lib/images/foot.jpg
     - lib/videos/credit_card.mp4
+    - lib/videos/back.mp4
+    - lib/images/tree.mp4
 #    - lib/videos/pay_card.mp4
 
   # To add assets to your application, add an assets section, like this:
