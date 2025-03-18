@@ -55,7 +55,6 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     final args = ModalRoute.of(context)?.settings.arguments;
     if (args != null && args is Map<String, dynamic>) {
       final selectedLecture = CartItem.fromJson(args);
@@ -76,35 +75,37 @@ class _PurchasePageState extends State<PurchasePage> {
     }
   }
 
-  /// 결제수단 4가지 (카드 결제만 mp4 사용)
+  /// 결제수단 4가지
+  /// - 카드 결제, 페이 결제, 핸드폰 결제, QR 결제 모두 MP4 동영상 사용
   final List<_PaymentMethod> paymentMethods = [
     _PaymentMethod(
       label: '카드 결제',
-      mp4AssetPath: 'lib/videos/credit_card.mp4', // MP4 경로 (영문 파일명 권장)
+      mp4AssetPath: 'lib/videos/credit_card.mp4',
       icon: null,
       modalType: _ModalType.card,
     ),
     _PaymentMethod(
       label: '페이 결제',
-      mp4AssetPath: null,
-      icon: Icons.payment,
+      mp4AssetPath: 'lib/videos/pay_card.mp4',
+      icon: null,
       modalType: _ModalType.pay,
     ),
     _PaymentMethod(
       label: '핸드폰 결제',
-      mp4AssetPath: null,
-      icon: Icons.phone_android,
+      mp4AssetPath: 'lib/videos/phone_pay.mp4', // 핸드폰 결제 동영상
+      icon: null,
       modalType: _ModalType.phone,
     ),
     _PaymentMethod(
       label: 'QR 결제',
-      mp4AssetPath: null,
-      icon: Icons.qr_code,
+      mp4AssetPath: 'lib/videos/qr_scan.mp4',
+      icon: null,
       modalType: _ModalType.qr,
     ),
   ];
 
-  void _onPaymentMethodSelected(_ModalType type) {
+  /// 결제수단별 모달 열기
+  void _openModal(_ModalType type) {
     switch (type) {
       case _ModalType.card:
         showDialog(
@@ -186,7 +187,7 @@ class _PurchasePageState extends State<PurchasePage> {
     );
   }
 
-  /// 결제수단 버튼 (카드결제는 mp4, 나머지는 아이콘)
+  /// 결제수단 버튼 (동영상은 자동 재생, 탭하면 모달 열기)
   Widget _buildPaymentOptions() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -206,44 +207,37 @@ class _PurchasePageState extends State<PurchasePage> {
             childAspectRatio: 1.1,
             children:
                 paymentMethods.map((method) {
-                  return GestureDetector(
-                    onTap: () => _onPaymentMethodSelected(method.modalType),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 4,
-                            offset: const Offset(2, 2),
+                  return Container(
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: const Offset(2, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        AnimatedMp4Icon(
+                          assetPath: method.mp4AssetPath!,
+                          width: 120,
+                          height: 120,
+                          onTap: () => _openModal(method.modalType),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          method.label,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
                           ),
-                        ],
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          if (method.mp4AssetPath != null)
-                            // MP4 아이콘
-                            AnimatedMp4Icon(
-                              assetPath: method.mp4AssetPath!,
-                              width: 120,
-                              height: 120,
-                            )
-                          else
-                            // 일반 아이콘
-                            Icon(method.icon, size: 48, color: Colors.black54),
-                          const SizedBox(height: 8),
-                          Text(
-                            method.label,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black87,
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   );
                 }).toList(),

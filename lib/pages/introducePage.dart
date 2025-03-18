@@ -57,7 +57,7 @@ class _IntroducePageState extends State<IntroducePage> {
 
   // 🔥서버 데이터 호출하고, 없으면 더미 사용
   Future<void> fetchLessonData(int lessonId) async {
-    final dio = Dio();
+    // final dio = Dio();
     try {
       final response = await dio.get('$apiEndpoint/$lessonId');
 

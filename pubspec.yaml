@@ -38,6 +38,8 @@ dependencies:
   youtube_player_flutter: ^9.1.1
   # 비디오 동영상 추가
   video_player: ^2.5.5 # 최신 버전 확인
+  # dio 추가
+  dio: ^5.0.3
 
 dev_dependencies:
   flutter_test:
@@ -84,8 +86,10 @@ flutter:
     - lib/images/golf.jpg
     - lib/images/tennis.jpg
     - lib/images/foot.jpg
-    - lib/videos/credit_card.mp4
-#    - lib/videos/pay_card.mp4
+    - lib/videos/credit_card.mp4 # 카드 결제용 mp4 파일 추가
+    - lib/videos/pay_card.mp4 # 페이 결제용 mp4 파일 추가
+    - lib/videos/qr_scan.mp4  # qr 결제용 mp4 파일 추가
+    - lib/videos/phone_pay.mp4 # 핸드폰 결제용 mp4 파일 추가
 
   # To add assets to your application, add an assets section, like this:
   # assets:
