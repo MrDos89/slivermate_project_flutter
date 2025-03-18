@@ -3,7 +3,34 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
-import 'package:dio/dio.dart';
+
+// 🔥 카테고리 ID를 문자열로 변환
+const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
+
+// 🔥 취미 ID를 문자열로 변환 (카테고리별로 따로 저장)
+const Map<int, String> indoorHobbies = {
+  1: "뜨개질",
+  2: "그림",
+  3: "독서",
+  4: "영화 감상",
+  5: "퍼즐",
+  6: "요리",
+  7: "통기타",
+  8: "당구",
+  9: "바둑",
+};
+
+const Map<int, String> outdoorHobbies = {
+  1: "등산",
+  2: "자전거",
+  3: "캠핑",
+  4: "낚시",
+  5: "러닝/마라톤",
+  6: "수영",
+  7: "골프",
+  8: "테니스",
+  9: "족구",
+};
 
 class IntroducePage extends StatefulWidget {
   LessonVo? lesson;
@@ -123,7 +150,8 @@ class _IntroducePageState extends State<IntroducePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    '${lesson!.lessonCategory} / ${lesson!.lessonSubCategory}',
+                    '${categoryNames[lesson!.lessonCategory] ?? "알 수 없음"} / '
+                    '${lesson!.lessonCategory == 1 ? indoorHobbies[lesson!.lessonSubCategory] : outdoorHobbies[lesson!.lessonSubCategory] ?? "알 수 없음"}',
                     style: const TextStyle(
                       fontSize: 16,
                       color: Color(0xFF212121),
@@ -169,22 +197,22 @@ class _IntroducePageState extends State<IntroducePage> {
                             CircleAvatar(
                               radius: 22,
                               backgroundImage: AssetImage(
-                                'assets/images/instructor.png',
+                                lesson!.userThumbnail,
                               ),
                             ),
                             const SizedBox(width: 8), // 이 값으로 간격 조정 가능
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: const [
+                              children: [
                                 Text(
-                                  "강사: User #101",
+                                  lesson!.userName,
                                   style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                                 Text(
-                                  "등록일: 2024-03-10",
+                                  lesson!.registerDate,
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.black54,
@@ -203,8 +231,8 @@ class _IntroducePageState extends State<IntroducePage> {
                               size: 18,
                             ),
                             const SizedBox(width: 8),
-                            const Text(
-                              '15,000원',
+                            Text(
+                              lesson!.lessonPrice.toString(),
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
@@ -219,6 +247,7 @@ class _IntroducePageState extends State<IntroducePage> {
                   const SizedBox(height: 10),
                   Expanded(
                     child: Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.all(12.0),
                       decoration: _boxDecorationWithShadow(),
                       child: Column(
@@ -233,10 +262,10 @@ class _IntroducePageState extends State<IntroducePage> {
                             ),
                           ),
                           const SizedBox(height: 8),
-                          const Expanded(
+                          Expanded(
                             child: SingleChildScrollView(
                               child: Text(
-                                "이 강의는 기초 요가 스트레칭을 배우는 과정으로, 몸의 유연성을 기르고 건강을 유지하는 데 도움을 줍니다.",
+                                lesson!.lessonDesc,
                                 style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.black87,
