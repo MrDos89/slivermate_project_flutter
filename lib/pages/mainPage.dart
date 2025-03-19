@@ -13,14 +13,17 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   late VideoPlayerController _controller;
   bool isLoading = false; // ✅ 로딩 상태 변수 추가
+  bool isDebugMode = true; // ✅ 디버그 모드 추가 (true: 이미지, false: 영상)
 
   @override
   void initState() {
     super.initState();
-    _initializeVideo();
+    if (!isDebugMode) {
+      _initializeVideo();
+    }
   }
 
-  /// 🎥 비디오 초기화 (단일 영상 유지)
+  /// 🎥 비디오 초기화 (디버그 모드가 아닐 때만 실행)
   void _initializeVideo() {
     _controller = VideoPlayerController.asset("lib/images/skan09.mp4")
       ..initialize()
@@ -38,7 +41,9 @@ class _MainPageState extends State<MainPage> {
 
   /// 🔹 배경 클릭 시 카테고리로 부드럽게 이동
   void _onBackgroundTap() {
-    _controller.dispose(); // ✅ 비디오 컨트롤러 해제
+    if (!isDebugMode) {
+      _controller.dispose(); // ✅ 비디오 컨트롤러 해제
+    }
     _navigateToCategory(); // ✅ 부드러운 페이드 인/아웃 효과 적용
   }
 
@@ -47,7 +52,6 @@ class _MainPageState extends State<MainPage> {
       isLoading = true; // ✅ 로딩 활성화
     });
 
-    // await Future.delayed(Duration(seconds: 1));
     await Future.delayed(Duration(milliseconds: 500));
 
     if (mounted) {
@@ -72,7 +76,7 @@ class _MainPageState extends State<MainPage> {
 
   @override
   void dispose() {
-    if (mounted) {
+    if (!isDebugMode && mounted) {
       _controller.dispose(); // ✅ mounted 확인 후 dispose()
     }
     super.dispose();
@@ -87,11 +91,16 @@ class _MainPageState extends State<MainPage> {
           onTap: _onBackgroundTap, // 🔹 배경 클릭하면 카테고리로 이동
           child: Stack(
             children: [
-              /// 🎥 배경 영상
+              /// 🎥 배경 영상 or 디버그 모드 이미지
               Positioned.fill(
                 child:
                     isLoading
                         ? Container(color: Colors.black) // ✅ 로딩 중엔 검은 화면 유지
+                        : isDebugMode
+                        ? Image.asset(
+                          "lib/images/tree.png", // ✅ 디버그 모드일 경우 정지된 이미지 표시
+                          fit: BoxFit.cover,
+                        )
                         : _controller.value.isInitialized
                         ? FittedBox(
                           fit: BoxFit.cover,
@@ -103,6 +112,27 @@ class _MainPageState extends State<MainPage> {
                         )
                         : Container(color: Colors.black), // ✅ 초기 로딩 중 검은 화면
               ),
+
+              /// 🛠 디버그 모드 토글 버튼 (우측 상단)
+              // Positioned(
+              //   top: 40,
+              //   right: 20,
+              //   child: ElevatedButton(
+              //     onPressed: () {
+              //       setState(() {
+              //         isDebugMode = !isDebugMode; // ✅ 디버그 모드 토글
+              //         if (!isDebugMode) {
+              //           _initializeVideo(); // ✅ 디버그 해제 시 영상 재생
+              //         }
+              //       });
+              //     },
+              //     style: ElevatedButton.styleFrom(
+              //       backgroundColor: Colors.black.withOpacity(0.7),
+              //       foregroundColor: Colors.white,
+              //     ),
+              //     child: Text(isDebugMode ? "디버그 OFF" : "디버그 ON"),
+              //   ),
+              // ),
             ],
           ),
         ),
