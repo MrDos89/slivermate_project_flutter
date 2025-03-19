@@ -123,6 +123,10 @@ class _CategoryPageState extends State<CategoryPage> {
   void initState() {
     super.initState();
     _initializeVideo();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("[CategoryPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+    });
   }
 
   /// 🔹 배경 영상 초기화

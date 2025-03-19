@@ -86,6 +86,10 @@ class _IntroducePageState extends State<IntroducePage> {
     print("야 initState 들어간다");
     super.initState();
     fetchLessonData(); // ✅ API 호출 (초기에는 값이 없을 수도 있음)
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("[IntroducePage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+    });
   }
 
   // ✅ lessonCategory와 lessonSubCategory가 설정된 후 API 호출

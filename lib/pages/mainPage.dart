@@ -1,27 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:slivermate_project_flutter/vo/userVo.dart';
-
 import 'package:video_player/video_player.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart'; // 카테고리 페이지 임포트
 import 'package:slivermate_project_flutter/widgets/LoadingOverlay.dart';
 
-class MainPage extends StatelessWidget {
+import 'package:slivermate_project_flutter/vo/userVo.dart';
+
+class MainPage extends StatefulWidget {
   final UserVo? dummyUser;
   const MainPage({super.key, required this.dummyUser});
 
   @override
-  Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("메인페이지"),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        ),
-        body: Container(color: Colors.grey[100], child: _MainPage(dummyUser: dummyUser),),
-      );
-
-    @override
-    _MainPageState createState() => _MainPageState();
-  }
+  _MainPageState createState() => _MainPageState();
 }
 
 class _MainPageState extends State<MainPage> {
@@ -35,12 +24,11 @@ class _MainPageState extends State<MainPage> {
     if (!isDebugMode) {
       _initializeVideo();
     }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("[MainPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+    });
   }
-}
 
-class _MainPage extends StatefulWidget {
-  final UserVo? dummyUser;
-  const _MainPage({super.key, this.dummyUser});
   /// 🎥 비디오 초기화 (디버그 모드가 아닐 때만 실행)
   void _initializeVideo() {
     _controller = VideoPlayerController.asset("lib/images/skan09.mp4")
@@ -76,7 +64,7 @@ class _MainPage extends StatefulWidget {
       await Navigator.of(context).push(
         PageRouteBuilder(
           pageBuilder:
-              (context, animation, secondaryAnimation) => CategoryPage(),
+              (context, animation, secondaryAnimation) => CategoryPage(dummyUser: widget.dummyUser),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
