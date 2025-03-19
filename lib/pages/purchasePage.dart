@@ -42,6 +42,7 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   void initState() {
     super.initState();
+    print("🟢 [PurchasePage initState()] dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
     // fetchPurchaseData();
   }
 

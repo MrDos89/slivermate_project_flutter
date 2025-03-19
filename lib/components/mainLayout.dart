@@ -21,6 +21,8 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("[MainLayout build()] 🔴 dummyUser 값: ${dummyUser?.userName}, ${dummyUser?.email}");
+
     return Scaffold(
       body: child, // 페이지 본문
       bottomNavigationBar: _buildFooter(context), // 공통 푸터 자동 포함

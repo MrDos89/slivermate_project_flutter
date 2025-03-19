@@ -86,10 +86,7 @@ class _IntroducePageState extends State<IntroducePage> {
     print("야 initState 들어간다");
     super.initState();
     fetchLessonData(); // ✅ API 호출 (초기에는 값이 없을 수도 있음)
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("[IntroducePage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
-    });
+    print("🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
   }
 
   // ✅ lessonCategory와 lessonSubCategory가 설정된 후 API 호출
@@ -144,12 +141,21 @@ class _IntroducePageState extends State<IntroducePage> {
 
   @override
   Widget build(BuildContext context) {
+    print("[IntroducePage] 🟢 dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+
+    if (widget.dummyUser == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()), // ✅ 데이터 로딩 중 표시
+      );
+    }
+
     return YoutubePlayerBuilder(
       player: YoutubePlayer(controller: _controller),
       builder: (context, player) {
         return MainLayout(
           showPaymentButton: lesson != null,
           lesson: lesson,
+          dummyUser: widget.dummyUser,
           child: Scaffold(
             appBar: AppBar(
               backgroundColor: const Color(0xFFE6E6FA),
