@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class MainPage extends StatelessWidget {
-  const MainPage({super.key});
+  final UserVo? dummyUser;
+  const MainPage({super.key, required this.dummyUser});
 
   @override
   Widget build(BuildContext context) {
@@ -10,13 +12,14 @@ class MainPage extends StatelessWidget {
         title: Text("메인페이지"),
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
       ),
-      body: Container(color: Colors.grey[100], child: _MainPage()),
+      body: Container(color: Colors.grey[100], child: _MainPage(dummyUser: dummyUser),),
     );
   }
 }
 
 class _MainPage extends StatefulWidget {
-  const _MainPage({super.key});
+  final UserVo? dummyUser;
+  const _MainPage({super.key, this.dummyUser});
 
   @override
   State<_MainPage> createState() => _MainPageState();
@@ -35,6 +38,9 @@ class _MainPageState extends State<_MainPage> {
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.pushNamed(context, "/category");
+
+                  print("[mainPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+
                 },
                 child: Text("카데고리 화면으로 이동"),
               ),

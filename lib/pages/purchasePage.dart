@@ -9,6 +9,7 @@ import 'package:lottie/lottie.dart';
 
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 /// 결제수단 타입
 enum _ModalType { card, pay, phone, qr }
@@ -27,7 +28,8 @@ class _PaymentMethod {
 }
 
 class PurchasePage extends StatefulWidget {
-  const PurchasePage({Key? key}) : super(key: key);
+  final UserVo? dummyUser;
+  const PurchasePage({super.key, required this.dummyUser});
 
   @override
   _PurchasePageState createState() => _PurchasePageState();

@@ -5,6 +5,7 @@ import 'package:slivermate_project_flutter/pages/categoryPage.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
 import 'package:slivermate_project_flutter/pages/NotificationPage.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -16,6 +17,25 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
+    // 🔥 더미 유저 데이터 (19번 유저)
+    final UserVo dummyUser = UserVo(
+      uid: 19, // ✅ 필드명 지정
+      userName: "user1",
+      nickname: "User",
+      userId: "user1",
+      userPassword: "user1",
+      telNumber: "010-0055-1122",
+      email: "user1@naver.com",
+      thumbnail: "",
+      guId: 1,
+      recommendUid: null,
+      registerDate: "2025-03-18T10:00:00.000+00:00",
+      isDeleted: false,
+      isAdmin: false,
+      updDate: "2025-03-18T10:00:00.000+00:00",
+    );
+
     return MaterialApp(
       title: 'Slivermate Project', //@dhkim - 가제
       theme: ThemeData(
@@ -23,12 +43,12 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => MainPage(),
-        "/category": (context) => CategoryPage(),
-        "/introduce": (context) => IntroducePage(lessonCategory: 1, lessonSubCategory: 1),
-        "/purchase": (context) => PurchasePage(),
-        "/call": (context) => CallStaffPage(),
-        "/notifications": (context) => NotificationPage(),
+        "/": (context) => MainPage(dummyUser: dummyUser),
+        "/category": (context) => CategoryPage(dummyUser: dummyUser),
+        "/introduce": (context) => IntroducePage(lessonCategory: 1, lessonSubCategory: 1, dummyUser: dummyUser),
+        "/purchase": (context) => PurchasePage(dummyUser: dummyUser),
+        "/call": (context) => CallStaffPage(dummyUser: dummyUser),
+        "/notifications": (context) => NotificationPage(dummyUser: dummyUser),
       },
     );
   }

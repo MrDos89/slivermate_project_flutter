@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class MainLayout extends StatelessWidget {
   final Widget child;
   final bool showPaymentButton; // 결제 버튼 활성화 여부
   final bool showAlertButton; // 디버그 상태에서 알림 버튼 활성화 여부
   final LessonVo? lesson;
+  final UserVo? dummyUser;
 
   const MainLayout({
     super.key,
@@ -14,6 +16,7 @@ class MainLayout extends StatelessWidget {
     this.showPaymentButton = false,
     this.showAlertButton = false,
     this.lesson,
+    this.dummyUser,
   });
 
   @override
@@ -29,7 +32,7 @@ class MainLayout extends StatelessWidget {
       context: context,
       barrierDismissible: false, // ❌ 바깥 클릭으로 닫히지 않도록 설정
       builder: (BuildContext context) {
-        return const CallStaffPage(); // ✅ 수정된 CallStaffPage 사용 (오류 해결)
+        return CallStaffPage(dummyUser: dummyUser!);
       },
     );
   }
@@ -112,7 +115,10 @@ class MainLayout extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       "/purchase",
-                      arguments: lesson,
+                      arguments: {
+                        "lesson": lesson,       // ✅ LessonVo 객체
+                        "user": dummyUser,      // ✅ UserVo 객체(dummyUser)
+                      },
                     );
                   } else {
                     print("🚨 [오류] lesson 데이터가 없습니다! 결제 페이지로 이동할 수 없음.");

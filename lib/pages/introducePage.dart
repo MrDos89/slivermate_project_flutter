@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
@@ -36,11 +37,13 @@ class IntroducePage extends StatefulWidget {
   LessonVo? lesson;
   int lessonCategory;
   int lessonSubCategory;
+  UserVo? dummyUser;
 
   IntroducePage({
     super.key,
     required this.lessonCategory,
     required this.lessonSubCategory,
+    required this.dummyUser,
   }) {
     print(
       "IntroducePage 찍힌 카데고리 번호: (카테고리 ID: $lessonCategory, 취미 ID: $lessonSubCategory)",

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class CallStaffPage extends StatefulWidget {
-  const CallStaffPage({super.key});
+  final UserVo? dummyUser;
+  const CallStaffPage({super.key, required this.dummyUser});
 
   @override
   _CallStaffPageState createState() => _CallStaffPageState();

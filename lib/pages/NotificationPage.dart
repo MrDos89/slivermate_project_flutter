@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class NotificationPage extends StatelessWidget {
-  const NotificationPage({super.key});
+  final UserVo? dummyUser;
+  const NotificationPage({super.key, required this.dummyUser});
 
   @override
   Widget build(BuildContext context) {
