@@ -65,6 +65,7 @@ class _CategoryPageState extends State<CategoryPage> {
   //     });
   // }
 
+  /*
   @override
   void initState() {
     super.initState();
@@ -92,6 +93,55 @@ class _CategoryPageState extends State<CategoryPage> {
     setState(() {
       _controller.dispose(); // 기존 영상 해제
       _initializeVideo(); // 새 랜덤 영상 설정
+    });
+  }
+   */
+
+  int? lastPlayedIndex; // 마지막 재생된 영상 인덱스 저장
+
+  /// 🔹 중복되지 않는 랜덤 영상 선택
+  String _getRandomVideoPath() {
+    final random = Random();
+    List<String> availableVideos = [...videoPaths];
+
+    if (lastPlayedIndex != null) {
+      availableVideos.removeAt(lastPlayedIndex!);
+    }
+
+    int newIndex = random.nextInt(availableVideos.length);
+    lastPlayedIndex = videoPaths.indexOf(availableVideos[newIndex]);
+
+    return availableVideos[newIndex];
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeVideo();
+  }
+
+  /// 🔹 배경 영상 초기화
+  void _initializeVideo() {
+    String nextVideo = _getRandomVideoPath();
+    _controller = VideoPlayerController.asset(nextVideo)
+      ..initialize().then((_) {
+        setState(() {});
+        _controller.setLooping(true);
+        _controller.play();
+      });
+  }
+
+  /// 🔹 배경 클릭 시 랜덤 영상 변경 (중복 방지)
+  void _changeVideo() {
+    setState(() {
+      _controller.dispose();
+      String nextVideo = _getRandomVideoPath();
+      _controller = VideoPlayerController.asset(nextVideo)
+        ..initialize().then((_) {
+          setState(() {});
+          _controller.setLooping(true);
+          _controller.play();
+        });
     });
   }
 

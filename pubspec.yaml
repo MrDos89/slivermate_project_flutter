@@ -88,6 +88,10 @@ flutter:
     - lib/images/golf.jpg
     - lib/images/tennis.jpg
     - lib/images/foot.jpg
+    - lib/images/skan.mp4
+    - lib/images/skan04.mp4
+    - lib/images/skan09.mp4
+    - lib/images/tree.png
     - lib/animations/credit_card.json # lottie 애니메이션 전환
     - lib/animations/pay_card.json # lottie 애니메이션 전환
     - lib/animations/qr_scan.json  # lottie 애니메이션 전환
