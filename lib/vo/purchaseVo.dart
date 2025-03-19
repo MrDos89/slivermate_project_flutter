@@ -7,7 +7,7 @@ class PurchaseVo {
   final int lessonId;
   final int modelType; //   모델 타입 (moedelType)
   final int clubId; //  결제한 유저 소속 동아리
-  final String receiptId; //  결제 승인증
+  final String receiptId; //  결제 영수증
   final int price; //  결제 가격
   final bool isMonthlyPaid; //  구독 모임인지 여부
   // final DateTime? updDate; //  업데이트 날짜 (nullable)
