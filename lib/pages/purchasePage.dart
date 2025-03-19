@@ -8,6 +8,7 @@ import 'package:slivermate_project_flutter/components/purchaseModal/EtcModal.dar
 import 'package:lottie/lottie.dart';
 
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 
 /// 결제수단 타입
 enum _ModalType { card, pay, phone, qr }
@@ -34,6 +35,27 @@ class PurchasePage extends StatefulWidget {
 
 class _PurchasePageState extends State<PurchasePage> {
   late LessonVo lesson;
+  late PurchaseVo purchase;
+
+  @override
+  void initState() {
+    super.initState();
+    // fetchPurchaseData();
+  }
+
+  /// purchaseVo 객체
+  PurchaseVo get purchaseTotal {
+    return PurchaseVo(
+      sku: 0,
+      uid: 19,
+      lessonId: lesson.lessonId,
+      modelType: 1,
+      clubId: 0,
+      receiptId: "test",
+      price: lesson.lessonPrice,
+      isMonthlyPaid: false,
+    );
+  }
 
   /// 장바구니 총합
   int get itemsTotal {
@@ -42,6 +64,7 @@ class _PurchasePageState extends State<PurchasePage> {
 
   /// 최종 결제금액
   int get totalPayment => itemsTotal;
+  PurchaseVo get totalPurchases => purchaseTotal;
 
   @override
   void didChangeDependencies() {
@@ -106,21 +129,43 @@ class _PurchasePageState extends State<PurchasePage> {
         showDialog(
           context: context,
           builder:
-              (_) =>
-                  CreditCardModal(lesson: lesson, totalPayment: totalPayment),
+              (_) => CreditCardModal(
+                lesson: lesson,
+                totalPurchases: totalPurchases,
+                totalPayment: totalPayment,
+              ),
         );
         break;
       case _ModalType.pay:
         showDialog(
           context: context,
-          builder: (_) => PayModal(lesson: lesson, totalPayment: totalPayment),
+          builder:
+              (_) => PayModal(
+                lesson: lesson,
+                totalPurchases: totalPurchases,
+                totalPayment: totalPayment,
+              ),
         );
         break;
       case _ModalType.phone:
+        showDialog(
+          context: context,
+          builder:
+              (_) => EtcModal(
+                lesson: lesson,
+                totalPurchases: totalPurchases,
+                totalPayment: totalPayment,
+              ),
+        );
       case _ModalType.qr:
         showDialog(
           context: context,
-          builder: (_) => EtcModal(lesson: lesson, totalPayment: totalPayment),
+          builder:
+              (_) => EtcModal(
+                lesson: lesson,
+                totalPurchases: totalPurchases,
+                totalPayment: totalPayment,
+              ),
         );
         break;
     }

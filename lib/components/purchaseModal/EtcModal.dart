@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 
 class EtcModal extends StatelessWidget {
   final LessonVo lesson;
+  final PurchaseVo totalPurchases;
   final int totalPayment;
 
-  const EtcModal({Key? key, required this.lesson, required this.totalPayment})
-    : super(key: key);
+  const EtcModal({
+    Key? key,
+    required this.lesson,
+    required this.totalPurchases,
+    required this.totalPayment,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

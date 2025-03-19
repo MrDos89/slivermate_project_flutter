@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 
 class CreditCardModal extends StatefulWidget {
   final LessonVo lesson; // 상품 목록
+  final PurchaseVo totalPurchases;
   final int totalPayment; // 총 결제금액
 
   const CreditCardModal({
     Key? key,
     required this.lesson,
+    required this.totalPurchases,
     required this.totalPayment,
   }) : super(key: key);
 
@@ -34,13 +37,21 @@ class _CreditCardModalState extends State<CreditCardModal> {
       _acknowledged = false;
     });
 
-    // 3초 동안 결제 로딩
-    await Future.delayed(const Duration(seconds: 3));
+    bool isSuccess = await PurchaseService.fetchPurchaseData(
+      widget.totalPurchases,
+    );
 
-    setState(() {
-      _paymentProcessing = false;
-      _paymentCompleted = true;
-    });
+    if (isSuccess) {
+      setState(() {
+        _paymentProcessing = false;
+        _paymentCompleted = true;
+      });
+    }
+
+    // // 3초 동안 결제 로딩
+    // await Future.delayed(const Duration(seconds: 3));
+    // ✅ 결제 정보 전송
+    // Future<void> fetchPurchaseData() async {}
 
     // 결제 완료 안내 (모달은 자동으로 닫히지 않음)
     ScaffoldMessenger.of(context).showSnackBar(
