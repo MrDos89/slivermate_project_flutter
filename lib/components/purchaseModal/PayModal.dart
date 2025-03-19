@@ -22,7 +22,6 @@ class PayModal extends StatefulWidget {
 class _PayModalState extends State<PayModal> {
   bool _paymentProcessing = false;
   bool _paymentCompleted = false;
-  // bool _acknowledged = false;
 
   Future<void> _simulatePayment() async {
     if (_paymentProcessing || _paymentCompleted) return;
@@ -30,7 +29,6 @@ class _PayModalState extends State<PayModal> {
     setState(() {
       _paymentProcessing = true;
       _paymentCompleted = false;
-      // _acknowledged = false;
     });
 
     bool isSuccess = await PurchaseService.fetchPurchaseData(

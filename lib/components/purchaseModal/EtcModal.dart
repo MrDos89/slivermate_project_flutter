@@ -3,7 +3,7 @@ import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 
-class EtcModal extends StatelessWidget {
+class EtcModal extends StatefulWidget {
   final LessonVo lesson;
   final PurchaseVo totalPurchases;
   final int totalPayment;
@@ -14,6 +14,34 @@ class EtcModal extends StatelessWidget {
     required this.totalPurchases,
     required this.totalPayment,
   }) : super(key: key);
+
+  @override
+  _EtcModalState createState() => _EtcModalState();
+}
+
+class _EtcModalState extends State<EtcModal> {
+  bool _paymentProcessing = false;
+  bool _paymentCompleted = false;
+
+  Future<void> _simulatePayment() async {
+    if (_paymentProcessing || _paymentCompleted) return;
+
+    setState(() {
+      _paymentProcessing = true;
+      _paymentCompleted = false;
+    });
+
+    bool isSuccess = await PurchaseService.fetchPurchaseData(
+      widget.totalPurchases,
+    );
+
+    if (isSuccess) {
+      setState(() {
+        _paymentProcessing = false;
+        _paymentCompleted = true;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +91,8 @@ class EtcModal extends StatelessWidget {
                 leading: const Icon(Icons.shopping_cart),
 
                 /// 결제할 상품목록
-                title: Text(lesson.lessonName),
-                subtitle: Text('${lesson.lessonPrice}원'),
+                title: Text(widget.lesson.lessonName),
+                subtitle: Text('${widget.lesson.lessonPrice}원'),
               );
             },
           ),
@@ -74,7 +102,7 @@ class EtcModal extends StatelessWidget {
             children: [
               const Text('총 결제금액', style: TextStyle(fontSize: 16)),
               Text(
-                '$totalPayment원',
+                '${widget.lesson.lessonPrice}원',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
@@ -131,6 +159,8 @@ class EtcModal extends StatelessWidget {
         onPressed: () {
           // 결제 로직
           Navigator.of(context).pop();
+
+          _simulatePayment();
         },
         child: const Text('결제하기', style: TextStyle(fontSize: 16)),
       ),
