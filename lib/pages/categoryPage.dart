@@ -6,6 +6,7 @@ import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 import 'package:video_player/video_player.dart';
 import 'dart:math';
+import 'package:slivermate_project_flutter/widgets/LectureLoadingOverlay.dart';
 
 class CategoryPage extends StatefulWidget {
   final UserVo? dummyUser;
@@ -21,6 +22,7 @@ class _CategoryPageState extends State<CategoryPage> {
   bool showOutdoor = false;
   bool movedToTop = false;
   bool showGrid = false; // ✅ 추가: 취미 그리드가 표시될 때 true
+  bool isLoading = false; // 로딩 상태 변수 추가
 
   final Map<String, int> categoryIds = {"실내 활동": 1, "실외 활동": 2};
 
@@ -125,7 +127,9 @@ class _CategoryPageState extends State<CategoryPage> {
     _initializeVideo();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("[CategoryPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+      print(
+        "[CategoryPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+      );
     });
   }
 
@@ -178,154 +182,178 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   /// 📌 취미 버튼을 클릭하면 강의 페이지로 이동 (현재는 주석 처리)
-  void _onHobbySelected(int categoryId, int subCategoryId, String hobbyName) {
+  void _onHobbySelected(
+    int categoryId,
+    int subCategoryId,
+    String hobbyName,
+  ) async {
     print("선택한 취미: $hobbyName (카테고리 ID: $categoryId, 취미 ID: $subCategoryId)");
 
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder:
-            (context) => IntroducePage(
-              lessonCategory: categoryId, // ✅ 실내 / 실외 분류
-              lessonSubCategory: subCategoryId, // ✅ 선택한 취미명
-              dummyUser: widget.dummyUser,
-            ),
-        settings: RouteSettings(arguments: widget.dummyUser)
-      ),
-    );
+    setState(() {
+      isLoading = true; // ✅ 로딩 시작
+    });
+
+    await Future.delayed(Duration(milliseconds: 500)); // ✅ 잠시 로딩 표시
+
+    if (mounted) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder:
+              (context) => IntroducePage(
+                lessonCategory: categoryId, // ✅ 실내 / 실외 분류
+                lessonSubCategory: subCategoryId, // ✅ 선택한 취미명
+                dummyUser: widget.dummyUser,
+              ),
+          settings: RouteSettings(arguments: widget.dummyUser),
+        ),
+      );
+
+      if (mounted) {
+        setState(() {
+          isLoading = false; // ✅ 로딩 종료
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: GestureDetector(
-        onTap: _changeVideo, // 🔹 배경 클릭하면 랜덤 영상 변경
-        child: Stack(
-          children: [
-            /// 🎥 **배경 영상 추가 (기존 유지)**
-            Positioned.fill(
-              child:
-                  _controller.value.isInitialized
-                      ? FittedBox(
-                        fit: BoxFit.cover,
-                        child: SizedBox(
-                          width: _controller.value.size.width,
-                          height: _controller.value.size.height,
-                          child: VideoPlayer(_controller),
-                        ),
-                      )
-                      : Container(color: Colors.black),
-            ),
-
-            /// 🎨 **영상 위에 반투명한 오버레이 추가**
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              color: Colors.white.withOpacity(showGrid ? 0.6 : 0.2), // ✅ 투명도 조절
-            ),
-
-            /// 🌟 **기존 Scaffold 유지**
-            Scaffold(
-              backgroundColor: Colors.transparent, // ✅ 배경 투명하게 설정
-              appBar: PreferredSize(
-                preferredSize: const Size.fromHeight(73),
-                child: AppBar(
-                  leading: null, // 뒤로가기 버튼 지우기
-                  automaticallyImplyLeading: false,
-                  centerTitle: false, // 🔥 제목을 왼쪽 정렬로 유지**
-                  title: Transform.translate(
-                    offset: const Offset(0, 8), // 🔥 아래로 6픽셀 이동 (조절 가능)
-                    child: const Text(
-                      "카테고리 선택",
-                      style: TextStyle(
-                        // color: Color(0xFF4E342E), // ✅ 기존 글씨색 유지
-                        color: Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  // backgroundColor: Color(0xFFE6E6FA), // ✅ 배경색 설정
-                  // backgroundColor: Colors.white.withOpacity(0.7),
-                  backgroundColor: Color(0xFF044E00).withOpacity(0.5),
-                  elevation: 0, // 그림자 제거
-                ),
+    return LectureLoadingOverlay(
+      isLoading: isLoading, // ✅ 로딩 적용
+      child: MainLayout(
+        child: GestureDetector(
+          onTap: _changeVideo, // 🔹 배경 클릭하면 랜덤 영상 변경
+          child: Stack(
+            children: [
+              /// 🎥 **배경 영상 추가 (기존 유지)**
+              Positioned.fill(
+                child:
+                    _controller.value.isInitialized
+                        ? FittedBox(
+                          fit: BoxFit.cover,
+                          child: SizedBox(
+                            width: _controller.value.size.width,
+                            height: _controller.value.size.height,
+                            child: VideoPlayer(_controller),
+                          ),
+                        )
+                        : Container(color: Colors.black),
               ),
 
-              body: Stack(
-                children: [
-                  AnimatedPositioned(
-                    duration: const Duration(milliseconds: 500),
-                    curve: Curves.easeInOut,
-                    top:
-                        movedToTop
-                            ? 50
-                            : MediaQuery.of(context).size.height / 2 - 167,
-                    left: 0,
-                    right: 0,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildCategoryButton(
-                              "실내 활동",
-                              () => _onCategorySelected(true),
-                              Icons.home, // ✅ 실내 활동 아이콘
-                            ),
-                            const SizedBox(width: 20),
-                            _buildCategoryButton(
-                              "실외 활동",
-                              () => _onCategorySelected(false),
-                              Icons.park, // ✅ 실외 활동 아이콘
-                            ),
-                          ],
-                        ),
+              /// 🎨 **영상 위에 반투명한 오버레이 추가**
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 500),
+                curve: Curves.easeInOut,
+                color: Colors.white.withOpacity(
+                  showGrid ? 0.6 : 0.2,
+                ), // ✅ 투명도 조절
+              ),
 
-                        if (movedToTop) const SizedBox(height: 30),
-                      ],
+              /// 🌟 **기존 Scaffold 유지**
+              Scaffold(
+                backgroundColor: Colors.transparent, // ✅ 배경 투명하게 설정
+                appBar: PreferredSize(
+                  preferredSize: const Size.fromHeight(73),
+                  child: AppBar(
+                    leading: null, // 뒤로가기 버튼 지우기
+                    automaticallyImplyLeading: false,
+                    centerTitle: false, // 🔥 제목을 왼쪽 정렬로 유지**
+                    title: Transform.translate(
+                      offset: const Offset(0, 8), // 🔥 아래로 6픽셀 이동 (조절 가능)
+                      child: const Text(
+                        "카테고리 선택",
+                        style: TextStyle(
+                          // color: Color(0xFF4E342E), // ✅ 기존 글씨색 유지
+                          color: Color(0xFFFFFFFF),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
+                    // backgroundColor: Color(0xFFE6E6FA), // ✅ 배경색 설정
+                    // backgroundColor: Colors.white.withOpacity(0.7),
+                    backgroundColor: Color(0xFF044E00).withOpacity(0.5),
+                    elevation: 0, // 그림자 제거
                   ),
-                  Positioned(
-                    top: movedToTop ? 200 : MediaQuery.of(context).size.height,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    child: AnimatedOpacity(
+                ),
+
+                body: Stack(
+                  children: [
+                    AnimatedPositioned(
                       duration: const Duration(milliseconds: 500),
                       curve: Curves.easeInOut,
-                      opacity: movedToTop ? 1.0 : 0.0,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16.0,
-                            vertical: 2.0,
-                          ),
-                          child: Column(
+                      top:
+                          movedToTop
+                              ? 50
+                              : MediaQuery.of(context).size.height / 2 - 167,
+                      left: 0,
+                      right: 0,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              if (showIndoor)
-                                _buildHobbyGrid(
-                                  indoorHobbies,
-                                  categoryIds["실내 활동"]!,
-                                ),
-                              if (showOutdoor)
-                                _buildHobbyGrid(
-                                  outdoorHobbies,
-                                  categoryIds["실외 활동"]!,
-                                ),
+                              _buildCategoryButton(
+                                "실내 활동",
+                                () => _onCategorySelected(true),
+                                Icons.home, // ✅ 실내 활동 아이콘
+                              ),
+                              const SizedBox(width: 20),
+                              _buildCategoryButton(
+                                "실외 활동",
+                                () => _onCategorySelected(false),
+                                Icons.park, // ✅ 실외 활동 아이콘
+                              ),
                             ],
+                          ),
+
+                          if (movedToTop) const SizedBox(height: 30),
+                        ],
+                      ),
+                    ),
+                    Positioned(
+                      top:
+                          movedToTop ? 200 : MediaQuery.of(context).size.height,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      child: AnimatedOpacity(
+                        duration: const Duration(milliseconds: 500),
+                        curve: Curves.easeInOut,
+                        opacity: movedToTop ? 1.0 : 0.0,
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16.0,
+                              vertical: 2.0,
+                            ),
+                            child: Column(
+                              children: [
+                                if (showIndoor)
+                                  _buildHobbyGrid(
+                                    indoorHobbies,
+                                    categoryIds["실내 활동"]!,
+                                  ),
+                                if (showOutdoor)
+                                  _buildHobbyGrid(
+                                    outdoorHobbies,
+                                    categoryIds["실외 활동"]!,
+                                  ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
-    ); // ✅ `MainLayout`의 닫는 `)` 추가
+    );
   }
 
   Widget _buildCategoryButton(
