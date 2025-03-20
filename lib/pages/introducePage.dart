@@ -4,6 +4,7 @@ import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:dio/dio.dart';
 
 // 🔥 카테고리 ID를 문자열로 변환
 const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
@@ -123,22 +124,61 @@ class _IntroducePageState extends State<IntroducePage> {
   //   fetchLessonData(0); // 데이터 불러오기
   // }
 
-  // ✅ API 데이터 가져오기
+  // ✅ API 데이터 가져오기 및 결제 정보 확인해서 강의 로드
   Future<void> fetchLessonData() async {
-    final fetchedLesson = await LessonService.fetchLessonData(
-      widget.lessonCategory,
-      widget.lessonSubCategory,
-    );
+    try {
+      final fetchedLesson = await LessonService.fetchLessonData(
+        widget.lessonCategory,
+        widget.lessonSubCategory,
+      );
 
-    if (fetchedLesson != null) {
+      if (fetchedLesson == null) {
+        print("❌ 강의 데이터를 가져오지 못함.");
+        return;
+      }
+
+      final Dio dio = Dio();
+      final purchaseResponse = await dio.get(
+        'http://13.125.197.66:18090/api/purchase/u/${widget.dummyUser!.uid}',
+        options: Options(validateStatus: (status) => true),
+      );
+
+      bool hasPurchased = false;
+
+      if (purchaseResponse.statusCode == 200) {
+        final purchaseData = purchaseResponse.data;
+
+        if (purchaseData is List && purchaseData.isNotEmpty) {
+          // 🔥 현재 선택된 강의와 결제내역의 lesson_id를 정확히 비교
+          // 서버에서 받은 결제 내역에 현재 Lesson과 일치하는 항목이 있는지 확인!
+          hasPurchased = purchaseData.any(
+                (item) => item['lesson_id'] == fetchedLesson.lessonId,
+          );
+        }
+      } else {
+        print("❌ 결제 정보 로딩 실패: ${purchaseResponse.statusCode}");
+      }
+
+      String videoUrl;
+      if (hasPurchased && fetchedLesson.lessonCostLecture.isNotEmpty) {
+        videoUrl = fetchedLesson.lessonCostLecture;
+        print("🔥 유료 강의를 로드합니다.");
+      } else {
+        videoUrl = fetchedLesson.lessonFreeLecture;
+        print("🔥 무료 강의를 로드합니다.");
+      }
+
       setState(() {
         lesson = fetchedLesson;
-        if (lesson != null && lesson!.lessonFreeLecture.isNotEmpty) {
-          initializeYoutubePlayer(lesson!.lessonFreeLecture);
+        if (videoUrl.isNotEmpty) {
+          initializeYoutubePlayer(videoUrl);
+        } else {
+          print("❌ 강의 URL이 없습니다!");
         }
       });
-    } else {
-      print("❌ 강의 데이터를 가져오지 못함.");
+
+    } catch (e) {
+      print("❌ API 호출 중 에러 발생: $e");
     }
   }
 
