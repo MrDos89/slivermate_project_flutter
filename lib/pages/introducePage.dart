@@ -137,6 +137,11 @@ class _IntroducePageState extends State<IntroducePage> {
         return;
       }
 
+      // ✅ [1] 강의 정보가 제대로 들어왔는지 확인
+      print("🟢 불러온 강의 정보: ${fetchedLesson.lessonName}");
+      print("   🔹 무료 강의 URL: ${fetchedLesson.lessonFreeLecture}");
+      print("   🔹 유료 강의 URL: ${fetchedLesson.lessonCostLecture}");
+
       final Dio dio = Dio();
       final purchaseResponse = await dio.get(
         'http://13.125.197.66:18090/api/purchase/u/${widget.dummyUser!.uid}',
@@ -149,31 +154,34 @@ class _IntroducePageState extends State<IntroducePage> {
         final purchaseData = purchaseResponse.data;
 
         if (purchaseData is List && purchaseData.isNotEmpty) {
-          // 🔥 현재 선택된 강의와 결제내역의 lesson_id를 정확히 비교
-          // 서버에서 받은 결제 내역에 현재 Lesson과 일치하는 항목이 있는지 확인!
-          hasPurchased = purchaseData.any(
-                (item) => item['lesson_id'] == fetchedLesson.lessonId,
-          );
+          hasPurchased = purchaseData.any((item) => item['lesson_id'] == fetchedLesson.lessonId);
         }
       } else {
         print("❌ 결제 정보 로딩 실패: ${purchaseResponse.statusCode}");
       }
 
-      String videoUrl;
-      if (hasPurchased && fetchedLesson.lessonCostLecture.isNotEmpty) {
-        videoUrl = fetchedLesson.lessonCostLecture;
-        print("🔥 유료 강의를 로드합니다.");
-      } else {
-        videoUrl = fetchedLesson.lessonFreeLecture;
-        print("🔥 무료 강의를 로드합니다.");
-      }
+      // ✅ [2] 결제 여부 확인
+      print("🟡 결제 여부(hasPurchased): $hasPurchased");
+
+      // 🔥 [핵심 변경 부분] 영상 URL 두 개를 다 관리하고, 선택적으로 제공!
+      String freeVideoUrl = fetchedLesson.lessonFreeLecture;
+      String costVideoUrl = fetchedLesson.lessonCostLecture;
+
+      // 유료 결제 여부에 따라 URL 선택
+      String videoUrl = hasPurchased && costVideoUrl.isNotEmpty
+          ? costVideoUrl
+          : freeVideoUrl;
+
+      // ✅ [3] 최종 선택된 영상 확인
+      print("🟣 최종 선택된 영상 URL: $videoUrl");
 
       setState(() {
         lesson = fetchedLesson;
         if (videoUrl.isNotEmpty) {
           initializeYoutubePlayer(videoUrl);
+          print(hasPurchased ? "🔥 유료 강의를 로드합니다." : "🔥 무료 강의를 로드합니다.");
         } else {
-          print("❌ 강의 URL이 없습니다!");
+          print("❌ 영상 URL이 없습니다!");
         }
       });
 
@@ -181,6 +189,8 @@ class _IntroducePageState extends State<IntroducePage> {
       print("❌ API 호출 중 에러 발생: $e");
     }
   }
+
+
 
 
 
