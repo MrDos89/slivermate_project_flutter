@@ -81,13 +81,26 @@ class _IntroducePageState extends State<IntroducePage> {
   //   userThumbnail: "assets/images/instructor.png",
   // );
 
+  // @override
+  // void initState() {
+  //   print("야 initState 들어간다");
+  //   super.initState();
+  //   fetchLessonData(); // ✅ API 호출 (초기에는 값이 없을 수도 있음)
+  //   print("🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+  // }
+
   @override
   void initState() {
-    print("야 initState 들어간다");
     super.initState();
-    fetchLessonData(); // ✅ API 호출 (초기에는 값이 없을 수도 있음)
-    print("🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+    _controller = YoutubePlayerController(
+      initialVideoId: '', // 기본값 (오류 방지)
+      flags: const YoutubePlayerFlags(autoPlay: false),
+    );
+    fetchLessonData(); // ✅ 데이터 가져오기
+      print("🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+
   }
+
 
   // ✅ lessonCategory와 lessonSubCategory가 설정된 후 API 호출
   void updateCategory(int category, int subCategory) {
@@ -120,10 +133,16 @@ class _IntroducePageState extends State<IntroducePage> {
     if (fetchedLesson != null) {
       setState(() {
         lesson = fetchedLesson;
-        initializeYoutubePlayer(lesson!.lessonFreeLecture);
+        if (lesson != null && lesson!.lessonFreeLecture.isNotEmpty) {
+          initializeYoutubePlayer(lesson!.lessonFreeLecture);
+        }
       });
+    } else {
+      print("❌ 강의 데이터를 가져오지 못함.");
     }
   }
+
+
 
   void initializeYoutubePlayer(String youtubeUrl) {
     final videoId = YoutubePlayer.convertUrlToId(youtubeUrl) ?? "";
@@ -131,7 +150,9 @@ class _IntroducePageState extends State<IntroducePage> {
       initialVideoId: videoId,
       flags: const YoutubePlayerFlags(autoPlay: false),
     );
+    setState(() {}); // ✅ UI 갱신 추가
   }
+
 
   @override
   void dispose() {
@@ -149,6 +170,12 @@ class _IntroducePageState extends State<IntroducePage> {
       );
     }
 
+    if (lesson == null) {
+      return Scaffold(
+        appBar: AppBar(title: const Text("강의 로딩 중...")),
+        body: const Center(child: CircularProgressIndicator()),
+      );
+    }
     return YoutubePlayerBuilder(
       player: YoutubePlayer(controller: _controller),
       builder: (context, player) {
@@ -160,7 +187,9 @@ class _IntroducePageState extends State<IntroducePage> {
             appBar: AppBar(
               backgroundColor: const Color(0xFFE6E6FA),
               automaticallyImplyLeading: false,
-              title: Column(
+              title: lesson == null
+                  ? const Text("강의 로딩 중...") // ✅ lesson이 null이면 기본 텍스트 표시
+                  : Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
