@@ -93,7 +93,12 @@ class _PayModalState extends State<PayModal> {
             itemCount: 1,
             itemBuilder: (context, index) {
               return ListTile(
-                leading: const Icon(Icons.shopping_cart),
+                leading: Image.network(
+                  widget.lesson.lessonThumbnail,
+                  width: 105,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
 
                 ///  임시아이콘
                 title: Text(widget.lesson.lessonName),

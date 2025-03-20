@@ -93,7 +93,12 @@ class _EtcModalState extends State<EtcModal> {
             itemCount: 1,
             itemBuilder: (context, index) {
               return ListTile(
-                leading: const Icon(Icons.shopping_cart),
+                leading: Image.network(
+                  widget.lesson.lessonThumbnail,
+                  width: 105,
+                  height: 80,
+                  fit: BoxFit.cover,
+                ),
 
                 /// 결제할 상품목록
                 title: Text(widget.lesson.lessonName),
