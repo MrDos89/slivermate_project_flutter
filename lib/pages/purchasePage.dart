@@ -75,31 +75,37 @@ class _PurchasePageState extends State<PurchasePage> {
   void didChangeDependencies() {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
-    if (args != null && args is LessonVo) {
-      setState(() {
-        lesson = args;
-      });
-    } else {
-      // 테스트용 기본 데이터
-      setState(() {
-        this.lesson = LessonVo(
-          lessonId: 1,
-          userId: 1,
-          lessonName: 'test',
-          lessonDesc: 'test',
-          lessonCategory: 1,
-          lessonSubCategory: 1,
-          lessonFreeLecture: "test",
-          lessonCostLecture: 'test',
-          lessonThumbnail: 'https://via.placeholder.com/60',
-          lessonPrice: 18000,
-          registerDate: "2025-03-18",
-          isHidden: false,
-          updDate: '골프 강의 영상',
-          userName: "test",
-          userThumbnail: "test",
-        );
-      });
+
+    print("purchasePage didChangeDependencies의 args: ${args.toString()}");
+
+    if (args != null && args is Map) {
+      final lessonArgs = args["lesson"];
+      if (lessonArgs != null && lessonArgs is LessonVo) {
+        setState(() {
+          lesson = lessonArgs;
+        });
+      } else {
+        // 테스트용 기본 데이터
+        setState(() {
+          this.lesson = LessonVo(
+            lessonId: 1,
+            userId: 1,
+            lessonName: 'test',
+            lessonDesc: 'test',
+            lessonCategory: 1,
+            lessonSubCategory: 1,
+            lessonFreeLecture: "test",
+            lessonCostLecture: 'test',
+            lessonThumbnail: 'https://via.placeholder.com/60',
+            lessonPrice: 18000,
+            registerDate: "2025-03-18",
+            isHidden: false,
+            updDate: '골프 강의 영상',
+            userName: "test",
+            userThumbnail: "test",
+          );
+        });
+      }
     }
   }
 
@@ -227,7 +233,7 @@ class _PurchasePageState extends State<PurchasePage> {
       itemBuilder: (context, index) {
         return ListTile(
           leading: Image.network(
-            'https://img.cpbc.co.kr/newsimg/upload/2024/09/25/R5B1727229411206.jpg',
+            lesson.lessonThumbnail,
             width: 105,
             height: 80,
             fit: BoxFit.cover,

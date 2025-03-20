@@ -21,7 +21,9 @@ class MainLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("[MainLayout build()] 🔴 dummyUser 값: ${dummyUser?.userName}, ${dummyUser?.email}");
+    print(
+      "[MainLayout build()] 🔴 dummyUser 값: ${dummyUser?.userName}, ${dummyUser?.email}",
+    );
 
     return Scaffold(
       body: child, // 페이지 본문
@@ -118,8 +120,8 @@ class MainLayout extends StatelessWidget {
                       context,
                       "/purchase",
                       arguments: {
-                        "lesson": lesson,       // ✅ LessonVo 객체
-                        "user": dummyUser,      // ✅ UserVo 객체(dummyUser)
+                        "lesson": lesson, // ✅ LessonVo 객체
+                        "user": dummyUser, // ✅ UserVo 객체(dummyUser)
                       },
                     );
                   } else {

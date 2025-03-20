@@ -70,7 +70,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
     }
     // 결제 진행 중(카드 상단 전혀 안 보이도록 좀 더 위로)
     if (_paymentProcessing) {
-      return kioskHeight - 55; // 더 깊숙이
+      return kioskHeight - 35; // 더 깊숙이
     }
     // 삽입 완료(결제 전) 또는 결제 완료 후
     return kioskHeight - 35; // 약간만 보이거나 거의 안 보이게
@@ -115,48 +115,61 @@ class _CreditCardModalState extends State<CreditCardModal> {
 
   /// (2) 상품 목록, 상품 제목, 총 결제금액
   Widget _buildTopSection() {
-    final productListString = widget.lesson.lessonName;
+    final productListString = widget.lesson.lessonThumbnail;
     final productTitle = widget.lesson.lessonName ?? "상품 제목";
 
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: [
-          // 상품 목록 + 제목
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // 이미지
+              Image.network(
+                productListString,
+                width: 105,
+                height: 80,
+                fit: BoxFit.fitHeight,
+                alignment: Alignment.centerLeft,
+              ),
+              const SizedBox(width: 8),
+              // 이미지 오른쪽에 제목과 총 결제금액 정보를 담은 Column
               Expanded(
-                child: Text(
-                  productListString.isNotEmpty
-                      ? productListString
-                      : "상품 목록이 없습니다.",
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ),
-              Text(
-                productTitle,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 8),
-          // 총 결제금액
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                '총 결제금액',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-              Text(
-                '${widget.totalPayment}원',
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 제목 (우측 상단에 위치)
+                    Text(
+                      productTitle,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    // 총 결제금액 정보
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        const Text(
+                          '총 결제금액',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        const SizedBox(width: 8), // 텍스트 사이의 간격 추가
+                        Text(
+                          '${widget.totalPayment}원',
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -200,7 +213,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
     final double kioskHeight = 280;
 
     final double cardLeft = (kioskWidth - 50) / 2;
-    final double cardTop = _getCardTopPosition(kioskHeight);
+    final double cardTop = _getCardTopPosition(kioskHeight) - 10;
 
     return GestureDetector(
       onTap: () {
