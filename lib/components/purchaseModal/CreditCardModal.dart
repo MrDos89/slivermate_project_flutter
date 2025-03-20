@@ -88,11 +88,15 @@ class _CreditCardModalState extends State<CreditCardModal> {
               // (1) 상단 타이틀
               Container(
                 padding: const EdgeInsets.all(16),
-                color: Colors.pink,
+                color: Color(0xFF044E00).withOpacity(0.5),
                 width: double.infinity,
                 child: const Text(
                   '신용카드 결제',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFFFFF),
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -353,7 +357,8 @@ class _CreditCardModalState extends State<CreditCardModal> {
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.pink,
+                backgroundColor: Color(0xFF044E00).withOpacity(0.5),
+                elevation: 0,
                 minimumSize: const Size(double.infinity, 48),
               ),
               onPressed: () async {
@@ -389,7 +394,10 @@ class _CreditCardModalState extends State<CreditCardModal> {
                   }
                 }
               },
-              child: const Text('결제하기', style: TextStyle(fontSize: 16)),
+              child: const Text(
+                '결제하기',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
           const SizedBox(height: 8),
@@ -404,7 +412,10 @@ class _CreditCardModalState extends State<CreditCardModal> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: const Text('취소하기', style: TextStyle(fontSize: 16)),
+              child: const Text(
+                '취소하기',
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],
