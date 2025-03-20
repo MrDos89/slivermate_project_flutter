@@ -184,8 +184,9 @@ class _IntroducePageState extends State<IntroducePage> {
           lesson: lesson,
           dummyUser: widget.dummyUser,
           child: Scaffold(
+            backgroundColor: const Color(0xFFD6FFDC).withOpacity(0.9),
             appBar: AppBar(
-              backgroundColor: const Color(0xFFE6E6FA),
+                backgroundColor: const Color(0xFF044E00).withOpacity(0.5), // 실외 (연녹색)
               automaticallyImplyLeading: false,
               title: lesson == null
                   ? const Text("강의 로딩 중...") // ✅ lesson이 null이면 기본 텍스트 표시
@@ -197,7 +198,7 @@ class _IntroducePageState extends State<IntroducePage> {
                     '${lesson!.lessonCategory == 1 ? indoorHobbies[lesson!.lessonSubCategory] : outdoorHobbies[lesson!.lessonSubCategory] ?? "알 수 없음"}',
                     style: const TextStyle(
                       fontSize: 16,
-                      color: Color(0xFF212121),
+                      color: Colors.white,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -207,7 +208,7 @@ class _IntroducePageState extends State<IntroducePage> {
                     style: const TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xFF4E342E),
+                        color: Colors.white,
                     ),
                   ),
                 ],
@@ -270,7 +271,7 @@ class _IntroducePageState extends State<IntroducePage> {
                           children: [
                             const FaIcon(
                               FontAwesomeIcons.wonSign,
-                              color: Color(0xFF4E342E),
+                              color: Color(0xFF077A00),
                               size: 18,
                             ),
                             const SizedBox(width: 8),
@@ -279,7 +280,7 @@ class _IntroducePageState extends State<IntroducePage> {
                               style: TextStyle(
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF4E342E),
+                                color: Color(0xFF077A00),
                               ),
                             ),
                           ],
@@ -301,7 +302,7 @@ class _IntroducePageState extends State<IntroducePage> {
                             style: TextStyle(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Color(0xFF4E342E),
+                              color: Color(0xFF077A00),
                             ),
                           ),
                           const SizedBox(height: 8),
