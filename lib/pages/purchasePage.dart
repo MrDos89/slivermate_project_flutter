@@ -42,7 +42,9 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   void initState() {
     super.initState();
-    print("🟢 [PurchasePage initState()] dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+    print(
+      "🟢 [PurchasePage initState()] dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+    );
     // fetchPurchaseData();
   }
 
@@ -179,10 +181,23 @@ class _PurchasePageState extends State<PurchasePage> {
     return MainLayout(
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('결제화면'),
-          centerTitle: true,
-          backgroundColor: Colors.pink,
+          leading: null, //  뒤로가기 버튼 지우기
+          automaticallyImplyLeading: false,
+          centerTitle: false, //  제목을 왼쪽 정렬로 유지
+          title: Transform.translate(
+            offset: const Offset(0, 8),
+            child: const Text(
+              "결제화면",
+              style: TextStyle(
+                color: Color(0xFFFFFFFF),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          backgroundColor: Color(0xFF044E00).withOpacity(0.5),
+          elevation: 0,
         ),
+
         body: SafeArea(
           child: SingleChildScrollView(
             // Extra bottom padding so the price summary isn't cut off
@@ -231,7 +246,11 @@ class _PurchasePageState extends State<PurchasePage> {
         children: [
           const Text(
             '결제수단을 선택해 주세요',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF077A00),
+            ),
           ),
           const SizedBox(height: 16),
           // Grid of Lottie animations
@@ -301,14 +320,31 @@ class _PurchasePageState extends State<PurchasePage> {
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       child: Column(
         children: [
-          _buildRowItem('총 상품금액', '$itemsTotal원', fontSize: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                '총 상품금액',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF077A00),
+                ),
+              ),
+              Text('$itemsTotal원', style: const TextStyle(fontSize: 20)),
+            ],
+          ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 '총 결제금액',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF077A00),
+                ),
               ),
               Text(
                 '$totalPayment원',
