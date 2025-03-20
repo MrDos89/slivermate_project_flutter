@@ -15,6 +15,7 @@ class NotificationPage extends StatelessWidget {
     ];
 
     return MainLayout(
+      dummyUser: dummyUser,
       child: Scaffold(
         appBar: AppBar(
           title: const Text("실시간 알림"),

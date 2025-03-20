@@ -179,6 +179,7 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   Widget build(BuildContext context) {
     return MainLayout(
+      dummyUser: widget.dummyUser,
       child: Scaffold(
         appBar: AppBar(
           leading: null, //  뒤로가기 버튼 지우기

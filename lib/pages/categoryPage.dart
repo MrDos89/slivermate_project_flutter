@@ -222,6 +222,7 @@ class _CategoryPageState extends State<CategoryPage> {
     return LectureLoadingOverlay(
       isLoading: isLoading, // ✅ 로딩 적용
       child: MainLayout(
+        dummyUser: widget.dummyUser,
         child: GestureDetector(
           onTap: _changeVideo, // 🔹 배경 클릭하면 랜덤 영상 변경
           child: Stack(
