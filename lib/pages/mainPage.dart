@@ -5,11 +5,16 @@ import 'package:slivermate_project_flutter/pages/categoryPage.dart'; // 카테�
 import 'package:slivermate_project_flutter/widgets/LoadingOverlay.dart';
 
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'dart:async';
 
 class MainPage extends StatefulWidget {
   final UserVo? dummyUser;
   final CategoryVo? categoryVo;
-  const MainPage({super.key, required this.dummyUser, required this.categoryVo});
+  const MainPage({
+    super.key,
+    required this.dummyUser,
+    required this.categoryVo,
+  });
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -19,6 +24,7 @@ class _MainPageState extends State<MainPage> {
   late VideoPlayerController _controller;
   bool isLoading = false; // ✅ 로딩 상태 변수 추가
   bool isDebugMode = true; // ✅ 디버그 모드 추가 (true: 이미지, false: 영상)
+  bool isTextVisible = true; // ✅ "터치해주세요" 애니메이션 상태 변수
 
   @override
   void initState() {
@@ -26,8 +32,23 @@ class _MainPageState extends State<MainPage> {
     if (!isDebugMode) {
       _initializeVideo();
     }
+    _startTextAnimation(); // ✅ "터치해주세요" 애니메이션 시작
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      print("[MainPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+      print(
+        "[MainPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+      );
+    });
+  }
+
+  /// 🔹 "터치해주세요" 텍스트 깜빡이는 애니메이션
+  void _startTextAnimation() {
+    Timer.periodic(const Duration(milliseconds: 1000), (timer) {
+      if (mounted) {
+        setState(() {
+          isTextVisible = !isTextVisible;
+        });
+      }
     });
   }
 
@@ -65,9 +86,10 @@ class _MainPageState extends State<MainPage> {
     if (mounted) {
       await Navigator.of(context).push(
         PageRouteBuilder(
-          pageBuilder: (context, animation, secondaryAnimation) => CategoryPage(
-            dummyUser: widget.dummyUser, // ✅ UserVo는 그대로 전달
-          ),
+          pageBuilder:
+              (context, animation, secondaryAnimation) => CategoryPage(
+                dummyUser: widget.dummyUser, // ✅ UserVo는 그대로 전달
+              ),
           settings: RouteSettings(
             arguments: {
               "categoryVo": widget.categoryVo, // ✅ CategoryVo를 arguments로 전달
@@ -127,33 +149,51 @@ class _MainPageState extends State<MainPage> {
                         : Container(color: Colors.black), // ✅ 초기 로딩 중 검은 화면
               ),
 
-              /// 🛠 디버그 모드 토글 버튼 (우측 상단)
-              // Positioned(
-              //   top: 40,
-              //   right: 20,
-              //   child: ElevatedButton(
-              //     onPressed: () {
-                // onPressed: () {
-                //   Navigator.pushNamed(context, "/category");
-
-                //   print("[mainPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
-
-                // },
-
-              //       setState(() {
-              //         isDebugMode = !isDebugMode; // ✅ 디버그 모드 토글
-              //         if (!isDebugMode) {
-              //           _initializeVideo(); // ✅ 디버그 해제 시 영상 재생
-              //         }
-              //       });
-              //     },
-              //     style: ElevatedButton.styleFrom(
-              //       backgroundColor: Colors.black.withOpacity(0.7),
-              //       foregroundColor: Colors.white,
-              //     ),
-              //     child: Text(isDebugMode ? "디버그 OFF" : "디버그 ON"),
-              //   ),
-              // ),
+              /// 🔹 **"터치해주세요" 폰트 추가 (배경 유지 + 중앙 배치 + 부드럽게 깜빡임)**
+              Positioned.fill(
+                child: Center(
+                  child: AnimatedOpacity(
+                    opacity: isTextVisible ? 1.0 : 0.6, // ✅ 부드러운 깜빡임 효과
+                    duration: const Duration(milliseconds: 800),
+                    child: const Text(
+                      "터치해주세요",
+                      style: TextStyle(
+                        fontSize: 45, // ✅ 폰트 크기 약간 키움
+                        color: Colors.white, // ✅ 폰트 컬러 유지
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 4.0, // ✅ 글자 간격(자간) 크게 증가
+                        shadows: [
+                          Shadow(
+                            offset: Offset(-5, -5),
+                            blurRadius: 12,
+                            color: Color(0xFF044E00),
+                          ),
+                          Shadow(
+                            offset: Offset(5, -5),
+                            blurRadius: 12,
+                            color: Color(0xFF044E00),
+                          ),
+                          Shadow(
+                            offset: Offset(-5, 5),
+                            blurRadius: 12,
+                            color: Color(0xFF044E00),
+                          ),
+                          Shadow(
+                            offset: Offset(5, 5),
+                            blurRadius: 12,
+                            color: Color(0xFF044E00),
+                          ),
+                          Shadow(
+                            offset: Offset(0, 0),
+                            blurRadius: 20,
+                            color: Color(0xFF044E00),
+                          ), // ✅ 더 넓고 부드럽게 퍼지는 효과
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
