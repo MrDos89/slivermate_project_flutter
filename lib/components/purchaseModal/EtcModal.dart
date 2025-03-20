@@ -54,11 +54,16 @@ class _EtcModalState extends State<EtcModal> {
               // 상단 타이틀
               Container(
                 padding: const EdgeInsets.all(16),
-                color: Colors.orange,
+                color: Color(0xFF044E00).withOpacity(0.5),
                 width: double.infinity,
                 child: const Text(
                   '기타 결제',
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFFFFF),
+                  ),
+                  textAlign: TextAlign.center,
                 ),
               ),
 
@@ -153,7 +158,8 @@ class _EtcModalState extends State<EtcModal> {
       padding: const EdgeInsets.all(16),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.orange,
+          backgroundColor: Color(0xFF044E00).withOpacity(0.5),
+          elevation: 0,
           minimumSize: const Size(double.infinity, 48),
         ),
         onPressed: () {
@@ -162,7 +168,14 @@ class _EtcModalState extends State<EtcModal> {
 
           _simulatePayment();
         },
-        child: const Text('결제하기', style: TextStyle(fontSize: 16)),
+        child: const Text(
+          '결제하기',
+          style: TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFFFFFFFF),
+          ),
+        ),
       ),
     );
   }
