@@ -7,6 +7,7 @@ import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:math';
 import 'package:slivermate_project_flutter/widgets/LectureLoadingOverlay.dart';
+import 'package:slivermate_project_flutter/vo/categoryVo.dart';
 
 class CategoryPage extends StatefulWidget {
   final UserVo? dummyUser;
@@ -22,33 +23,36 @@ class _CategoryPageState extends State<CategoryPage> {
   bool showOutdoor = false;
   bool movedToTop = false;
   bool showGrid = false; // ✅ 추가: 취미 그리드가 표시될 때 true
-  bool isLoading = false; // 로딩 상태 변수 추가
+  bool isLoading = false;
 
-  final Map<String, int> categoryIds = {"실내 활동": 1, "실외 활동": 2};
+  List<CategoryVo> categories = []; // 카테고리Vo 저장
+  // 로딩 상태 변수 추가
 
-  final List<Map<String, dynamic>> indoorHobbies = [
-    {"id": 1, "name": "뜨개질", "image": "lib/images/knitting.jpg"},
-    {"id": 2, "name": "그림", "image": "lib/images/drawing.jpg"},
-    {"id": 3, "name": "독서", "image": "lib/images/reading.jpg"},
-    {"id": 4, "name": "영화 감상", "image": "lib/images/movie.jpg"},
-    {"id": 5, "name": "퍼즐", "image": "lib/images/puzzle.jpg"},
-    {"id": 6, "name": "요리", "image": "lib/images/cooking.jpg"},
-    {"id": 7, "name": "통기타", "image": "lib/images/guitar.jpg"},
-    {"id": 8, "name": "당구", "image": "lib/images/billiards.jpg"},
-    {"id": 9, "name": "바둑", "image": "lib/images/go.jpg"},
-  ];
-
-  final List<Map<String, dynamic>> outdoorHobbies = [
-    {"id": 1, "name": "등산", "image": "lib/images/hiking.jpg"},
-    {"id": 2, "name": "자전거", "image": "lib/images/cycling.jpg"},
-    {"id": 3, "name": "캠핑", "image": "lib/images/camping.jpg"},
-    {"id": 4, "name": "낚시", "image": "lib/images/fishing.jpg"},
-    {"id": 5, "name": "러닝/마라톤", "image": "lib/images/running.jpg"},
-    {"id": 6, "name": "수영", "image": "lib/images/surfing.jpg"},
-    {"id": 7, "name": "골프", "image": "lib/images/golf.jpg"},
-    {"id": 8, "name": "테니스", "image": "lib/images/tennis.jpg"},
-    {"id": 9, "name": "족구", "image": "lib/images/foot.jpg"},
-  ];
+  // final Map<String, int> categoryIds = {"실내 활동": 1, "실외 활동": 2};
+  //
+  // final List<Map<String, dynamic>> indoorHobbies = [
+  //   {"id": 1, "name": "뜨개질", "image": "lib/images/knitting.jpg"},
+  //   {"id": 2, "name": "그림", "image": "lib/images/drawing.jpg"},
+  //   {"id": 3, "name": "독서", "image": "lib/images/reading.jpg"},
+  //   {"id": 4, "name": "영화 감상", "image": "lib/images/movie.jpg"},
+  //   {"id": 5, "name": "퍼즐", "image": "lib/images/puzzle.jpg"},
+  //   {"id": 6, "name": "요리", "image": "lib/images/cooking.jpg"},
+  //   {"id": 7, "name": "통기타", "image": "lib/images/guitar.jpg"},
+  //   {"id": 8, "name": "당구", "image": "lib/images/billiards.jpg"},
+  //   {"id": 9, "name": "바둑", "image": "lib/images/go.jpg"},
+  // ];
+  //
+  // final List<Map<String, dynamic>> outdoorHobbies = [
+  //   {"id": 1, "name": "등산", "image": "lib/images/hiking.jpg"},
+  //   {"id": 2, "name": "자전거", "image": "lib/images/cycling.jpg"},
+  //   {"id": 3, "name": "캠핑", "image": "lib/images/camping.jpg"},
+  //   {"id": 4, "name": "낚시", "image": "lib/images/fishing.jpg"},
+  //   {"id": 5, "name": "러닝/마라톤", "image": "lib/images/running.jpg"},
+  //   {"id": 6, "name": "수영", "image": "lib/images/surfing.jpg"},
+  //   {"id": 7, "name": "골프", "image": "lib/images/golf.jpg"},
+  //   {"id": 8, "name": "테니스", "image": "lib/images/tennis.jpg"},
+  //   {"id": 9, "name": "족구", "image": "lib/images/foot.jpg"},
+  // ];
 
   // 🔹 (추가됨) 사용할 영상 목록
   final List<String> videoPaths = [
@@ -126,12 +130,33 @@ class _CategoryPageState extends State<CategoryPage> {
     super.initState();
     _initializeVideo();
 
+    isLoading = true; // 로딩 시작
+    fetchCategories().then((_) {
+      setState(() {
+        isLoading = false; // 로딩 종료
+      });
+    });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print(
         "[CategoryPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
       );
     });
   }
+
+  // API를 통해 데이터를 불러오는 메서드
+  Future<void> fetchCategories() async {
+    final fetchedCategories = await CategoryService.fetchCategories();
+
+    if (fetchedCategories.isNotEmpty) {
+      setState(() {
+        categories = fetchedCategories; // 데이터가 정상적으로 오면 저장
+      });
+    } else {
+      print("❌ 카테고리 데이터를 가져오지 못했습니다.");
+    }
+  }
+
 
   /// 🔹 배경 영상 초기화
   void _initializeVideo() {
@@ -332,15 +357,9 @@ class _CategoryPageState extends State<CategoryPage> {
                             child: Column(
                               children: [
                                 if (showIndoor)
-                                  _buildHobbyGrid(
-                                    indoorHobbies,
-                                    categoryIds["실내 활동"]!,
-                                  ),
+                                  _buildHobbyGrid(1), // 카테고리 ID를 직접 넘겨줌
                                 if (showOutdoor)
-                                  _buildHobbyGrid(
-                                    outdoorHobbies,
-                                    categoryIds["실외 활동"]!,
-                                  ),
+                                  _buildHobbyGrid(2),
                               ],
                             ),
                           ),
@@ -399,7 +418,11 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   /// 🔥 취미 카드 버튼을 기존 디자인 유지하면서 그대로 버튼화
-  Widget _buildHobbyGrid(List<Map<String, dynamic>> hobbies, int categoryId) {
+  Widget _buildHobbyGrid(int categoryId) {
+    final hobbyList = categories
+        .where((category) => category.categoryId == categoryId)
+        .toList();
+
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
@@ -409,22 +432,23 @@ class _CategoryPageState extends State<CategoryPage> {
         mainAxisSpacing: 15,
         childAspectRatio: 1,
       ),
-      itemCount: hobbies.length,
+      itemCount: hobbyList.length,
       itemBuilder: (context, index) {
-        return _buildHobbyButton(hobbies[index], categoryId);
+        return _buildHobbyButton(hobbyList[index]);
       },
     );
   }
 
   /// 🔥 이미지 배경을 유지한 취미 버튼
-  Widget _buildHobbyButton(Map<String, dynamic> hobby, int categoryId) {
+  Widget _buildHobbyButton(CategoryVo hobby) {
     return GestureDetector(
-      onTap: () => _onHobbySelected(categoryId, hobby["id"], hobby["name"]),
+      onTap: () => _onHobbySelected(
+          hobby.categoryId, hobby.subCategoryId, hobby.subCategoryName),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
-            image: _getImage(hobby["image"]),
+            image: _getImage(hobby.image),
             fit: BoxFit.cover,
           ),
         ),
@@ -435,7 +459,7 @@ class _CategoryPageState extends State<CategoryPage> {
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
-            hobby["name"],
+            hobby.subCategoryName,
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -447,11 +471,12 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
+
   /// 📌 이미지가 없으면 기본 이미지 사용
   ImageProvider _getImage(String? path) {
     if (path == null || path.isEmpty) {
       return const AssetImage("lib/images/cofl.jpg"); // 기본 이미지 설정
     }
-    return AssetImage(path);
+    return AssetImage("lib/images/$path.jpg");
   }
 }

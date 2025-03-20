@@ -6,13 +6,15 @@ import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
 import 'package:slivermate_project_flutter/pages/NotificationPage.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/vo/categoryVo.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final CategoryVo? categoryVo;
+  const MyApp({super.key, this.categoryVo});
 
   // This widget is the root of your application.
   @override
@@ -43,7 +45,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: "/",
       routes: {
-        "/": (context) => MainPage(dummyUser: dummyUser),
+        "/": (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
         "/category": (context) => CategoryPage(dummyUser: dummyUser),
         "/introduce": (context) => IntroducePage(lessonCategory: 1, lessonSubCategory: 1, dummyUser: dummyUser),
         "/purchase": (context) => PurchasePage(dummyUser: dummyUser),

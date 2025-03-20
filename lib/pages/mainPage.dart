@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/vo/categoryVo.dart';
 import 'package:video_player/video_player.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart'; // 카테고리 페이지 임포트
 import 'package:slivermate_project_flutter/widgets/LoadingOverlay.dart';
@@ -7,7 +8,8 @@ import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class MainPage extends StatefulWidget {
   final UserVo? dummyUser;
-  const MainPage({super.key, required this.dummyUser});
+  final CategoryVo? categoryVo;
+  const MainPage({super.key, required this.dummyUser, required this.categoryVo});
 
   @override
   _MainPageState createState() => _MainPageState();
@@ -63,8 +65,14 @@ class _MainPageState extends State<MainPage> {
     if (mounted) {
       await Navigator.of(context).push(
         PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) => CategoryPage(dummyUser: widget.dummyUser),
+          pageBuilder: (context, animation, secondaryAnimation) => CategoryPage(
+            dummyUser: widget.dummyUser, // ✅ UserVo는 그대로 전달
+          ),
+          settings: RouteSettings(
+            arguments: {
+              "categoryVo": widget.categoryVo, // ✅ CategoryVo를 arguments로 전달
+            },
+          ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
