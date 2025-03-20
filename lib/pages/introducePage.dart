@@ -240,9 +240,7 @@ class _IntroducePageState extends State<IntroducePage> {
                           children: [
                             CircleAvatar(
                               radius: 22,
-                              backgroundImage: AssetImage(
-                                lesson!.userThumbnail,
-                              ),
+                              backgroundImage: NetworkImage(lesson!.userThumbnail),
                             ),
                             const SizedBox(width: 8), // 이 값으로 간격 조정 가능
                             Column(
