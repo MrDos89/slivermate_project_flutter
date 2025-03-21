@@ -162,10 +162,10 @@ class _MainPageState extends State<MainPage> {
                           Transform.translate(
                             offset: Offset(-10, -10), // 왼쪽 위로 이동
                             child: const Text(
-                              '파',
+                              '실버',
                               style: TextStyle(
                                 fontFamily: 'KCCHyerim',
-                                fontSize: 100,
+                                fontSize: 90,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 6.0,
@@ -194,10 +194,10 @@ class _MainPageState extends State<MainPage> {
                           Transform.translate(
                             offset: Offset(10, 10), // 오른쪽 아래로 이동
                             child: const Text(
-                              '릇',
+                              '트리',
                               style: TextStyle(
                                 fontFamily: 'KCCHyerim',
-                                fontSize: 100,
+                                fontSize: 95,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 6.0,
