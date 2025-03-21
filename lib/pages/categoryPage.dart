@@ -157,7 +157,6 @@ class _CategoryPageState extends State<CategoryPage> {
     }
   }
 
-
   /// 🔹 배경 영상 초기화
   void _initializeVideo() {
     String nextVideo = _getRandomVideoPath();
@@ -290,6 +289,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       child: const Text(
                         "카테고리 선택",
                         style: TextStyle(
+                          fontFamily: 'GowunDodum',
                           // color: Color(0xFF4E342E), // ✅ 기존 글씨색 유지
                           color: Color(0xFFFFFFFF),
                           fontWeight: FontWeight.bold,
@@ -358,8 +358,7 @@ class _CategoryPageState extends State<CategoryPage> {
                               children: [
                                 if (showIndoor)
                                   _buildHobbyGrid(1), // 카테고리 ID를 직접 넘겨줌
-                                if (showOutdoor)
-                                  _buildHobbyGrid(2),
+                                if (showOutdoor) _buildHobbyGrid(2),
                               ],
                             ),
                           ),
@@ -406,6 +405,7 @@ class _CategoryPageState extends State<CategoryPage> {
             Text(
               title,
               style: const TextStyle(
+                fontFamily: 'GowunDodum',
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 23,
@@ -419,9 +419,10 @@ class _CategoryPageState extends State<CategoryPage> {
 
   /// 🔥 취미 카드 버튼을 기존 디자인 유지하면서 그대로 버튼화
   Widget _buildHobbyGrid(int categoryId) {
-    final hobbyList = categories
-        .where((category) => category.categoryId == categoryId)
-        .toList();
+    final hobbyList =
+        categories
+            .where((category) => category.categoryId == categoryId)
+            .toList();
 
     return GridView.builder(
       physics: const NeverScrollableScrollPhysics(),
@@ -442,8 +443,12 @@ class _CategoryPageState extends State<CategoryPage> {
   /// 🔥 이미지 배경을 유지한 취미 버튼
   Widget _buildHobbyButton(CategoryVo hobby) {
     return GestureDetector(
-      onTap: () => _onHobbySelected(
-          hobby.categoryId, hobby.subCategoryId, hobby.subCategoryName),
+      onTap:
+          () => _onHobbySelected(
+            hobby.categoryId,
+            hobby.subCategoryId,
+            hobby.subCategoryName,
+          ),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -464,13 +469,13 @@ class _CategoryPageState extends State<CategoryPage> {
               fontSize: 18,
               fontWeight: FontWeight.bold,
               color: Colors.white,
+              fontFamily: 'GowunDodum',
             ),
           ),
         ),
       ),
     );
   }
-
 
   /// 📌 이미지가 없으면 기본 이미지 사용
   ImageProvider _getImage(String? path) {

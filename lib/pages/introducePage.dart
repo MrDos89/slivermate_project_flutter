@@ -98,10 +98,10 @@ class _IntroducePageState extends State<IntroducePage> {
       flags: const YoutubePlayerFlags(autoPlay: false),
     );
     fetchLessonData(); // ✅ 데이터 가져오기
-      print("🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
-
+    print(
+      "🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+    );
   }
-
 
   // ✅ lessonCategory와 lessonSubCategory가 설정된 후 API 호출
   void updateCategory(int category, int subCategory) {
@@ -154,7 +154,9 @@ class _IntroducePageState extends State<IntroducePage> {
         final purchaseData = purchaseResponse.data;
 
         if (purchaseData is List && purchaseData.isNotEmpty) {
-          hasPurchased = purchaseData.any((item) => item['lesson_id'] == fetchedLesson.lessonId);
+          hasPurchased = purchaseData.any(
+            (item) => item['lesson_id'] == fetchedLesson.lessonId,
+          );
         }
       } else {
         print("❌ 결제 정보 로딩 실패: ${purchaseResponse.statusCode}");
@@ -168,9 +170,8 @@ class _IntroducePageState extends State<IntroducePage> {
       String costVideoUrl = fetchedLesson.lessonCostLecture;
 
       // 유료 결제 여부에 따라 URL 선택
-      String videoUrl = hasPurchased && costVideoUrl.isNotEmpty
-          ? costVideoUrl
-          : freeVideoUrl;
+      String videoUrl =
+          hasPurchased && costVideoUrl.isNotEmpty ? costVideoUrl : freeVideoUrl;
 
       // ✅ [3] 최종 선택된 영상 확인
       print("🟣 최종 선택된 영상 URL: $videoUrl");
@@ -184,15 +185,10 @@ class _IntroducePageState extends State<IntroducePage> {
           print("❌ 영상 URL이 없습니다!");
         }
       });
-
     } catch (e) {
       print("❌ API 호출 중 에러 발생: $e");
     }
   }
-
-
-
-
 
   void initializeYoutubePlayer(String youtubeUrl) {
     final videoId = YoutubePlayer.convertUrlToId(youtubeUrl) ?? "";
@@ -203,7 +199,6 @@ class _IntroducePageState extends State<IntroducePage> {
     setState(() {}); // ✅ UI 갱신 추가
   }
 
-
   @override
   void dispose() {
     _controller.dispose();
@@ -212,7 +207,9 @@ class _IntroducePageState extends State<IntroducePage> {
 
   @override
   Widget build(BuildContext context) {
-    print("[IntroducePage] 🟢 dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
+    print(
+      "[IntroducePage] 🟢 dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+    );
 
     if (widget.dummyUser == null) {
       return const Scaffold(
@@ -236,33 +233,36 @@ class _IntroducePageState extends State<IntroducePage> {
           child: Scaffold(
             backgroundColor: const Color(0xFFD6FFDC).withOpacity(0.9),
             appBar: AppBar(
-                backgroundColor: const Color(0xFF044E00).withOpacity(0.5), // 실외 (연녹색)
+              backgroundColor: const Color(
+                0xFF044E00,
+              ).withOpacity(0.5), // 실외 (연녹색)
               automaticallyImplyLeading: false,
-              title: lesson == null
-                  ? const Text("강의 로딩 중...") // ✅ lesson이 null이면 기본 텍스트 표시
-                  : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '${categoryNames[lesson!.lessonCategory] ?? "알 수 없음"} / '
-                    '${lesson!.lessonCategory == 1 ? indoorHobbies[lesson!.lessonSubCategory] : outdoorHobbies[lesson!.lessonSubCategory] ?? "알 수 없음"}',
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    lesson!.lessonName,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+              title:
+                  lesson == null
+                      ? const Text("강의 로딩 중...") // ✅ lesson이 null이면 기본 텍스트 표시
+                      : Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '${categoryNames[lesson!.lessonCategory] ?? "알 수 없음"} / '
+                            '${lesson!.lessonCategory == 1 ? indoorHobbies[lesson!.lessonSubCategory] : outdoorHobbies[lesson!.lessonSubCategory] ?? "알 수 없음"}',
+                            style: const TextStyle(
+                              fontSize: 16,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            lesson!.lessonName,
+                            style: const TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
+                      ),
             ),
             body: Padding(
               padding: const EdgeInsets.symmetric(
@@ -290,7 +290,9 @@ class _IntroducePageState extends State<IntroducePage> {
                           children: [
                             CircleAvatar(
                               radius: 22,
-                              backgroundImage: NetworkImage(lesson!.userThumbnail),
+                              backgroundImage: NetworkImage(
+                                lesson!.userThumbnail,
+                              ),
                             ),
                             const SizedBox(width: 8), // 이 값으로 간격 조정 가능
                             Column(

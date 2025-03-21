@@ -152,45 +152,147 @@ class _MainPageState extends State<MainPage> {
               /// 🔹 **"터치해주세요" 폰트 추가 (배경 유지 + 중앙 배치 + 부드럽게 깜빡임)**
               Positioned.fill(
                 child: Center(
-                  child: AnimatedOpacity(
-                    opacity: isTextVisible ? 1.0 : 0.6, // ✅ 부드러운 깜빡임 효과
-                    duration: const Duration(milliseconds: 800),
-                    child: const Text(
-                      "터치해주세요",
-                      style: TextStyle(
-                        fontSize: 45, // ✅ 폰트 크기 약간 키움
-                        color: Colors.white, // ✅ 폰트 컬러 유지
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 4.0, // ✅ 글자 간격(자간) 크게 증가
-                        shadows: [
-                          Shadow(
-                            offset: Offset(-5, -5),
-                            blurRadius: 12,
-                            color: Color(0xFF044E00),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          /// 🔹 '파'를 왼쪽 위로 이동
+                          Transform.translate(
+                            offset: Offset(-10, -10), // 왼쪽 위로 이동
+                            child: const Text(
+                              '파',
+                              style: TextStyle(
+                                fontFamily: 'KCCHyerim',
+                                fontSize: 100,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 6.0,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(-5, -5),
+                                    blurRadius: 12,
+                                    color: Color(0xFF84B448),
+                                  ),
+                                  Shadow(
+                                    offset: Offset(5, 5),
+                                    blurRadius: 12,
+                                    color: Color(0xFF84B448),
+                                  ),
+                                  Shadow(
+                                    offset: Offset(0, 0),
+                                    blurRadius: 30,
+                                    color: Color(0xFF84B448),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Shadow(
-                            offset: Offset(5, -5),
-                            blurRadius: 12,
-                            color: Color(0xFF044E00),
+
+                          /// 🔹 '릇'을 오른쪽 아래로 이동
+                          Transform.translate(
+                            offset: Offset(10, 10), // 오른쪽 아래로 이동
+                            child: const Text(
+                              '릇',
+                              style: TextStyle(
+                                fontFamily: 'KCCHyerim',
+                                fontSize: 100,
+                                color: Colors.white,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 6.0,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(-5, -5),
+                                    blurRadius: 12,
+                                    color: Color(0xFF84B448),
+                                  ),
+                                  Shadow(
+                                    offset: Offset(5, 5),
+                                    blurRadius: 12,
+                                    color: Color(0xFF84B448),
+                                  ),
+                                  Shadow(
+                                    offset: Offset(0, 0),
+                                    blurRadius: 30,
+                                    color: Color(0xFF84B448),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          Shadow(
-                            offset: Offset(-5, 5),
-                            blurRadius: 12,
-                            color: Color(0xFF044E00),
-                          ),
-                          Shadow(
-                            offset: Offset(5, 5),
-                            blurRadius: 12,
-                            color: Color(0xFF044E00),
-                          ),
-                          Shadow(
-                            offset: Offset(0, 0),
-                            blurRadius: 20,
-                            color: Color(0xFF044E00),
-                          ), // ✅ 더 넓고 부드럽게 퍼지는 효과
                         ],
                       ),
-                    ),
+                      // const Text(
+                      //   '파릇',
+                      //   style: TextStyle(
+                      //     fontFamily: 'KCCHyerim', // ✅ 새로운 폰트 적용
+                      //     fontSize: 90,
+                      //     color: Colors.white,
+                      //     fontWeight: FontWeight.w600,
+                      //     letterSpacing: 6.0,
+                      //     shadows: [
+                      //       Shadow(
+                      //         offset: Offset(-5, -5),
+                      //         blurRadius: 12,
+                      //         color: Color(0xFF84B448),
+                      //       ),
+                      //       Shadow(
+                      //         offset: Offset(5, 5),
+                      //         blurRadius: 12,
+                      //         color: Color(0xFF84B448),
+                      //       ),
+                      //       Shadow(
+                      //         offset: Offset(0, 0),
+                      //         blurRadius: 30,
+                      //         color: Color(0xFF84B448),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // ),
+                      const SizedBox(height: 20),
+                      AnimatedOpacity(
+                        opacity: isTextVisible ? 1.0 : 0.6,
+                        duration: const Duration(milliseconds: 800),
+                        child: const Text(
+                          "터치해주세요",
+                          style: TextStyle(
+                            fontFamily: 'GowunDodum',
+                            fontSize: 30,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 4.0,
+                            shadows: [
+                              Shadow(
+                                offset: Offset(-5, -5),
+                                blurRadius: 12,
+                                color: Color(0xFF576D23),
+                              ),
+                              Shadow(
+                                offset: Offset(5, -5),
+                                blurRadius: 12,
+                                color: Color(0xFF576D23),
+                              ),
+                              Shadow(
+                                offset: Offset(-5, 5),
+                                blurRadius: 12,
+                                color: Color(0xFF576D23),
+                              ),
+                              Shadow(
+                                offset: Offset(5, 5),
+                                blurRadius: 12,
+                                color: Color(0xFF576D23),
+                              ),
+                              Shadow(
+                                offset: Offset(0, 0),
+                                blurRadius: 20,
+                                color: Color(0xFF576D23),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
