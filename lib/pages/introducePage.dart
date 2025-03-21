@@ -160,10 +160,17 @@ class _IntroducePageState extends State<IntroducePage> {
         }
       } else {
         print("❌ 결제 정보 로딩 실패: ${purchaseResponse.statusCode}");
+        return;
       }
 
       // ✅ [2] 결제 여부 확인
       print("🟡 결제 여부(hasPurchased): $hasPurchased");
+
+      if (hasPurchased) {
+        await dio.patch(
+          'http://13.125.197.66:18090/api/purchase/${fetchedLesson.lessonId}/${widget.dummyUser!.uid}',
+        );
+      }
 
       // 🔥 [핵심 변경 부분] 영상 URL 두 개를 다 관리하고, 선택적으로 제공!
       String freeVideoUrl = fetchedLesson.lessonFreeLecture;
