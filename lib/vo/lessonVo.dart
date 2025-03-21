@@ -6,6 +6,7 @@ class LessonVo {
   final int userId;
   final String lessonName;
   final String lessonDesc;
+  final String lessonCostDesc;
   final int lessonCategory;
   final int lessonSubCategory;
   final String lessonFreeLecture;
@@ -23,6 +24,7 @@ class LessonVo {
     required this.userId,
     required this.lessonName,
     required this.lessonDesc,
+    required this.lessonCostDesc,
     required this.lessonCategory,
     required this.lessonSubCategory,
     required this.lessonFreeLecture,
@@ -43,6 +45,7 @@ class LessonVo {
       userId: json['user_id'] ?? 0,
       lessonName: json['lesson_name'] ?? "없음",
       lessonDesc: json['lesson_desc'] ?? "설명이 없습니다.",
+      lessonCostDesc: json['lesson_cost_desc'] ?? "유료 영상 설명이 없습니다.",
       lessonCategory: json['lesson_category'] ?? 0,
       lessonSubCategory: json['lesson_sub_category'] ?? 0,
       lessonFreeLecture: json['lesson_free_lecture'] ?? "",
@@ -75,6 +78,7 @@ class LessonVo {
       'user_id': userId,
       'lesson_name': lessonName,
       'lesson_desc': lessonDesc,
+      'lesson_cost_desc': lessonDesc,
       'lesson_category': lessonCategory,
       'lesson_sub_category': lessonSubCategory,
       'lesson_free_lecture': lessonFreeLecture,

@@ -39,6 +39,7 @@ class IntroducePage extends StatefulWidget {
   int lessonCategory;
   int lessonSubCategory;
   UserVo? dummyUser;
+  bool hasPurchased = false;
 
   IntroducePage({
     super.key,
@@ -58,37 +59,6 @@ class IntroducePage extends StatefulWidget {
 class _IntroducePageState extends State<IntroducePage> {
   late YoutubePlayerController _controller;
   LessonVo? lesson;
-
-  // static const String apiEndpoint =
-  //     "http://13.125.197.66:18090/api/lesson/sc/${widget.lesson.lessonCategory}/${lessonSubCategory}"; // 🔥 서버 주소
-  // final Dio dio = Dio();
-
-  // 더미 데이터 (서버 데이터 없을 시 사용)
-  // final LessonVO dummyLesson = LessonVO(
-  //   lessonId: 0,
-  //   userId: 101,
-  //   lessonName: "기초 요가 스트레칭",
-  //   lessonDesc: "기초적인 요가 동작을 통해 스트레칭 하는 법을 배워봅시다.",
-  //   lessonCategory: 1,
-  //   lessonSubCategory: 2,
-  //   lessonFreeLecture: "https://youtu.be/Ei3eoqXmkjU?si=W60TzlwbXhJErL4F",
-  //   lessonCostLecture: "",
-  //   lessonThumbnail: "",
-  //   lessonPrice: 15000,
-  //   registerDate: "2024-03-10",
-  //   isHidden: false,
-  //   updDate: "2024-03-10",
-  //   userName: "User #101",
-  //   userThumbnail: "assets/images/instructor.png",
-  // );
-
-  // @override
-  // void initState() {
-  //   print("야 initState 들어간다");
-  //   super.initState();
-  //   fetchLessonData(); // ✅ API 호출 (초기에는 값이 없을 수도 있음)
-  //   print("🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
-  // }
 
   @override
   void initState() {
@@ -148,13 +118,13 @@ class _IntroducePageState extends State<IntroducePage> {
         options: Options(validateStatus: (status) => true),
       );
 
-      bool hasPurchased = false;
+      // bool hasPurchased = false;
 
       if (purchaseResponse.statusCode == 200) {
         final purchaseData = purchaseResponse.data;
 
         if (purchaseData is List && purchaseData.isNotEmpty) {
-          hasPurchased = purchaseData.any(
+          widget.hasPurchased = purchaseData.any(
             (item) => item['lesson_id'] == fetchedLesson.lessonId,
           );
         }
@@ -164,9 +134,9 @@ class _IntroducePageState extends State<IntroducePage> {
       }
 
       // ✅ [2] 결제 여부 확인
-      print("🟡 결제 여부(hasPurchased): $hasPurchased");
+      print("🟡 결제 여부(hasPurchased): ${widget.hasPurchased}");
 
-      if (hasPurchased) {
+      if (widget.hasPurchased) {
         await dio.patch(
           'http://13.125.197.66:18090/api/purchase/${fetchedLesson.lessonId}/${widget.dummyUser!.uid}',
         );
@@ -178,7 +148,9 @@ class _IntroducePageState extends State<IntroducePage> {
 
       // 유료 결제 여부에 따라 URL 선택
       String videoUrl =
-          hasPurchased && costVideoUrl.isNotEmpty ? costVideoUrl : freeVideoUrl;
+          widget.hasPurchased && costVideoUrl.isNotEmpty
+              ? costVideoUrl
+              : freeVideoUrl;
 
       // ✅ [3] 최종 선택된 영상 확인
       print("🟣 최종 선택된 영상 URL: $videoUrl");
@@ -187,7 +159,7 @@ class _IntroducePageState extends State<IntroducePage> {
         lesson = fetchedLesson;
         if (videoUrl.isNotEmpty) {
           initializeYoutubePlayer(videoUrl);
-          print(hasPurchased ? "🔥 유료 강의를 로드합니다." : "🔥 무료 강의를 로드합니다.");
+          print(widget.hasPurchased ? "🔥 유료 강의를 로드합니다." : "🔥 무료 강의를 로드합니다.");
         } else {
           print("❌ 영상 URL이 없습니다!");
         }
@@ -372,14 +344,17 @@ class _IntroducePageState extends State<IntroducePage> {
                           const SizedBox(height: 8),
                           Expanded(
                             child: SingleChildScrollView(
-                              child: Text(
-                                lesson!.lessonDesc,
-                                style: TextStyle(
-                                  fontFamily: 'cts',
-                                  fontSize: 18,
-                                  color: Colors.black87,
-                                ),
-                              ),
+                              child:
+                                  widget.hasPurchased
+                                      ? Text(lesson!.lessonCostDesc)
+                                      : Text(
+                                        lesson!.lessonDesc,
+                                        style: TextStyle(
+                                          fontFamily: 'cts',
+                                          fontSize: 18,
+                                          color: Colors.black87,
+                                        ),
+                                      ),
                             ),
                           ),
                         ],
