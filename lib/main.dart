@@ -19,7 +19,6 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     // 🔥 더미 유저 데이터 (19번 유저)
     final UserVo dummyUser = UserVo(
       uid: 19, // ✅ 필드명 지정
@@ -44,10 +43,24 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
       initialRoute: "/",
+      onGenerateRoute: (settings) {
+        if (settings.name == '/introduce') {
+          final args = settings.arguments as Map<String, dynamic>;
+          return MaterialPageRoute(
+            builder:
+                (context) => IntroducePage(
+                  lessonCategory: args["lessonCategory"],
+                  lessonSubCategory: args["lessonSubCategory"],
+                  dummyUser: args["dummyUser"],
+                ),
+          );
+        }
+        return null; // 다른 라우트에 대한 처리
+      },
       routes: {
-        "/": (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
+        "/":
+            (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
         "/category": (context) => CategoryPage(dummyUser: dummyUser),
-        "/introduce": (context) => IntroducePage(lessonCategory: 1, lessonSubCategory: 1, dummyUser: dummyUser),
         "/purchase": (context) => PurchasePage(dummyUser: dummyUser),
         "/call": (context) => CallStaffPage(dummyUser: dummyUser),
         "/notifications": (context) => NotificationPage(dummyUser: dummyUser),

@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class CreditCardModal extends StatefulWidget {
+  final UserVo dummyUser;
   final LessonVo lesson; // 상품 목록
   final PurchaseVo totalPurchases;
   final int totalPayment; // 총 결제금액
 
   const CreditCardModal({
     Key? key,
+    required this.dummyUser,
     required this.lesson,
     required this.totalPurchases,
     required this.totalPayment,
@@ -55,7 +58,14 @@ class _CreditCardModalState extends State<CreditCardModal> {
         const SnackBar(content: Text("결제가 완료되었습니다. 단말기에서 카드를 빼주세요")),
       );
 
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed(
+        "/introduce",
+        arguments: {
+          "lessonCategory": widget.lesson.lessonCategory,
+          "lessonSubCategory": widget.lesson.lessonSubCategory,
+          "dummyUser": widget.dummyUser,
+        },
+      );
     }
 
     // ✅ 결제 정보 전송

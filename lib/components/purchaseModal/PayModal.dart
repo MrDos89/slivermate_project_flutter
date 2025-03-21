@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class PayModal extends StatefulWidget {
   final LessonVo lesson;
   final PurchaseVo totalPurchases;
   final int totalPayment;
+  final UserVo dummyUser;
 
   const PayModal({
     Key? key,
+    required this.dummyUser,
     required this.lesson,
     required this.totalPurchases,
     required this.totalPayment,

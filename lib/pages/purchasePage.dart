@@ -52,7 +52,7 @@ class _PurchasePageState extends State<PurchasePage> {
   PurchaseVo get purchaseTotal {
     return PurchaseVo(
       sku: 0,
-      uid: 19,
+      uid: widget.dummyUser!.uid,
       lessonId: lesson.lessonId,
       modelType: 1,
       clubId: 0,
@@ -141,6 +141,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => CreditCardModal(
+                dummyUser: widget.dummyUser!,
                 lesson: lesson,
                 totalPurchases: totalPurchases,
                 totalPayment: totalPayment,
@@ -152,6 +153,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => PayModal(
+                dummyUser: widget.dummyUser!,
                 lesson: lesson,
                 totalPurchases: totalPurchases,
                 totalPayment: totalPayment,
@@ -163,6 +165,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => EtcModal(
+                dummyUser: widget.dummyUser!,
                 lesson: lesson,
                 totalPurchases: totalPurchases,
                 totalPayment: totalPayment,
@@ -173,6 +176,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => EtcModal(
+                dummyUser: widget.dummyUser!,
                 lesson: lesson,
                 totalPurchases: totalPurchases,
                 totalPayment: totalPayment,
@@ -272,7 +276,7 @@ class _PurchasePageState extends State<PurchasePage> {
             children:
                 paymentMethods.map((method) {
                   return InkWell(
-                    onTap: () => _openModal(method.modalType),
+                    onTap: () => {_openModal(method.modalType)},
                     child: Container(
                       decoration: BoxDecoration(
                         color: Colors.grey[200],
