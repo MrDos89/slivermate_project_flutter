@@ -73,7 +73,7 @@ class _IntroducePageState extends State<IntroducePage> {
     );
   }
 
-  // ✅ lessonCategory와 lessonSubCategory가 설정된 후 API 호출
+  // [yj] lessonCategory와 lessonSubCategory가 설정된 후 API 호출
   void updateCategory(int category, int subCategory) {
     setState(() {
       widget.lessonCategory = category;
@@ -84,7 +84,7 @@ class _IntroducePageState extends State<IntroducePage> {
       "🎯 [카테고리 업데이트] lessonCategory: ${widget.lessonCategory}, lessonSubCategory: ${widget.lessonSubCategory}",
     );
 
-    // ✅ 값이 설정된 후 API 호출
+    // [yj] 값이 설정된 후 API 호출
     fetchLessonData();
   }
 
@@ -94,7 +94,7 @@ class _IntroducePageState extends State<IntroducePage> {
   //   fetchLessonData(0); // 데이터 불러오기
   // }
 
-  // ✅ API 데이터 가져오기 및 결제 정보 확인해서 강의 로드
+  // [yj] API 데이터 가져오기 및 결제 정보 확인해서 강의 로드
   Future<void> fetchLessonData() async {
     try {
       final fetchedLesson = await LessonService.fetchLessonData(
@@ -107,7 +107,7 @@ class _IntroducePageState extends State<IntroducePage> {
         return;
       }
 
-      // ✅ [1] 강의 정보가 제대로 들어왔는지 확인
+      // [yj] 강의 정보가 제대로 들어왔는지 확인
       print("🟢 불러온 강의 정보: ${fetchedLesson.lessonName}");
       print("   🔹 무료 강의 URL: ${fetchedLesson.lessonFreeLecture}");
       print("   🔹 유료 강의 URL: ${fetchedLesson.lessonCostLecture}");
@@ -142,7 +142,7 @@ class _IntroducePageState extends State<IntroducePage> {
         );
       }
 
-      // 🔥 [핵심 변경 부분] 영상 URL 두 개를 다 관리하고, 선택적으로 제공!
+      //  [yj] 영상 URL 두 개를 다 관리하고, 선택적으로 제공
       String freeVideoUrl = fetchedLesson.lessonFreeLecture;
       String costVideoUrl = fetchedLesson.lessonCostLecture;
 
@@ -152,7 +152,7 @@ class _IntroducePageState extends State<IntroducePage> {
               ? costVideoUrl
               : freeVideoUrl;
 
-      // ✅ [3] 최종 선택된 영상 확인
+      // [yj] 최종 선택된 영상 확인
       print("🟣 최종 선택된 영상 URL: $videoUrl");
 
       setState(() {
@@ -175,7 +175,7 @@ class _IntroducePageState extends State<IntroducePage> {
       initialVideoId: videoId,
       flags: const YoutubePlayerFlags(autoPlay: false),
     );
-    setState(() {}); // ✅ UI 갱신 추가
+    setState(() {}); // UI 갱신 추가
   }
 
   @override
@@ -192,7 +192,7 @@ class _IntroducePageState extends State<IntroducePage> {
 
     if (widget.dummyUser == null) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()), // ✅ 데이터 로딩 중 표시
+        body: Center(child: CircularProgressIndicator()), // 데이터 로딩 중 표시
       );
     }
 
@@ -218,7 +218,7 @@ class _IntroducePageState extends State<IntroducePage> {
               automaticallyImplyLeading: false,
               title:
                   lesson == null
-                      ? const Text("강의 로딩 중...") // ✅ lesson이 null이면 기본 텍스트 표시
+                      ? const Text("강의 로딩 중...") // lesson이 null이면 기본 텍스트 표시
                       : Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -265,7 +265,7 @@ class _IntroducePageState extends State<IntroducePage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        // 🔥 이미지를 텍스트와 묶어주는 Row
+                        // 이미지를 텍스트와 묶어주는 Row
                         Row(
                           children: [
                             CircleAvatar(
@@ -288,7 +288,7 @@ class _IntroducePageState extends State<IntroducePage> {
                                   ),
                                 ),
                                 Text(
-                                  lesson!.getFormattedDate(), // ✅ 변환된 날짜 표시
+                                  lesson!.getFormattedDate(), // 변환된 날짜 표시
                                   style: TextStyle(
                                     fontFamily: 'MaruBuri',
                                     fontSize: 16,
@@ -299,7 +299,7 @@ class _IntroducePageState extends State<IntroducePage> {
                               ],
                             ),
                           ],
-                        ), // 🔥 이미지와 강사정보 묶는 Row의 끝
+                        ),
 
                         Row(
                           children: [

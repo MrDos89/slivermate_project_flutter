@@ -24,9 +24,9 @@ class _CallStaffPageState extends State<CallStaffPage> {
     "기타 문의": 4,
   };
 
-  /// 🟢 **직원 호출 요청 (API 전송)**
+  /// 직원 호출 요청 (API 전송)
   void _callStaff() async {
-    if (selectedReasonId == null) return; // 🔥 호출 사유 선택해야 실행
+    if (selectedReasonId == null) return; //  호출 사유 선택해야 실행됨
 
     setState(() {
       isCalling = true;
@@ -37,7 +37,7 @@ class _CallStaffPageState extends State<CallStaffPage> {
       userId: 1, // TODO: 실제 로그인한 유저 ID로 변경
       lessonId: 100, // TODO: 신고 대상 ID로 변경
       reportId: selectedReasonId!,
-      reportContent: _detailsController.text.trim(), // ✅ 신고 내용 추가됨
+      reportContent: _detailsController.text.trim(), // 신고 내용 추가
       isConfirmed: false,
       updDate: DateTime.now(),
     );
@@ -45,21 +45,21 @@ class _CallStaffPageState extends State<CallStaffPage> {
     // 서버로 데이터 전송
     bool success = await SliverVo.sendReport(report);
 
-    // ✅ **호출 완료 모달을 2초 후에 띄우도록 설정**
+    // 호출 완료 모달을 2초 후에 띄우도록
     Future.delayed(const Duration(seconds: 2), () {
-      // ⏳ 2초 후 실행
+      //  2초 후 실행
       if (mounted) {
         Navigator.pop(context); // 기존 모달 닫기
         if (success) {
-          _showCompletedModal(); // ✅ 성공 모달
+          _showCompletedModal(); // 성공 모달
         } else {
-          _showErrorModal(); // ❌ 실패 모달
+          _showErrorModal(); // 실패 모달
         }
       }
     });
   }
 
-  /// ✅ **호출 완료 모달**
+  /// 호출 완료 모달
   void _showCompletedModal() {
     showDialog(
       context: context,
@@ -93,7 +93,7 @@ class _CallStaffPageState extends State<CallStaffPage> {
     );
   }
 
-  /// ❌ **호출 실패 모달**
+  /// 호출 실패 모달
   void _showErrorModal() {
     showDialog(
       context: context,
