@@ -6,16 +6,16 @@ import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class PayModal extends StatefulWidget {
   final LessonVo lesson;
-  final PurchaseVo totalPurchases;
-  final int totalPayment;
+  final int modelType;
+  // final int totalPayment;
   final UserVo dummyUser;
 
   const PayModal({
     Key? key,
     required this.dummyUser,
     required this.lesson,
-    required this.totalPurchases,
-    required this.totalPayment,
+    required this.modelType,
+    // required this.totalPayment,
   }) : super(key: key);
 
   @override
@@ -25,6 +25,23 @@ class PayModal extends StatefulWidget {
 class _PayModalState extends State<PayModal> {
   bool _paymentProcessing = false;
   bool _paymentCompleted = false;
+
+  /// purchaseVo 객체
+  PurchaseVo get purchaseTotal {
+    return PurchaseVo(
+      sku: 0,
+      uid: widget.dummyUser!.uid,
+      lessonId: widget.lesson.lessonId,
+      modelType: widget.modelType,
+      clubId: 0,
+      receiptId: "test",
+      price: widget.lesson.lessonPrice,
+      isMonthlyPaid: false,
+    );
+  }
+
+  /// 최종 결제 데이터 객체
+  PurchaseVo get totalPurchases => purchaseTotal;
 
   Future<void> _simulatePayment() async {
     if (_paymentProcessing || _paymentCompleted) return;
@@ -37,9 +54,7 @@ class _PayModalState extends State<PayModal> {
     // 3초 동안 결제 로딩
     await Future.delayed(const Duration(seconds: 3));
 
-    bool isSuccess = await PurchaseService.fetchPurchaseData(
-      widget.totalPurchases,
-    );
+    bool isSuccess = await PurchaseService.fetchPurchaseData(totalPurchases);
 
     if (isSuccess) {
       setState(() {

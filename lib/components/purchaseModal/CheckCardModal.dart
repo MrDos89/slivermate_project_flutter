@@ -7,13 +7,11 @@ import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 class CheckCardModal extends StatelessWidget {
   final LessonVo lesson;
   final PurchaseVo totalPurchases;
-  final int totalPayment;
 
   const CheckCardModal({
     Key? key,
     required this.lesson,
     required this.totalPurchases,
-    required this.totalPayment,
   }) : super(key: key);
 
   @override
@@ -76,7 +74,7 @@ class CheckCardModal extends StatelessWidget {
             children: [
               const Text('총 결제금액', style: TextStyle(fontSize: 16)),
               Text(
-                '$totalPayment원',
+                '${lesson.lessonPrice}원',
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,

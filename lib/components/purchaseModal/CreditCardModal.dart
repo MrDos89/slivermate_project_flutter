@@ -7,15 +7,15 @@ import 'package:slivermate_project_flutter/vo/userVo.dart';
 class CreditCardModal extends StatefulWidget {
   final UserVo dummyUser;
   final LessonVo lesson; // 상품 목록
-  final PurchaseVo totalPurchases;
-  final int totalPayment; // 총 결제금액
+  final int modelType; // 결제수단
+  // final int totalPayment; // 총 결제금액
 
   const CreditCardModal({
     Key? key,
     required this.dummyUser,
     required this.lesson,
-    required this.totalPurchases,
-    required this.totalPayment,
+    required this.modelType,
+    // required this.totalPayment,
   }) : super(key: key);
 
   @override
@@ -27,6 +27,23 @@ class _CreditCardModalState extends State<CreditCardModal> {
   bool _paymentProcessing = false; // 결제 진행 여부
   bool _paymentCompleted = false; // 결제 완료 여부
   bool _acknowledged = false; // 결제 완료 후 안내 확인 여부
+
+  /// purchaseVo 객체
+  PurchaseVo get purchaseTotal {
+    return PurchaseVo(
+      sku: 0,
+      uid: widget.dummyUser!.uid,
+      lessonId: widget.lesson.lessonId,
+      modelType: widget.modelType,
+      clubId: 0,
+      receiptId: "test",
+      price: widget.lesson.lessonPrice,
+      isMonthlyPaid: false,
+    );
+  }
+
+  /// 최종 결제 데이터 객체
+  PurchaseVo get totalPurchases => purchaseTotal;
 
   /// 카드 삽입 + 결제 로딩 시뮬레이션
   Future<void> _simulateCardInsertion() async {
@@ -40,9 +57,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
       _acknowledged = false;
     });
 
-    bool isSuccess = await PurchaseService.fetchPurchaseData(
-      widget.totalPurchases,
-    );
+    bool isSuccess = await PurchaseService.fetchPurchaseData(totalPurchases);
 
     if (isSuccess) {
       // 3초 동안 결제 로딩
@@ -174,7 +189,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
                         ),
                         const SizedBox(width: 8), // 텍스트 사이의 간격 추가
                         Text(
-                          '${widget.totalPayment}원',
+                          '${widget.lesson.lessonPrice}원',
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,

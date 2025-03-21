@@ -48,29 +48,6 @@ class _PurchasePageState extends State<PurchasePage> {
     // fetchPurchaseData();
   }
 
-  /// purchaseVo 객체
-  PurchaseVo get purchaseTotal {
-    return PurchaseVo(
-      sku: 0,
-      uid: widget.dummyUser!.uid,
-      lessonId: lesson.lessonId,
-      modelType: 1,
-      clubId: 0,
-      receiptId: "test",
-      price: lesson.lessonPrice,
-      isMonthlyPaid: false,
-    );
-  }
-
-  /// 장바구니 총합
-  int get itemsTotal {
-    return lesson.lessonPrice;
-  }
-
-  /// 최종 결제금액
-  int get totalPayment => itemsTotal;
-  PurchaseVo get totalPurchases => purchaseTotal;
-
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -143,8 +120,8 @@ class _PurchasePageState extends State<PurchasePage> {
               (_) => CreditCardModal(
                 dummyUser: widget.dummyUser!,
                 lesson: lesson,
-                totalPurchases: totalPurchases,
-                totalPayment: totalPayment,
+                modelType: 1,
+                // totalPayment: totalPayment,
               ),
         );
         break;
@@ -155,8 +132,8 @@ class _PurchasePageState extends State<PurchasePage> {
               (_) => PayModal(
                 dummyUser: widget.dummyUser!,
                 lesson: lesson,
-                totalPurchases: totalPurchases,
-                totalPayment: totalPayment,
+                modelType: 2,
+                // totalPayment: totalPayment,
               ),
         );
         break;
@@ -167,8 +144,8 @@ class _PurchasePageState extends State<PurchasePage> {
               (_) => EtcModal(
                 dummyUser: widget.dummyUser!,
                 lesson: lesson,
-                totalPurchases: totalPurchases,
-                totalPayment: totalPayment,
+                modelType: 3,
+                // totalPayment: totalPayment,
               ),
         );
       case _ModalType.qr:
@@ -178,8 +155,8 @@ class _PurchasePageState extends State<PurchasePage> {
               (_) => EtcModal(
                 dummyUser: widget.dummyUser!,
                 lesson: lesson,
-                totalPurchases: totalPurchases,
-                totalPayment: totalPayment,
+                modelType: 4,
+                // totalPayment: totalPayment,
               ),
         );
         break;
@@ -342,7 +319,10 @@ class _PurchasePageState extends State<PurchasePage> {
                   color: Color(0xFF077A00),
                 ),
               ),
-              Text('$itemsTotal원', style: const TextStyle(fontSize: 20)),
+              Text(
+                '${lesson.lessonPrice}원',
+                style: const TextStyle(fontSize: 20),
+              ),
             ],
           ),
           const SizedBox(height: 8),
@@ -358,7 +338,7 @@ class _PurchasePageState extends State<PurchasePage> {
                 ),
               ),
               Text(
-                '$totalPayment원',
+                '${lesson.lessonPrice}원',
                 style: const TextStyle(
                   fontSize: 35,
                   fontWeight: FontWeight.bold,
