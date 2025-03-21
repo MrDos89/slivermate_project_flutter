@@ -31,6 +31,9 @@ class _PayModalState extends State<PayModal> {
       _paymentCompleted = false;
     });
 
+    // 3초 동안 결제 로딩
+    await Future.delayed(const Duration(seconds: 3));
+
     bool isSuccess = await PurchaseService.fetchPurchaseData(
       widget.totalPurchases,
     );
@@ -40,6 +43,14 @@ class _PayModalState extends State<PayModal> {
         _paymentProcessing = false;
         _paymentCompleted = true;
       });
+
+      // 결제 모달 팝 시키기
+      Navigator.of(context).pop();
+
+      // 결제 완료 안내 (모달은 자동으로 닫히지 않음)
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("결제가 완료되었습니다.")));
     }
   }
 
@@ -173,9 +184,6 @@ class _PayModalState extends State<PayModal> {
           minimumSize: const Size(double.infinity, 48),
         ),
         onPressed: () {
-          // 결제 로직
-          Navigator.of(context).pop();
-
           _simulatePayment();
         },
         child: const Text(
