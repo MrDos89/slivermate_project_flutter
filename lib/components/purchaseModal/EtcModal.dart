@@ -29,6 +29,9 @@ class _EtcModalState extends State<EtcModal> {
   Future<void> _simulatePayment() async {
     if (_paymentProcessing || _paymentCompleted) return;
 
+    // 3초 동안 결제 로딩
+    await Future.delayed(const Duration(seconds: 3));
+
     setState(() {
       _paymentProcessing = true;
       _paymentCompleted = false;
@@ -43,6 +46,20 @@ class _EtcModalState extends State<EtcModal> {
         _paymentProcessing = false;
         _paymentCompleted = true;
       });
+
+      Navigator.of(context).pushReplacementNamed(
+        "/introduce",
+        arguments: {
+          "lessonCategory": widget.lesson.lessonCategory,
+          "lessonSubCategory": widget.lesson.lessonSubCategory,
+          "dummyUser": widget.dummyUser,
+        },
+      );
+
+      // 결제 완료 안내 (모달은 자동으로 닫히지 않음)
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("결제가 완료되었습니다.")));
     }
   }
 

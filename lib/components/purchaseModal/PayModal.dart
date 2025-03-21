@@ -47,8 +47,14 @@ class _PayModalState extends State<PayModal> {
         _paymentCompleted = true;
       });
 
-      // 결제 모달 팝 시키기
-      Navigator.of(context).pop();
+      Navigator.of(context).pushReplacementNamed(
+        "/introduce",
+        arguments: {
+          "lessonCategory": widget.lesson.lessonCategory,
+          "lessonSubCategory": widget.lesson.lessonSubCategory,
+          "dummyUser": widget.dummyUser,
+        },
+      );
 
       // 결제 완료 안내 (모달은 자동으로 닫히지 않음)
       ScaffoldMessenger.of(
