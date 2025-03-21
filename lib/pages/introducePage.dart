@@ -256,6 +256,7 @@ class _IntroducePageState extends State<IntroducePage> {
                           Text(
                             lesson!.lessonName,
                             style: const TextStyle(
+                              fontFamily: 'cts',
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
@@ -301,15 +302,19 @@ class _IntroducePageState extends State<IntroducePage> {
                                 Text(
                                   lesson!.userName,
                                   style: TextStyle(
+                                    fontFamily: 'MaruBuri',
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w500,
+                                    // fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                                 Text(
                                   lesson!.getFormattedDate(), // ✅ 변환된 날짜 표시
                                   style: TextStyle(
+                                    fontFamily: 'MaruBuri',
                                     fontSize: 16,
                                     color: Colors.black54,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
                               ],
@@ -328,6 +333,7 @@ class _IntroducePageState extends State<IntroducePage> {
                             Text(
                               lesson!.lessonPrice.toString(),
                               style: TextStyle(
+                                fontFamily: 'MaruBuri',
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold,
                                 color: Color(0xFF077A00),
@@ -350,6 +356,7 @@ class _IntroducePageState extends State<IntroducePage> {
                           const Text(
                             '📖 강의 설명',
                             style: TextStyle(
+                              fontFamily: 'cts',
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
                               color: Color(0xFF077A00),
@@ -361,6 +368,7 @@ class _IntroducePageState extends State<IntroducePage> {
                               child: Text(
                                 lesson!.lessonDesc,
                                 style: TextStyle(
+                                  fontFamily: 'cts',
                                   fontSize: 18,
                                   color: Colors.black87,
                                 ),

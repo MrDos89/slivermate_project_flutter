@@ -466,10 +466,10 @@ class _CategoryPageState extends State<CategoryPage> {
           child: Text(
             hobby.subCategoryName,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 22,
               fontWeight: FontWeight.bold,
               color: Colors.white,
-              fontFamily: 'GowunDodum',
+              fontFamily: 'SDSam',
             ),
           ),
         ),

@@ -63,6 +63,18 @@ flutter:
     - family: GowunDodum
       fonts:
         - asset: lib/font/GowunDodum-Regular.ttf
+    - family: SDSam
+      fonts:
+        - asset: lib/font/SDSamliphopangcheTTFBasic.ttf
+    - family: cts
+      fonts:
+        - asset: lib/font/cts2688_file4.ttf
+    - family: 이순신
+      fonts:
+        - asset: lib/font/이순신돋움체M.ttf
+    - family: MaruBuri
+      fonts:
+        - asset: lib/font/MaruBuri-Regular.ttf
     - family: KCCHyerim
       fonts:
         - asset: lib/font/KCCHyerimTTF.ttf
