@@ -346,14 +346,34 @@ class _IntroducePageState extends State<IntroducePage> {
                             child: SingleChildScrollView(
                               child:
                                   widget.hasPurchased
-                                      ? Text(lesson!.lessonCostDesc)
-                                      : Text(
-                                        lesson!.lessonDesc,
-                                        style: TextStyle(
-                                          fontFamily: 'cts',
-                                          fontSize: 18,
-                                          color: Colors.black87,
+                                      ? Text.rich(
+                                        TextSpan(
+                                          text: lesson!.lessonCostDesc
+                                              .replaceAll(
+                                                r'\n',
+                                                '\n',
+                                              ), // 서버에서 받은 String
+                                          style: TextStyle(
+                                            fontFamily: 'cts',
+                                            fontSize: 18,
+                                            color: Colors.black87,
+                                          ),
                                         ),
+                                        textAlign: TextAlign.left,
+                                      )
+                                      : Text.rich(
+                                        TextSpan(
+                                          text: lesson!.lessonDesc.replaceAll(
+                                            r'\n',
+                                            '\n',
+                                          ), // 서버에서 받은 String
+                                          style: TextStyle(
+                                            fontFamily: 'cts',
+                                            fontSize: 18,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        textAlign: TextAlign.left,
                                       ),
                             ),
                           ),
