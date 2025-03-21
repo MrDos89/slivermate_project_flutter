@@ -42,21 +42,24 @@ class _CreditCardModalState extends State<CreditCardModal> {
     );
 
     if (isSuccess) {
+      // 3초 동안 결제 로딩
+      await Future.delayed(const Duration(seconds: 3));
+
       setState(() {
         _paymentProcessing = false;
         _paymentCompleted = true;
       });
+
+      // 결제 완료 안내 (모달은 자동으로 닫히지 않음)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("결제가 완료되었습니다. 단말기에서 카드를 빼주세요")),
+      );
+
+      Navigator.of(context).pop();
     }
 
-    // // 3초 동안 결제 로딩
-    // await Future.delayed(const Duration(seconds: 3));
     // ✅ 결제 정보 전송
     // Future<void> fetchPurchaseData() async {}
-
-    // 결제 완료 안내 (모달은 자동으로 닫히지 않음)
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("결제가 완료되었습니다. 단말기에서 카드를 빼주세요")),
-    );
   }
 
   /// 카드의 최종 위치

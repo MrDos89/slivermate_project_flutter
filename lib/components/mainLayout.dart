@@ -85,6 +85,9 @@ class MainLayout extends StatelessWidget {
               size: 36,
             ),
             onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context);
+              }
               Navigator.pushNamed(context, "/");
             },
           ),
