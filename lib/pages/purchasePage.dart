@@ -69,6 +69,7 @@ class _PurchasePageState extends State<PurchasePage> {
             userId: 1,
             lessonName: 'test',
             lessonDesc: 'test',
+            lessonCostDesc: 'test',
             lessonCategory: 1,
             lessonSubCategory: 1,
             lessonFreeLecture: "test",
