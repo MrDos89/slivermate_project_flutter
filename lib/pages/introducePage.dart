@@ -109,8 +109,8 @@ class _IntroducePageState extends State<IntroducePage> {
 
       // [yj] 강의 정보가 제대로 들어왔는지 확인
       print(" 불러온 강의 정보: ${fetchedLesson.lessonName}");
-      print("   🔹 무료 강의 URL: ${fetchedLesson.lessonFreeLecture}");
-      print("   🔹 유료 강의 URL: ${fetchedLesson.lessonCostLecture}");
+      print("    무료 강의 URL: ${fetchedLesson.lessonFreeLecture}");
+      print("    유료 강의 URL: ${fetchedLesson.lessonCostLecture}");
 
       final Dio dio = Dio();
       final purchaseResponse = await dio.get(
