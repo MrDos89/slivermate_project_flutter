@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/main.dart';
 import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/pages/categoryPage.dart';
 
 class MainLayout extends StatelessWidget {
   final Widget child;
@@ -74,6 +76,15 @@ class MainLayout extends StatelessWidget {
               if (Navigator.canPop(context)) {
                 Navigator.pop(context);
               }
+
+              //@todo - 뒤로가기 시 무조건 카데고리로 이동하도록 구현된 상태인데 이걸 결제창 이후에만 적용되도록 수정할 예정
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CategoryPage(dummyUser: dummyUser),
+                ),
+                (Route<dynamic> route) => false, // 모든 기존 페이지 제거
+              );
             },
           ),
           //  홈 버튼
