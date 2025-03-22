@@ -6,10 +6,10 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:dio/dio.dart';
 
-// 🔥 카테고리 ID를 문자열로 변환
+//  카테고리 ID를 문자열로 변환
 const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
 
-// 🔥 취미 ID를 문자열로 변환 (카테고리별로 따로 저장)
+//  취미 ID를 문자열로 변환 (카테고리별로 따로 저장)
 const Map<int, String> indoorHobbies = {
   1: "뜨개질",
   2: "그림",
@@ -333,7 +333,7 @@ class _IntroducePageState extends State<IntroducePage> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            '📖 강의 설명',
+                            ' 강의 설명',
                             style: TextStyle(
                               fontFamily: 'cts',
                               fontSize: 22,
