@@ -41,7 +41,7 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  /// 🔹 "터치해주세요" 텍스트 깜빡이는 애니메이션
+  ///  "터치해주세요" 텍스트 깜빡이는 애니메이션
   void _startTextAnimation() {
     Timer.periodic(const Duration(milliseconds: 1000), (timer) {
       if (mounted) {
@@ -52,7 +52,7 @@ class _MainPageState extends State<MainPage> {
     });
   }
 
-  /// 🎥 비디오 초기화 (디버그 모드가 아닐 때만 실행)
+  ///  비디오 초기화 (디버그 모드가 아닐 때만 실행)
   void _initializeVideo() {
     _controller = VideoPlayerController.asset("lib/images/skan09.mp4")
       ..initialize()
@@ -68,7 +68,7 @@ class _MainPageState extends State<MainPage> {
           });
   }
 
-  /// 🔹 배경 클릭 시 카테고리로 부드럽게 이동
+  ///  배경 클릭 시 카테고리로 부드럽게 이동
   void _onBackgroundTap() {
     if (!isDebugMode) {
       _controller.dispose(); //  비디오 컨트롤러 해제
@@ -124,7 +124,7 @@ class _MainPageState extends State<MainPage> {
       isLoading: isLoading, //  로딩 중일 때 오버레이 표시
       child: Scaffold(
         body: GestureDetector(
-          onTap: _onBackgroundTap, // 🔹 배경 클릭하면 카테고리로 이동
+          onTap: _onBackgroundTap, //  배경 클릭하면 카테고리로 이동
           child: Stack(
             children: [
               /// 🎥 배경 영상 or 디버그 모드 이미지
@@ -149,7 +149,7 @@ class _MainPageState extends State<MainPage> {
                         : Container(color: Colors.black), //  초기 로딩 중 검은 화면
               ),
 
-              /// 🔹 **"터치해주세요" 폰트 추가 (배경 유지 + 중앙 배치 + 부드럽게 깜빡임)**
+              ///  **"터치해주세요" 폰트 추가 (배경 유지 + 중앙 배치 + 부드럽게 깜빡임)**
               Positioned.fill(
                 child: Center(
                   child: Column(
@@ -158,7 +158,7 @@ class _MainPageState extends State<MainPage> {
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          /// 🔹 '파'를 왼쪽 위로 이동
+                          ///  '파'를 왼쪽 위로 이동
                           Transform.translate(
                             offset: Offset(-10, -10), // 왼쪽 위로 이동
                             child: const Text(
@@ -190,7 +190,7 @@ class _MainPageState extends State<MainPage> {
                             ),
                           ),
 
-                          /// 🔹 '릇'을 오른쪽 아래로 이동
+                          ///  '릇'을 오른쪽 아래로 이동
                           Transform.translate(
                             offset: Offset(10, 10), // 오른쪽 아래로 이동
                             child: const Text(
