@@ -33,7 +33,7 @@ class UserVo {
     required this.updDate,
   });
 
-  // ✅ JSON → UserVo 변환
+  //  JSON → UserVo 변환
   factory UserVo.fromJson(Map<String, dynamic> json) {
     return UserVo(
       uid: json['uid'] ?? 0,
@@ -53,7 +53,7 @@ class UserVo {
     );
   }
 
-  // ✅ UserVo → JSON 변환
+  //  UserVo → JSON 변환
   Map<String, dynamic> toJson() {
     return {
       'uid': uid,

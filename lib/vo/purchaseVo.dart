@@ -65,7 +65,7 @@ class PurchaseService {
   static final Dio dio = Dio();
 
   static Future<bool> fetchPurchaseData(PurchaseVo purchaseVo) async {
-    print('📌 [API 요청 시작] 요청 URL: $apiEndPoint');
+    print(' [API 요청 시작] 요청 URL: $apiEndPoint');
 
     try {
       //  요청

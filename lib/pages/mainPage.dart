@@ -22,9 +22,9 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   late VideoPlayerController _controller;
-  bool isLoading = false; // ✅ 로딩 상태 변수 추가
-  bool isDebugMode = true; // ✅ 디버그 모드 추가 (true: 이미지, false: 영상)
-  bool isTextVisible = true; // ✅ "터치해주세요" 애니메이션 상태 변수
+  bool isLoading = false; //  로딩 상태 변수 추가
+  bool isDebugMode = true; //  디버그 모드 추가 (true: 이미지, false: 영상)
+  bool isTextVisible = true; //  "터치해주세요" 애니메이션 상태 변수
 
   @override
   void initState() {
@@ -32,7 +32,7 @@ class _MainPageState extends State<MainPage> {
     if (!isDebugMode) {
       _initializeVideo();
     }
-    _startTextAnimation(); // ✅ "터치해주세요" 애니메이션 시작
+    _startTextAnimation(); //  "터치해주세요" 애니메이션 시작
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print(
@@ -71,9 +71,9 @@ class _MainPageState extends State<MainPage> {
   /// 🔹 배경 클릭 시 카테고리로 부드럽게 이동
   void _onBackgroundTap() {
     if (!isDebugMode) {
-      _controller.dispose(); // ✅ 비디오 컨트롤러 해제
+      _controller.dispose(); //  비디오 컨트롤러 해제
     }
-    _navigateToCategory(); // ✅ 부드러운 페이드 인/아웃 효과 적용
+    _navigateToCategory(); //  부드러운 페이드 인/아웃 효과 적용
   }
 
   void _navigateToCategory() async {
@@ -88,11 +88,11 @@ class _MainPageState extends State<MainPage> {
         PageRouteBuilder(
           pageBuilder:
               (context, animation, secondaryAnimation) => CategoryPage(
-                dummyUser: widget.dummyUser, // ✅ UserVo는 그대로 전달
+                dummyUser: widget.dummyUser, //  UserVo는 그대로 전달
               ),
           settings: RouteSettings(
             arguments: {
-              "categoryVo": widget.categoryVo, // ✅ CategoryVo를 arguments로 전달
+              "categoryVo": widget.categoryVo, //  CategoryVo를 arguments로 전달
             },
           ),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -104,7 +104,7 @@ class _MainPageState extends State<MainPage> {
 
       if (mounted) {
         setState(() {
-          isLoading = false; // ✅ 로딩 종료
+          isLoading = false; //  로딩 종료
         });
       }
     }
@@ -113,7 +113,7 @@ class _MainPageState extends State<MainPage> {
   @override
   void dispose() {
     if (!isDebugMode && mounted) {
-      _controller.dispose(); // ✅ mounted 확인 후 dispose()
+      _controller.dispose(); //  mounted 확인 후 dispose()
     }
     super.dispose();
   }
@@ -121,7 +121,7 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
-      isLoading: isLoading, // ✅ 로딩 중일 때 오버레이 표시
+      isLoading: isLoading, //  로딩 중일 때 오버레이 표시
       child: Scaffold(
         body: GestureDetector(
           onTap: _onBackgroundTap, // 🔹 배경 클릭하면 카테고리로 이동
@@ -131,10 +131,10 @@ class _MainPageState extends State<MainPage> {
               Positioned.fill(
                 child:
                     isLoading
-                        ? Container(color: Colors.black) // ✅ 로딩 중엔 검은 화면 유지
+                        ? Container(color: Colors.black) //  로딩 중엔 검은 화면 유지
                         : isDebugMode
                         ? Image.asset(
-                          "lib/images/tree.png", // ✅ 디버그 모드일 경우 정지된 이미지 표시
+                          "lib/images/tree.png", //  디버그 모드일 경우 정지된 이미지 표시
                           fit: BoxFit.cover,
                         )
                         : _controller.value.isInitialized
@@ -146,7 +146,7 @@ class _MainPageState extends State<MainPage> {
                             child: VideoPlayer(_controller),
                           ),
                         )
-                        : Container(color: Colors.black), // ✅ 초기 로딩 중 검은 화면
+                        : Container(color: Colors.black), //  초기 로딩 중 검은 화면
               ),
 
               /// 🔹 **"터치해주세요" 폰트 추가 (배경 유지 + 중앙 배치 + 부드럽게 깜빡임)**
@@ -226,7 +226,7 @@ class _MainPageState extends State<MainPage> {
                       // const Text(
                       //   '파릇',
                       //   style: TextStyle(
-                      //     fontFamily: 'KCCHyerim', // ✅ 새로운 폰트 적용
+                      //     fontFamily: 'KCCHyerim', //  새로운 폰트 적용
                       //     fontSize: 90,
                       //     color: Colors.white,
                       //     fontWeight: FontWeight.w600,
@@ -329,7 +329,7 @@ class _MainPageState extends State<MainPage> {
 // }
 //
 // class _MainPageState extends State<_MainPage> {
-//   bool isDebugMode = false; // 🔥 디버그 모드 상태
+//   bool isDebugMode = false; //  디버그 모드 상태
 //
 //   @override
 //   Widget build(BuildContext context) {

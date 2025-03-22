@@ -83,7 +83,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
       );
     }
 
-    // ✅ 결제 정보 전송
+    //  결제 정보 전송
     // Future<void> fetchPurchaseData() async {}
   }
 

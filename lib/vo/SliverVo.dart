@@ -1,12 +1,12 @@
 import 'package:dio/dio.dart';
 
-/// 🔹 신고 데이터 모델 + API 연동 (Vo + Service 합침)
+///  신고 데이터 모델 + API 연동 (Vo + Service 합침)
 class SliverVo {
   final int? id; // 신고글 번호
   final int userId; // 신고한 유저 번호
   final int lessonId; // 신고당한 게시글 번호
   final int reportId; // 신고 사유
-  final String reportContent; // 🔹 신고 내용
+  final String reportContent; //  신고 내용
   final bool isConfirmed; // 신고 처리 완료 여부
   final DateTime updDate; // 신고 일시
 
@@ -20,7 +20,7 @@ class SliverVo {
     required this.updDate,
   });
 
-  /// 🟢 **JSON → 객체 변환 (fromJson)**
+  ///  **JSON → 객체 변환 (fromJson)**
   factory SliverVo.fromJson(Map<String, dynamic> json) {
     return SliverVo(
       id: json['id'],
@@ -33,7 +33,7 @@ class SliverVo {
     );
   }
 
-  /// 🔵 **객체 → JSON 변환 (toJson)**
+  ///  **객체 → JSON 변환 (toJson)**
   Map<String, dynamic> toJson() {
     return {
       'id': id,
@@ -46,24 +46,24 @@ class SliverVo {
     };
   }
 
-  /// 🟡 **API 요청 기능 추가 (Dio 사용)**
+  ///  **API 요청 기능 추가 (Dio 사용)**
   static const String apiUrl = "http://13.125.197.66:18090/api/report";
   static final Dio dio = Dio();
 
-  /// 🔹 신고 데이터 전송 (POST)
+  ///  신고 데이터 전송 (POST)
   static Future<bool> sendReport(SliverVo report) async {
     try {
       Response response = await dio.post(apiUrl, data: report.toJson());
 
       if (response.statusCode == 200) {
-        print("✅ 신고 전송 성공: ${response.data}");
+        print(" 신고 전송 성공: ${response.data}");
         return true;
       } else {
         print("⚠ 서버 응답 오류: ${response.statusCode}");
         return false;
       }
     } catch (e) {
-      print("🚨 서버 요청 실패: $e");
+      print(" 서버 요청 실패: $e");
       return false;
     }
   }
@@ -77,14 +77,14 @@ class SliverVo {
         List<dynamic> data = response.data;
         List<SliverVo> reports =
             data.map((json) => SliverVo.fromJson(json)).toList();
-        print("✅ 신고 내역 가져오기 성공: ${reports.length}개");
+        print(" 신고 내역 가져오기 성공: ${reports.length}개");
         return reports;
       } else {
         print("⚠ 서버 응답 오류: ${response.statusCode}");
         return [];
       }
     } catch (e) {
-      print("🚨 서버 요청 실패: $e");
+      print(" 서버 요청 실패: $e");
       return [];
     }
   }

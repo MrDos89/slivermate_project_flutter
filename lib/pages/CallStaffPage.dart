@@ -16,7 +16,7 @@ class _CallStaffPageState extends State<CallStaffPage> {
   final TextEditingController _detailsController =
       TextEditingController(); // 추가 요청 사항
 
-  // 🔹 호출 사유 목록 (문자열 → int 매핑)
+  //  호출 사유 목록 (문자열 → int 매핑)
   final Map<String, int> callReasons = {
     "기능 오류": 1,
     "추천 요청": 2,

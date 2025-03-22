@@ -9,9 +9,9 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     List<String> notifications = [
-      "📌 동산 동아리에 가입되었습니다",
-      "💰 결제가 완료되었습니다",
-      "⏳ <청춘은바로지금> 동아리 정기 모임 날짜(8/20)까지 5일 남았습니다",
+      " 동산 동아리에 가입되었습니다",
+      " 결제가 완료되었습니다",
+      " <청춘은바로지금> 동아리 정기 모임 날짜(8/20)까지 5일 남았습니다",
     ];
 
     return MainLayout(
@@ -51,14 +51,14 @@ class NotificationPage extends StatelessWidget {
     );
   }
 
-  /// 🔥 최신 알람일 경우 Fade In + Scale + 반짝임 애니메이션 적용
+  ///  최신 알람일 경우 Fade In + Scale + 반짝임 애니메이션 적용
   Widget _buildNotificationBubble(String message, bool isLatest) {
     return isLatest
-        ? _buildAnimatedNotification(message) // ✅ 최신 알람만 애니메이션 적용
+        ? _buildAnimatedNotification(message) //  최신 알람만 애니메이션 적용
         : _buildStaticNotification(message);
   }
 
-  /// 🎨 기본 알림 (애니메이션 없음)
+  ///  기본 알림 (애니메이션 없음)
   Widget _buildStaticNotification(String message) {
     return Stack(
       children: [
@@ -88,7 +88,7 @@ class NotificationPage extends StatelessWidget {
   }
 }
 
-/// 🚀 최신 알림 애니메이션 (Fade In + Scale + 반짝임)
+///  최신 알림 애니메이션 (Fade In + Scale + 반짝임)
 Widget _buildAnimatedNotification(String message) {
   return TweenAnimationBuilder(
     tween: Tween<double>(begin: 0.0, end: 1.0),
@@ -97,7 +97,7 @@ Widget _buildAnimatedNotification(String message) {
       return Opacity(
         opacity: value,
         child: Transform.scale(
-          scale: 0.9 + (0.1 * value), // ✅ Scale Animation (0.9~1.0)
+          scale: 0.9 + (0.1 * value), //  Scale Animation (0.9~1.0)
           child: child,
         ),
       );
@@ -119,7 +119,7 @@ Widget _buildAnimatedNotification(String message) {
                 ),
               ],
             ),
-            child: _buildShiningText(message), // 🔥 반짝이는 텍스트
+            child: _buildShiningText(message), //  반짝이는 텍스트
           ),
         ),
         Positioned(
@@ -132,7 +132,7 @@ Widget _buildAnimatedNotification(String message) {
   );
 }
 
-/// ✨ 반짝반짝 효과 (Fade In / Out)
+///  반짝반짝 효과 (Fade In / Out)
 Widget _buildShiningText(String message) {
   return TweenAnimationBuilder(
     tween: Tween<double>(begin: 0.6, end: 1.0),
@@ -149,7 +149,7 @@ Widget _buildShiningText(String message) {
   );
 }
 
-// 🎨 말풍선 꼬리 그리는 클래스
+//  말풍선 꼬리 그리는 클래스
 class BubbleTailPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {

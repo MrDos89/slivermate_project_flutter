@@ -22,7 +22,7 @@ class _CategoryPageState extends State<CategoryPage> {
   bool showIndoor = false;
   bool showOutdoor = false;
   bool movedToTop = false;
-  bool showGrid = false; // ✅ 추가: 취미 그리드가 표시될 때 true
+  bool showGrid = false; //  추가: 취미 그리드가 표시될 때 true
   bool isLoading = false;
 
   List<CategoryVo> categories = []; // 카테고리Vo 저장
@@ -54,7 +54,7 @@ class _CategoryPageState extends State<CategoryPage> {
   //   {"id": 9, "name": "족구", "image": "lib/images/foot.jpg"},
   // ];
 
-  // 🔹 (추가됨) 사용할 영상 목록
+  //  (추가됨) 사용할 영상 목록
   final List<String> videoPaths = [
     "lib/images/skan.mp4",
     "lib/images/skan04.mp4",
@@ -64,8 +64,8 @@ class _CategoryPageState extends State<CategoryPage> {
   // @override
   // void initState() {
   //   super.initState();
-  //   _controller = VideoPlayerController.asset("lib/images/skan.mp4") // ✅ 추가
-  //     // _controller = VideoPlayerController.asset("lib/animations/back.mp4") // ✅ 추가
+  //   _controller = VideoPlayerController.asset("lib/images/skan.mp4") //  추가
+  //     // _controller = VideoPlayerController.asset("lib/animations/back.mp4") //  추가
   //     ..initialize().then((_) {
   //       setState(() {});
   //       _controller.setLooping(true);
@@ -77,19 +77,19 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   void initState() {
     super.initState();
-    _initializeVideo(); // 🔹 (추가됨) 초기 영상도 랜덤하게 설정
+    _initializeVideo(); //  (추가됨) 초기 영상도 랜덤하게 설정
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("[CategoryPage]로 전달된 유저 정보: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}");
     });
   }
 
-  /// 🔹 (추가됨) 랜덤한 영상 선택 함수
+  ///  (추가됨) 랜덤한 영상 선택 함수
   String _getRandomVideoPath() {
     final random = Random();
     return videoPaths[random.nextInt(videoPaths.length)];
   }
 
-  /// 🔹 (추가됨) 배경 영상 초기화
+  ///  (추가됨) 배경 영상 초기화
   void _initializeVideo() {
     _controller = VideoPlayerController.asset(_getRandomVideoPath())
       ..initialize().then((_) {
@@ -99,7 +99,7 @@ class _CategoryPageState extends State<CategoryPage> {
       });
   }
 
-  /// 🔹 (추가됨) 배경 클릭 시 랜덤 영상으로 변경
+  ///  (추가됨) 배경 클릭 시 랜덤 영상으로 변경
   void _changeVideo() {
     setState(() {
       _controller.dispose(); // 기존 영상 해제
@@ -110,7 +110,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   int? lastPlayedIndex; // 마지막 재생된 영상 인덱스 저장
 
-  /// 🔹 중복되지 않는 랜덤 영상 선택
+  ///  중복되지 않는 랜덤 영상 선택
   String _getRandomVideoPath() {
     final random = Random();
     List<String> availableVideos = [...videoPaths];
@@ -153,11 +153,11 @@ class _CategoryPageState extends State<CategoryPage> {
         categories = fetchedCategories; // 데이터가 정상적으로 오면 저장
       });
     } else {
-      print("❌ 카테고리 데이터를 가져오지 못했습니다.");
+      print(" 카테고리 데이터를 가져오지 못했습니다.");
     }
   }
 
-  /// 🔹 배경 영상 초기화
+  ///  배경 영상 초기화
   void _initializeVideo() {
     String nextVideo = _getRandomVideoPath();
     _controller = VideoPlayerController.asset(nextVideo)
@@ -168,7 +168,7 @@ class _CategoryPageState extends State<CategoryPage> {
       });
   }
 
-  /// 🔹 배경 클릭 시 랜덤 영상 변경 (중복 방지)
+  ///  배경 클릭 시 랜덤 영상 변경 (중복 방지)
   void _changeVideo() {
     setState(() {
       _controller.dispose();
@@ -184,7 +184,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   void dispose() {
-    _controller.dispose(); // ✅ 추가
+    _controller.dispose(); //  추가
     super.dispose();
   }
 
@@ -195,12 +195,12 @@ class _CategoryPageState extends State<CategoryPage> {
         showIndoor = false;
         showOutdoor = false;
         movedToTop = false;
-        showGrid = false; // ✅ 취미 버튼이 사라지면 배경도 투명하게 유지
+        showGrid = false; //  취미 버튼이 사라지면 배경도 투명하게 유지
       } else {
         showIndoor = isIndoor;
         showOutdoor = !isIndoor;
         movedToTop = true;
-        showGrid = true; // ✅ 취미 버튼이 나타나면 배경을 흰색으로 변경
+        showGrid = true; //  취미 버튼이 나타나면 배경을 흰색으로 변경
       }
     });
   }
@@ -214,10 +214,10 @@ class _CategoryPageState extends State<CategoryPage> {
     print("선택한 취미: $hobbyName (카테고리 ID: $categoryId, 취미 ID: $subCategoryId)");
 
     setState(() {
-      isLoading = true; // ✅ 로딩 시작
+      isLoading = true; //  로딩 시작
     });
 
-    await Future.delayed(Duration(milliseconds: 500)); // ✅ 잠시 로딩 표시
+    await Future.delayed(Duration(milliseconds: 500)); //  잠시 로딩 표시
 
     if (mounted) {
       await Navigator.push(
@@ -225,8 +225,8 @@ class _CategoryPageState extends State<CategoryPage> {
         MaterialPageRoute(
           builder:
               (context) => IntroducePage(
-                lessonCategory: categoryId, // ✅ 실내 / 실외 분류
-                lessonSubCategory: subCategoryId, // ✅ 선택한 취미명
+                lessonCategory: categoryId, //  실내 / 실외 분류
+                lessonSubCategory: subCategoryId, //  선택한 취미명
                 dummyUser: widget.dummyUser,
               ),
           settings: RouteSettings(arguments: widget.dummyUser),
@@ -235,7 +235,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
       if (mounted) {
         setState(() {
-          isLoading = false; // ✅ 로딩 종료
+          isLoading = false; //  로딩 종료
         });
       }
     }
@@ -244,7 +244,7 @@ class _CategoryPageState extends State<CategoryPage> {
   @override
   Widget build(BuildContext context) {
     return LectureLoadingOverlay(
-      isLoading: isLoading, // ✅ 로딩 적용
+      isLoading: isLoading, //  로딩 적용
       child: MainLayout(
         dummyUser: widget.dummyUser,
         child: GestureDetector(
@@ -266,18 +266,18 @@ class _CategoryPageState extends State<CategoryPage> {
                         : Container(color: Colors.black),
               ),
 
-              /// 🎨 **영상 위에 반투명한 오버레이 추가**
+              ///  **영상 위에 반투명한 오버레이 추가**
               AnimatedContainer(
                 duration: const Duration(milliseconds: 500),
                 curve: Curves.easeInOut,
                 color: Colors.white.withOpacity(
                   showGrid ? 0.6 : 0.2,
-                ), // ✅ 투명도 조절
+                ), //  투명도 조절
               ),
 
               /// 🌟 **기존 Scaffold 유지**
               Scaffold(
-                backgroundColor: Colors.transparent, // ✅ 배경 투명하게 설정
+                backgroundColor: Colors.transparent, //  배경 투명하게 설정
                 appBar: PreferredSize(
                   preferredSize: const Size.fromHeight(73),
                   child: AppBar(
@@ -290,13 +290,13 @@ class _CategoryPageState extends State<CategoryPage> {
                         "카테고리 선택",
                         style: TextStyle(
                           fontFamily: 'GowunDodum',
-                          // color: Color(0xFF4E342E), // ✅ 기존 글씨색 유지
+                          // color: Color(0xFF4E342E), //  기존 글씨색 유지
                           color: Color(0xFFFFFFFF),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    // backgroundColor: Color(0xFFE6E6FA), // ✅ 배경색 설정
+                    // backgroundColor: Color(0xFFE6E6FA), //  배경색 설정
                     // backgroundColor: Colors.white.withOpacity(0.7),
                     backgroundColor: Color(0xFF044E00).withOpacity(0.5),
                     elevation: 0, // 그림자 제거
@@ -323,13 +323,13 @@ class _CategoryPageState extends State<CategoryPage> {
                               _buildCategoryButton(
                                 "실내 활동",
                                 () => _onCategorySelected(true),
-                                Icons.home, // ✅ 실내 활동 아이콘
+                                Icons.home, //  실내 활동 아이콘
                               ),
                               const SizedBox(width: 20),
                               _buildCategoryButton(
                                 "실외 활동",
                                 () => _onCategorySelected(false),
-                                Icons.park, // ✅ 실외 활동 아이콘
+                                Icons.park, //  실외 활동 아이콘
                               ),
                             ],
                           ),
@@ -383,7 +383,7 @@ class _CategoryPageState extends State<CategoryPage> {
     return Center(
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          // backgroundColor: const Color(0xFFE6E6FA), // ✅ 버튼 배경색 변경
+          // backgroundColor: const Color(0xFFE6E6FA), //  버튼 배경색 변경
           // backgroundColor: Colors.white.withOpacity(0.7),
           // backgroundColor: Color(0xFF000000).withOpacity(0.4),
           // backgroundColor: Color(0xFF00A8A8).withOpacity(0.6),
@@ -417,7 +417,7 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  /// 🔥 취미 카드 버튼을 기존 디자인 유지하면서 그대로 버튼화
+  ///  취미 카드 버튼을 기존 디자인 유지하면서 그대로 버튼화
   Widget _buildHobbyGrid(int categoryId) {
     final hobbyList =
         categories
@@ -440,7 +440,7 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  /// 🔥 이미지 배경을 유지한 취미 버튼
+  ///  이미지 배경을 유지한 취미 버튼
   Widget _buildHobbyButton(CategoryVo hobby) {
     return GestureDetector(
       onTap:
@@ -477,7 +477,7 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-  /// 📌 이미지가 없으면 기본 이미지 사용
+  ///  이미지가 없으면 기본 이미지 사용
   ImageProvider _getImage(String? path) {
     if (path == null || path.isEmpty) {
       return const AssetImage("lib/images/cofl.jpg"); // 기본 이미지 설정

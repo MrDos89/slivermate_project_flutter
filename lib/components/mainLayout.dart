@@ -22,7 +22,7 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(
-      "[MainLayout build()] 🔴 dummyUser 값: ${dummyUser?.userName}, ${dummyUser?.email}",
+      "[MainLayout build()]  dummyUser 값: ${dummyUser?.userName}, ${dummyUser?.email}",
     );
 
     return Scaffold(
@@ -34,14 +34,14 @@ class MainLayout extends StatelessWidget {
   void _showStaffCallModal(BuildContext context) {
     showDialog(
       context: context,
-      barrierDismissible: false, // ❌ 바깥 클릭으로 닫히지 않도록 설정
+      barrierDismissible: false, //  바깥 클릭으로 닫히지 않도록 설정
       builder: (BuildContext context) {
         return CallStaffPage(dummyUser: dummyUser!);
       },
     );
   }
 
-  // 📌 공통 푸터 위젯
+  //  공통 푸터 위젯
   Widget _buildFooter(BuildContext context) {
     return Container(
       height: 70, // 높이 증가
@@ -62,7 +62,7 @@ class MainLayout extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          // 🔙 뒤로가기 버튼
+          //  뒤로가기 버튼
           IconButton(
             icon: const Icon(
               Icons.arrow_back,
@@ -76,7 +76,7 @@ class MainLayout extends StatelessWidget {
               }
             },
           ),
-          // 🏠 홈 버튼
+          //  홈 버튼
           IconButton(
             icon: const Icon(
               Icons.home,
@@ -100,14 +100,14 @@ class MainLayout extends StatelessWidget {
             ),
             onPressed: () {
               if (showAlertButton) {
-                // debugPrint("🔔 알림 버튼 클릭됨! (디버그)");
-                Navigator.pushNamed(context, "/notifications"); // 🔔 알림 페이지로 이동
+                // debugPrint(" 알림 버튼 클릭됨! (디버그)");
+                Navigator.pushNamed(context, "/notifications"); //  알림 페이지로 이동
               } else {
                 _showStaffCallModal(context); // ✅ 직원 호출 모달 띄우기
               }
             },
           ),
-          // 💳 결제 버튼 (활성화 여부에 따라 다르게 표시)
+          //  결제 버튼 (활성화 여부에 따라 다르게 표시)
           showPaymentButton
               ? IconButton(
                 icon: const Icon(
@@ -118,22 +118,22 @@ class MainLayout extends StatelessWidget {
                 ),
                 onPressed: () {
                   if (lesson != null) {
-                    // ✅ lesson이 null이 아닐 때만 이동
+                    //  lesson이 null이 아닐 때만 이동
                     Navigator.pushNamed(
                       context,
                       "/purchase",
                       arguments: {
-                        "lesson": lesson, // ✅ LessonVo 객체
-                        "user": dummyUser, // ✅ UserVo 객체(dummyUser)
+                        "lesson": lesson, //  LessonVo 객체
+                        "user": dummyUser, //  UserVo 객체(dummyUser)
                       },
                     );
                   } else {
-                    print("🚨 [오류] lesson 데이터가 없습니다! 결제 페이지로 이동할 수 없음.");
+                    print(" [오류] lesson 데이터가 없습니다! 결제 페이지로 이동할 수 없음.");
                   }
                 },
               )
               : const Opacity(
-                opacity: 0.3, // ❌ 비활성화 시 투명도 낮춤
+                opacity: 0.3, //  비활성화 시 투명도 낮춤
                 child: Icon(Icons.payment, color: Colors.grey, size: 36),
               ),
         ],

@@ -67,9 +67,9 @@ class _IntroducePageState extends State<IntroducePage> {
       initialVideoId: '', // 기본값 (오류 방지)
       flags: const YoutubePlayerFlags(autoPlay: false),
     );
-    fetchLessonData(); // ✅ 데이터 가져오기
+    fetchLessonData(); //  데이터 가져오기
     print(
-      "🟢 IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+      " IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
     );
   }
 
@@ -81,7 +81,7 @@ class _IntroducePageState extends State<IntroducePage> {
     });
 
     print(
-      "🎯 [카테고리 업데이트] lessonCategory: ${widget.lessonCategory}, lessonSubCategory: ${widget.lessonSubCategory}",
+      " [카테고리 업데이트] lessonCategory: ${widget.lessonCategory}, lessonSubCategory: ${widget.lessonSubCategory}",
     );
 
     // [yj] 값이 설정된 후 API 호출
@@ -103,12 +103,12 @@ class _IntroducePageState extends State<IntroducePage> {
       );
 
       if (fetchedLesson == null) {
-        print("❌ 강의 데이터를 가져오지 못함.");
+        print(" 강의 데이터를 가져오지 못함.");
         return;
       }
 
       // [yj] 강의 정보가 제대로 들어왔는지 확인
-      print("🟢 불러온 강의 정보: ${fetchedLesson.lessonName}");
+      print(" 불러온 강의 정보: ${fetchedLesson.lessonName}");
       print("   🔹 무료 강의 URL: ${fetchedLesson.lessonFreeLecture}");
       print("   🔹 유료 강의 URL: ${fetchedLesson.lessonCostLecture}");
 
@@ -129,12 +129,12 @@ class _IntroducePageState extends State<IntroducePage> {
           );
         }
       } else {
-        print("❌ 결제 정보 로딩 실패: ${purchaseResponse.statusCode}");
+        print(" 결제 정보 로딩 실패: ${purchaseResponse.statusCode}");
         return;
       }
 
-      // ✅ [2] 결제 여부 확인
-      print("🟡 결제 여부(hasPurchased): ${widget.hasPurchased}");
+      //  [2] 결제 여부 확인
+      print(" 결제 여부(hasPurchased): ${widget.hasPurchased}");
 
       if (widget.hasPurchased) {
         await dio.patch(
@@ -153,19 +153,19 @@ class _IntroducePageState extends State<IntroducePage> {
               : freeVideoUrl;
 
       // [yj] 최종 선택된 영상 확인
-      print("🟣 최종 선택된 영상 URL: $videoUrl");
+      print(" 최종 선택된 영상 URL: $videoUrl");
 
       setState(() {
         lesson = fetchedLesson;
         if (videoUrl.isNotEmpty) {
           initializeYoutubePlayer(videoUrl);
-          print(widget.hasPurchased ? "🔥 유료 강의를 로드합니다." : "🔥 무료 강의를 로드합니다.");
+          print(widget.hasPurchased ? " 유료 강의를 로드합니다." : " 무료 강의를 로드합니다.");
         } else {
-          print("❌ 영상 URL이 없습니다!");
+          print(" 영상 URL이 없습니다!");
         }
       });
     } catch (e) {
-      print("❌ API 호출 중 에러 발생: $e");
+      print(" API 호출 중 에러 발생: $e");
     }
   }
 
@@ -187,7 +187,7 @@ class _IntroducePageState extends State<IntroducePage> {
   @override
   Widget build(BuildContext context) {
     print(
-      "[IntroducePage] 🟢 dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+      "[IntroducePage]  dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
     );
 
     if (widget.dummyUser == null) {
@@ -390,7 +390,7 @@ class _IntroducePageState extends State<IntroducePage> {
     );
   }
 
-  // 📌 아래쪽에만 그림자 적용하는 BoxDecoration
+  //  아래쪽에만 그림자 적용하는 BoxDecoration
   BoxDecoration _boxDecorationWithShadow() {
     return BoxDecoration(
       color: Colors.white,

@@ -38,7 +38,7 @@ class LessonVo {
     required this.userThumbnail,
   });
 
-  // ✅ JSON → LessonVO 변환
+  //  JSON → LessonVO 변환
   factory LessonVo.fromJson(Map<String, dynamic> json) {
     return LessonVo(
       lessonId: json['lesson_id'] ?? 0,
@@ -60,7 +60,7 @@ class LessonVo {
     );
   }
 
-  // 🔥 날짜 변환 함수 추가
+  //  날짜 변환 함수 추가
   String getFormattedDate() {
     if (registerDate.isEmpty || registerDate == "없음") return "날짜 없음"; // 빈 값 처리
     try {
@@ -71,7 +71,7 @@ class LessonVo {
     }
   }
 
-  // ✅ LessonVO → JSON 변환
+  //  LessonVO → JSON 변환
   Map<String, dynamic> toJson() {
     return {
       'lesson_id': lessonId,
@@ -94,7 +94,7 @@ class LessonVo {
   }
 }
 
-// ✅ API 요청을 처리하는 함수
+//  API 요청을 처리하는 함수
 class LessonService {
   static const String apiEndpoint = "http://13.125.197.66:18090/api/lesson";
   static final Dio dio = Dio();
@@ -105,18 +105,18 @@ class LessonService {
   ) async {
     final String url = "$apiEndpoint/sc/$lessonCategory/$lessonSubCategory";
 
-    print('📌 [API 요청 시작] 요청 URL: $url');
+    print(' [API 요청 시작] 요청 URL: $url');
 
     try {
       final response = await dio.get(url);
 
-      print('✅ [API 응답 성공] 상태 코드: ${response.statusCode}');
-      print('📩 [API 응답 데이터]: ${response.data}');
+      print(' [API 응답 성공] 상태 코드: ${response.statusCode}');
+      print(' [API 응답 데이터]: ${response.data}');
 
       if (response.statusCode == 200 && response.data != null) {
         if (response.data is List && response.data.isNotEmpty) {
           final parsedLesson = LessonVo.fromJson(response.data[0]);
-          print('✅ [JSON 파싱 성공]');
+          print(' [JSON 파싱 성공]');
           return parsedLesson;
         } else {
           print('⚠ [서버 응답 데이터 없음]');
@@ -127,7 +127,7 @@ class LessonService {
         return null;
       }
     } catch (e) {
-      print('🚨 [API 요청 실패] 오류 발생: $e');
+      print(' [API 요청 실패] 오류 발생: $e');
       return null;
     }
   }

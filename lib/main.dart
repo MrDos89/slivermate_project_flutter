@@ -19,9 +19,9 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    // 🔥 더미 유저 데이터 (19번 유저)
+    //  더미 유저 데이터 (19번 유저)
     final UserVo dummyUser = UserVo(
-      uid: 19, // ✅ 필드명 지정
+      uid: 19, //  필드명 지정
       userName: "user1",
       nickname: "User",
       userId: "user1",
