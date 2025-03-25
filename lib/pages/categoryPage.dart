@@ -110,6 +110,25 @@ class _CategoryPageState extends State<CategoryPage> {
 
   int? lastPlayedIndex; // 마지막 재생된 영상 인덱스 저장
 
+  /// "준비중입니다" 다이얼로그 띄우기
+  void _showComingSoonDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("준비중입니다"),
+          content: const Text("해당 기능은 현재 준비중입니다."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("확인"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   ///  중복되지 않는 랜덤 영상 선택
   String _getRandomVideoPath() {
     final random = Random();
@@ -287,7 +306,7 @@ class _CategoryPageState extends State<CategoryPage> {
                     title: Transform.translate(
                       offset: const Offset(0, 8), // 🔥 아래로 6픽셀 이동 (조절 가능)
                       child: const Text(
-                        "카테고리 선택",
+                        "마이 페이지",
                         style: TextStyle(
                           fontFamily: 'GowunDodum',
                           // color: Color(0xFF4E342E), //  기존 글씨색 유지
@@ -300,9 +319,29 @@ class _CategoryPageState extends State<CategoryPage> {
                     // backgroundColor: Colors.white.withOpacity(0.7),
                     backgroundColor: Color(0xFF044E00).withOpacity(0.5),
                     elevation: 0, // 그림자 제거
+
+                    actions: [
+                      IconButton(
+                        icon: const Icon(
+                          Icons.notifications,
+                          color: Color(0xFF229F3B),
+                          size: 30,
+                        ),
+                        onPressed: _showComingSoonDialog,
+                        tooltip: "알람",
+                      ),
+                      IconButton(
+                        icon: const Icon(
+                          Icons.settings,
+                          color: Color(0xFF229F3B),
+                          size: 30,
+                        ),
+                        onPressed: _showComingSoonDialog,
+                        tooltip: "설정",
+                      ),
+                    ],
                   ),
                 ),
-
                 body: Stack(
                   children: [
                     AnimatedPositioned(
