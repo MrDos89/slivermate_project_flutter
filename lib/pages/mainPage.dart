@@ -165,7 +165,7 @@ class _MainPageState extends State<MainPage> {
                               '파',
                               style: TextStyle(
                                 fontFamily: 'KCCHyerim',
-                                fontSize: 110,
+                                fontSize: 120,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 6.0,
@@ -173,17 +173,17 @@ class _MainPageState extends State<MainPage> {
                                   Shadow(
                                     offset: Offset(-5, -5),
                                     blurRadius: 12,
-                                    color: Color(0xFF8FA663),
+                                    color: Color(0xFF9FD542),
                                   ),
                                   Shadow(
                                     offset: Offset(5, 5),
                                     blurRadius: 12,
-                                    color: Color(0xFFA6C174),
+                                    color: Color(0xFF5F8028),
                                   ),
                                   Shadow(
                                     offset: Offset(0, 0),
                                     blurRadius: 30,
-                                    color: Color(0xFFBEDD85),
+                                    color: Color(0xFF1D270C),
                                   ),
                                 ],
                               ),
@@ -197,7 +197,7 @@ class _MainPageState extends State<MainPage> {
                               '릇',
                               style: TextStyle(
                                 fontFamily: 'KCCHyerim',
-                                fontSize: 105,
+                                fontSize: 115,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 6.0,
@@ -205,17 +205,17 @@ class _MainPageState extends State<MainPage> {
                                   Shadow(
                                     offset: Offset(-5, -5),
                                     blurRadius: 12,
-                                    color: Color(0xFF8FA663),
+                                    color: Color(0xFF9FD542),
                                   ),
                                   Shadow(
                                     offset: Offset(5, 5),
                                     blurRadius: 12,
-                                    color: Color(0xFFA6C174),
+                                    color: Color(0xFF5F8028),
                                   ),
                                   Shadow(
                                     offset: Offset(0, 0),
                                     blurRadius: 30,
-                                    color: Color(0xFFBEDD85),
+                                    color: Color(0xFF1D270C),
                                   ),
                                 ],
                               ),
