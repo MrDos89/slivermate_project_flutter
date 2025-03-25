@@ -324,7 +324,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       IconButton(
                         icon: const Icon(
                           Icons.notifications,
-                          color: Color(0xFF229F3B),
+                          color: Colors.white,
                           size: 30,
                         ),
                         onPressed: _showComingSoonDialog,
@@ -333,7 +333,7 @@ class _CategoryPageState extends State<CategoryPage> {
                       IconButton(
                         icon: const Icon(
                           Icons.settings,
-                          color: Color(0xFF229F3B),
+                          color: Colors.white,
                           size: 30,
                         ),
                         onPressed: _showComingSoonDialog,
