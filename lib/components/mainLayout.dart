@@ -89,9 +89,17 @@ class MainLayout extends StatelessWidget {
             tooltip: "자유게시판",
           ),
           IconButton(
-            icon: const Icon(
-                Icons.menu_book, color: Color(0xFF229F3B), size: 30),
-            onPressed: _showComingSoonDialog,
+            icon: const Icon(Icons.menu_book, color: Color(0xFF229F3B), size: 30),
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // 현재 스택에서 빠지고
+              }
+              Navigator.pushNamed(
+                context,
+                "/category",
+                arguments: dummyUser, // 유저 정보도 같이 넘김
+              );
+            },
             tooltip: "강의페이지",
           ),
           IconButton(

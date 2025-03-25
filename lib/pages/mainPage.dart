@@ -162,10 +162,10 @@ class _MainPageState extends State<MainPage> {
                           Transform.translate(
                             offset: Offset(-10, -10), // 왼쪽 위로 이동
                             child: const Text(
-                              '실버',
+                              '파',
                               style: TextStyle(
                                 fontFamily: 'KCCHyerim',
-                                fontSize: 90,
+                                fontSize: 110,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 6.0,
@@ -173,17 +173,17 @@ class _MainPageState extends State<MainPage> {
                                   Shadow(
                                     offset: Offset(-5, -5),
                                     blurRadius: 12,
-                                    color: Color(0xFF84B448),
+                                    color: Color(0xFF8FA663),
                                   ),
                                   Shadow(
                                     offset: Offset(5, 5),
                                     blurRadius: 12,
-                                    color: Color(0xFF84B448),
+                                    color: Color(0xFFA6C174),
                                   ),
                                   Shadow(
                                     offset: Offset(0, 0),
                                     blurRadius: 30,
-                                    color: Color(0xFF84B448),
+                                    color: Color(0xFFBEDD85),
                                   ),
                                 ],
                               ),
@@ -194,10 +194,10 @@ class _MainPageState extends State<MainPage> {
                           Transform.translate(
                             offset: Offset(10, 10), // 오른쪽 아래로 이동
                             child: const Text(
-                              '트리',
+                              '릇',
                               style: TextStyle(
                                 fontFamily: 'KCCHyerim',
-                                fontSize: 95,
+                                fontSize: 105,
                                 color: Colors.white,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 6.0,
@@ -205,17 +205,17 @@ class _MainPageState extends State<MainPage> {
                                   Shadow(
                                     offset: Offset(-5, -5),
                                     blurRadius: 12,
-                                    color: Color(0xFF84B448),
+                                    color: Color(0xFF8FA663),
                                   ),
                                   Shadow(
                                     offset: Offset(5, 5),
                                     blurRadius: 12,
-                                    color: Color(0xFF84B448),
+                                    color: Color(0xFFA6C174),
                                   ),
                                   Shadow(
                                     offset: Offset(0, 0),
                                     blurRadius: 30,
-                                    color: Color(0xFF84B448),
+                                    color: Color(0xFFBEDD85),
                                   ),
                                 ],
                               ),
