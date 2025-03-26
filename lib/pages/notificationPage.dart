@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 
@@ -25,7 +26,6 @@ class _NotificationPageState extends State<NotificationPage> {
     ];
     isSelected = List.generate(notifications.length, (_) => false);
   }
-
 
   void _deleteSelected() {
     setState(() {
@@ -58,179 +58,84 @@ class _NotificationPageState extends State<NotificationPage> {
     return MainLayout(
       dummyUser: widget.dummyUser,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("알림"),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: isEditing
-              ? [
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  TextButton(
-                    onPressed: _deleteSelected,
-                    style: TextButton.styleFrom(
-                      side: const BorderSide(color: Colors.deepPurple),
-                      foregroundColor: Colors.deepPurple,
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      // minimumSize: const Size(0, 30),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      textStyle: const TextStyle(fontSize: 12),
-                    ),
-                    child: const Text("일부 삭제",
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 6), // 간격 추가
-                  TextButton(
-                    onPressed: _deleteAll,
-                    style: TextButton.styleFrom(
-                      side: const BorderSide(color: Colors.red),
-                      foregroundColor: Colors.red,
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      // minimumSize: const Size(0, 30),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      textStyle: const TextStyle(fontSize: 12),
-                    ),
-                    child: const Text("전체 삭제",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )
-                    ),
-                  ),
-                  const SizedBox(width: 6), // 간격 추가
-                  TextButton(
-                    onPressed: () {
-                      setState(() {
-                        isEditing = false;
-                      });
-                    },
-                    style: TextButton.styleFrom(
-                      side: const BorderSide(color: Colors.grey),
-                      foregroundColor: Colors.grey[700],
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                      // minimumSize: const Size(0, 30),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      visualDensity: VisualDensity.compact,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      textStyle: const TextStyle(fontSize: 12),
-                    ),
-                    child: const Text("취소",
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                        )
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ]
-              : [
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  isEditing = true;
-                });
-              },
-              child: const Text("편집",
-                  style: TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.bold,
-                  )
-              ),
-            ),
-          ],
-
-        ),
-        body: notifications.isEmpty
-            ? Center(child: Text("알림이 없습니다."))
-            : Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              notifications.length,
-                  (index) => Column(
-                children: [
-                  GestureDetector(
-                      onTap: isEditing
-                          ? () {
-                        setState(() {
-                          isSelected[index] = !isSelected[index];
-                        });
-                      }
-                          : null, // 편집 모드일 때만 반응
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+        appBar: HeaderPage(),
+        body:
+            notifications.isEmpty
+                ? Center(child: Text("알림이 없습니다."))
+                : Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(
+                      notifications.length,
+                      (index) => Column(
                         children: [
-                          if (isEditing)
-                            Checkbox(
-                              value: index < isSelected.length ? isSelected[index] : false,
-                              onChanged: (value) {
-                                setState(() {
-                                  isSelected[index] = value ?? false;
-                                });
-                              },
-                            ),
-                          Expanded(
-                            child: _buildNotificationBubble(
-                              notifications[index],
-                              index == notifications.length - 1 && !isEditing,
-                              isSelected[index], // ← 체크 여부 전달
+                          GestureDetector(
+                            onTap:
+                                isEditing
+                                    ? () {
+                                      setState(() {
+                                        isSelected[index] = !isSelected[index];
+                                      });
+                                    }
+                                    : null, // 편집 모드일 때만 반응
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (isEditing)
+                                  Checkbox(
+                                    value:
+                                        index < isSelected.length
+                                            ? isSelected[index]
+                                            : false,
+                                    onChanged: (value) {
+                                      setState(() {
+                                        isSelected[index] = value ?? false;
+                                      });
+                                    },
+                                  ),
+                                Expanded(
+                                  child: _buildNotificationBubble(
+                                    notifications[index],
+                                    index == notifications.length - 1 &&
+                                        !isEditing,
+                                    isSelected[index], // ← 체크 여부 전달
+                                  ),
+                                ),
+                                if (isEditing)
+                                  IconButton(
+                                    icon: Icon(Icons.close),
+                                    onPressed: () {
+                                      setState(() {
+                                        notifications.removeAt(index);
+                                        isSelected.removeAt(index);
+                                      });
+                                    },
+                                  ),
+                              ],
                             ),
                           ),
-                          if (isEditing)
-                            IconButton(
-                              icon: Icon(Icons.close),
-                              onPressed: () {
-                                setState(() {
-                                  notifications.removeAt(index);
-                                  isSelected.removeAt(index);
-                                });
-                              },
-                            ),
+                          if (index != notifications.length - 1)
+                            const SizedBox(height: 15),
                         ],
                       ),
+                    ),
                   ),
-                  if (index != notifications.length - 1)
-                    const SizedBox(height: 15),
-                ],
-              ),
-            ),
-          ),
-        ),
+                ),
       ),
     );
   }
 
   ///  최신 알람일 경우 Fade In + Scale + 반짝임 애니메이션 적용
-  Widget _buildNotificationBubble(String message, bool isLatest, bool isChecked) {
-    final backgroundColor = isChecked
-        ? const Color(0xFF0F4A0D).withAlpha(128)
-        : const Color(0xFF0BBC02).withAlpha(128);
+  Widget _buildNotificationBubble(
+    String message,
+    bool isLatest,
+    bool isChecked,
+  ) {
+    final backgroundColor =
+        isChecked
+            ? const Color(0xFF0F4A0D).withAlpha(128)
+            : const Color(0xFF0BBC02).withAlpha(128);
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -249,7 +154,6 @@ class _NotificationPageState extends State<NotificationPage> {
       ),
     );
   }
-
 
   ///  기본 알림 (애니메이션 없음)
   Widget _buildStaticNotification(String message) {
@@ -365,5 +269,3 @@ Widget _buildShiningText(String message) {
 //   @override
 //   bool shouldRepaint(CustomPainter oldDelegate) => false;
 // }
-
-

@@ -32,36 +32,37 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 70,
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        color: Color(0xFFFFFFFF),
-        boxShadow: [], // 필요하다면 그림자 추가 가능
-      ),
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      color: const Color(0xFF044E00).withAlpha(128),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          // 왼쪽: 뒤로가기 버튼 + 페이지 타이틀 (조건부)
           Row(
             children: [
-              if (showBackButton)
-                IconButton(
-                  icon: const Icon(Icons.arrow_back, color: Color(0xFF229F3B)),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
+              IconButton(
+                icon: const Icon(
+                  Icons.arrow_back,
+                  color: Color(0xFFFFFFFF),
+                  size: 30,
                 ),
-              if (pageTitle != null)
-                Text(
-                  pageTitle!,
-                  style: const TextStyle(
-                    color: Color(0xFF229F3B),
-                    fontSize: 16,
+                onPressed: () {
+                  Navigator.pushNamed(context, "/config");
+                },
+                tooltip: "Config 페이지로 이동",
+              ),
+              const Padding(
+                padding: EdgeInsets.only(left: 4.0),
+                child: Text(
+                  "채팅페이지",
+                  style: TextStyle(
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: Color(0xFFFFFFFF),
                   ),
                 ),
+              ),
             ],
           ),
-
           // 오른쪽: 기존 아이콘들
           Row(
             children: [
@@ -69,67 +70,22 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
               IconButton(
                 icon: const Icon(
                   Icons.notifications,
-                  color: Color(0xFF229F3B),
+                  color: Color(0xFFFFFFFF),
                   size: 30,
                 ),
                 onPressed: () => _showComingSoonDialog(context),
-                tooltip: "마이페이지",
+                tooltip: "알람",
               ),
               // 설정
               IconButton(
                 icon: const Icon(
                   Icons.settings,
-                  color: Color(0xFF229F3B),
+                  color: Color(0xFFFFFFFF),
                   size: 30,
                 ),
                 onPressed: () => _showComingSoonDialog(context),
                 tooltip: "설정",
               ),
-              // 채팅페이지
-              // IconButton(
-              //   icon: const Icon(
-              //     Icons.chat_bubble,
-              //     color: Color(0xFF229F3B),
-              //     size: 30,
-              //   ),
-              //   onPressed: () => _showComingSoonDialog(context),
-              //   tooltip: "채팅페이지",
-              // ),
-              // 게시글페이지
-              // IconButton(
-              //   icon: const Icon(
-              //     Icons.description,
-              //     color: Color(0xFF229F3B),
-              //     size: 30,
-              //   ),
-              //   onPressed: () => _showComingSoonDialog(context),
-              //   tooltip: "게시글페이지",
-              // ),
-              // 레슨페이지 (Navigator 예시)
-              // IconButton(
-              //   icon: const Icon(
-              //     Icons.menu_book,
-              //     color: Color(0xFF229F3B),
-              //     size: 30,
-              //   ),
-              //   onPressed: () {
-              //     if (Navigator.canPop(context)) {
-              //       Navigator.pop(context); // 현재 스택에서 빠지고
-              //     }
-              //     Navigator.pushNamed(context, "/lesson");
-              //   },
-              //   tooltip: "레슨페이지",
-              // ),
-              // 모임페이지
-              // IconButton(
-              //   icon: const Icon(
-              //     Icons.groups,
-              //     color: Color(0xFF229F3B),
-              //     size: 30,
-              //   ),
-              //   onPressed: () => _showComingSoonDialog(context),
-              //   tooltip: "모임페이지",
-              // ),
             ],
           ),
         ],

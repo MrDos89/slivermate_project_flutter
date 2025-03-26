@@ -9,6 +9,8 @@ import 'dart:math';
 import 'package:slivermate_project_flutter/widgets/LectureLoadingOverlay.dart';
 import 'package:slivermate_project_flutter/vo/categoryVo.dart';
 
+import 'package:slivermate_project_flutter/components/headerPage.dart';
+
 class CategoryPage extends StatefulWidget {
   final UserVo? dummyUser;
   const CategoryPage({super.key, required this.dummyUser});
@@ -271,80 +273,7 @@ class _CategoryPageState extends State<CategoryPage> {
           child: Column(
             children: [
               // AppBar + TabBar
-              Container(
-                padding: EdgeInsets.only(
-                  top: MediaQuery.of(context).padding.top,
-                ),
-                color: const Color(0xFF044E00).withAlpha(128),
-                child: Column(
-                  children: [
-                    // 상단 바
-                    Container(
-                      height: 73,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 12,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back,
-                                  color: Colors.white,
-                                ),
-                                onPressed: () => Navigator.pop(context),
-                              ),
-                              const SizedBox(width: 8),
-                              const Text(
-                                "카테고리 선택",
-                                style: TextStyle(
-                                  fontFamily: 'GowunDodum',
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.notifications,
-                                  color: Colors.white,
-                                ),
-                                onPressed: _showComingSoonDialog,
-                              ),
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
-                                ),
-                                onPressed: _showComingSoonDialog,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    // 탭바
-                    const TabBar(
-                      indicatorColor: Colors.white,
-                      labelColor: Colors.white,
-                      unselectedLabelColor: Colors.white60,
-                      tabs: [
-                        Tab(text: "전체 페이지"),
-                        Tab(text: "강의 페이지"),
-                        Tab(text: "내 강의 페이지"),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-
+              HeaderPage(),
               // 탭 컨텐츠 (TabBarView)
               Expanded(
                 child: TabBarView(
