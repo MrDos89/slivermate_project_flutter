@@ -18,7 +18,7 @@ class CategoryPage extends StatefulWidget {
 }
 
 class _CategoryPageState extends State<CategoryPage> {
-  late VideoPlayerController _controller;
+  // late VideoPlayerController _controller;
   bool showIndoor = false;
   bool showOutdoor = false;
   bool movedToTop = false;
@@ -55,11 +55,11 @@ class _CategoryPageState extends State<CategoryPage> {
   // ];
 
   //  (추가됨) 사용할 영상 목록
-  final List<String> videoPaths = [
-    "lib/images/skan.mp4",
-    "lib/images/skan04.mp4",
-    "lib/images/skan09.mp4",
-  ];
+  // final List<String> videoPaths = [
+  //   "lib/images/skan.mp4",
+  //   "lib/images/skan04.mp4",
+  //   "lib/images/skan09.mp4",
+  // ];
 
   // @override
   // void initState() {
@@ -108,7 +108,7 @@ class _CategoryPageState extends State<CategoryPage> {
   }
    */
 
-  int? lastPlayedIndex; // 마지막 재생된 영상 인덱스 저장
+  // int? lastPlayedIndex; // 마지막 재생된 영상 인덱스 저장
 
   /// "준비중입니다" 다이얼로그 띄우기
   void _showComingSoonDialog() {
@@ -130,24 +130,24 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   ///  중복되지 않는 랜덤 영상 선택
-  String _getRandomVideoPath() {
-    final random = Random();
-    List<String> availableVideos = [...videoPaths];
-
-    if (lastPlayedIndex != null) {
-      availableVideos.removeAt(lastPlayedIndex!);
-    }
-
-    int newIndex = random.nextInt(availableVideos.length);
-    lastPlayedIndex = videoPaths.indexOf(availableVideos[newIndex]);
-
-    return availableVideos[newIndex];
-  }
+  // String _getRandomVideoPath() {
+  //   final random = Random();
+  //   List<String> availableVideos = [...videoPaths];
+  //
+  //   if (lastPlayedIndex != null) {
+  //     availableVideos.removeAt(lastPlayedIndex!);
+  //   }
+  //
+  //   int newIndex = random.nextInt(availableVideos.length);
+  //   lastPlayedIndex = videoPaths.indexOf(availableVideos[newIndex]);
+  //
+  //   return availableVideos[newIndex];
+  // }
 
   @override
   void initState() {
     super.initState();
-    _initializeVideo();
+    // _initializeVideo();
 
     isLoading = true; // 로딩 시작
     fetchCategories().then((_) {
@@ -177,33 +177,33 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   ///  배경 영상 초기화
-  void _initializeVideo() {
-    String nextVideo = _getRandomVideoPath();
-    _controller = VideoPlayerController.asset(nextVideo)
-      ..initialize().then((_) {
-        setState(() {});
-        _controller.setLooping(true);
-        _controller.play();
-      });
-  }
+  // void _initializeVideo() {
+  //   String nextVideo = _getRandomVideoPath();
+  //   _controller = VideoPlayerController.asset(nextVideo)
+  //     ..initialize().then((_) {
+  //       setState(() {});
+  //       _controller.setLooping(true);
+  //       _controller.play();
+  //     });
+  // }
 
   ///  배경 클릭 시 랜덤 영상 변경 (중복 방지)
-  void _changeVideo() {
-    setState(() {
-      _controller.dispose();
-      String nextVideo = _getRandomVideoPath();
-      _controller = VideoPlayerController.asset(nextVideo)
-        ..initialize().then((_) {
-          setState(() {});
-          _controller.setLooping(true);
-          _controller.play();
-        });
-    });
-  }
+  // void _changeVideo() {
+  //   setState(() {
+  //     _controller.dispose();
+  //     String nextVideo = _getRandomVideoPath();
+  //     _controller = VideoPlayerController.asset(nextVideo)
+  //       ..initialize().then((_) {
+  //         setState(() {});
+  //         _controller.setLooping(true);
+  //         _controller.play();
+  //       });
+  //   });
+  // }
 
   @override
   void dispose() {
-    _controller.dispose(); //  추가
+    // _controller.dispose(); //  추가
     super.dispose();
   }
 
@@ -262,134 +262,152 @@ class _CategoryPageState extends State<CategoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    return LectureLoadingOverlay(
-      isLoading: isLoading, //  로딩 적용
-      child: MainLayout(
-        dummyUser: widget.dummyUser,
-        child: Stack(
-          children: [
-            // 🎥 배경 영상
-            Positioned.fill(
-              child: _controller.value.isInitialized
-                  ? FittedBox(
-                fit: BoxFit.cover,
-                child: SizedBox(
-                  width: _controller.value.size.width,
-                  height: _controller.value.size.height,
-                  child: VideoPlayer(_controller),
-                ),
-              )
-                  : Container(color: Colors.black),
-            ),
-
-            // 반투명 오버레이
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              color: Colors.white.withOpacity(showGrid ? 0.6 : 0.2),
-            ),
-
-            // ✅ AppBar를 Scaffold 없이 직접 구성
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              child: Container(
-                height: 73,
-                color: const Color(0xFF044E00).withOpacity(0.5),
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return DefaultTabController(
+      length: 3,
+      child: LectureLoadingOverlay(
+        isLoading: isLoading,
+        child: MainLayout(
+          dummyUser: widget.dummyUser,
+          child: Column(
+            children: [
+              // AppBar + TabBar
+              Container(
+                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                color: const Color(0xFF044E00).withAlpha(128),
+                child: Column(
                   children: [
-                    /// 왼쪽 텍스트
-                    const Text(
-                      "카테고리 선택",
-                      style: TextStyle(
-                        fontFamily: 'GowunDodum',
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20,
+                    // 상단 바
+                    Container(
+                      height: 73,
+                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                                onPressed: () => Navigator.pop(context),
+                              ),
+                              const SizedBox(width: 8),
+                              const Text(
+                                "카테고리 선택",
+                                style: TextStyle(
+                                  fontFamily: 'GowunDodum',
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.notifications, color: Colors.white),
+                                onPressed: _showComingSoonDialog,
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.settings, color: Colors.white),
+                                onPressed: _showComingSoonDialog,
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
                     ),
-
-                    /// 오른쪽 아이콘 버튼들
-                    Row(
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.notifications, color: Colors.white, size: 30),
-                          onPressed: _showComingSoonDialog,
-                          tooltip: "알람",
-                        ),
-                        IconButton(
-                          icon: const Icon(Icons.settings, color: Colors.white, size: 30),
-                          onPressed: _showComingSoonDialog,
-                          tooltip: "설정",
-                        ),
+                    // 탭바
+                    const TabBar(
+                      indicatorColor: Colors.white,
+                      labelColor: Colors.white,
+                      unselectedLabelColor: Colors.white60,
+                      tabs: [
+                        Tab(text: "전체 페이지"),
+                        Tab(text: "강의 페이지"),
+                        Tab(text: "내 강의 페이지"),
                       ],
                     ),
                   ],
                 ),
               ),
-            ),
+
+              // 탭 컨텐츠 (TabBarView)
+              Expanded(
+                child: TabBarView(
+                  physics: const NeverScrollableScrollPhysics(),
+                  children: [
+                    _buildCategoryTab(),
+                    const Center(child: Text("강의 페이지 준비 중입니다")),
+                    const Center(child: Text("내 강의 페이지 준비 중입니다")),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 
 
-            // ✅ 기존 콘텐츠 영역 유지
-            AnimatedPositioned(
-              duration: const Duration(milliseconds: 500),
-              curve: Curves.easeInOut,
-              top: movedToTop ? 150 : MediaQuery.of(context).size.height / 2 - 167 + 80,
-              left: 0,
-              right: 0,
-              child: Column(
+  Widget _buildCategoryTab() {
+    return Stack(
+      children: [
+        // 카테고리 선택 버튼
+        AnimatedPositioned(
+          duration: const Duration(milliseconds: 500),
+          curve: Curves.easeInOut,
+          top: movedToTop ? 70 : MediaQuery.of(context).size.height / 2 - 167,
+          left: 0,
+          right: 0,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buildCategoryButton(
-                        "실내 활동",
-                            () => _onCategorySelected(true),
-                        Icons.home,
-                      ),
-                      const SizedBox(width: 20),
-                      _buildCategoryButton(
-                        "실외 활동",
-                            () => _onCategorySelected(false),
-                        Icons.park,
-                      ),
-                    ],
+                  _buildCategoryButton(
+                    "실내 활동",
+                        () => _onCategorySelected(true),
+                    Icons.home,
                   ),
-                  if (movedToTop) const SizedBox(height: 30),
+                  const SizedBox(width: 20),
+                  _buildCategoryButton(
+                    "실외 활동",
+                        () => _onCategorySelected(false),
+                    Icons.park,
+                  ),
                 ],
               ),
-            ),
+              if (movedToTop) const SizedBox(height: 30),
+            ],
+          ),
+        ),
 
-            // ✅ 취미 그리드
-            Positioned(
-              top: movedToTop ? 270 : MediaQuery.of(context).size.height,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              child: AnimatedOpacity(
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-                opacity: movedToTop ? 1.0 : 0.0,
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
-                    child: Column(
-                      children: [
-                        if (showIndoor) _buildHobbyGrid(1),
-                        if (showOutdoor) _buildHobbyGrid(2),
-                      ],
-                    ),
-                  ),
+        // 취미 그리드
+        Positioned(
+          top: movedToTop ? 190 : MediaQuery.of(context).size.height,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          child: AnimatedOpacity(
+            duration: const Duration(milliseconds: 500),
+            curve: Curves.easeInOut,
+            opacity: movedToTop ? 1.0 : 0.0,
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
+                child: Column(
+                  children: [
+                    if (showIndoor) _buildHobbyGrid(1),
+                    if (showOutdoor) _buildHobbyGrid(2),
+                  ],
                 ),
               ),
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 
@@ -405,7 +423,7 @@ class _CategoryPageState extends State<CategoryPage> {
           // backgroundColor: Colors.white.withOpacity(0.7),
           // backgroundColor: Color(0xFF000000).withOpacity(0.4),
           // backgroundColor: Color(0xFF00A8A8).withOpacity(0.6),
-          backgroundColor: Color(0xFF044E00).withOpacity(0.6),
+          backgroundColor: Color(0xFF044E00).withAlpha(128),
           minimumSize: const Size(150, 120),
           textStyle: const TextStyle(fontSize: 18),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -478,7 +496,7 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: Colors.black.withOpacity(0.25),
+            color: Colors.black.withAlpha(64),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
