@@ -44,15 +44,15 @@ class ChatPage extends StatelessWidget {
               // 오른쪽: 기존 채팅 아이콘
               Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.chat_bubble,
-                      color: Color(0xFF229F3B),
-                      size: 30,
-                    ),
-                    onPressed: () => _showComingSoonDialog(context),
-                    tooltip: "채팅페이지",
-                  ),
+                  // IconButton(
+                  //   icon: const Icon(
+                  //     Icons.chat_bubble,
+                  //     color: Color(0xFF229F3B),
+                  //     size: 30,
+                  //   ),
+                  //   onPressed: () => _showComingSoonDialog(context),
+                  //   tooltip: "채팅페이지",
+                  // ),
                 ],
               ),
             ],

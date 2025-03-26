@@ -86,15 +86,15 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
                 tooltip: "설정",
               ),
               // 채팅페이지
-              IconButton(
-                icon: const Icon(
-                  Icons.chat_bubble,
-                  color: Color(0xFF229F3B),
-                  size: 30,
-                ),
-                onPressed: () => _showComingSoonDialog(context),
-                tooltip: "채팅페이지",
-              ),
+              // IconButton(
+              //   icon: const Icon(
+              //     Icons.chat_bubble,
+              //     color: Color(0xFF229F3B),
+              //     size: 30,
+              //   ),
+              //   onPressed: () => _showComingSoonDialog(context),
+              //   tooltip: "채팅페이지",
+              // ),
               // 게시글페이지
               IconButton(
                 icon: const Icon(
@@ -106,30 +106,30 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
                 tooltip: "게시글페이지",
               ),
               // 레슨페이지 (Navigator 예시)
-              IconButton(
-                icon: const Icon(
-                  Icons.menu_book,
-                  color: Color(0xFF229F3B),
-                  size: 30,
-                ),
-                onPressed: () {
-                  if (Navigator.canPop(context)) {
-                    Navigator.pop(context); // 현재 스택에서 빠지고
-                  }
-                  Navigator.pushNamed(context, "/lesson");
-                },
-                tooltip: "레슨페이지",
-              ),
+              // IconButton(
+              //   icon: const Icon(
+              //     Icons.menu_book,
+              //     color: Color(0xFF229F3B),
+              //     size: 30,
+              //   ),
+              //   onPressed: () {
+              //     if (Navigator.canPop(context)) {
+              //       Navigator.pop(context); // 현재 스택에서 빠지고
+              //     }
+              //     Navigator.pushNamed(context, "/lesson");
+              //   },
+              //   tooltip: "레슨페이지",
+              // ),
               // 동아리페이지
-              IconButton(
-                icon: const Icon(
-                  Icons.groups,
-                  color: Color(0xFF229F3B),
-                  size: 30,
-                ),
-                onPressed: () => _showComingSoonDialog(context),
-                tooltip: "동아리페이지",
-              ),
+              // IconButton(
+              //   icon: const Icon(
+              //     Icons.groups,
+              //     color: Color(0xFF229F3B),
+              //     size: 30,
+              //   ),
+              //   onPressed: () => _showComingSoonDialog(context),
+              //   tooltip: "동아리페이지",
+              // ),
             ],
           ),
         ],
