@@ -7,18 +7,11 @@ class UserProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // 기본 AppBar 대신 PreferredSize + Container 사용
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(70),
         child: Container(
-          // (1) 높이 지정
           height: 70,
-          // (2) 투명 배경
           color: Colors.transparent,
-          // (3) 수직 방향 여백을 주고 싶다면 아래 padding 추가 가능
-          // padding: const EdgeInsets.symmetric(vertical: 10),
-
-          // (4) 왼쪽에 텍스트, 오른쪽에 아이콘 2개
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -30,11 +23,10 @@ class UserProfilePage extends StatelessWidget {
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.black, // 필요 시 원하는 색상 지정
+                    color: Colors.black,
                   ),
                 ),
               ),
-              // 오른쪽 아이콘들
               Row(
                 children: [
                   IconButton(
@@ -73,7 +65,7 @@ class _UserProfilePage extends StatefulWidget {
   State<_UserProfilePage> createState() => _UserProfilePageState();
 }
 
-// "준비중" 다이얼로그 함수
+// "준비중" 다이얼로그 함수 (기존 코드)
 void _showComingSoonDialog(BuildContext context) {
   showDialog(
     context: context,
@@ -94,6 +86,198 @@ void _showComingSoonDialog(BuildContext context) {
 class _UserProfilePageState extends State<_UserProfilePage> {
   @override
   Widget build(BuildContext context) {
-    return const Placeholder();
+    final placeholder = const Placeholder();
+
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          // (1) 썸네일 + 닉네임 + 로그아웃
+          const SizedBox(height: 16),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Row(
+              // 양 끝 정렬 (썸네일+닉네임, 로그아웃)
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                // 왼쪽: 썸네일 + 닉네임
+                Row(
+                  children: [
+                    // 썸네일 (프로필 이미지) - 실제 url 대신 Placeholder
+                    CircleAvatar(
+                      radius: 24,
+                      backgroundColor: Colors.grey,
+                      // backgroundImage: NetworkImage('프로필 URL'),
+                    ),
+                    const SizedBox(width: 8),
+                    // 닉네임
+                    const Text(
+                      "홍길동",
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+                // 오른쪽: 로그아웃 버튼
+                TextButton(
+                  onPressed: () => _showComingSoonDialog(context),
+                  child: const Text(
+                    "로그아웃",
+                    style: TextStyle(
+                      color: Color(0xFF229F3B),
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // (2) 구독상태, 구독기간, 가입된 동아리 - 박스 형태 (3칸)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  // 살짝 그림자
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.05),
+                    offset: const Offset(0, 2),
+                    blurRadius: 4,
+                  ),
+                ],
+              ),
+              child: Row(
+                children: [
+                  // 구독상태
+                  Expanded(
+                    child: Column(
+                      children: const [
+                        Text(
+                          "구독상태",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text("O/X"),
+                      ],
+                    ),
+                  ),
+                  // 세로 구분선
+                  Container(width: 1, height: 40, color: Colors.grey[300]),
+                  // 구독기간
+                  Expanded(
+                    child: Column(
+                      children: const [
+                        Text(
+                          "구독기간",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text(
+                          "2023.08.01\n~ 2023.09.01",
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                  // 세로 구분선
+                  Container(width: 1, height: 40, color: Colors.grey[300]),
+                  // 가입된 동아리
+                  Expanded(
+                    child: Column(
+                      children: const [
+                        Text(
+                          "가입된 동아리",
+                          style: TextStyle(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(height: 4),
+                        Text("4개"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
+          // (3) 8개 버튼 (회원정보, 강의, 모임, 문의, 내 글보기, 내 호스트, 내 모임장, 오늘의 운세)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: GridView.count(
+              crossAxisCount: 4,
+              mainAxisSpacing: 16,
+              crossAxisSpacing: 16,
+              // GridView의 스크롤 비활성화 -> 부모 SingleChildScrollView와 충돌 방지
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              children: [
+                _buildMenuButton("회원정보"),
+                _buildMenuButton("강의"),
+                _buildMenuButton("모임"),
+                _buildMenuButton("문의"),
+                _buildMenuButton("내 글보기"),
+                _buildMenuButton("내 호스트"),
+                _buildMenuButton("내 모임장"),
+                _buildMenuButton("오늘의 운세"),
+              ],
+            ),
+          ),
+
+          const SizedBox(height: 24),
+
+          placeholder,
+
+          const SizedBox(height: 24),
+        ],
+      ),
+    );
+  }
+
+  // 버튼 하나를 빌드하는 함수
+  Widget _buildMenuButton(String text) {
+    return InkWell(
+      onTap: () => _showComingSoonDialog(context),
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            // 살짝 그림자
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, 2),
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
   }
 }
