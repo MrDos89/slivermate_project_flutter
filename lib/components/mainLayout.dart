@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/main.dart';
-import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
+import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart';
@@ -22,8 +22,7 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print(
-      "[MainLayout build()]  dummyUser 값: ${dummyUser?.userName}, ${dummyUser
-          ?.email}",
+      "[MainLayout build()]  dummyUser 값: ${dummyUser?.userName}, ${dummyUser?.email}",
     );
 
     return Scaffold(
@@ -65,10 +64,7 @@ class MainLayout extends StatelessWidget {
     return Container(
       height: 70,
       padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: const BoxDecoration(
-        color: Color(0xFFFFFFFF),
-        boxShadow: [],
-      ),
+      decoration: const BoxDecoration(color: Color(0xFFFFFFFF), boxShadow: []),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -79,17 +75,28 @@ class MainLayout extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(
-                Icons.chat_bubble, color: Color(0xFF229F3B), size: 30),
+              Icons.chat_bubble,
+              color: Color(0xFF229F3B),
+              size: 30,
+            ),
             onPressed: _showComingSoonDialog,
             tooltip: "채팅",
           ),
           IconButton(
-            icon: const Icon(Icons.description, color: Color(0xFF229F3B), size: 30),
+            icon: const Icon(
+              Icons.description,
+              color: Color(0xFF229F3B),
+              size: 30,
+            ),
             onPressed: _showComingSoonDialog,
             tooltip: "자유게시판",
           ),
           IconButton(
-            icon: const Icon(Icons.menu_book, color: Color(0xFF229F3B), size: 30),
+            icon: const Icon(
+              Icons.menu_book,
+              color: Color(0xFF229F3B),
+              size: 30,
+            ),
             onPressed: () {
               if (Navigator.canPop(context)) {
                 Navigator.pop(context); // 현재 스택에서 빠지고

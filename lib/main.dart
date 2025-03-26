@@ -3,10 +3,11 @@ import 'package:slivermate_project_flutter/pages/mainPage.dart';
 import 'package:slivermate_project_flutter/pages/introducePage.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
-import 'package:slivermate_project_flutter/pages/CallStaffPage.dart';
-import 'package:slivermate_project_flutter/pages/NotificationPage.dart';
+import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
+import 'package:slivermate_project_flutter/pages/notificationPage.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/vo/categoryVo.dart';
+import 'package:slivermate_project_flutter/pages/configPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
         "/purchase": (context) => PurchasePage(dummyUser: dummyUser),
         "/call": (context) => CallStaffPage(dummyUser: dummyUser),
         "/notifications": (context) => NotificationPage(dummyUser: dummyUser),
+        "/config": (context) => ConfigPage(),
       },
     );
   }
