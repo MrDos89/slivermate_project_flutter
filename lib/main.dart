@@ -9,6 +9,9 @@ import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/vo/categoryVo.dart';
 import 'package:slivermate_project_flutter/pages/configPage.dart';
 import 'package:slivermate_project_flutter/pages/chatPage.dart';
+import 'package:slivermate_project_flutter/pages/userProfilePage.dart';
+import 'package:slivermate_project_flutter/pages/postPage.dart';
+import 'package:slivermate_project_flutter/pages/clubPage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -63,12 +66,15 @@ class MyApp extends StatelessWidget {
         "/":
             // (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
             (context) => ConfigPage(),
-        "/category": (context) => CategoryPage(dummyUser: dummyUser),
         "/purchase": (context) => PurchasePage(dummyUser: dummyUser),
         "/call": (context) => CallStaffPage(dummyUser: dummyUser),
         "/notifications": (context) => NotificationPage(dummyUser: dummyUser),
         "/config": (context) => ConfigPage(),
+        "/userprofile": (context) => UserProfilePage(),
         "/chat": (context) => ChatPage(),
+        "/post": (context) => PostPage(),
+        "/category": (context) => CategoryPage(dummyUser: dummyUser),
+        "/club": (context) => ClubPage(),
       },
     );
   }
