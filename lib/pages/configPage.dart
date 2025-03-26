@@ -69,6 +69,14 @@ class _ConfigPageState extends State<_ConfigPage> {
                 child: Text("동아리 페이지로 이동"),
               ),
             ),
+            SizedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/notifications");
+                },
+                child: Text("알람 페이지로 이동"),
+              ),
+            ),
             // SizedBox(
             //   child: ElevatedButton(
             //     onPressed: () {
