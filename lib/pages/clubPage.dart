@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class ClubPage extends StatelessWidget {
@@ -43,15 +42,15 @@ class ClubPage extends StatelessWidget {
               // 오른쪽: 기존 아이콘 (예: 모임 아이콘)
               Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.groups,
-                      color: Color(0xFF229F3B),
-                      size: 30,
-                    ),
-                    onPressed: () => _showComingSoonDialog(context),
-                    tooltip: "모임 페이지",
-                  ),
+                  // IconButton(
+                  //   icon: const Icon(
+                  //     Icons.groups,
+                  //     color: Color(0xFF229F3B),
+                  //     size: 30,
+                  //   ),
+                  //   onPressed: () => _showComingSoonDialog(context),
+                  //   tooltip: "모임 페이지",
+                  // ),
                 ],
               ),
             ],
@@ -67,16 +66,17 @@ class ClubPage extends StatelessWidget {
 void _showComingSoonDialog(BuildContext context) {
   showDialog(
     context: context,
-    builder: (context) => AlertDialog(
-      title: const Text("준비중"),
-      content: const Text("해당 기능은 아직 준비중입니다."),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text("확인"),
+    builder:
+        (context) => AlertDialog(
+          title: const Text("준비중"),
+          content: const Text("해당 기능은 아직 준비중입니다."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("확인"),
+            ),
+          ],
         ),
-      ],
-    ),
   );
 }
 
