@@ -8,32 +8,32 @@ class ClubPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text("동아리 페이지"),
-          backgroundColor: const Color(0xFF044E00).withAlpha(128),
-          foregroundColor: Colors.white,
+        backgroundColor: const Color(0xFFF5F5F5),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70),
+          child: Container(
+            height: 70,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            color: Colors.transparent,
+            child: const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  "모임 페이지",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
         body: const _ClubPage(),
       ),
     );
   }
-}
-// "준비중" 다이얼로그 함수 (기존 코드)
-void _showComingSoonDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder:
-        (context) => AlertDialog(
-      title: const Text("준비중"),
-      content: const Text("해당 기능은 아직 준비중입니다."),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.pop(context),
-          child: const Text("확인"),
-        ),
-      ],
-    ),
-  );
 }
 
 class _ClubPage extends StatefulWidget {
@@ -48,7 +48,7 @@ class _ClubPageState extends State<_ClubPage> {
   List<String> selectedCategories = [];
 
   final List<String> allRegions = ["서울", "경기", "부산"];
-  final List<String> allCategories = ["운동", "독서", "게임"];
+  final List<String> allCategories = ["뜨개질", "그림", "독서", "영화감상", "퍼즐", "요리", "통기타", "당구", "바둑", "등산", "자전거", "캠핑", "낚시", "러닝/마라톤", "수영", "골프", "테니스", "족구"];
 
   List<Map<String, String>> clubData = [];
   bool isLoading = true;
@@ -87,6 +87,44 @@ class _ClubPageState extends State<_ClubPage> {
     setState(() {
       clubData = dummyResponse;
       isLoading = false;
+    });
+  }
+
+  List<Widget> _buildCategoryChipRows() {
+    const int rowCount = 2;
+    const int itemsPerRow = 9;
+
+    return List.generate(rowCount, (rowIndex) {
+      final start = rowIndex * itemsPerRow;
+      final end = (start + itemsPerRow) <= allCategories.length
+          ? start + itemsPerRow
+          : allCategories.length;
+
+      final rowItems = allCategories.sublist(start, end);
+
+      return Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          children: rowItems.map((category) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: _buildFilterChip(
+                category,
+                selectedCategories.contains(category),
+                    (bool value) {
+                  setState(() {
+                    if (value) {
+                      selectedCategories.add(category);
+                    } else {
+                      selectedCategories.remove(category);
+                    }
+                  });
+                },
+              ),
+            );
+          }).toList(),
+        ),
+      );
     });
   }
 
@@ -166,24 +204,12 @@ class _ClubPageState extends State<_ClubPage> {
               child: Text("카테고리", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
             ),
             Expanded(
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children: allCategories.map((category) {
-                  return _buildFilterChip(
-                    category,
-                    selectedCategories.contains(category),
-                        (bool value) {
-                      setState(() {
-                        if (value) {
-                          selectedCategories.add(category);
-                        } else {
-                          selectedCategories.remove(category);
-                        }
-                      });
-                    },
-                  );
-                }).toList(),
+              child: SizedBox(
+                height: 80, // 2줄 필터 높이
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: _buildCategoryChipRows(), // 아래 함수 추가!
+                ),
               ),
             ),
           ],
@@ -334,51 +360,3 @@ class _ClubPageState extends State<_ClubPage> {
   }
 }
 
-// Widget _buildRecommendedClubs() {
-//   return Column(
-//     crossAxisAlignment: CrossAxisAlignment.start,
-//     children: [
-//       const Text(
-//         "추천 동아리",
-//         style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-//       ),
-//       const SizedBox(height: 12),
-//       SizedBox(
-//         height: 200,
-//         child: PageView.builder(
-//           itemCount: 3, // 더미 3개
-//           controller: PageController(viewportFraction: 1), // 꽉 채우기
-//           itemBuilder: (context, index) {
-//             return Padding(
-//               padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//               child: Container(
-//                 width: MediaQuery.of(context).size.width,
-//                 decoration: BoxDecoration(
-//                   color: Colors.white,
-//                   borderRadius: BorderRadius.circular(16),
-//                   boxShadow: [
-//                     BoxShadow(
-//                       color: Colors.black12,
-//                       blurRadius: 4,
-//                       offset: Offset(0, 2),
-//                     ),
-//                   ],
-//                 ),
-//                 padding: const EdgeInsets.all(20),
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     Icon(Icons.star, size: 40, color: Colors.grey[400]),
-//                     const SizedBox(height: 12),
-//                     Text("추천 동아리 ${index + 1}", style: const TextStyle(fontSize: 16)),
-//                     const Text("동아리 정보 자리", style: TextStyle(color: Colors.grey)),
-//                   ],
-//                 ),
-//               ),
-//             );
-//           },
-//         ),
-//       ),
-//     ],
-//   );
-// }
