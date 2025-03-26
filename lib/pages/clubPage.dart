@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/components/headerPage.dart';
 
 class ClubPage extends StatelessWidget {
   const ClubPage({super.key});
@@ -11,24 +12,25 @@ class ClubPage extends StatelessWidget {
         backgroundColor: const Color(0xFFF5F5F5),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
-          child: Container(
-            height: 70,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            color: Colors.transparent,
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  "모임 페이지",
-                  style: TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ],
-            ),
-          ),
+          child: HeaderPage(),
+          //  Container(
+          //   height: 70,
+          //   padding: const EdgeInsets.symmetric(horizontal: 16),
+          //   color: Colors.transparent,
+          //   child: const Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          //     children: [
+          //       Text(
+          //         "모임 페이지",
+          //         style: TextStyle(
+          //           fontSize: 20,
+          //           fontWeight: FontWeight.bold,
+          //           color: Colors.black,
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         ),
         body: const _ClubPage(),
       ),
@@ -48,7 +50,26 @@ class _ClubPageState extends State<_ClubPage> {
   List<String> selectedCategories = [];
 
   final List<String> allRegions = ["서울", "경기", "부산"];
-  final List<String> allCategories = ["뜨개질", "그림", "독서", "영화감상", "퍼즐", "요리", "통기타", "당구", "바둑", "등산", "자전거", "캠핑", "낚시", "러닝/마라톤", "수영", "골프", "테니스", "족구"];
+  final List<String> allCategories = [
+    "뜨개질",
+    "그림",
+    "독서",
+    "영화감상",
+    "퍼즐",
+    "요리",
+    "통기타",
+    "당구",
+    "바둑",
+    "등산",
+    "자전거",
+    "캠핑",
+    "낚시",
+    "러닝/마라톤",
+    "수영",
+    "골프",
+    "테니스",
+    "족구",
+  ];
 
   List<Map<String, String>> clubData = [];
   bool isLoading = true;
@@ -96,33 +117,35 @@ class _ClubPageState extends State<_ClubPage> {
 
     return List.generate(rowCount, (rowIndex) {
       final start = rowIndex * itemsPerRow;
-      final end = (start + itemsPerRow) <= allCategories.length
-          ? start + itemsPerRow
-          : allCategories.length;
+      final end =
+          (start + itemsPerRow) <= allCategories.length
+              ? start + itemsPerRow
+              : allCategories.length;
 
       final rowItems = allCategories.sublist(start, end);
 
       return Padding(
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(
-          children: rowItems.map((category) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 8.0),
-              child: _buildFilterChip(
-                category,
-                selectedCategories.contains(category),
+          children:
+              rowItems.map((category) {
+                return Padding(
+                  padding: const EdgeInsets.only(right: 8.0),
+                  child: _buildFilterChip(
+                    category,
+                    selectedCategories.contains(category),
                     (bool value) {
-                  setState(() {
-                    if (value) {
-                      selectedCategories.add(category);
-                    } else {
-                      selectedCategories.remove(category);
-                    }
-                  });
-                },
-              ),
-            );
-          }).toList(),
+                      setState(() {
+                        if (value) {
+                          selectedCategories.add(category);
+                        } else {
+                          selectedCategories.remove(category);
+                        }
+                      });
+                    },
+                  ),
+                );
+              }).toList(),
         ),
       );
     });
@@ -133,7 +156,6 @@ class _ClubPageState extends State<_ClubPage> {
     super.initState();
     fetchClubList(); // 서버처럼 더미 데이터 받아오기
   }
-
 
   @override
   void dispose() {
@@ -170,27 +192,31 @@ class _ClubPageState extends State<_ClubPage> {
           children: [
             const SizedBox(
               width: 60, // 제목 너비 고정
-              child: Text("지역", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: Text(
+                "지역",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
             Expanded(
               child: Wrap(
                 spacing: 8,
                 runSpacing: 8,
-                children: allRegions.map((region) {
-                  return _buildFilterChip(
-                    region,
-                    selectedRegions.contains(region),
+                children:
+                    allRegions.map((region) {
+                      return _buildFilterChip(
+                        region,
+                        selectedRegions.contains(region),
                         (bool value) {
-                      setState(() {
-                        if (value) {
-                          selectedRegions.add(region);
-                        } else {
-                          selectedRegions.remove(region);
-                        }
-                      });
-                    },
-                  );
-                }).toList(),
+                          setState(() {
+                            if (value) {
+                              selectedRegions.add(region);
+                            } else {
+                              selectedRegions.remove(region);
+                            }
+                          });
+                        },
+                      );
+                    }).toList(),
               ),
             ),
           ],
@@ -201,7 +227,10 @@ class _ClubPageState extends State<_ClubPage> {
           children: [
             const SizedBox(
               width: 60,
-              child: Text("카테고리", style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              child: Text(
+                "카테고리",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
             ),
             Expanded(
               child: SizedBox(
@@ -218,7 +247,11 @@ class _ClubPageState extends State<_ClubPage> {
     );
   }
 
-  Widget _buildFilterChip(String label, bool selected, Function(bool) onSelected) {
+  Widget _buildFilterChip(
+    String label,
+    bool selected,
+    Function(bool) onSelected,
+  ) {
     return FilterChip(
       label: Text(
         label,
@@ -247,7 +280,10 @@ class _ClubPageState extends State<_ClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("추천 동아리", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const Text(
+          "추천 동아리",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 12),
         SizedBox(
           height: 140,
@@ -281,8 +317,14 @@ class _ClubPageState extends State<_ClubPage> {
                     children: [
                       Icon(Icons.star, size: 40, color: Colors.grey[400]),
                       const SizedBox(height: 12),
-                      Text("추천 동아리 ${index + 1}", style: const TextStyle(fontSize: 16)),
-                      const Text("동아리 정보 자리", style: TextStyle(color: Colors.grey)),
+                      Text(
+                        "추천 동아리 ${index + 1}",
+                        style: const TextStyle(fontSize: 16),
+                      ),
+                      const Text(
+                        "동아리 정보 자리",
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ],
                   ),
                 ),
@@ -301,7 +343,10 @@ class _ClubPageState extends State<_ClubPage> {
                 width: _currentPage == index ? 12 : 8,
                 height: 8,
                 decoration: BoxDecoration(
-                  color: _currentPage == index ? Colors.blueAccent : Colors.grey[300],
+                  color:
+                      _currentPage == index
+                          ? Colors.blueAccent
+                          : Colors.grey[300],
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
@@ -317,36 +362,54 @@ class _ClubPageState extends State<_ClubPage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final filtered = clubData.where((club) {
-      final region = club["region"] ?? "";
-      final category = club["category"] ?? "";
+    final filtered =
+        clubData.where((club) {
+          final region = club["region"] ?? "";
+          final category = club["category"] ?? "";
 
-      final regionMatch = selectedRegions.isEmpty || selectedRegions.contains(region);
-      final categoryMatch = selectedCategories.isEmpty || selectedCategories.contains(category);
+          final regionMatch =
+              selectedRegions.isEmpty || selectedRegions.contains(region);
+          final categoryMatch =
+              selectedCategories.isEmpty ||
+              selectedCategories.contains(category);
 
-      return regionMatch && categoryMatch;
-    }).toList();
+          return regionMatch && categoryMatch;
+        }).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text("동아리 리스트", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+        const Text(
+          "동아리 리스트",
+          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 12),
         ...filtered.map((club) {
           return SizedBox(
             width: double.infinity, // 🔹 와이드하게 꽉 채우기
             child: Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
               elevation: 2,
               child: Padding(
                 padding: const EdgeInsets.all(16),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(club["name"]!, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                    Text(
+                      club["name"]!,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 4),
-                    Text("${club["region"]} · ${club["category"]}", style: const TextStyle(color: Colors.grey)),
+                    Text(
+                      "${club["region"]} · ${club["category"]}",
+                      style: const TextStyle(color: Colors.grey),
+                    ),
                     const SizedBox(height: 8),
                     Text(club["description"]!),
                   ],
@@ -359,4 +422,3 @@ class _ClubPageState extends State<_ClubPage> {
     );
   }
 }
-

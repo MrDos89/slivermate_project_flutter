@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
+import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
 class PostPage extends StatelessWidget {
   const PostPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // PreferredSize를 사용해 커스텀 앱바 구현
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(70),
-        child: HeaderPage(),
+    return MainLayout(
+      child: Scaffold(
+        // PreferredSize를 사용해 커스텀 앱바 구현
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70),
+          child: HeaderPage(),
+        ),
+        body: Container(color: Colors.grey[100], child: const _PostPage()),
       ),
-      body: Container(color: Colors.grey[100], child: const _PostPage()),
     );
   }
 }

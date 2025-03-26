@@ -1,59 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
+import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100),
-        child: Container(
-          height: 70,
-          color: Colors.transparent,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              // 왼쪽 텍스트
-              const Padding(
-                padding: EdgeInsets.only(left: 16.0),
-                child: Text(
-                  "마이페이지",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(
-                      Icons.notifications,
-                      color: Color(0xFF229F3B),
-                      size: 30,
-                    ),
-                    onPressed: () => _showComingSoonDialog(context),
-                    tooltip: "알람",
-                  ),
-                  IconButton(
-                    icon: const Icon(
-                      Icons.settings,
-                      color: Color(0xFF229F3B),
-                      size: 30,
-                    ),
-                    onPressed: () => _showComingSoonDialog(context),
-                    tooltip: "설정",
-                  ),
-                ],
-              ),
-            ],
-          ),
+    return MainLayout(
+      child: Scaffold(
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(70),
+          child: HeaderPage(),
+        ),
+        body: Container(
+          color: Colors.grey[100],
+          child: const _UserProfilePage(),
         ),
       ),
-      body: Container(color: Colors.grey[100], child: const _UserProfilePage()),
     );
   }
 }
