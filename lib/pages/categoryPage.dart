@@ -272,21 +272,29 @@ class _CategoryPageState extends State<CategoryPage> {
             children: [
               // AppBar + TabBar
               Container(
-                padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+                padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).padding.top,
+                ),
                 color: const Color(0xFF044E00).withAlpha(128),
                 child: Column(
                   children: [
                     // 상단 바
                     Container(
                       height: 73,
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Row(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.arrow_back, color: Colors.white),
+                                icon: const Icon(
+                                  Icons.arrow_back,
+                                  color: Colors.white,
+                                ),
                                 onPressed: () => Navigator.pop(context),
                               ),
                               const SizedBox(width: 8),
@@ -304,11 +312,17 @@ class _CategoryPageState extends State<CategoryPage> {
                           Row(
                             children: [
                               IconButton(
-                                icon: const Icon(Icons.notifications, color: Colors.white),
+                                icon: const Icon(
+                                  Icons.notifications,
+                                  color: Colors.white,
+                                ),
                                 onPressed: _showComingSoonDialog,
                               ),
                               IconButton(
-                                icon: const Icon(Icons.settings, color: Colors.white),
+                                icon: const Icon(
+                                  Icons.settings,
+                                  color: Colors.white,
+                                ),
                                 onPressed: _showComingSoonDialog,
                               ),
                             ],
@@ -349,7 +363,6 @@ class _CategoryPageState extends State<CategoryPage> {
     );
   }
 
-
   Widget _buildCategoryTab() {
     return Stack(
       children: [
@@ -368,13 +381,13 @@ class _CategoryPageState extends State<CategoryPage> {
                 children: [
                   _buildCategoryButton(
                     "실내 활동",
-                        () => _onCategorySelected(true),
+                    () => _onCategorySelected(true),
                     Icons.home,
                   ),
                   const SizedBox(width: 20),
                   _buildCategoryButton(
                     "실외 활동",
-                        () => _onCategorySelected(false),
+                    () => _onCategorySelected(false),
                     Icons.park,
                   ),
                 ],
@@ -396,7 +409,10 @@ class _CategoryPageState extends State<CategoryPage> {
             opacity: movedToTop ? 1.0 : 0.0,
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 2.0),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 2.0,
+                ),
                 child: Column(
                   children: [
                     if (showIndoor) _buildHobbyGrid(1),

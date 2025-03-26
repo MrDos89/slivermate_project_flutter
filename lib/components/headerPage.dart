@@ -87,11 +87,11 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
             },
             tooltip: "레슨페이지",
           ),
-          // 동아리페이지
+          // 모임페이지
           IconButton(
             icon: const Icon(Icons.groups, color: Color(0xFF229F3B), size: 30),
             onPressed: () => _showComingSoonDialog(context),
-            tooltip: "동아리페이지",
+            tooltip: "모임페이지",
           ),
         ],
       ),
@@ -99,5 +99,5 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize => const Size.fromHeight(70);
+  Size get preferredSize => const Size.fromHeight(100);
 }
