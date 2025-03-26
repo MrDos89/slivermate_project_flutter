@@ -44,6 +44,33 @@ class ChatPage extends StatelessWidget {
               // 오른쪽: 기존 채팅 아이콘
               Row(
                 children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF229F3B),
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/config");
+                    },
+                    tooltip: "Config 페이지로 이동",
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 4.0),
+                    child: Text(
+                      "채팅페이지",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              // 오른쪽: 기존 채팅 아이콘
+              Row(
+                children: [
                   // IconButton(
                   //   icon: const Icon(
                   //     Icons.chat_bubble,

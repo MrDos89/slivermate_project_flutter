@@ -43,6 +43,31 @@ class PostPage extends StatelessWidget {
               // 오른쪽: 기존 아이콘 (예: 레슨페이지 아이콘)
               Row(
                 children: [
+                  IconButton(
+                    icon: const Icon(
+                      Icons.arrow_back,
+                      color: Color(0xFF229F3B),
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      Navigator.pushNamed(context, "/config");
+                    },
+                    tooltip: "Config 페이지로 이동",
+                  ),
+                  const SizedBox(width: 4),
+                  const Text(
+                    "게시글페이지",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              // 오른쪽: 기존 아이콘 (예: 레슨페이지 아이콘)
+              Row(
+                children: [
                   // IconButton(
                   //   icon: const Icon(
                   //     Icons.menu_book,
