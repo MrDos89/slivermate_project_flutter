@@ -210,11 +210,11 @@ class _IntroducePageState extends State<IntroducePage> {
           lesson: lesson,
           dummyUser: widget.dummyUser,
           child: Scaffold(
-            backgroundColor: const Color(0xFFD6FFDC).withOpacity(0.9),
+            backgroundColor: const Color(0xFFD6FFDC).withAlpha(128),
             appBar: AppBar(
               backgroundColor: const Color(
                 0xFF044E00,
-              ).withOpacity(0.5), // 실외 (연녹색)
+              ).withAlpha(128), // 실외 (연녹색)
               automaticallyImplyLeading: false,
               title:
                   lesson == null

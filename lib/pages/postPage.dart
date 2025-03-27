@@ -10,7 +10,9 @@ PostVo dummyPost = PostVo(
     regionId: 1,
     categoryNames: 1,
     subCategory: 8,
-    postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+    postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+    countLikes: 0,
+    countComment: 0
 );
 
 List<PostVo> dummyPostList = [
@@ -20,7 +22,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -28,7 +32,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -36,7 +42,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -44,7 +52,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -52,7 +62,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -60,7 +72,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -68,7 +82,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -76,7 +92,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   ),
   PostVo(
       userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
@@ -84,7 +102,9 @@ List<PostVo> dummyPostList = [
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
-      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+      countLikes: 0,
+      countComment: 0
   )
 ];
 
@@ -154,6 +174,7 @@ class PostPage extends StatelessWidget {
                   children: [
                     // const SizedBox(height: 32),
                     postContainer(context),
+                    // _comment(),
                   ],
                 ),
               ),
@@ -162,6 +183,7 @@ class PostPage extends StatelessWidget {
     );
   }
 }
+
 Widget postContainer(BuildContext context, {String title =''}){
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,13 +262,29 @@ void _showComingSoonDialog(BuildContext context) {
         ),
   );
 }
-
-class _PostPage extends StatelessWidget {
-  const _PostPage({super.key});
-
-
-  @override
-  Widget build(BuildContext context) {
-    return const Placeholder();
-  }
-}
+//
+// Widget _comment() {
+//   return Padding(
+//     padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//     child: Column(
+//       crossAxisAlignment: CrossAxisAlignment.stretch,
+//       children: [
+//         Padding(
+//           padding: const EdgeInsets.all(8.0),
+//           child: Text(
+//             '좋아요 ${widget.countLikes}개',
+//             style: const TextStyle(fontWeight: FontWeight.bold),
+//           ),
+//         ),
+//       ],
+//     ),
+//   );
+// }
+// class _PostPage extends StatelessWidget {
+//   const _PostPage({super.key});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return const Placeholder();
+//   }
+// }

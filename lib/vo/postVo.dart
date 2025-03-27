@@ -7,6 +7,8 @@ class PostVo {
   final int categoryNames;
   final int subCategory;
   final String postNote;
+  final int countLikes;
+  final int countComment;
 
   PostVo({
     required this.userThumbnail,
@@ -15,5 +17,7 @@ class PostVo {
     required this.categoryNames,
     required this.subCategory,
     required this.postNote,
+    required this.countLikes,
+    required this.countComment,
   });
 }
