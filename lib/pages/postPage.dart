@@ -174,7 +174,6 @@ class PostPage extends StatelessWidget {
                   children: [
                     // const SizedBox(height: 32),
                     postContainer(context),
-                    // _comment(),
                   ],
                 ),
               ),
@@ -231,6 +230,32 @@ Widget postContainer(BuildContext context, {String title =''}){
                           ),
                           const SizedBox(height: 8),
                           Text(dummyPost.postNote),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              LikeHeart(initialLikes: dummyPost.countLikes),
+
+                              const SizedBox(width: 16),
+
+                              Builder(
+                                builder: (BuildContext context) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      _showCommentModal(context);
+                                    },
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.comment_outlined, size: 18, color: Colors.grey),
+                                        const SizedBox(width: 4),
+                                        Text('${dummyPost.countComment}'),
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
+
                         ],
                       ),
                     ),
@@ -262,29 +287,122 @@ void _showComingSoonDialog(BuildContext context) {
         ),
   );
 }
-//
-// Widget _comment() {
-//   return Padding(
-//     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-//     child: Column(
-//       crossAxisAlignment: CrossAxisAlignment.stretch,
-//       children: [
-//         Padding(
-//           padding: const EdgeInsets.all(8.0),
-//           child: Text(
-//             '좋아요 ${widget.countLikes}개',
-//             style: const TextStyle(fontWeight: FontWeight.bold),
-//           ),
-//         ),
-//       ],
-//     ),
-//   );
-// }
-// class _PostPage extends StatelessWidget {
-//   const _PostPage({super.key});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return const Placeholder();
-//   }
-// }
+
+class LikeHeart extends StatefulWidget {
+  final int initialLikes;
+
+  const LikeHeart({super.key, required this.initialLikes});
+
+  @override
+  State<LikeHeart> createState() => _LikeHeartState();
+}
+
+class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMixin {
+  late int _likes;
+  bool _isLiked = false;
+  late AnimationController _controller;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _likes = widget.initialLikes;
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 200),
+    );
+
+    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.4).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  void _onTapLike() {
+    setState(() {
+      if (_isLiked) {
+        _likes--;
+      } else {
+        _likes++;
+        _controller.forward().then((_) => _controller.reverse());
+      }
+      _isLiked = !_isLiked;
+    });
+
+    // TODO: 서버에 좋아요 상태 전송
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _onTapLike,
+      child: Row(
+        children: [
+          ScaleTransition(
+            scale: _scaleAnimation,
+            child: Icon(
+              _isLiked ? Icons.favorite : Icons.favorite_border,
+              color: _isLiked ? Colors.red : Colors.grey,
+              size: 20,
+            ),
+          ),
+          const SizedBox(width: 4),
+          Text('$_likes'),
+        ],
+      ),
+    );
+  }
+}
+
+
+void _showCommentModal(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+    ),
+    isScrollControlled: true,
+    builder: (context) {
+      return Padding(
+        padding: MediaQuery.of(context).viewInsets,
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          height: 400,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                '댓글',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const Divider(),
+              const Expanded(
+                child: Center(
+                  child: Text("아직 등록된 댓글이 없습니다."),
+                ),
+              ),
+              TextField(
+                decoration: InputDecoration(
+                  hintText: '댓글을 입력하세요',
+                  suffixIcon: IconButton(
+                    icon: const Icon(Icons.send),
+                    onPressed: () {
+                      // TODO: 댓글 전송 기능
+                    },
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
