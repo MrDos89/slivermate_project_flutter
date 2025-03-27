@@ -9,6 +9,7 @@ class PostVo {
   final String postNote;
   final int countLikes;
   final int countComment;
+  final String? postImage;
 
   PostVo({
     required this.userThumbnail,
@@ -19,5 +20,6 @@ class PostVo {
     required this.postNote,
     required this.countLikes,
     required this.countComment,
+    this.postImage,
   });
 }

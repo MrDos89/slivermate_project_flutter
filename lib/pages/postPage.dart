@@ -5,106 +5,116 @@ import 'package:slivermate_project_flutter/vo/postVo.dart';
 
 
 PostVo dummyPost = PostVo(
-    userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+    userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
     userNickname: "라이언",
     regionId: 1,
     categoryNames: 1,
     subCategory: 8,
     postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
     countLikes: 0,
-    countComment: 0
+    countComment: 0,
+    postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
 );
 
 List<PostVo> dummyPostList = [
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   ),
   PostVo(
-      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
       userNickname: "라이언",
       regionId: 1,
       categoryNames: 1,
       subCategory: 8,
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
-      countComment: 0
+      countComment: 0,
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
   )
 ];
 
@@ -210,7 +220,7 @@ Widget postContainer(BuildContext context, {String title =''}){
                             children: [
                               CircleAvatar(
                                 radius: 30,
-                                backgroundImage: NetworkImage("https://cdn.newsworks.co.kr/news/photo/202002/433057_327801_345.jpg"),
+                                backgroundImage: NetworkImage(dummyPost.userThumbnail),
                               ),
                               const SizedBox(width: 12),
                               Column(
@@ -237,6 +247,32 @@ Widget postContainer(BuildContext context, {String title =''}){
                               ),
                             ],
                           ),
+                          if (dummyPost.postImage != null && dummyPost.postImage!.isNotEmpty)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                dummyPost.postImage!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 180,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    height: 180,
+                                    child: const CircularProgressIndicator(),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    height: 180,
+                                    color: Colors.grey[300],
+                                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                                  );
+                                },
+                              ),
+                            ),
                           const SizedBox(height: 8),
                           Text(dummyPost.postNote),
                           const SizedBox(height: 8),
@@ -343,8 +379,6 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
       }
       _isLiked = !_isLiked;
     });
-
-    // TODO: 서버에 좋아요 상태 전송
   }
 
   @override
@@ -369,49 +403,68 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
   }
 }
 
+final TextEditingController _commentController = TextEditingController();
+List<String> _comments = [];
+
 
 void _showCommentModal(BuildContext context) {
   showModalBottomSheet(
     context: context,
+    isScrollControlled: true,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
-    isScrollControlled: true,
     builder: (context) {
-      return Padding(
-        padding: MediaQuery.of(context).viewInsets,
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          height: 400,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                '댓글',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const Divider(),
-              const Expanded(
-                child: Center(
-                  child: Text("아직 등록된 댓글이 없습니다."),
-                ),
-              ),
-              TextField(
-                decoration: InputDecoration(
-                  hintText: '댓글을 입력하세요',
-                  suffixIcon: IconButton(
-                    icon: const Icon(Icons.send),
-                    onPressed: () {
-                      // TODO: 댓글 전송 기능
-                    },
+      return StatefulBuilder( // 👈 상태 변경을 위해 사용
+        builder: (context, setModalState) {
+          return Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              height: 400,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('댓글', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                  const Divider(),
+
+                  Expanded(
+                    child: _comments.isEmpty
+                        ? const Center(child: Text("아직 등록된 댓글이 없습니다."))
+                        : ListView.builder(
+                      itemCount: _comments.length,
+                      itemBuilder: (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(_comments[index]),
+                      ),
+                    ),
                   ),
-                ),
-              )
-            ],
-          ),
-        ),
+
+                  TextField(
+                    controller: _commentController,
+                    decoration: InputDecoration(
+                      hintText: '댓글을 입력하세요',
+                      suffixIcon: IconButton(
+                        icon: const Icon(Icons.send),
+                        onPressed: () {
+                          if (_commentController.text.trim().isNotEmpty) {
+                            setModalState(() {
+                              _comments.add(_commentController.text.trim());
+                              _commentController.clear();
+                            });
+                          }
+                        },
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          );
+        },
       );
     },
   );
 }
+
 
