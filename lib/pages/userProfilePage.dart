@@ -204,12 +204,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
               ],
             ),
           ),
-
-          const SizedBox(height: 24),
-
-          placeholder,
-
-          const SizedBox(height: 24),
         ],
       ),
     );
