@@ -206,24 +206,33 @@ Widget postContainer(BuildContext context, {String title =''}){
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Row(
-                            children:[
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               CircleAvatar(
                                 radius: 30,
                                 backgroundImage: NetworkImage("https://cdn.newsworks.co.kr/news/photo/202002/433057_327801_345.jpg"),
                               ),
+                              const SizedBox(width: 12),
                               Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    dummyPost.userNickname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                  Row(
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        dummyPost.userNickname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 4),
+                                    Text(
+                                      "${regionMap[dummyPost.regionId]!} · ${outdoorHobbies[dummyPost.subCategory]!}",
+                                      style: const TextStyle(color: Colors.grey),
                                     ),
-                                  ),
-                                  Text(
-                                    "${regionMap[dummyPostList[0].regionId]!} · ${outdoorHobbies[dummyPostList[0].subCategory]!}",
-                                    style: const TextStyle(color: Colors.grey),
-                                  ),
                                 ],
                               ),
                             ],
