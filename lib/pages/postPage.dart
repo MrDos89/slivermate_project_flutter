@@ -14,7 +14,78 @@ PostVo dummyPost = PostVo(
 );
 
 List<PostVo> dummyPostList = [
-  dummyPost,
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  ),
+  PostVo(
+      userThumbnail: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.newsworks.co.kr%2Fnews%2FarticleView.html%3Fidxno%3D433057&psig=AOvVaw3zWNOdj9c3R8SA5xNqlgyY&ust=1743132020169000&source=images&cd=vfe&opi=89978449&ved=0CBQQjRxqFwoTCICV7PimqYwDFQAAAAAdAAAAABAE",
+      userNickname: "라이언",
+      regionId: 1,
+      categoryNames: 1,
+      subCategory: 8,
+      postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다."
+  )
 ];
 
 //  카테고리 ID를 문자열로 변환
@@ -81,7 +152,7 @@ class PostPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(height: 32),
+                    // const SizedBox(height: 32),
                     postContainer(context),
                   ],
                 ),
@@ -113,25 +184,28 @@ Widget postContainer(BuildContext context, {String title =''}){
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            dummyPost.userNickname,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            regionMap[dummyPostList[0].regionId]!,
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          Text(
-                            categoryNames[dummyPostList[0].categoryNames]!,
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          Text(
-                            outdoorHobbies[dummyPostList[0].subCategory]!,
-                            style: const TextStyle(color: Colors.grey),
+                          Row(
+                            children:[
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage("https://cdn.newsworks.co.kr/news/photo/202002/433057_327801_345.jpg"),
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    dummyPost.userNickname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${regionMap[dummyPostList[0].regionId]!} · ${outdoorHobbies[dummyPostList[0].subCategory]!}",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                           const SizedBox(height: 8),
                           Text(dummyPost.postNote),
