@@ -103,6 +103,12 @@ class _ClubPageState extends State<_ClubPage> {
         "category": "게임",
         "description": "보드게임 좋아하는 분들 모여요!",
       },
+      {
+        "name": "서울 보드게임 동호회",
+        "region": "서울",
+        "category": "게임",
+        "description": "보드게임 좋아하는 분들 모여요!",
+      },
     ];
 
     setState(() {
@@ -383,41 +389,47 @@ class _ClubPageState extends State<_ClubPage> {
           "동아리 리스트",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 12),
-        ...filtered.map((club) {
-          return SizedBox(
-            width: double.infinity, // 🔹 와이드하게 꽉 채우기
-            child: Card(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              elevation: 2,
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      club["name"]!,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
+        SizedBox(
+          height: 250,
+          child: ListView(
+            children: [SizedBox(height: 12),
+              ...filtered.map((club) {
+                return SizedBox(
+                  width: double.infinity, // 🔹 와이드하게 꽉 채우기
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            club["name"]!,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            "${club["region"]} · ${club["category"]}",
+                            style: const TextStyle(color: Colors.grey),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(club["description"]!),
+                        ],
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      "${club["region"]} · ${club["category"]}",
-                      style: const TextStyle(color: Colors.grey),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(club["description"]!),
-                  ],
-                ),
-              ),
-            ),
-          );
-        }).toList(),
+                  ),
+                );
+              }).toList(),],
+          ),
+        )
+
       ],
     );
   }

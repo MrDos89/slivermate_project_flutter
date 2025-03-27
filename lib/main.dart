@@ -12,6 +12,7 @@ import 'package:slivermate_project_flutter/pages/chatPage.dart';
 import 'package:slivermate_project_flutter/pages/userProfilePage.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
 import 'package:slivermate_project_flutter/pages/clubPage.dart';
+import 'package:slivermate_project_flutter/vo/postVo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
         "/config": (context) => ConfigPage(),
         "/userprofile": (context) => UserProfilePage(),
         "/chat": (context) => ChatPage(),
-        "/post": (context) => PostPage(),
+        "/post": (context) => PostPage(dummyPost:dummyPost),
         "/category": (context) => CategoryPage(dummyUser: dummyUser),
         "/club": (context) => ClubPage(),
       },
