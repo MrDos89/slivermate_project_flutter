@@ -12,7 +12,7 @@ class ClubPage extends StatelessWidget {
         backgroundColor: const Color(0xFFF5F5F5),
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
-          child: HeaderPage(),
+          child: HeaderPage(pageTitle: "모임 페이지"),
           //  Container(
           //   height: 70,
           //   padding: const EdgeInsets.symmetric(horizontal: 16),

@@ -273,7 +273,7 @@ class _CategoryPageState extends State<CategoryPage> {
           child: Column(
             children: [
               // AppBar + TabBar
-              HeaderPage(),
+              HeaderPage(pageTitle: "강의 페이지"),
               // 탭 컨텐츠 (TabBarView)
               Expanded(
                 child: TabBarView(

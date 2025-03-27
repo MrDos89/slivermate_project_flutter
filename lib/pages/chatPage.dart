@@ -11,7 +11,7 @@ class ChatPage extends StatelessWidget {
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
-          child: HeaderPage(),
+          child: HeaderPage(pageTitle: "채팅 페이지"),
           // child: Container(
           //   height: 70,
           //   color: Colors.transparent,

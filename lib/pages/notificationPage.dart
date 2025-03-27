@@ -58,7 +58,7 @@ class _NotificationPageState extends State<NotificationPage> {
     return MainLayout(
       dummyUser: widget.dummyUser,
       child: Scaffold(
-        appBar: HeaderPage(),
+        appBar: HeaderPage(pageTitle: "알람 페이지"),
         body:
             notifications.isEmpty
                 ? Center(child: Text("알림이 없습니다."))

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
   /// 페이지 타이틀 (예: "채팅", "게시글", "레슨", "동아리" 등)
-  final String? pageTitle;
+  final String pageTitle;
 
   /// 뒤로가기 버튼 표시 여부
   final bool showBackButton;
 
-  const HeaderPage({Key? key, this.pageTitle, this.showBackButton = false})
+  const HeaderPage({Key? key, this.pageTitle = '', this.showBackButton = false})
     : super(key: key);
 
   // "준비중" 팝업 다이얼로그
@@ -50,10 +50,10 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
                 },
                 tooltip: "Config 페이지로 이동",
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.only(left: 4.0),
                 child: Text(
-                  "채팅페이지",
+                  pageTitle,
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -66,7 +66,7 @@ class HeaderPage extends StatelessWidget implements PreferredSizeWidget {
           // 오른쪽: 기존 아이콘들
           Row(
             children: [
-              // 마이페이지
+              // 알람
               IconButton(
                 icon: const Icon(
                   Icons.notifications,

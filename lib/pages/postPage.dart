@@ -12,7 +12,7 @@ class PostPage extends StatelessWidget {
         // PreferredSize를 사용해 커스텀 앱바 구현
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
-          child: HeaderPage(),
+          child: HeaderPage(pageTitle: "피드 페이지"),
         ),
         body: Container(color: Colors.grey[100], child: const _PostPage()),
       ),

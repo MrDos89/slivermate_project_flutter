@@ -11,7 +11,7 @@ class UserProfilePage extends StatelessWidget {
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
-          child: HeaderPage(),
+          child: HeaderPage(pageTitle: "마이 페이지"),
         ),
         body: Container(
           color: Colors.grey[100],
