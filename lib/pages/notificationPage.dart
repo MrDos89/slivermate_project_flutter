@@ -126,6 +126,114 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
+  // appBar: AppBar(
+  // title: const Text("알림"),
+  // backgroundColor: Colors.white,
+  // elevation: 0,
+  // leading: IconButton(
+  // icon: const Icon(Icons.arrow_back, color: Colors.black),
+  // onPressed: () {
+  // Navigator.pop(context);
+  // },
+  // ),
+  // actions: isEditing
+  // ? [
+  // Padding(
+  // padding: const EdgeInsets.symmetric(vertical: 8),
+  // child: Row(
+  // mainAxisSize: MainAxisSize.min,
+  // children: [
+  // TextButton(
+  // onPressed: _deleteSelected,
+  // style: TextButton.styleFrom(
+  // side: const BorderSide(color: Colors.deepPurple),
+  // foregroundColor: Colors.deepPurple,
+  // padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+  // // minimumSize: const Size(0, 30),
+  // tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  // visualDensity: VisualDensity.compact,
+  // shape: RoundedRectangleBorder(
+  // borderRadius: BorderRadius.circular(6),
+  // ),
+  // textStyle: const TextStyle(fontSize: 12),
+  // ),
+  // child: const Text("일부 삭제",
+  // style: TextStyle(
+  // fontSize: 12,
+  // fontWeight: FontWeight.bold,
+  // ),
+  // ),
+  // ),
+  // const SizedBox(width: 6), // 간격 추가
+  // TextButton(
+  // onPressed: _deleteAll,
+  // style: TextButton.styleFrom(
+  // side: const BorderSide(color: Colors.red),
+  // foregroundColor: Colors.red,
+  // padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+  // // minimumSize: const Size(0, 30),
+  // tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  // visualDensity: VisualDensity.compact,
+  // shape: RoundedRectangleBorder(
+  // borderRadius: BorderRadius.circular(6),
+  // ),
+  // textStyle: const TextStyle(fontSize: 12),
+  // ),
+  // child: const Text("전체 삭제",
+  // style: TextStyle(
+  // fontSize: 12,
+  // fontWeight: FontWeight.bold,
+  // )
+  // ),
+  // ),
+  // const SizedBox(width: 6), // 간격 추가
+  // TextButton(
+  // onPressed: () {
+  // setState(() {
+  // isEditing = false;
+  // });
+  // },
+  // style: TextButton.styleFrom(
+  // side: const BorderSide(color: Colors.grey),
+  // foregroundColor: Colors.grey[700],
+  // padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+  // // minimumSize: const Size(0, 30),
+  // tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+  // visualDensity: VisualDensity.compact,
+  // shape: RoundedRectangleBorder(
+  // borderRadius: BorderRadius.circular(6),
+  // ),
+  // textStyle: const TextStyle(fontSize: 12),
+  // ),
+  // child: const Text("취소",
+  // style: TextStyle(
+  // fontSize: 12,
+  // fontWeight: FontWeight.bold,
+  // )
+  // ),
+  // ),
+  // ],
+  // ),
+  // ),
+  // ]
+  //     : [
+  // TextButton(
+  // onPressed: () {
+  // setState(() {
+  // isEditing = true;
+  // });
+  // },
+  // child: const Text("편집",
+  // style: TextStyle(
+  // fontSize: 12,
+  // fontWeight: FontWeight.bold,
+  // )
+  // ),
+  // ),
+  // ],
+  //
+  // ),
+
   ///  최신 알람일 경우 Fade In + Scale + 반짝임 애니메이션 적용
   Widget _buildNotificationBubble(
     String message,
