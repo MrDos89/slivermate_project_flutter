@@ -180,41 +180,40 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   int? _selectedRegionId;  // 지역
-  int? _selectedCategoryId; // 카테고리
   int? _selectedSubCategoryId; // 서브 카테고리
+  Set<int> _selectedSubCategoryIds = {};
 
   @override
   Widget build(BuildContext context) {
-
     List<PostVo> filteredList = dummyPostList.where((post) {
-      bool regionMatch = _selectedRegionId == null || post.regionId == _selectedRegionId;
-      bool categoryMatch = _selectedCategoryId == null || post.categoryNames == _selectedCategoryId;
-      bool subCategoryMatch = _selectedSubCategoryId == null || post.subCategory == _selectedSubCategoryId;
-      return regionMatch && categoryMatch;
+      bool regionMatch = _selectedRegionId == null ||
+          post.regionId == _selectedRegionId;
+      bool subCategoryMatch = _selectedSubCategoryIds.isEmpty ||
+          _selectedSubCategoryIds.contains(post.subCategory);
+
+      return regionMatch && subCategoryMatch;
     }).toList();
 
     return MainLayout(
       child: Scaffold(
-        // PreferredSize를 사용해 커스텀 앱바 구현
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
           child: HeaderPage(pageTitle: "피드 페이지"),
         ),
-        body:
-            Container(
-              color: const Color(0xFFF5F5F5),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                // 드롭다운 필터 영역
-                Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                child: Row(
-                  children: [
-                    // 지역 드롭다운
-                    Expanded(
+        body: Container(
+          color: const Color(0xFFF5F5F5),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // 지역 드롭다운
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                  width: double.infinity,
+                  child: ButtonTheme(
+                    alignedDropdown: true,
+                    child: DropdownButtonHideUnderline(
                       child: DropdownButton<int?>(
                         isExpanded: true,
                         value: _selectedRegionId,
@@ -236,203 +235,203 @@ class _PostPageState extends State<PostPage> {
                         },
                       ),
                     ),
-                    const SizedBox(width: 10),
-                    // 카테고리 드롭다운
-                    Expanded(
-                      child: DropdownButton<int?>(
-                        isExpanded: true,
-                        value: _selectedCategoryId,
-                        hint: const Text("카테고리 선택"),
-                        items: [
-                          const DropdownMenuItem<int?>(
-                            value: null,
-                            child: Text("전체 카테고리"),
-                          ),
-                          ...categoryNames.entries.map((e) => DropdownMenuItem(
-                            value: e.key,
-                            child: Text(e.value),
-                          )),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedCategoryId = value;
-                          });
-                        },
+                  ),
+                ),
+
+
+                // const SizedBox(height: ),
+
+                // 카테고리 선택 (Chip 형태)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Text(
+                        '카테고리',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    // 서브 카테고리 드롭다운
-                    if (_selectedCategoryId != null)
+                      const SizedBox(width: 12),
                       Expanded(
-                        child: DropdownButton<int?>(
-                          isExpanded: true,
-                          value: _selectedSubCategoryId,
-                          hint: const Text("서브카테고리 선택"),
-                          items: [
-                            const DropdownMenuItem<int?>(
-                              value: null,
-                              child: Text("서브"),
+                        child: SizedBox(
+                          height: 30,  // 칩 높이 제한
+                          child: SingleChildScrollView(
+                            scrollDirection: Axis.horizontal, // 가로 슬라이드 활성화
+                            child: Row(
+                              children: {
+                                ...indoorHobbies.entries,
+                                ...outdoorHobbies.entries,
+                              }.map((e) {
+                                final bool isSelected = _selectedSubCategoryIds.contains(e.key);
+                                return Padding(
+                                  padding: const EdgeInsets.only(right: 8.0),
+                                  child: FilterChip( // ✅ ChoiceChip 대신 FilterChip 사용
+                                    label: Text(e.value),
+                                    selected: isSelected,
+                                    onSelected: (selected) {
+                                      setState(() {
+                                        if (selected) {
+                                          _selectedSubCategoryIds.add(e.key);
+                                        } else {
+                                          _selectedSubCategoryIds.remove(e.key);
+                                        }
+                                      });
+                                    },
+                                  ),
+                                );
+                              }).toList(),
                             ),
-                            ...(_selectedCategoryId == 1 ? indoorHobbies : outdoorHobbies)
-                                .entries
-                                .map((e) => DropdownMenuItem(
-                              value: e.key,
-                              child: Text(e.value),
-                            )),
-                          ],
-                          onChanged: (value) {
-                            setState(() {
-                              _selectedSubCategoryId = value;
-                            });
-                          },
+                          ),
                         ),
                       ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-                        SingleChildScrollView(
-                          child: postContainer(context, postList: filteredList),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-        ),
-    );
-  }
-}
 
-Widget postContainer(BuildContext context, {required List<PostVo> postList}) {
-  if (postList.isEmpty) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 40),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "해당되는 피드가 없습니다.",
-              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+
+                SingleChildScrollView(
+                  child: postContainer(context, postList: filteredList),
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            Text(
-              "첫 번째 피드를 남겨주세요.",
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-          ],
+          ),
         ),
       ),
     );
   }
+  Widget postContainer(BuildContext context, {required List<PostVo> postList}) {
+    if (postList.isEmpty) {
+      return Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 40),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "해당되는 피드가 없습니다.",
+                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                "첫 번째 피드를 남겨주세요.",
+                style: TextStyle(fontSize: 14, color: Colors.grey),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      SizedBox(
-        height: MediaQuery.of(context).size.height * 0.71,
-        child: ListView(
-          children: [
-            const SizedBox(height: 40),
-            ...postList.map((dummyPost) {
-              return SizedBox(
-                width: double.infinity,
-                child: Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  elevation: 2,
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(dummyPost.userThumbnail),
-                            ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  dummyPost.userNickname,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1
-                                      ? indoorHobbies[dummyPost.subCategory]
-                                      : outdoorHobbies[dummyPost.subCategory]}",
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        if (dummyPost.postImage != null && dummyPost.postImage!.isNotEmpty)
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              dummyPost.postImage!,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
-                              height: 180,
-                              loadingBuilder: (context, child, loadingProgress) {
-                                if (loadingProgress == null) return child;
-                                return Container(
-                                  alignment: Alignment.center,
-                                  height: 180,
-                                  child: const CircularProgressIndicator(),
-                                );
-                              },
-                              errorBuilder: (context, error, stackTrace) {
-                                return Container(
-                                  alignment: Alignment.center,
-                                  height: 180,
-                                  color: Colors.grey[300],
-                                  child: const Icon(Icons.broken_image, color: Colors.grey),
-                                );
-                              },
-                            ),
-                          ),
-                        const SizedBox(height: 8),
-                        Text(dummyPost.postNote),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            LikeHeart(initialLikes: dummyPost.countLikes),
-                            const SizedBox(width: 16),
-                            GestureDetector(
-                              onTap: () => _showCommentModal(context),
-                              child: Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 0.71,
+          child: ListView(
+            children: [
+              const SizedBox(height: 40),
+              ...postList.map((dummyPost) {
+                return SizedBox(
+                  width: double.infinity,
+                  child: Card(
+                    margin: const EdgeInsets.symmetric(vertical: 8),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              CircleAvatar(
+                                radius: 30,
+                                backgroundImage: NetworkImage(dummyPost.userThumbnail),
+                              ),
+                              const SizedBox(width: 12),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const Icon(Icons.comment_outlined, size: 18, color: Colors.grey),
-                                  const SizedBox(width: 4),
-                                  Text('${dummyPost.countComment}'),
+                                  Text(
+                                    dummyPost.userNickname,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text(
+                                    "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1
+                                        ? indoorHobbies[dummyPost.subCategory]
+                                        : outdoorHobbies[dummyPost.subCategory]}",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
                                 ],
                               ),
+                            ],
+                          ),
+                          if (dummyPost.postImage != null && dummyPost.postImage!.isNotEmpty)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.network(
+                                dummyPost.postImage!,
+                                fit: BoxFit.cover,
+                                width: double.infinity,
+                                height: 180,
+                                loadingBuilder: (context, child, loadingProgress) {
+                                  if (loadingProgress == null) return child;
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    height: 180,
+                                    child: const CircularProgressIndicator(),
+                                  );
+                                },
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    alignment: Alignment.center,
+                                    height: 180,
+                                    color: Colors.grey[300],
+                                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                                  );
+                                },
+                              ),
                             ),
-                          ],
-                        ),
-                      ],
+                          const SizedBox(height: 8),
+                          Text(dummyPost.postNote),
+                          const SizedBox(height: 8),
+                          Row(
+                            children: [
+                              LikeHeart(initialLikes: dummyPost.countLikes),
+                              const SizedBox(width: 16),
+                              GestureDetector(
+                                onTap: () => _showCommentModal(context),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.comment_outlined, size: 18, color: Colors.grey),
+                                    const SizedBox(width: 4),
+                                    Text('${dummyPost.countComment}'),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
-                ),
-              );
-            }).toList()
-          ],
-        ),
-      )
-    ],
-  );
+                );
+              }).toList()
+            ],
+          ),
+        )
+      ],
+    );
+  }
 }
+
 
 
 // "준비중" 팝업 다이얼로그 함수
@@ -535,7 +534,7 @@ void _showCommentModal(BuildContext context) {
       borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
     ),
     builder: (context) {
-      return StatefulBuilder( // 👈 상태 변경을 위해 사용
+      return StatefulBuilder(
         builder: (context, setModalState) {
           return Padding(
             padding: MediaQuery.of(context).viewInsets,
