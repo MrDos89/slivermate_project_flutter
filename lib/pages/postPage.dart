@@ -181,6 +181,7 @@ class PostPage extends StatefulWidget {
 class _PostPageState extends State<PostPage> {
   int? _selectedRegionId;  // 지역
   int? _selectedCategoryId; // 카테고리
+  int? _selectedSubCategoryId; // 서브 카테고리
 
   @override
   Widget build(BuildContext context) {
@@ -188,6 +189,7 @@ class _PostPageState extends State<PostPage> {
     List<PostVo> filteredList = dummyPostList.where((post) {
       bool regionMatch = _selectedRegionId == null || post.regionId == _selectedRegionId;
       bool categoryMatch = _selectedCategoryId == null || post.categoryNames == _selectedCategoryId;
+      bool subCategoryMatch = _selectedSubCategoryId == null || post.subCategory == _selectedSubCategoryId;
       return regionMatch && categoryMatch;
     }).toList();
 
@@ -258,6 +260,33 @@ class _PostPageState extends State<PostPage> {
                         },
                       ),
                     ),
+                    const SizedBox(width: 10),
+                    // 서브 카테고리 드롭다운
+                    if (_selectedCategoryId != null)
+                      Expanded(
+                        child: DropdownButton<int?>(
+                          isExpanded: true,
+                          value: _selectedSubCategoryId,
+                          hint: const Text("서브카테고리 선택"),
+                          items: [
+                            const DropdownMenuItem<int?>(
+                              value: null,
+                              child: Text("서브"),
+                            ),
+                            ...(_selectedCategoryId == 1 ? indoorHobbies : outdoorHobbies)
+                                .entries
+                                .map((e) => DropdownMenuItem(
+                              value: e.key,
+                              child: Text(e.value),
+                            )),
+                          ],
+                          onChanged: (value) {
+                            setState(() {
+                              _selectedSubCategoryId = value;
+                            });
+                          },
+                        ),
+                      ),
                   ],
                 ),
               ),
@@ -274,11 +303,33 @@ class _PostPageState extends State<PostPage> {
 }
 
 Widget postContainer(BuildContext context, {required List<PostVo> postList}) {
+  if (postList.isEmpty) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 40),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "해당되는 피드가 없습니다.",
+              style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              "첫 번째 피드를 남겨주세요.",
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       SizedBox(
-        height: MediaQuery.of(context).size.height,
+        height: MediaQuery.of(context).size.height * 0.71,
         child: ListView(
           children: [
             const SizedBox(height: 40),
