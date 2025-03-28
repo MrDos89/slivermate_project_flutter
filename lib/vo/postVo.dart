@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:slivermate_project_flutter/vo/commentVo.dart';
 
 class PostVo {
   final String userThumbnail;
@@ -11,6 +12,7 @@ class PostVo {
   final int countComment;
   final String? postImage;
   final DateTime registerDate;
+  final List<CommentVo> comments;
 
   PostVo({
     required this.userThumbnail,
@@ -23,5 +25,6 @@ class PostVo {
     required this.countComment,
     this.postImage,
     required this.registerDate,
+    required this.comments,
   });
 }
