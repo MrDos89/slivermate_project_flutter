@@ -42,7 +42,7 @@ List<PostVo> dummyPostList = [
     postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
     countLikes: 2,
     countComment: 3,
-    postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+    postImage: null,
     registerDate: DateTime.now(),
     comments: [
       CommentVo(
@@ -263,7 +263,7 @@ List<PostVo> dummyPostList = [
     postNote: "통기타 초보 모임! 같이 배워봐요.",
     countLikes: 3,
     countComment: 3,
-    postImage: "https://example.com/guitar.jpg",
+    postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
     registerDate: DateTime.now().subtract(Duration(days: 7)),
     comments: [
       CommentVo(
