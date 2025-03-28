@@ -116,6 +116,7 @@ flutter:
     - lib/animations/phone_pay.json # lottie 애니메이션 전환
 #    - lib/animations/back.mp4
     - lib/images/tree.mp4
+    - lib/images/rion.jpg
 
   # To add assets to your application, add an assets section, like this:
   # assets:
