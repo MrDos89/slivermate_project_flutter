@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slivermate_project_flutter/components/chatdetailPage.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
@@ -45,7 +46,6 @@ class _ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<_ChatPage> {
-  // 채팅 아이템 데이터 (스크롤 충분히 발생하도록 늘림)
   final List<Map<String, dynamic>> _chatItems = [
     {
       "title": "뜨개질",
@@ -75,86 +75,92 @@ class _ChatPageState extends State<_ChatPage> {
       "isRead": true,
       "imageUrl": "lib/images/영화감상.jpg",
     },
+
     {
       "title": "퍼즐",
       "subTitle": "퍼즐을 맞쳐보세요",
-      "dateTime": "7:30",
-      "isRead": false,
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/퍼즐맞추기.jpg",
     },
+
     {
       "title": "요리",
-      "subTitle": "Pull Request #123",
-      "dateTime": "6:10",
+      "subTitle": "요리를 해보자",
+      "dateTime": "8:20",
       "isRead": true,
       "imageUrl": "lib/images/요리.jpg",
     },
+
     {
       "title": "통기타",
-      "subTitle": "기타 고수가 되어보세요",
-      "dateTime": "어제",
-      "isRead": false,
+      "subTitle": "통기타 치실래요?",
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/통기타.jpg",
     },
+
     {
       "title": "당구",
-      "subTitle": "4구 ,3구 가능",
-      "dateTime": "어제",
+      "subTitle": "4구,3구 다 알려드려요.",
+      "dateTime": "8:20",
       "isRead": true,
       "imageUrl": "lib/images/당구.jpg",
     },
+
     {
       "title": "바둑",
       "subTitle": "누구나 이세돌이 될 수 있어요",
-      "dateTime": "그제",
-      "isRead": false,
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/바둑.jpg",
     },
+
     {
       "title": "등산",
       "subTitle": "정상을 향하여",
-      "dateTime": "어제",
+      "dateTime": "8:20",
       "isRead": true,
-      "imageUrl": "lib/images/rion.jpg",
+      "imageUrl": "lib/images/등산.jpg",
     },
 
     {
       "title": "자전거",
-      "subTitle": "한강나들이 갑시다..",
-      "dateTime": "9:55",
-      "isRead": false,
+      "subTitle": "한강나들이 갑시다.",
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/rion.jpg",
     },
 
     {
       "title": "캠핑",
       "subTitle": "불멍하러 갑시다.",
-      "dateTime": "9:55",
-      "isRead": false,
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/rion.jpg",
     },
 
     {
       "title": "낚시",
       "subTitle": "대어 낚으러 오실분",
-      "dateTime": "9:55",
-      "isRead": false,
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/rion.jpg",
     },
 
     {
       "title": "러닝/마라톤",
       "subTitle": "누구나 이봉주가 될 수 있다.",
-      "dateTime": "9:55",
-      "isRead": false,
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/rion.jpg",
     },
 
     {
       "title": "수영",
       "subTitle": "오늘도 물속에서 힐링합시다.",
-      "dateTime": "9:55",
-      "isRead": false,
+      "dateTime": "8:20",
+      "isRead": true,
       "imageUrl": "lib/images/rion.jpg",
     },
 
@@ -201,17 +207,23 @@ class _ChatPageState extends State<_ChatPage> {
             return InkWell(
               // InkWell 전체를 클릭했을 때
               onTap: () {
-                // 팝업 띄우기
-                _showComingSoonDialog(context);
+                // 예: 새로운 채팅방 페이지로 이동
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder:
+                        (context) => ChatDetailPage(
+                          chatTitle: item["title"], // 채팅방 제목 (예: "그냥한번해본게임 11")
+                        ),
+                  ),
+                );
 
-                // 배경색 토글
+                // 배경색 토글 (선택 항목 시각화)
                 setState(() {
                   _selectedIndex = (_selectedIndex == index) ? -1 : index;
                 });
               },
               child: Container(
-                // 리스트 전체 영역 배경색을 바꿔도 되고,
-                // 가운데 부분만 바꾸고 싶다면 Expanded 쪽에 Container를 둘 수도 있음
                 color:
                     _selectedIndex == index
                         ? Colors.blue[50]
