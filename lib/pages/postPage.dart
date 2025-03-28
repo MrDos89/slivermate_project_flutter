@@ -180,7 +180,6 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   int? _selectedRegionId;  // 지역
-  int? _selectedSubCategoryId; // 서브 카테고리
   Set<int> _selectedSubCategoryIds = {};
 
   @override
@@ -254,7 +253,7 @@ class _PostPageState extends State<PostPage> {
                       const SizedBox(width: 12),
                       Expanded(
                         child: SizedBox(
-                          height: 30,  // 칩 높이 제한
+                          height: 35,  // 칩 높이 제한
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal, // 가로 슬라이드 활성화
                             child: Row(
