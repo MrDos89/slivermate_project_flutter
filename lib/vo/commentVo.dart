@@ -1,9 +1,9 @@
 
 class CommentVo {
-  final String userThumbnail;  // 댓글 작성자의 썸네일
-  final String userNickname;   // 댓글 작성자 닉네임
-  final String commentText;    // 댓글 내용
-  final DateTime commentDate;  // 댓글 작성일
+  final String userThumbnail;
+  final String userNickname;
+  final String commentText;
+  final DateTime commentDate;
 
   CommentVo({
     required this.userThumbnail,

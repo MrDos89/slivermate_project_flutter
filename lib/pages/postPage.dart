@@ -288,7 +288,6 @@ List<PostVo> dummyPostList = [
   ),
 ];
 
-
 //  카테고리 ID를 문자열로 변환
 const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
 
@@ -505,7 +504,7 @@ class _PostPageState extends State<PostPage> {
                                 final bool isSelected = _selectedSubCategoryIds.contains(e.key);
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
-                                  child: FilterChip( // ✅ ChoiceChip 대신 FilterChip 사용
+                                  child: FilterChip(
                                     label: Text(e.value),
                                     selected: isSelected,
                                     onSelected: (selected) {
@@ -652,7 +651,7 @@ class _PostPageState extends State<PostPage> {
                                   children: [
                                     const Icon(Icons.comment_outlined, size: 18, color: Colors.grey),
                                     const SizedBox(width: 4),
-                                    Text('${dummyPost.comments.length}'), // 댓글 수를 정확히 comments.length로 표시
+                                    Text('${dummyPost.comments.length}'),
                                   ],
                                 ),
                               ),
