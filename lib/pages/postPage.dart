@@ -13,7 +13,8 @@ PostVo dummyPost = PostVo(
     postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
     countLikes: 0,
     countComment: 0,
-    postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+    postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+    registerDate: DateTime.now(),
 );
 
 List<PostVo> dummyPostList = [
@@ -26,7 +27,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime.now(),
   ),
   PostVo(
       userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -37,7 +39,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg"
+      postImage:"https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+      registerDate: DateTime(2025, 3, 28, 14, 32),
   ),
   PostVo(
       userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -48,7 +51,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime(2025, 3, 28, 14, 30),
   ),
   PostVo(
       userThumbnail: "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
@@ -59,7 +63,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime(2024, 11, 25, 14, 30),
   ),
   PostVo(
       userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -70,7 +75,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime(2025, 3, 25, 14, 30),
   ),
   PostVo(
       userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -81,7 +87,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime(2025, 3, 25, 14, 30),
   ),
   PostVo(
       userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -92,7 +99,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime(2025, 1, 25, 14, 30),
   ),
   PostVo(
       userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -103,7 +111,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime(2024, 12, 24, 14, 30),
   ),
   PostVo(
       userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -114,7 +123,8 @@ List<PostVo> dummyPostList = [
       postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
       countLikes: 0,
       countComment: 0,
-      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"
+      postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+      registerDate: DateTime(2024, 12, 25, 14, 30),
   )
 ];
 
@@ -159,13 +169,27 @@ Map<int, String> regionMap = {
   10 : "울릉도"
 };
 
-class PostPage extends StatelessWidget {
+class PostPage extends StatefulWidget {
   final PostVo? dummyPost;
 
   const PostPage({super.key, required this.dummyPost});
 
   @override
+  State<PostPage> createState() => _PostPageState();
+}
+
+class _PostPageState extends State<PostPage> {
+  int? _selectedRegionId;  // 지역
+  int? _selectedCategoryId; // 카테고리
+
+  @override
   Widget build(BuildContext context) {
+
+    List<PostVo> filteredList = dummyPostList.where((post) {
+      bool regionMatch = _selectedRegionId == null || post.regionId == _selectedRegionId;
+      bool categoryMatch = _selectedCategoryId == null || post.categoryNames == _selectedCategoryId;
+      return regionMatch && categoryMatch;
+    }).toList();
 
     return MainLayout(
       child: Scaffold(
@@ -181,9 +205,65 @@ class PostPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                // 드롭다운 필터 영역
+                Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                child: Row(
                   children: [
-                    // const SizedBox(height: 32),
-                    postContainer(context),
+                    // 지역 드롭다운
+                    Expanded(
+                      child: DropdownButton<int?>(
+                        isExpanded: true,
+                        value: _selectedRegionId,
+                        hint: const Text("지역 선택"),
+                        items: [
+                          const DropdownMenuItem<int?>(
+                            value: null,
+                            child: Text("전체 지역"),
+                          ),
+                          ...regionMap.entries.map((e) => DropdownMenuItem(
+                            value: e.key,
+                            child: Text(e.value),
+                          )),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedRegionId = value;
+                          });
+                        },
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    // 카테고리 드롭다운
+                    Expanded(
+                      child: DropdownButton<int?>(
+                        isExpanded: true,
+                        value: _selectedCategoryId,
+                        hint: const Text("카테고리 선택"),
+                        items: [
+                          const DropdownMenuItem<int?>(
+                            value: null,
+                            child: Text("전체 카테고리"),
+                          ),
+                          ...categoryNames.entries.map((e) => DropdownMenuItem(
+                            value: e.key,
+                            child: Text(e.value),
+                          )),
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedCategoryId = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+                        SingleChildScrollView(
+                          child: postContainer(context, postList: filteredList),
+                      ),
                   ],
                 ),
               ),
@@ -193,15 +273,16 @@ class PostPage extends StatelessWidget {
   }
 }
 
-Widget postContainer(BuildContext context, {String title =''}){
+Widget postContainer(BuildContext context, {required List<PostVo> postList}) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
       SizedBox(
         height: MediaQuery.of(context).size.height,
         child: ListView(
-          children: [SizedBox(height: 40,),
-            ...dummyPostList.map((dummyPost) {
+          children: [
+            const SizedBox(height: 40),
+            ...postList.map((dummyPost) {
               return SizedBox(
                 width: double.infinity,
                 child: Card(
@@ -210,110 +291,98 @@ Widget postContainer(BuildContext context, {String title =''}){
                     borderRadius: BorderRadius.circular(12),
                   ),
                   elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(dummyPost.userThumbnail),
-                              ),
-                              const SizedBox(width: 12),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        dummyPost.userNickname,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            CircleAvatar(
+                              radius: 30,
+                              backgroundImage: NetworkImage(dummyPost.userThumbnail),
+                            ),
+                            const SizedBox(width: 12),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  dummyPost.userNickname,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  const SizedBox(height: 4),
-                                    Text(
-                                      "${regionMap[dummyPost.regionId]!} · ${outdoorHobbies[dummyPost.subCategory]!}",
-                                      style: const TextStyle(color: Colors.grey),
-                                    ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1
+                                      ? indoorHobbies[dummyPost.subCategory]
+                                      : outdoorHobbies[dummyPost.subCategory]}",
+                                  style: const TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        if (dummyPost.postImage != null && dummyPost.postImage!.isNotEmpty)
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.network(
+                              dummyPost.postImage!,
+                              fit: BoxFit.cover,
+                              width: double.infinity,
+                              height: 180,
+                              loadingBuilder: (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return Container(
+                                  alignment: Alignment.center,
+                                  height: 180,
+                                  child: const CircularProgressIndicator(),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return Container(
+                                  alignment: Alignment.center,
+                                  height: 180,
+                                  color: Colors.grey[300],
+                                  child: const Icon(Icons.broken_image, color: Colors.grey),
+                                );
+                              },
+                            ),
+                          ),
+                        const SizedBox(height: 8),
+                        Text(dummyPost.postNote),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            LikeHeart(initialLikes: dummyPost.countLikes),
+                            const SizedBox(width: 16),
+                            GestureDetector(
+                              onTap: () => _showCommentModal(context),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.comment_outlined, size: 18, color: Colors.grey),
+                                  const SizedBox(width: 4),
+                                  Text('${dummyPost.countComment}'),
                                 ],
                               ),
-                            ],
-                          ),
-                          if (dummyPost.postImage != null && dummyPost.postImage!.isNotEmpty)
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                dummyPost.postImage!,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 180,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    alignment: Alignment.center,
-                                    height: 180,
-                                    child: const CircularProgressIndicator(),
-                                  );
-                                },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    alignment: Alignment.center,
-                                    height: 180,
-                                    color: Colors.grey[300],
-                                    child: const Icon(Icons.broken_image, color: Colors.grey),
-                                  );
-                                },
-                              ),
                             ),
-                          const SizedBox(height: 8),
-                          Text(dummyPost.postNote),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              LikeHeart(initialLikes: dummyPost.countLikes),
-
-                              const SizedBox(width: 16),
-
-                              Builder(
-                                builder: (BuildContext context) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      _showCommentModal(context);
-                                    },
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.comment_outlined, size: 18, color: Colors.grey),
-                                        const SizedBox(width: 4),
-                                        Text('${dummyPost.countComment}'),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              ),
-                            ],
-                          ),
-
-                        ],
-                      ),
+                          ],
+                        ),
+                      ],
                     ),
                   ),
-                );
-              }
-            )
+                ),
+              );
+            }).toList()
           ],
-        )
+        ),
       )
     ],
   );
 }
+
 
 // "준비중" 팝업 다이얼로그 함수
 void _showComingSoonDialog(BuildContext context) {

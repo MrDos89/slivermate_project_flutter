@@ -10,6 +10,7 @@ class PostVo {
   final int countLikes;
   final int countComment;
   final String? postImage;
+  final DateTime registerDate;
 
   PostVo({
     required this.userThumbnail,
@@ -21,5 +22,6 @@ class PostVo {
     required this.countLikes,
     required this.countComment,
     this.postImage,
+    required this.registerDate,
   });
 }
