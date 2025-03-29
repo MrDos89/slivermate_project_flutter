@@ -3,7 +3,8 @@ import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/vo/commentVo.dart';
-
+import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
+import 'package:readmore/readmore.dart';
 
 PostVo dummyPost = PostVo(
     userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -39,26 +40,26 @@ List<PostVo> dummyPostList = [
     regionId: 1,
     categoryNames: 1,
     subCategory: 8,
-    postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
+    postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다. 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
     countLikes: 2,
     countComment: 3,
-    postImage: null,
+    postImage: "",
     registerDate: DateTime.now(),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user1.jpg",
+        userThumbnail: "",
         userNickname: "철수",
         commentText: "저도 참여할 수 있을까요?",
         commentDate: DateTime.now().subtract(Duration(minutes: 15)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user2.jpg",
+        userThumbnail: "",
         userNickname: "영희",
         commentText: "실력은 초보지만 같이해요!",
         commentDate: DateTime.now().subtract(Duration(minutes: 30)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user3.jpg",
+        userThumbnail: "",
         userNickname: "민수",
         commentText: "몇 시에 모이나요?",
         commentDate: DateTime.now().subtract(Duration(hours: 1)),
@@ -71,14 +72,14 @@ List<PostVo> dummyPostList = [
     regionId: 1,
     categoryNames: 1,
     subCategory: 8,
-    postNote: "당구 좋아하시는 분 함께 쳐요!",
+    postNote: "당구 좋아하시는 분 함께 쳐요!테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
     countLikes: 1,
     countComment: 1,
     postImage: "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
     registerDate: DateTime(2025, 3, 28, 14, 32),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user4.jpg",
+        userThumbnail: "",
         userNickname: "현수",
         commentText: "장소가 어디인가요?",
         commentDate: DateTime.now().subtract(Duration(hours: 2)),
@@ -98,13 +99,13 @@ List<PostVo> dummyPostList = [
     registerDate: DateTime(2025, 3, 28, 14, 30),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user5.jpg",
+        userThumbnail: "",
         userNickname: "지수",
         commentText: "책은 정해졌나요?",
         commentDate: DateTime.now().subtract(Duration(hours: 4)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user6.jpg",
+        userThumbnail: "",
         userNickname: "수진",
         commentText: "어떤 장르인지 궁금해요!",
         commentDate: DateTime.now().subtract(Duration(hours: 3, minutes: 30)),
@@ -137,7 +138,7 @@ List<PostVo> dummyPostList = [
     registerDate: DateTime(2025, 3, 25, 14, 30),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user7.jpg",
+        userThumbnail: "",
         userNickname: "도윤",
         commentText: "어떤 영화인가요?",
         commentDate: DateTime.now().subtract(Duration(days: 1, hours: 1)),
@@ -145,7 +146,7 @@ List<PostVo> dummyPostList = [
     ],
   ),
   PostVo(
-    userThumbnail: "https://example.com/user8.jpg",
+    userThumbnail: "",
     userNickname: "민지",
     regionId: 2,
     categoryNames: 2,
@@ -153,17 +154,17 @@ List<PostVo> dummyPostList = [
     postNote: "자전거 라이딩 같이해요~ 주말에 한강에서 모여요!",
     countLikes: 4,
     countComment: 2,
-    postImage: "https://example.com/bike_ride.jpg",
+    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 2)),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user9.jpg",
+        userThumbnail: "",
         userNickname: "태호",
         commentText: "좋아요! 몇 시에 볼까요?",
         commentDate: DateTime.now().subtract(Duration(days: 2, hours: 3)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user10.jpg",
+        userThumbnail: "",
         userNickname: "지연",
         commentText: "참여 가능한가요?",
         commentDate: DateTime.now().subtract(Duration(days: 2, hours: 2, minutes: 20)),
@@ -171,7 +172,7 @@ List<PostVo> dummyPostList = [
     ],
   ),
   PostVo(
-    userThumbnail: "https://example.com/user11.jpg",
+    userThumbnail: "https://item.kakaocdn.net/do/bef59207f5155a4eddd632c9a833e80d7154249a3890514a43687a85e6b6cc82",
     userNickname: "영민",
     regionId: 3,
     categoryNames: 1,
@@ -179,11 +180,11 @@ List<PostVo> dummyPostList = [
     postNote: "쿠킹 클래스 회원 모집합니다. 이번엔 이탈리안 요리!",
     countLikes: 5,
     countComment: 1,
-    postImage: "https://example.com/cooking_class.jpg",
+    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 5)),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user12.jpg",
+        userThumbnail: "",
         userNickname: "지혜",
         commentText: "재료 준비물이 있나요?",
         commentDate: DateTime.now().subtract(Duration(days: 5, hours: 5)),
@@ -191,7 +192,7 @@ List<PostVo> dummyPostList = [
     ],
   ),
   PostVo(
-    userThumbnail: "https://example.com/user13.jpg",
+    userThumbnail: "",
     userNickname: "하늘",
     regionId: 4,
     categoryNames: 2,
@@ -199,29 +200,29 @@ List<PostVo> dummyPostList = [
     postNote: "캠핑 가고 싶은 사람들 모여요!",
     countLikes: 10,
     countComment: 4,
-    postImage: "https://example.com/camping.jpg",
+    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 10)),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user14.jpg",
+        userThumbnail: "",
         userNickname: "소연",
         commentText: "장소는 정해졌나요?",
         commentDate: DateTime.now().subtract(Duration(days: 10, hours: 4)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user15.jpg",
+        userThumbnail: "",
         userNickname: "우진",
         commentText: "텐트랑 장비는 각자 준비인가요?",
         commentDate: DateTime.now().subtract(Duration(days: 10, hours: 3)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user16.jpg",
+        userThumbnail: "",
         userNickname: "민혁",
         commentText: "불멍하고 싶네요!",
         commentDate: DateTime.now().subtract(Duration(days: 10, hours: 2, minutes: 15)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user17.jpg",
+        userThumbnail: "https://item.kakaocdn.net/do/bef59207f5155a4eddd632c9a833e80d7154249a3890514a43687a85e6b6cc82",
         userNickname: "승아",
         commentText: "다음엔 꼭 갈게요~",
         commentDate: DateTime.now().subtract(Duration(days: 9)),
@@ -229,7 +230,7 @@ List<PostVo> dummyPostList = [
     ],
   ),
   PostVo(
-    userThumbnail: "https://example.com/user18.jpg",
+    userThumbnail: "",
     userNickname: "예린",
     regionId: 5,
     categoryNames: 2,
@@ -237,17 +238,17 @@ List<PostVo> dummyPostList = [
     postNote: "등산 동호회에서 이번 주 토요일 산행갑니다.",
     countLikes: 7,
     countComment: 2,
-    postImage: "https://example.com/hiking.jpg",
+    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 3)),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user19.jpg",
+        userThumbnail: "",
         userNickname: "수아",
         commentText: "초보도 갈 수 있나요?",
         commentDate: DateTime.now().subtract(Duration(days: 3, hours: 1)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user20.jpg",
+        userThumbnail: "",
         userNickname: "건우",
         commentText: "저도 신청할게요!",
         commentDate: DateTime.now().subtract(Duration(days: 2, hours: 22)),
@@ -255,7 +256,7 @@ List<PostVo> dummyPostList = [
     ],
   ),
   PostVo(
-    userThumbnail: "https://example.com/user21.jpg",
+    userThumbnail: "",
     userNickname: "준서",
     regionId: 6,
     categoryNames: 1,
@@ -263,26 +264,72 @@ List<PostVo> dummyPostList = [
     postNote: "통기타 초보 모임! 같이 배워봐요.",
     countLikes: 3,
     countComment: 3,
-    postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 7)),
     comments: [
       CommentVo(
-        userThumbnail: "https://example.com/user22.jpg",
+        userThumbnail: "",
         userNickname: "지훈",
         commentText: "기타가 없는데 참여 가능할까요?",
         commentDate: DateTime.now().subtract(Duration(days: 7, hours: 4)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user23.jpg",
+        userThumbnail: "",
         userNickname: "하영",
         commentText: "장소는 어디인가요?",
         commentDate: DateTime.now().subtract(Duration(days: 7, hours: 2, minutes: 45)),
       ),
       CommentVo(
-        userThumbnail: "https://example.com/user24.jpg",
+        userThumbnail: "",
         userNickname: "세훈",
         commentText: "악보는 미리 받아볼 수 있나요?",
         commentDate: DateTime.now().subtract(Duration(days: 6, hours: 20)),
+      ),
+    ],
+  ),
+  PostVo(
+    userThumbnail: "",
+    userNickname: "하람",
+    regionId: 1, // 서울특별시
+    categoryNames: 1, // 실내
+    subCategory: 0, // 일상
+    postNote: "요즘 날씨 너무 좋아요~ 산책하면서 봄바람 느끼는 중 🌸",
+    countLikes: 5,
+    countComment: 2,
+    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    registerDate: DateTime.now().subtract(Duration(hours: 5)),
+    comments: [
+      CommentVo(
+        userThumbnail: "",
+        userNickname: "주연",
+        commentText: "와 사진 너무 예뻐요!",
+        commentDate: DateTime.now().subtract(Duration(hours: 4, minutes: 30)),
+      ),
+      CommentVo(
+        userThumbnail: "",
+        userNickname: "진우",
+        commentText: "산책 코스 어디에요?",
+        commentDate: DateTime.now().subtract(Duration(hours: 3, minutes: 10)),
+      ),
+    ],
+  ),
+  PostVo(
+    userThumbnail: "",
+    userNickname: "다영",
+    regionId: 3, // 대전광역시
+    categoryNames: 1, // 실내
+    subCategory: 0, // 일상
+    postNote: "집에서 커피 내려 마시면서 좋아하는 책 읽는 중입니다 ☕📖",
+    countLikes: 3,
+    countComment: 1,
+    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    registerDate: DateTime.now().subtract(Duration(days: 1, hours: 2)),
+    comments: [
+      CommentVo(
+        userThumbnail: "",
+        userNickname: "성우",
+        commentText: "힐링 그 자체네요!",
+        commentDate: DateTime.now().subtract(Duration(days: 1, hours: 1, minutes: 20)),
       ),
     ],
   ),
@@ -293,6 +340,7 @@ const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
 
 //  취미 ID를 문자열로 변환 (카테고리별로 따로 저장)
 const Map<int, String> indoorHobbies = {
+  0: "일상",
   1: "뜨개질",
   2: "그림",
   3: "독서",
@@ -339,7 +387,7 @@ class PostPage extends StatefulWidget {
 }
 
 class _PostPageState extends State<PostPage> {
-  int? _selectedRegionId;  // 지역
+  int? _selectedRegionId; // 지역
   Set<int> _selectedSubCategoryIds = {};
 
   void _showCommentModal(BuildContext context, PostVo post) {
@@ -355,14 +403,17 @@ class _PostPageState extends State<PostPage> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Padding(
-              padding: MediaQuery.of(context).viewInsets,
+              padding: MediaQuery
+                  .of(context)
+                  .viewInsets,
               child: Container(
                 padding: const EdgeInsets.all(16),
                 height: 400,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('댓글', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Text('댓글', style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
                     const Divider(),
 
                     Expanded(
@@ -374,13 +425,24 @@ class _PostPageState extends State<PostPage> {
                           final comment = post.comments[index];
                           return ListTile(
                             leading: CircleAvatar(
-                              backgroundImage: NetworkImage(comment.userThumbnail),
+                              radius: 16,
+                              backgroundImage: NetworkImage(
+                                comment.userThumbnail
+                                    .trim()
+                                    .isEmpty ? defaultUserThumbnail : comment
+                                    .userThumbnail,
+                              )
+                              ,
                             ),
-                            title: Text(comment.userNickname, style: const TextStyle(fontWeight: FontWeight.bold)),
+                            title: Text(comment.userNickname,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
                             subtitle: Text(comment.commentText),
                             trailing: Text(
-                              "${comment.commentDate.month}/${comment.commentDate.day} ${comment.commentDate.hour}:${comment.commentDate.minute.toString().padLeft(2, '0')}",
-                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                              "${comment.commentDate.hour}:${comment.commentDate
+                                  .minute.toString().padLeft(2, '0')}",
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.grey),
                             ),
                           );
                         },
@@ -395,11 +457,13 @@ class _PostPageState extends State<PostPage> {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.send),
                           onPressed: () {
-                            if (commentController.text.trim().isNotEmpty) {
+                            if (commentController.text
+                                .trim()
+                                .isNotEmpty) {
                               setModalState(() {
                                 post.comments.add(CommentVo(
-                                  userThumbnail: "https://example.com/currentUser.jpg", // 현재 사용자 프로필 이미지
-                                  userNickname: "현재 사용자",                           // 현재 사용자 닉네임
+                                  userThumbnail: "", // 현재 사용자 프로필 이미지
+                                  userNickname: "현재 사용자", // 현재 사용자 닉네임
                                   commentText: commentController.text.trim(),
                                   commentDate: DateTime.now(),
                                 ));
@@ -448,7 +512,8 @@ class _PostPageState extends State<PostPage> {
               children: [
                 // 지역 드롭다운
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 0, vertical: 4),
                   width: double.infinity,
                   child: ButtonTheme(
                     alignedDropdown: true,
@@ -462,10 +527,11 @@ class _PostPageState extends State<PostPage> {
                             value: null,
                             child: Text("전체 지역"),
                           ),
-                          ...regionMap.entries.map((e) => DropdownMenuItem(
-                            value: e.key,
-                            child: Text(e.value),
-                          )),
+                          ...regionMap.entries.map((e) =>
+                              DropdownMenuItem(
+                                value: e.key,
+                                child: Text(e.value),
+                              )),
                         ],
                         onChanged: (value) {
                           setState(() {
@@ -482,18 +548,20 @@ class _PostPageState extends State<PostPage> {
 
                 // 카테고리 선택 (Chip 형태)
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 8),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
                         '카테고리',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
                         child: SizedBox(
-                          height: 35,  // 칩 높이 제한
+                          height: 35, // 칩 높이 제한
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal, // 가로 슬라이드 활성화
                             child: Row(
@@ -501,7 +569,8 @@ class _PostPageState extends State<PostPage> {
                                 ...indoorHobbies.entries,
                                 ...outdoorHobbies.entries,
                               }.map((e) {
-                                final bool isSelected = _selectedSubCategoryIds.contains(e.key);
+                                final bool isSelected = _selectedSubCategoryIds
+                                    .contains(e.key);
                                 return Padding(
                                   padding: const EdgeInsets.only(right: 8.0),
                                   child: FilterChip(
@@ -538,6 +607,7 @@ class _PostPageState extends State<PostPage> {
       ),
     );
   }
+
   Widget postContainer(BuildContext context, {required List<PostVo> postList}) {
     if (postList.isEmpty) {
       return Center(
@@ -565,104 +635,159 @@ class _PostPageState extends State<PostPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.71,
+          height: MediaQuery
+              .of(context)
+              .size
+              .height * 0.71,
           child: ListView(
             children: [
               const SizedBox(height: 40),
               ...postList.map((dummyPost) {
-                return SizedBox(
-                  width: double.infinity,
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
+                return
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => PostDetailPage(Post: dummyPost),
+                        ),
+                      );
+                    },
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: Card(
+                        margin: const EdgeInsets.symmetric(vertical: 8),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        elevation: 2,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CircleAvatar(
-                                radius: 30,
-                                backgroundImage: NetworkImage(dummyPost.userThumbnail),
-                              ),
-                              const SizedBox(width: 12),
-                              Column(
+                              Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    dummyPost.userNickname,
-                                    style: const TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
+                                  CircleAvatar(
+                                    radius: 16,
+                                    backgroundImage: NetworkImage(
+                                      dummyPost.userThumbnail
+                                          .trim()
+                                          .isEmpty
+                                          ? defaultUserThumbnail
+                                          : dummyPost.userThumbnail,
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+
+                                  const SizedBox(width: 12),
+                                  Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: [
+                                      Text(
+                                        dummyPost.userNickname,
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        "${regionMap[dummyPost
+                                            .regionId]!} · ${dummyPost
+                                            .categoryNames == 1
+                                            ? indoorHobbies[dummyPost
+                                            .subCategory]
+                                            : outdoorHobbies[dummyPost
+                                            .subCategory]}",
+                                        style: const TextStyle(
+                                            color: Colors.grey),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              if (dummyPost.postImage != null &&
+                                  dummyPost.postImage!.isNotEmpty)
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: Image.network(
+                                    dummyPost.postImage!,
+                                    fit: BoxFit.cover,
+                                    width: double.infinity,
+                                    height: 180,
+                                    loadingBuilder: (context, child,
+                                        loadingProgress) {
+                                      if (loadingProgress == null) return child;
+                                      return Container(
+                                        alignment: Alignment.center,
+                                        height: 180,
+                                        child: const CircularProgressIndicator(),
+                                      );
+                                    },
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Container(
+                                        alignment: Alignment.center,
+                                        height: 180,
+                                        color: Colors.grey[300],
+                                        child: const Icon(Icons.broken_image,
+                                            color: Colors.grey),
+                                      );
+                                    },
+                                  ),
+                                ),
+                              const SizedBox(height: 8),
+                              ReadMoreText(
+                                dummyPost.postNote,
+                                trimLines: 2,
+                                trimMode: TrimMode.Line,
+                                trimCollapsedText: ' ...더보기',
+                                trimExpandedText: ' 접기',
+                                style: const TextStyle(fontSize: 16),
+                                moreStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+                                lessStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+                              ),
+                              const SizedBox(height: 8),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment
+                                    .spaceBetween,
+                                children: [
+                                  Row(
+                                    children: [
+                                      LikeHeart(
+                                          initialLikes: dummyPost.countLikes),
+                                      const SizedBox(width: 16),
+                                      GestureDetector(
+                                        onTap: () =>
+                                            _showCommentModal(
+                                                context, dummyPost),
+                                        child: Row(
+                                          children: [
+                                            const Icon(Icons.comment_outlined,
+                                                size: 18, color: Colors.grey),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                                '${dummyPost.comments.length}'),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                   Text(
-                                    "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1
-                                        ? indoorHobbies[dummyPost.subCategory]
-                                        : outdoorHobbies[dummyPost.subCategory]}",
-                                    style: const TextStyle(color: Colors.grey),
+                                    getTimeAgo(dummyPost.registerDate),
+                                    style: const TextStyle(
+                                        fontSize: 12, color: Colors.grey),
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          if (dummyPost.postImage != null && dummyPost.postImage!.isNotEmpty)
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: Image.network(
-                                dummyPost.postImage!,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                                height: 180,
-                                loadingBuilder: (context, child, loadingProgress) {
-                                  if (loadingProgress == null) return child;
-                                  return Container(
-                                    alignment: Alignment.center,
-                                    height: 180,
-                                    child: const CircularProgressIndicator(),
-                                  );
-                                },
-                                errorBuilder: (context, error, stackTrace) {
-                                  return Container(
-                                    alignment: Alignment.center,
-                                    height: 180,
-                                    color: Colors.grey[300],
-                                    child: const Icon(Icons.broken_image, color: Colors.grey),
-                                  );
-                                },
-                              ),
-                            ),
-                          const SizedBox(height: 8),
-                          Text(dummyPost.postNote),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              LikeHeart(initialLikes: dummyPost.countLikes),
-                              const SizedBox(width: 16),
-                              GestureDetector(
-                                onTap: () => _showCommentModal(context, dummyPost),
-                                child: Row(
-                                  children: [
-                                    const Icon(Icons.comment_outlined, size: 18, color: Colors.grey),
-                                    const SizedBox(width: 4),
-                                    Text('${dummyPost.comments.length}'),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              }).toList()
+                  );
+              }).toList(),
             ],
           ),
         )
@@ -670,7 +795,6 @@ class _PostPageState extends State<PostPage> {
     );
   }
 }
-
 
 
 // "준비중" 팝업 다이얼로그 함수
@@ -764,7 +888,27 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
 final TextEditingController _commentController = TextEditingController();
 List<String> _comments = [];
 
+String getTimeAgo(DateTime date) {
+  final now = DateTime.now();
+  final diff = now.difference(date);
+
+  final minutes = diff.inMinutes;
+  final hours = diff.inHours;
+  final days = diff.inDays;
+  final months = (days / 30).floor();
+  final years = (days / 365).floor();
+
+  if (minutes < 60) return '$minutes분 전';
+  if (hours < 24) return '$hours시간 전';
+  if (days < 30) return '$days일 전';
+  if (days < 365) return '$months달 전';
+  return '$years년 전';
+}
+
+final postUserThumbnail = (dummyPost.userThumbnail.trim().isEmpty)
+    ? defaultUserThumbnail
+    : dummyPost.userThumbnail;
 
 
-
-
+// 유저 썸네일 기본 이미지, 설정 안했을 경우 나올 이미지 설정
+const String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";

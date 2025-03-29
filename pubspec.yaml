@@ -42,6 +42,7 @@ dependencies:
 
   # lottie 패키지 추가
   lottie: ^2.2.0  #최신 버전을 pub.dev에서 확인 후 사용
+  readmore: ^3.0.0
 
 dev_dependencies:
   flutter_test:
