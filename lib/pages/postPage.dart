@@ -390,6 +390,13 @@ class _PostPageState extends State<PostPage> {
   int? _selectedRegionId; // 지역
   Set<int> _selectedSubCategoryIds = {};
 
+  Future<void> _refreshDummyPostList() async {
+    await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌 나게 딜레이
+    setState(() {
+      dummyPostList = List.from(dummyPostList); // 새 객체로 복사
+    });
+  }
+
   void _showCommentModal(BuildContext context, PostVo post) {
     final TextEditingController commentController = TextEditingController();
 
@@ -595,11 +602,10 @@ class _PostPageState extends State<PostPage> {
                     ],
                   ),
                 ),
+              SizedBox(
+                child: postContainer(context, postList: filteredList, onRefresh: _refreshDummyPostList),
+              )
 
-
-                SingleChildScrollView(
-                  child: postContainer(context, postList: filteredList),
-                ),
               ],
             ),
           ),
@@ -608,7 +614,7 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
-  Widget postContainer(BuildContext context, {required List<PostVo> postList}) {
+  Widget postContainer(BuildContext context, {required List<PostVo> postList, required Future<void> Function() onRefresh}) {
     if (postList.isEmpty) {
       return Center(
         child: Padding(
@@ -635,16 +641,15 @@ class _PostPageState extends State<PostPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
-          height: MediaQuery
-              .of(context)
-              .size
-              .height * 0.71,
-          child: ListView(
-            children: [
-              const SizedBox(height: 40),
-              ...postList.map((dummyPost) {
-                return
-                  GestureDetector(
+          height: MediaQuery.of(context).size.height * 0.71,
+          child: RefreshIndicator(
+            onRefresh: onRefresh,
+            child: ListView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              children: [
+                const SizedBox(height: 40),
+                ...postList.map((dummyPost) {
+                  return GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
@@ -672,18 +677,14 @@ class _PostPageState extends State<PostPage> {
                                   CircleAvatar(
                                     radius: 16,
                                     backgroundImage: NetworkImage(
-                                      dummyPost.userThumbnail
-                                          .trim()
-                                          .isEmpty
+                                      dummyPost.userThumbnail.trim().isEmpty
                                           ? defaultUserThumbnail
                                           : dummyPost.userThumbnail,
                                     ),
                                   ),
-
                                   const SizedBox(width: 12),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment
-                                        .start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       Text(
                                         dummyPost.userNickname,
@@ -694,15 +695,8 @@ class _PostPageState extends State<PostPage> {
                                       ),
                                       const SizedBox(height: 4),
                                       Text(
-                                        "${regionMap[dummyPost
-                                            .regionId]!} · ${dummyPost
-                                            .categoryNames == 1
-                                            ? indoorHobbies[dummyPost
-                                            .subCategory]
-                                            : outdoorHobbies[dummyPost
-                                            .subCategory]}",
-                                        style: const TextStyle(
-                                            color: Colors.grey),
+                                        "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1 ? indoorHobbies[dummyPost.subCategory] : outdoorHobbies[dummyPost.subCategory]}",
+                                        style: const TextStyle(color: Colors.grey),
                                       ),
                                     ],
                                   ),
@@ -717,8 +711,7 @@ class _PostPageState extends State<PostPage> {
                                     fit: BoxFit.cover,
                                     width: double.infinity,
                                     height: 180,
-                                    loadingBuilder: (context, child,
-                                        loadingProgress) {
+                                    loadingBuilder: (context, child, loadingProgress) {
                                       if (loadingProgress == null) return child;
                                       return Container(
                                         alignment: Alignment.center,
@@ -731,8 +724,7 @@ class _PostPageState extends State<PostPage> {
                                         alignment: Alignment.center,
                                         height: 180,
                                         color: Colors.grey[300],
-                                        child: const Icon(Icons.broken_image,
-                                            color: Colors.grey),
+                                        child: const Icon(Icons.broken_image, color: Colors.grey),
                                       );
                                     },
                                   ),
@@ -750,25 +742,20 @@ class _PostPageState extends State<PostPage> {
                               ),
                               const SizedBox(height: 8),
                               Row(
-                                mainAxisAlignment: MainAxisAlignment
-                                    .spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Row(
                                     children: [
-                                      LikeHeart(
-                                          initialLikes: dummyPost.countLikes),
+                                      LikeHeart(initialLikes: dummyPost.countLikes),
                                       const SizedBox(width: 16),
                                       GestureDetector(
-                                        onTap: () =>
-                                            _showCommentModal(
-                                                context, dummyPost),
+                                        onTap: () => _showCommentModal(context, dummyPost),
                                         child: Row(
                                           children: [
                                             const Icon(Icons.comment_outlined,
                                                 size: 18, color: Colors.grey),
                                             const SizedBox(width: 4),
-                                            Text(
-                                                '${dummyPost.comments.length}'),
+                                            Text('${dummyPost.comments.length}'),
                                           ],
                                         ),
                                       ),
@@ -776,8 +763,7 @@ class _PostPageState extends State<PostPage> {
                                   ),
                                   Text(
                                     getTimeAgo(dummyPost.registerDate),
-                                    style: const TextStyle(
-                                        fontSize: 12, color: Colors.grey),
+                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                                   ),
                                 ],
                               ),
@@ -787,33 +773,35 @@ class _PostPageState extends State<PostPage> {
                       ),
                     ),
                   );
-              }).toList(),
-            ],
+                }).toList(),
+              ],
+            ),
           ),
         )
       ],
     );
   }
+
 }
 
 
 // "준비중" 팝업 다이얼로그 함수
-void _showComingSoonDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder:
-        (context) => AlertDialog(
-          title: const Text("준비중"),
-          content: const Text("해당 기능은 아직 준비중입니다."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("확인"),
-            ),
-          ],
-        ),
-  );
-}
+// void _showComingSoonDialog(BuildContext context) {
+//   showDialog(
+//     context: context,
+//     builder:
+//         (context) => AlertDialog(
+//           title: const Text("준비중"),
+//           content: const Text("해당 기능은 아직 준비중입니다."),
+//           actions: [
+//             TextButton(
+//               onPressed: () => Navigator.pop(context),
+//               child: const Text("확인"),
+//             ),
+//           ],
+//         ),
+//   );
+// }
 
 class LikeHeart extends StatefulWidget {
   final int initialLikes;
@@ -885,8 +873,8 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
   }
 }
 
-final TextEditingController _commentController = TextEditingController();
-List<String> _comments = [];
+// final TextEditingController _commentController = TextEditingController();
+// List<String> _comments = [];
 
 String getTimeAgo(DateTime date) {
   final now = DateTime.now();
