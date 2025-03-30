@@ -77,6 +77,14 @@ class _ConfigPageState extends State<_ConfigPage> {
                 child: Text("알람 페이지로 이동"),
               ),
             ),
+            SizedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/chatTest");
+                },
+                child: Text("채팅 테스트 페이지"),
+              ),
+            ),
             // SizedBox(
             //   child: ElevatedButton(
             //     onPressed: () {

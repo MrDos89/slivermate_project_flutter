@@ -40,6 +40,9 @@ dependencies:
   # video_player 패키지 추가
   video_player: ^2.5.5
 
+  # 웹소켓 추가
+  web_socket_channel: ^2.1.0
+
   # lottie 패키지 추가
   lottie: ^2.2.0  #최신 버전을 pub.dev에서 확인 후 사용
   readmore: ^3.0.0

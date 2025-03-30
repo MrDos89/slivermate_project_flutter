@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
-import 'package:slivermate_project_flutter/components/chatdetailPage.dart';
+import 'package:slivermate_project_flutter/components/chatDetailPage.dart';
 
 class ChatDetailPage extends StatefulWidget {
   final String chatTitle; // 채팅방 제목
