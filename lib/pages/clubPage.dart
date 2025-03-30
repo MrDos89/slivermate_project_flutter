@@ -49,7 +49,7 @@ class _ClubPageState extends State<_ClubPage> {
   List<String> selectedRegions = [];
   List<String> selectedCategories = [];
 
-  final List<String> allRegions = ["서울", "경기", "부산"];
+  final List<String> allRegions = ["서울특별시", "인천광역시", "대전광역시", "대구광역시", "울산광역시", "부산광역시", "광주광역시", "세종특별자치시", "제주도", "울릉도"];
   final List<String> allCategories = [
     "뜨개질",
     "그림",
@@ -87,27 +87,27 @@ class _ClubPageState extends State<_ClubPage> {
     final dummyResponse = [
       {
         "name": "서울 등산 동아리",
-        "region": "서울",
+        "region": "서울특별시",
         "category": "운동",
         "description": "주말마다 서울 근교 등산을 함께해요!",
       },
       {
         "name": "경기 독서 모임",
-        "region": "경기",
+        "region": "인천광역시",
         "category": "독서",
         "description": "한 달 한 권 함께 읽고 이야기 나눠요.",
       },
       {
-        "name": "부산 보드게임 동호회",
-        "region": "부산",
-        "category": "게임",
-        "description": "보드게임 좋아하는 분들 모여요!",
+        "name": "부산 퍼즐 동호회",
+        "region": "부산광역시",
+        "category": "퍼즐",
+        "description": "퍼즐 좋아하는 분들 모여요!",
       },
       {
-        "name": "서울 보드게임 동호회",
-        "region": "서울",
-        "category": "게임",
-        "description": "보드게임 좋아하는 분들 모여요!",
+        "name": "서울 테니스 동호회",
+        "region": "서울특별시",
+        "category": "테니스",
+        "description": "테니스 좋아하는 분들 모여요!",
       },
     ];
 
@@ -204,30 +204,17 @@ class _ClubPageState extends State<_ClubPage> {
               ),
             ),
             Expanded(
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children:
-                    allRegions.map((region) {
-                      return _buildFilterChip(
-                        region,
-                        selectedRegions.contains(region),
-                        (bool value) {
-                          setState(() {
-                            if (value) {
-                              selectedRegions.add(region);
-                            } else {
-                              selectedRegions.remove(region);
-                            }
-                          });
-                        },
-                      );
-                    }).toList(),
+              child: SizedBox(
+                height: 40, // 높이 조정 가능
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: _buildRegionChips(),
+                ),
               ),
             ),
           ],
         ),
-        const SizedBox(height: 16),
+        const SizedBox(height: 5),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -240,10 +227,10 @@ class _ClubPageState extends State<_ClubPage> {
             ),
             Expanded(
               child: SizedBox(
-                height: 80, // 2줄 필터 높이
+                height: 40, // 2줄 필터 높이
                 child: ListView(
                   scrollDirection: Axis.horizontal,
-                  children: _buildCategoryChipRows(), // 아래 함수 추가!
+                  children: _buildCategoryChipRows(),
                 ),
               ),
             ),
@@ -251,6 +238,27 @@ class _ClubPageState extends State<_ClubPage> {
         ),
       ],
     );
+  }
+
+  List<Widget> _buildRegionChips() { // 지역 필터 리스트 함수
+    return allRegions.map((region) {
+      return Padding(
+        padding: const EdgeInsets.only(right: 8.0),
+        child: _buildFilterChip(
+          region,
+          selectedRegions.contains(region),
+              (bool value) {
+            setState(() {
+              if (value) {
+                selectedRegions.add(region);
+              } else {
+                selectedRegions.remove(region);
+              }
+            });
+          },
+        ),
+      );
+    }).toList();
   }
 
   Widget _buildFilterChip(
@@ -290,7 +298,7 @@ class _ClubPageState extends State<_ClubPage> {
           "추천 동아리",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        const SizedBox(height: 12),
+        // const SizedBox(height: 5),
         SizedBox(
           height: 140,
           child: PageView.builder(
@@ -322,7 +330,7 @@ class _ClubPageState extends State<_ClubPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.star, size: 40, color: Colors.grey[400]),
-                      const SizedBox(height: 12),
+                      // const SizedBox(height: 10),
                       Text(
                         "추천 동아리 ${index + 1}",
                         style: const TextStyle(fontSize: 16),
@@ -338,7 +346,7 @@ class _ClubPageState extends State<_ClubPage> {
             },
           ),
         ),
-        const SizedBox(height: 12),
+        const SizedBox(height: 5),
         Center(
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -390,12 +398,13 @@ class _ClubPageState extends State<_ClubPage> {
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
         SizedBox(
-          height: 250,
+          height: 300,
           child: ListView(
-            children: [SizedBox(height: 12),
+            children: [
+              // SizedBox(height: ),
               ...filtered.map((club) {
                 return SizedBox(
-                  width: double.infinity, // 🔹 와이드하게 꽉 채우기
+                  width: double.infinity, // 와이드 꽉 채우기
                   child: Card(
                     margin: const EdgeInsets.symmetric(vertical: 8),
                     shape: RoundedRectangleBorder(
@@ -414,7 +423,7 @@ class _ClubPageState extends State<_ClubPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          const SizedBox(height: 4),
+                          // const SizedBox(height: 2),
                           Text(
                             "${club["region"]} · ${club["category"]}",
                             style: const TextStyle(color: Colors.grey),
