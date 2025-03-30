@@ -14,6 +14,7 @@ import 'package:slivermate_project_flutter/pages/postPage.dart';
 import 'package:slivermate_project_flutter/pages/clubPage.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/pages/chatTestPage.dart';
+import 'package:slivermate_project_flutter/pages/loginPage.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -81,6 +82,7 @@ class MyApp extends StatelessWidget {
         "/post": (context) => PostPage(dummyPost: dummyPost),
         "/category": (context) => CategoryPage(dummyUser: dummyUser),
         "/club": (context) => ClubPage(),
+        "/loginPage": (context) => LoginPage(),
 
         // test
         "/chatTest": (context) => ChatTestPage(),
