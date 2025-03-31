@@ -75,7 +75,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white70,
+      backgroundColor: Colors.white,
       appBar: AppBar(title: Text('채팅 테스트 중')),
       body: Column(
         children: [
@@ -165,16 +165,36 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                                       ? CrossAxisAlignment.end
                                       : CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  senderName,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey[400],
-                                  ),
+                                Row(
+                                  children: [
+                                    if (!isMe)
+                                      Text(
+                                        senderName,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey[800],
+                                        ),
+                                      ),
+                                    if (isMe)
+                                      Text(
+                                        senderName,
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.grey[600],
+                                        ),
+                                      ),
+                                  ],
                                 ),
                                 Container(
                                   margin: const EdgeInsets.only(top: 4),
-                                  padding: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.fromLTRB(
+                                    10,
+                                    10,
+                                    10,
+                                    6,
+                                  ),
                                   decoration: BoxDecoration(
                                     color:
                                         isMe
@@ -193,22 +213,27 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                                               : Radius.circular(12),
                                     ),
                                   ),
-                                  child: Text(
-                                    message['message'] ?? '',
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.4,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 2),
-                                Text(
-                                  timeString,
-                                  style: TextStyle(
-                                    color: Colors.grey[500],
-                                    fontSize: 10,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        message['message'] ?? '',
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w600,
+                                          height: 1.4,
+                                        ),
+                                      ),
+                                      SizedBox(height: 4),
+                                      Text(
+                                        timeString,
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.grey[700],
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -227,7 +252,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.add, color: Colors.white),
+                  icon: Icon(Icons.add, color: Colors.black),
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
@@ -240,18 +265,12 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                               ListTile(
                                 leading: Icon(Icons.camera_alt),
                                 title: Text("카메라로 촬영하기"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  // TODO: 카메라 기능 추가
-                                },
+                                onTap: () => Navigator.pop(context),
                               ),
                               ListTile(
                                 leading: Icon(Icons.photo_library),
                                 title: Text("앨범에서 선택하기"),
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  // TODO: 앨범 기능 추가
-                                },
+                                onTap: () => Navigator.pop(context),
                               ),
                             ],
                           ),
@@ -280,15 +299,14 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                 IconButton(
                   icon: Icon(
                     Icons.emoji_emotions_outlined,
-                    color: Colors.white,
+                    color:
+                        _controller.text.isEmpty ? Colors.grey : Colors.black,
                   ),
-                  onPressed: () {
-                    // TODO: 이모티콘 기능 추가
-                  },
+                  onPressed: () {},
                 ),
                 if (_controller.text.isNotEmpty)
                   IconButton(
-                    icon: Icon(Icons.send, color: Colors.white),
+                    icon: Icon(Icons.send, color: Colors.black),
                     onPressed: _sendMessage,
                   ),
               ],
