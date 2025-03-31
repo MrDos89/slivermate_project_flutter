@@ -39,18 +39,18 @@ class MyApp extends StatelessWidget {
       nickname: "User",
       userId: "user1",
       userPassword: "user1",
-      pinPassword: "1234", // ➕ 추가된 필드 (예시)
+      pinPassword: "1234", //
       telNumber: "010-0055-1122",
       email: "user1@naver.com",
       thumbnail: "",
-      regionId: 1, // ✅ guId → regionId로 변경
+      regionId: 1, // guId → regionId로 변경
       recommendUid: null,
       registerDate: "2025-03-18T10:00:00.000+00:00",
       isDeleted: false,
       isAdmin: false,
       updDate: "2025-03-18T10:00:00.000+00:00",
-      groupId: 1, // ➕ 추가된 필드
-      userType: 1, // ➕ 추가된 필드 (1: 부모님1)
+      groupId: 1,
+      userType: 1,
     );
 
 

@@ -40,8 +40,35 @@ class _LoginPageState extends State<LoginPage> {
       isLoading = false;
     });
 
+    print("로그인 성공 - 사용자: $email");
+
     Navigator.pushNamed(context, '/config');
   }
+
+  void _goToSignup() {
+    Navigator.pushNamed(context, '/signUpPage');
+  }
+
+  void _goToFindPassword() {
+    Navigator.pushNamed(context, '/find-password');
+  }
+
+  void _showComingSoonDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder:
+        (context) => AlertDialog(
+          title: const Text("준비중"),
+          content: const Text("해당 기능은 아직 준비중입니다."),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text("확인"),
+            ),
+          ],
+        ),
+  );
+}
 
   @override
   Widget build(BuildContext context) {
@@ -74,16 +101,20 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         TextField(
                           controller: emailController,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: '아이디를 입력해주세요.',
+                            labelStyle: TextStyle(color: Colors.grey[400], fontWeight: FontWeight.bold),
+                            alignLabelWithHint: true,
                           ),
                         ),
                         const SizedBox(height: 16),
                         TextField(
                           controller: passwordController,
                           obscureText: true,
-                          decoration: const InputDecoration(
+                          decoration: InputDecoration(
                             labelText: '비밀번호를 입력해주세요.',
+                            labelStyle: TextStyle(color: Colors.grey[400], fontWeight: FontWeight.bold),
+                            alignLabelWithHint: true,
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -91,21 +122,48 @@ class _LoginPageState extends State<LoginPage> {
                           Text(errorText!,
                               style: const TextStyle(color: Colors.red)),
                         const SizedBox(height: 16),
-                        SizedBox(
-                          width: double.infinity,
-                          child: ElevatedButton(
-                            onPressed: isLoading ? null : _login,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF84C99C), // 연녹색
-                              padding:
-                              const EdgeInsets.symmetric(vertical: 16),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: isLoading ? null : _login,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF84C99C),
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                ),
+                                child: isLoading
+                                    ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                                    : const Text('로그인', style: TextStyle(fontSize: 20,  fontWeight: FontWeight.bold)),
+                              ),
                             ),
-                            child: isLoading
-                                ? const CircularProgressIndicator(
-                              color: Colors.white,
-                            )
-                                : const Text('로그인',
-                                style: TextStyle(fontSize: 16)),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: _goToSignup,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.grey.shade300,
+                                  foregroundColor: Colors.black87,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                ),
+                                child: const Text('회원가입', style: TextStyle(fontSize: 19,  fontWeight: FontWeight.bold)),
+                              ),
+                            ),
+                          ],
+                        ),
+
+                        const SizedBox(height: 12),
+
+                        // 비밀번호 찾기
+                        Align(
+                          alignment: Alignment.center,
+                          child: TextButton(
+                            onPressed: () => _showComingSoonDialog(context),
+                            child: const Text(
+                              '비밀번호를 잊으셨나요?',
+                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                            ),
                           ),
                         ),
                       ],
