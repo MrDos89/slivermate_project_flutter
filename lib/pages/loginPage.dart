@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
     if (email.isEmpty || password.isEmpty) {
       setState(() {
         isLoading = false;
-        errorText = "이메일과 비밀번호를 모두 입력해주세요.";
+        errorText = "아이디와 비밀번호를 모두 입력해주세요.";
       });
       return;
     }
@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                         TextField(
                           controller: emailController,
                           decoration: const InputDecoration(
-                            labelText: '이메일',
+                            labelText: '아이디를 입력해주세요.',
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                           controller: passwordController,
                           obscureText: true,
                           decoration: const InputDecoration(
-                            labelText: '비밀번호',
+                            labelText: '비밀번호를 입력해주세요.',
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -96,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                           child: ElevatedButton(
                             onPressed: isLoading ? null : _login,
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xFF84C99C), // 💚 연녹색
+                              backgroundColor: const Color(0xFF84C99C), // 연녹색
                               padding:
                               const EdgeInsets.symmetric(vertical: 16),
                             ),

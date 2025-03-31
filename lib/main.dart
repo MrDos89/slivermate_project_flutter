@@ -15,6 +15,7 @@ import 'package:slivermate_project_flutter/pages/clubPage.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/pages/chatTestPage.dart';
 import 'package:slivermate_project_flutter/pages/loginPage.dart';
+import 'package:slivermate_project_flutter/pages/signUpPage.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -33,21 +34,25 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     //  더미 유저 데이터 (19번 유저)
     final UserVo dummyUser = UserVo(
-      uid: 19, //  필드명 지정
+      uid: 19,
       userName: "user1",
       nickname: "User",
       userId: "user1",
       userPassword: "user1",
+      pinPassword: "1234", // ➕ 추가된 필드 (예시)
       telNumber: "010-0055-1122",
       email: "user1@naver.com",
       thumbnail: "",
-      guId: 1,
+      regionId: 1, // ✅ guId → regionId로 변경
       recommendUid: null,
       registerDate: "2025-03-18T10:00:00.000+00:00",
       isDeleted: false,
       isAdmin: false,
       updDate: "2025-03-18T10:00:00.000+00:00",
+      groupId: 1, // ➕ 추가된 필드
+      userType: 1, // ➕ 추가된 필드 (1: 부모님1)
     );
+
 
     return MaterialApp(
       title: 'Slivermate Project', //@dhkim - 가제
@@ -83,7 +88,7 @@ class MyApp extends StatelessWidget {
         "/category": (context) => CategoryPage(dummyUser: dummyUser),
         "/club": (context) => ClubPage(),
         "/loginPage": (context) => LoginPage(),
-
+        "/signUpPage": (context) => SignUpPage(),
         // test
         "/chatTest": (context) => ChatTestPage(),
       },
