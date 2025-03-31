@@ -104,6 +104,14 @@ class _ConfigPageState extends State<_ConfigPage> {
             // SizedBox(
             //   child: ElevatedButton(
             //     onPressed: () {
+            //       Navigator.pushNamed(context, "/SelectAccountPage");
+            //     },
+            //     child: Text("계정선택 페이지로 이동"),
+            //   ),
+            // ),
+            // SizedBox(
+            //   child: ElevatedButton(
+            //     onPressed: () {
             //       Navigator.pushNamed(context, "/purchase");
             //     },
             //     child: Text("결제 화면으로 이동"),
