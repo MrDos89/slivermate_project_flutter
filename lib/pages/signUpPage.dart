@@ -27,6 +27,13 @@ class _SignUpPageState extends State<SignUpPage> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController userIdController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController pinPasswordController = TextEditingController();
+  final TextEditingController confirmPinController = TextEditingController();
+
+  bool isPinMatching = true;
+  bool isPasswordMatching = true;
 
   String userName = '';
   String nickname = '';
@@ -35,8 +42,44 @@ class _SignUpPageState extends State<SignUpPage> {
   String pinPassword = '';
   String telNumber = '';
   String email = '';
-  int? regionId;
+  int? regionId = 1;
   int userType = 1;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // 두 입력 값이 변할 때마다 비교해서 상태 업데이트
+    passwordController.addListener(_validatePasswordMatch);
+    confirmPasswordController.addListener(_validatePasswordMatch);
+    pinPasswordController.addListener(_validatePinMatch);
+    confirmPinController.addListener(_validatePinMatch);
+  }
+
+  // [yj] 비밀번호, 비밀번호 확인
+  void _validatePasswordMatch() {
+    setState(() {
+      isPasswordMatching =
+          passwordController.text == confirmPasswordController.text;
+    });
+  }
+
+  // [yj] 핀 번호, 핀 번호 확인
+  void _validatePinMatch() {
+    setState(() {
+      isPinMatching =
+          pinPasswordController.text == confirmPinController.text;
+    });
+  }
+
+  @override
+  void dispose() {
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    pinPasswordController.dispose();
+    confirmPinController.dispose();
+    super.dispose();
+  }
 
   // [yj] 닉네임 중복 확인 함수
   void _checkNicknameDuplication() {
@@ -95,6 +138,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextFormField(
                       decoration: const InputDecoration(labelText: '이름'),
                       onSaved: (value) => userName = value ?? '',
+                      validator: (value) => value == null || value.isEmpty ? '이름을 입력해주세요.' : null,
                     ),
                     Row(
                       children: [
@@ -103,6 +147,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: TextFormField(
                             decoration: const InputDecoration(labelText: '닉네임'),
                             onSaved: (value) => nickname = value ?? '',
+                            validator: (value) => value == null || value.isEmpty ? '닉네임을 입력해주세요.' : null,
                             controller: nicknameController,
                           ),
                         ),
@@ -127,6 +172,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             decoration: const InputDecoration(labelText: '아이디'),
                             controller: userIdController,
                             onSaved: (value) => userId = value ?? '',
+                            validator: (value) => value == null || value.isEmpty ? '아이디를 입력해주세요.' : null,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -143,37 +189,95 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ],
                     ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: '비밀번호'),
-                      obscureText: true,
-                      onSaved: (value) => userPassword = value ?? '',
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                          controller: passwordController,
+                          decoration: const InputDecoration(labelText: '비밀번호'),
+                          obscureText: true,
+                          onSaved: (value) => userPassword = value ?? '',
+                          validator: (value) => value == null || value.isEmpty ? '비밀번호를 입력해주세요.' : null,
+                        ),
+                        TextFormField(
+                          controller: confirmPasswordController,
+                          decoration: const InputDecoration(labelText: '비밀번호 확인'),
+                          obscureText: true,
+                          validator: (value) => value == null || value.isEmpty ? '비밀번호를 한 번 더 입력 해주세요.' : null,
+                        ),
+                        const SizedBox(height: 4),
+                        if (!isPasswordMatching)
+                          Row(
+                            children: const [
+                              Icon(Icons.error_outline, color: Colors.red, size: 18),
+                              SizedBox(width: 6),
+                              Text(
+                                '비밀번호가 다릅니다',
+                                style: TextStyle(color: Colors.red, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: '비밀번호 확인'),
-                      obscureText: true,
-                      onSaved: (value) => userPassword = value ?? '',
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'PIN 비밀번호'),
-                      obscureText: true,
-                      keyboardType: TextInputType.number,
-                      onSaved: (value) => pinPassword = value ?? '',
-                    ),
-                    TextFormField(
-                      decoration: const InputDecoration(labelText: 'PIN 비밀번호 확인'),
-                      obscureText: true,
-                      keyboardType: TextInputType.number,
-                      onSaved: (value) => pinPassword = value ?? '',
+                    // [yj] 핀 번호 설정
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextFormField(
+                          controller: pinPasswordController,
+                          decoration: const InputDecoration(
+                            labelText: 'PIN 번호',
+                          ),
+                          obscureText: true,
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) => pinPassword = value ?? '',
+                          validator: (value) => value == null || value.isEmpty ? '핀 번호를 입력해주세요.' : null,
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.error_outline, color: Colors.red, size: 18),
+                            const SizedBox(width: 6),
+                            const Text(
+                              '계정 비밀번호 설정입니다.',
+                              style: TextStyle(color: Colors.red, fontSize: 12),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 4),
+                        TextFormField(
+                          controller: confirmPinController,
+                          decoration: const InputDecoration(labelText: 'PIN 번호 확인'),
+                          obscureText: true,
+                          keyboardType: TextInputType.number,
+                          onSaved: (value) => pinPassword = value ?? '',
+                          validator: (value) => value == null || value.isEmpty ? '핀 번호를 한 번 더 입력 해주세요.' : null,
+                        ),
+                        const SizedBox(height: 4),
+                        if (!isPinMatching)
+                          Row(
+                            children: const [
+                              Icon(Icons.error_outline, color: Colors.red, size: 18),
+                              SizedBox(width: 6),
+                              Text(
+                                'PIN 비밀번호가 다릅니다',
+                                style: TextStyle(color: Colors.red, fontSize: 12),
+                              ),
+                            ],
+                          ),
+                      ],
                     ),
                     TextFormField(
                       decoration: const InputDecoration(labelText: '전화번호'),
                       keyboardType: TextInputType.phone,
                       onSaved: (value) => telNumber = value ?? '',
+                      validator: (value) => value == null || value.isEmpty ? '전화번호를 입력해주세요.' : null,
                     ),
                     TextFormField(
                       decoration: const InputDecoration(labelText: '이메일'),
                       keyboardType: TextInputType.emailAddress,
                       onSaved: (value) => email = value ?? '',
+                      validator: (value) => value == null || value.isEmpty ? '이메일을 입력해주세요.' : null,
                     ),
                     const SizedBox(height: 10),
                     RegionDropdown(
@@ -190,12 +294,41 @@ class _SignUpPageState extends State<SignUpPage> {
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
-                        _formKey.currentState?.save();
-                        debugPrint('회원가입 정보:');
-                        debugPrint('이름: $userName, 닉네임: $nickname');
-                        debugPrint('아이디: $userId, 비번: $userPassword, PIN: $pinPassword');
-                        debugPrint('전화: $telNumber, 이메일: $email, 지역: $regionId');
-                        // debugPrint('유저타입: $userType');
+                        // 먼저 입력값 검증
+                        if (_formKey.currentState?.validate() ?? false) {
+                          // 검증 통과 시 입력값 저장
+                          _formKey.currentState?.save();
+
+                          // 디버깅 출력
+                          debugPrint('회원가입 정보:');
+                          debugPrint('이름: $userName, 닉네임: $nickname');
+                          debugPrint('아이디: $userId, 비번: $userPassword, PIN: $pinPassword');
+                          debugPrint('전화: $telNumber, 이메일: $email, 지역: $regionId');
+
+                          // 회원가입 성공 모달 띄우기
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertDialog(
+                                title: const Text('회원가입 완료'),
+                                content: const Text('회원 가입에 성공했습니다!'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).pop(); // 모달 닫기
+                                    },
+                                    child: const Text('확인'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        } else {
+                          // 유효성 검증 실패 시 안내
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('입력되지 않은 정보가 있습니다.')),
+                          );
+                        }
                       },
                       child: const Text('회원가입'),
                     ),
