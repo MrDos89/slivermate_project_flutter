@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final UserVo? dummyUser;
+  const LoginPage({super.key, required this.dummyUser});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -42,39 +44,45 @@ class _LoginPageState extends State<LoginPage> {
 
     print("로그인 성공 - 사용자: $email");
 
-    Navigator.pushNamed(context, '/config');
-  }
+    Navigator.pushNamed(
+      context,
+      '/selectAccount',
+      arguments: [widget.dummyUser],
+    );
 
-  void _goToSignup() {
-    Navigator.pushNamed(context, '/signUpPage');
-  }
 
-  void _goToFindPassword() {
-    Navigator.pushNamed(context, '/find-password');
-  }
 
-  void _showComingSoonDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder:
-        (context) => AlertDialog(
-          title: const Text("준비중"),
-          content: const Text("해당 기능은 아직 준비중입니다."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("확인"),
-            ),
-          ],
-        ),
-  );
+  // void _goToFindPassword() {
+  //   Navigator.pushNamed(context, '/find-password');
+  // }
+
+  // void _showComingSoonDialog(BuildContext context) {
+  // showDialog(
+  //   context: context,
+  //   builder:
+  //       (context) => AlertDialog(
+  //         title: const Text("준비중"),
+  //         content: const Text("해당 기능은 아직 준비중입니다."),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () => Navigator.pop(context),
+  //             child: const Text("확인"),
+  //           ),
+  //         ],
+  //       ),
+  // );
 }
 
-  @override
+void _goToSignup() {
+      Navigator.pushNamed(context, '/signUpPage');
+    }
+
+
+    @override
   Widget build(BuildContext context) {
     final inputDecoration = InputDecorationTheme(
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(color: Color(0xFF229F3B), width: 2),
+        borderSide: const BorderSide(color: Color(0xFFE5F3E8), width: 2),
         borderRadius: BorderRadius.circular(4.0),
       ),
       enabledBorder: OutlineInputBorder(
@@ -153,28 +161,28 @@ class _LoginPageState extends State<LoginPage> {
                           ],
                         ),
 
-                        const SizedBox(height: 12),
-
-                        // 비밀번호 찾기
-                        Align(
-                          alignment: Alignment.center,
-                          child: TextButton(
-                            onPressed: () => _showComingSoonDialog(context),
-                            child: const Text(
-                              '비밀번호를 잊으셨나요?',
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
-                            ),
-                          ),
-                        ),
-                      ],
+                        // const SizedBox(height: 12),
+                        //
+                        // // 비밀번호 찾기
+                        // Align(
+                        //   alignment: Alignment.center,
+                        //   child: TextButton(
+                        //     onPressed: () => _showComingSoonDialog(context),
+                        //     child: const Text(
+                        //       '비밀번호를 잊으셨나요?',
+                        //       style: TextStyle(fontSize: 14, color: Colors.grey),
+                        //     ),
+                        //   ),
+                        // ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    }
   }
-}
