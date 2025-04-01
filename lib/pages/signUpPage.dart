@@ -82,45 +82,81 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   // [yj] 닉네임 중복 확인 함수
-  void _checkNicknameDuplication() {
+  Future<bool> checkNicknameAvailable(String nickname) async {
+    await Future.delayed(const Duration(milliseconds: 500)); // 서버 응답 대기 시뮬레이션
+
+    // TODO: 서버 연동되면 여기를 http.post 또는 get으로 교체
+
+    // 예시: 닉네임이 'test'이면 중복 처리
+    if (nickname == 'test') return false;
+    return true;
+  }
+
+  void _checkNicknameDuplication() async {
     final nicknameText = nicknameController.text.trim();
 
     if (nicknameText.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('닉네임을 입력해주세요.')),
-      );
+      _showDialog('오류', '닉네임을 입력해주세요.');
       return;
     }
 
-    // TODO: 실제 서버와 중복 확인 로직 추가
-    debugPrint('닉네임 중복 확인 요청: $nicknameText');
+    final available = await checkNicknameAvailable(nicknameText);
 
-    // 예시 응답 처리
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('사용 가능한 닉네임입니다.')),
-    );
+    if (available) {
+      _showDialog('확인', '사용 가능한 닉네임입니다.');
+    } else {
+      _showDialog('중복', '이미 사용 중인 닉네임입니다.');
+    }
   }
 
+
   // [yj] 아이디 중복 확인 함수
-  void _checkUserIdDuplication() {
+  Future<bool> checkUserIdAvailable(String userId) async {
+    await Future.delayed(const Duration(milliseconds: 500)); // 가짜 서버 응답 지연
+
+    // TODO: 서버 완성되면 아래 부분을 실제 요청 코드로 교체
+
+    // 테스트용 로직: 'admin'은 중복된 아이디로 처리
+    if (userId.toLowerCase() == 'admin') return false;
+    return true;
+  }
+
+  void _checkUserIdDuplication() async {
     final idText = userIdController.text.trim();
 
     if (idText.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('아이디를 입력해주세요.')),
-      );
+      _showDialog('오류', '아이디를 입력해주세요.');
       return;
     }
 
-    // TODO: 실제 서버에 중복 확인 요청 보내기
-    debugPrint('아이디 중복 확인 요청: $idText');
+    final available = await checkUserIdAvailable(idText);
 
-    // 예시 응답 처리
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('사용 가능한 아이디입니다.')),
-    );
+    if (available) {
+      _showDialog('확인', '사용 가능한 아이디입니다.');
+    } else {
+      _showDialog('중복', '이미 사용 중인 아이디입니다.');
+    }
   }
 
+  void _showDialog(String title, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // 모달 닫기
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -315,7 +351,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                 actions: [
                                   TextButton(
                                     onPressed: () {
-                                      Navigator.of(context).pop(); // 모달 닫기
+                                      Navigator.of(context).pop();
+                                      Navigator.pushReplacementNamed(context, '/loginPage');// 모달 닫기
                                     },
                                     child: const Text('확인'),
                                   ),
