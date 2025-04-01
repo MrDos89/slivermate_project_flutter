@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -33,6 +34,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
   final List<Map<String, dynamic>> _messages = [];
+  Timer? _guestMessageTimer;
 
   @override
   void initState() {
@@ -50,6 +52,17 @@ class _ChatTestPageState extends State<_ChatTestPage> {
         _messages.add({
           'sender': 'guest',
           'message': message,
+          'time': DateTime.now(),
+        });
+      });
+    });
+
+    // 일정 간격으로 guest 메시지 자동 추가
+    _guestMessageTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+      setState(() {
+        _messages.add({
+          'sender': 'guest',
+          'message': '자동으로 받은 guest 메시지입니다.',
           'time': DateTime.now(),
         });
       });
@@ -77,6 +90,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   @override
   void dispose() {
     _channel.sink.close();
+    _guestMessageTimer?.cancel(); // 타이머 정리
     super.dispose();
   }
 
