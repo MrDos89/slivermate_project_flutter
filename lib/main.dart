@@ -17,6 +17,8 @@ import 'package:slivermate_project_flutter/pages/chatTestPage.dart';
 import 'package:slivermate_project_flutter/pages/loginPage.dart';
 import 'package:slivermate_project_flutter/pages/signUpPage.dart';
 import 'package:slivermate_project_flutter/pages/selectAccountPage.dart';
+import 'package:slivermate_project_flutter/pages/signUpPage2.dart';
+import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -90,7 +92,16 @@ class MyApp extends StatelessWidget {
         "/club": (context) => ClubPage(),
         "/loginPage": (context) => LoginPage(dummyUser: dummyUser),
         "/signUpPage": (context) => SignUpPage(),
-        "/selectAccount": (context) => SelectAccountPage(userList: [dummyUser]),
+        "/selectAccount": (context) {
+          final args = ModalRoute.of(context)?.settings.arguments as List<UserVo>;
+          return SelectAccountPage(userList: args);
+        },
+        "/signUpPage2": (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as List<UserVo>;
+          return SignUpPage2(userList: args);
+        },
+        "/newPostPage": (context) => NewPostPage(),
+
 
         // test
         "/chatTest": (context) => ChatTestPage(),

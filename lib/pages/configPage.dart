@@ -101,6 +101,14 @@ class _ConfigPageState extends State<_ConfigPage> {
                 child: Text("회원가입 페이지로 이동"),
               ),
             ),
+            SizedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/newPostPage");
+                },
+                child: Text("새 피드 페이지로 이동"),
+              ),
+            ),
             // SizedBox(
             //   child: ElevatedButton(
             //     onPressed: () {
