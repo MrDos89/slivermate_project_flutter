@@ -89,10 +89,12 @@ class _NewPostPageState extends State<NewPostPage> {
   Widget build(BuildContext context) {
     return MainLayout(
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         appBar: const HeaderPage(pageTitle: '피드 작성'),
         body: Padding(
           padding: const EdgeInsets.all(16.0),
           child: ListView(
+            padding: const EdgeInsets.only(bottom: 100),
             children: [
               // 카테고리 선택 (해시태그 형태)
               Padding(
@@ -203,7 +205,7 @@ class _NewPostPageState extends State<NewPostPage> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("게시글이 업로드되었습니다.")),
                     );
-                    Navigator.pop(context);
+                    Navigator.pushReplacementNamed(context, '/post');
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text("모든 항목을 입력해주세요.")),

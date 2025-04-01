@@ -6,6 +6,7 @@ import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:readmore/readmore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 
 
 PostVo dummyPost = PostVo(
@@ -601,8 +602,11 @@ class _PostPageState extends State<PostPage> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            // 버튼 클릭 시 실행될 동작
-            // 예: Navigator.push(context, MaterialPageRoute(builder: (_) => NewPostPage()));
+            // 버튼 클릭 시 NewPostPage로 이동
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (_) => NewPostPage()),
+            );
           },
           backgroundColor: Colors.green,
           shape: const CircleBorder(),
