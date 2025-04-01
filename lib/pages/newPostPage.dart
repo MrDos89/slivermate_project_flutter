@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
@@ -45,6 +48,43 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Set<int> _selectedSubCategoryIds = {}; // 다중 선택
 
+  List<XFile> _selectedImages = [];
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    if (_selectedImages.length >= 4) return;
+
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      final bytes = await image.readAsBytes(); // 원본 이미지 바이트 읽기
+      final originalImage = img.decodeImage(bytes); // 디코딩해서 Image 객체로 변환
+
+      if (originalImage != null) {
+        // 가로 500으로 리사이징 (세로는 비율에 따라 자동 조정)
+        print("원본 크기: ${originalImage.width} x ${originalImage.height}");
+        print("원본 크기: ${await originalImage.lengthInBytes / 1024 } kbytes");
+        final resizedImage = img.copyResize(originalImage, width: 500);
+
+        print("리사이징 후 크기: ${resizedImage.width} x ${resizedImage.height}");
+
+        // 리사이징된 이미지를 임시 파일로 저장
+        final tempDir = Directory.systemTemp;
+        final resizedFile = File('${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+        await resizedFile.writeAsBytes(img.encodeJpg(resizedImage)); // JPEG 형식으로 저장
+
+        print("리사이징된 파일 경로: ${resizedFile.path}");
+        print("리사이징된 파일 용량: ${await resizedFile.length() / 1024 } kbytes");
+
+        // 화면에 표시될 수 있도록 리스트에 추가
+        setState(() {
+          _selectedImages.add(XFile(resizedFile.path));
+        });
+      }
+    }
+  }
+
+
+
   @override
   Widget build(BuildContext context) {
     return MainLayout(
@@ -84,6 +124,53 @@ class _NewPostPageState extends State<NewPostPage> {
                     ),
                   ],
                 ),
+              ),
+              // [yj] 이미지 업로드
+              const SizedBox(height: 24),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('이미지 업로드 (최대 4장)', style: TextStyle(fontWeight: FontWeight.bold)),
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+                      ..._selectedImages.map((image) => Stack(
+                        children: [
+                          Image.file(
+                            File(image.path),
+                            width: 80,
+                            height: 80,
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedImages.remove(image);
+                                });
+                              },
+                              child: const Icon(Icons.close, size: 20, color: Colors.red),
+                            ),
+                          ),
+                        ],
+                      )),
+                      if (_selectedImages.length < 4)
+                        GestureDetector(
+                          onTap: _pickImage,
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            color: Colors.grey[300],
+                            child: const Icon(Icons.add_a_photo),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
               ),
               const SizedBox(height: 24),
 
@@ -186,4 +273,5 @@ class CategoryChipSelector extends StatelessWidget {
     );
   }
 }
+
 

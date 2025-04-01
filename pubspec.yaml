@@ -48,6 +48,8 @@ dependencies:
   readmore: ^3.0.0
   flutter_dotenv: ^5.2.1
   dropdown_button2: ^2.3.9
+  image_picker: ^1.1.2
+  image: ^4.3.0
 
 dev_dependencies:
   flutter_test:
