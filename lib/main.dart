@@ -83,7 +83,7 @@ class MyApp extends StatelessWidget {
             (context) => ConfigPage(),
         "/purchase": (context) => PurchasePage(dummyUser: dummyUser),
         "/call": (context) => CallStaffPage(dummyUser: dummyUser),
-        "/notifications": (context) => NotificationPage(dummyUser: dummyUser),
+        "/notifications": (context) => NotificationPage(dummyUser: dummyUser, isEditing: false),
         "/config": (context) => ConfigPage(),
         "/userprofile": (context) => UserProfilePage(),
         "/chat": (context) => ChatPage(),
