@@ -32,7 +32,7 @@ class _ChatTestPage extends StatefulWidget {
 class _ChatTestPageState extends State<_ChatTestPage> {
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
-  final List<Map<String, String>> _messages = [];
+  final List<Map<String, dynamic>> _messages = [];
 
   @override
   void initState() {
@@ -47,7 +47,11 @@ class _ChatTestPageState extends State<_ChatTestPage> {
 
     _channel.stream.listen((message) {
       setState(() {
-        _messages.add({'sender': 'guest', 'message': message});
+        _messages.add({
+          'sender': 'guest',
+          'message': message,
+          'time': DateTime.now(), //  받은 시각 기록
+        });
       });
     });
   }
@@ -60,7 +64,11 @@ class _ChatTestPageState extends State<_ChatTestPage> {
       });
       _channel.sink.add(message);
       setState(() {
-        _messages.add({'sender': 'me', 'message': _controller.text});
+        _messages.add({
+          'sender': 'me',
+          'message': _controller.text,
+          'time': DateTime.now(), //  보낸 시각 기록
+        });
       });
       _controller.clear();
     }
@@ -86,17 +94,33 @@ class _ChatTestPageState extends State<_ChatTestPage> {
               itemBuilder: (context, index) {
                 final message = _messages[index];
                 final isMe = message['sender'] == 'me';
+                final DateTime messageTime = message['time'];
+                final timeString =
+                    "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
+
+                // 날짜 헤더 표시 조건
+                bool showDateHeader = false;
+                if (index == 0) {
+                  showDateHeader = true;
+                } else {
+                  final prevTime = _messages[index - 1]['time'] as DateTime;
+                  showDateHeader =
+                      messageTime.day != prevTime.day ||
+                      messageTime.month != prevTime.month ||
+                      messageTime.year != prevTime.year;
+                }
+
                 final senderName = isMe ? "파릇" : "게스트";
                 final senderImage =
                     isMe
                         ? const AssetImage('lib/images/뜨개질.jpg')
                         : const AssetImage('lib/images/rion.jpg');
 
-                final messageTime = DateTime.now();
-                final timeString =
-                    "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
+                // final messageTime = DateTime.now();
+                // final timeString =
+                //     "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
 
-                bool showDateHeader = index == 0;
+                // bool showDateHeader = index == 0;
 
                 return Column(
                   crossAxisAlignment:
@@ -286,14 +310,14 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                     ),
                   ),
                 ),
-                IconButton(
-                  icon: Icon(
-                    Icons.emoji_emotions_outlined,
-                    color:
-                        _controller.text.isEmpty ? Colors.grey : Colors.black,
-                  ),
-                  onPressed: () {},
-                ),
+                // IconButton(
+                //   icon: Icon(
+                //     Icons.emoji_emotions_outlined,
+                //     color:
+                //         _controller.text.isEmpty ? Colors.grey : Colors.black,
+                //   ),
+                //   onPressed: () {},
+                // ),
                 if (_controller.text.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.send, color: Colors.black),
