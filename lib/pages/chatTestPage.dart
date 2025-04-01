@@ -16,7 +16,7 @@ class ChatTestPage extends StatelessWidget {
           preferredSize: const Size.fromHeight(70),
           child: HeaderPage(pageTitle: "채팅 테스트 페이지"),
         ),
-        body: Container(color: Colors.grey[100], child: _ChatTestPage()),
+        body: Container(color: Colors.grey[100], child: const _ChatTestPage()),
       ),
     );
   }
@@ -47,7 +47,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
 
     _channel.stream.listen((message) {
       setState(() {
-        _messages.add({'sender': 'server', 'message': message});
+        _messages.add({'sender': 'guest', 'message': message});
       });
     });
   }
@@ -76,11 +76,12 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: AppBar(title: Text('채팅 테스트 중')),
+      appBar: AppBar(title: const Text('채팅 테스트 중')),
       body: Column(
         children: [
           Expanded(
             child: ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 10),
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 final message = _messages[index];
@@ -88,28 +89,14 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                 final senderName = isMe ? "파릇" : "게스트";
                 final senderImage =
                     isMe
-                        ? NetworkImage(
-                          "https://cdn-icons-png.flaticon.com/512/147/147144.png",
-                        )
-                        : NetworkImage(
-                          "https://cdn-icons-png.flaticon.com/512/194/194938.png",
-                        );
+                        ? const AssetImage('lib/images/뜨개질.jpg')
+                        : const AssetImage('lib/images/rion.jpg');
 
                 final messageTime = DateTime.now();
                 final timeString =
                     "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
 
-                bool showDateHeader = false;
-                if (index == 0) {
-                  showDateHeader = true;
-                } else {
-                  final prevDate = DateTime.now().subtract(Duration(days: 1));
-                  if (messageTime.day != prevDate.day ||
-                      messageTime.month != prevDate.month ||
-                      messageTime.year != prevDate.year) {
-                    showDateHeader = true;
-                  }
-                }
+                bool showDateHeader = index == 0;
 
                 return Column(
                   crossAxisAlignment:
@@ -130,7 +117,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                             ),
                             child: Text(
                               "${messageTime.year}년 ${messageTime.month}월 ${messageTime.day}일 (${["일", "월", "화", "수", "목", "금", "토"][messageTime.weekday % 7]})",
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontSize: 13,
                                 fontWeight: FontWeight.bold,
@@ -141,103 +128,103 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                       ),
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 4,
+                        horizontal: 10,
+                        vertical: 6,
                       ),
                       child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.end,
                         mainAxisAlignment:
                             isMe
                                 ? MainAxisAlignment.end
                                 : MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           if (!isMe) ...[
                             CircleAvatar(
                               backgroundImage: senderImage,
-                              radius: 18,
+                              radius: 16,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                           ],
-                          Flexible(
-                            child: Column(
-                              crossAxisAlignment:
-                                  isMe
-                                      ? CrossAxisAlignment.end
-                                      : CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    if (!isMe)
-                                      Text(
-                                        senderName,
+                          Column(
+                            crossAxisAlignment:
+                                isMe
+                                    ? CrossAxisAlignment.end
+                                    : CrossAxisAlignment.start,
+                            children: [
+                              if (!isMe)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 2),
+                                  child: Text(
+                                    senderName,
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.grey[700],
+                                    ),
+                                  ),
+                                ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.end,
+                                children: [
+                                  if (!isMe)
+                                    Padding(
+                                      padding: const EdgeInsets.only(right: 6),
+                                      child: Text(
+                                        timeString,
                                         style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.grey[800],
-                                        ),
-                                      ),
-                                    if (isMe)
-                                      Text(
-                                        senderName,
-                                        style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
                                           color: Colors.grey[600],
                                         ),
                                       ),
-                                  ],
-                                ),
-                                Container(
-                                  margin: const EdgeInsets.only(top: 4),
-                                  padding: const EdgeInsets.fromLTRB(
-                                    10,
-                                    10,
-                                    10,
-                                    6,
-                                  ),
-                                  decoration: BoxDecoration(
-                                    color:
-                                        isMe
-                                            ? Colors.yellow[700]
-                                            : Colors.grey[800],
-                                    borderRadius: BorderRadius.only(
-                                      topLeft: Radius.circular(12),
-                                      topRight: Radius.circular(12),
-                                      bottomLeft:
+                                    ),
+                                  Container(
+                                    padding: const EdgeInsets.fromLTRB(
+                                      12,
+                                      10,
+                                      12,
+                                      10,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color:
                                           isMe
-                                              ? Radius.circular(12)
-                                              : Radius.zero,
-                                      bottomRight:
-                                          isMe
-                                              ? Radius.zero
-                                              : Radius.circular(12),
+                                              ? Colors.yellow[700]
+                                              : Colors.grey[800],
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: const Radius.circular(12),
+                                        topRight: const Radius.circular(12),
+                                        bottomLeft: Radius.circular(
+                                          isMe ? 12 : 0,
+                                        ),
+                                        bottomRight: Radius.circular(
+                                          isMe ? 0 : 12,
+                                        ),
+                                      ),
+                                    ),
+                                    child: Text(
+                                      message['message'] ?? '',
+                                      style: TextStyle(
+                                        color:
+                                            isMe ? Colors.black : Colors.white,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        message['message'] ?? '',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600,
-                                          height: 1.4,
-                                        ),
-                                      ),
-                                      SizedBox(height: 4),
-                                      Text(
+                                  if (isMe)
+                                    Padding(
+                                      padding: const EdgeInsets.only(left: 6),
+                                      child: Text(
                                         timeString,
                                         style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.grey[700],
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: Colors.grey[600],
                                         ),
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                                    ),
+                                ],
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -247,12 +234,13 @@ class _ChatTestPageState extends State<_ChatTestPage> {
               },
             ),
           ),
+          const Divider(height: 1),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Row(
               children: [
                 IconButton(
-                  icon: Icon(Icons.add, color: Colors.black),
+                  icon: const Icon(Icons.add, color: Colors.black),
                   onPressed: () {
                     showModalBottomSheet(
                       context: context,
@@ -263,13 +251,13 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                           child: Column(
                             children: [
                               ListTile(
-                                leading: Icon(Icons.camera_alt),
-                                title: Text("카메라로 촬영하기"),
+                                leading: const Icon(Icons.camera_alt),
+                                title: const Text("카메라로 촬영하기"),
                                 onTap: () => Navigator.pop(context),
                               ),
                               ListTile(
-                                leading: Icon(Icons.photo_library),
-                                title: Text("앨범에서 선택하기"),
+                                leading: const Icon(Icons.photo_library),
+                                title: const Text("앨범에서 선택하기"),
                                 onTap: () => Navigator.pop(context),
                               ),
                             ],
@@ -283,10 +271,12 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                   child: TextField(
                     controller: _controller,
                     onChanged: (_) => setState(() {}),
-                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
+                    style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
                       hintText: '메시지를 입력하세요',
-                      hintStyle: TextStyle(color: Colors.grey),
+                      hintStyle: const TextStyle(color: Colors.grey),
                       filled: true,
                       fillColor: Colors.grey[900],
                       border: OutlineInputBorder(
@@ -306,7 +296,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                 ),
                 if (_controller.text.isNotEmpty)
                   IconButton(
-                    icon: Icon(Icons.send, color: Colors.black),
+                    icon: const Icon(Icons.send, color: Colors.black),
                     onPressed: _sendMessage,
                   ),
               ],
