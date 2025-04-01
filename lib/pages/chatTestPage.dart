@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -32,7 +33,8 @@ class _ChatTestPage extends StatefulWidget {
 class _ChatTestPageState extends State<_ChatTestPage> {
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
-  final List<Map<String, String>> _messages = [];
+  final List<Map<String, dynamic>> _messages = [];
+  Timer? _guestMessageTimer;
 
   @override
   void initState() {
@@ -47,7 +49,22 @@ class _ChatTestPageState extends State<_ChatTestPage> {
 
     _channel.stream.listen((message) {
       setState(() {
-        _messages.add({'sender': 'guest', 'message': message});
+        _messages.add({
+          'sender': 'guest',
+          'message': message,
+          'time': DateTime.now(),
+        });
+      });
+    });
+
+    // 일정 간격으로 guest 메시지 자동 추가
+    _guestMessageTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+      setState(() {
+        _messages.add({
+          'sender': 'guest',
+          'message': 'UI 테스트 메시지입니다.',
+          'time': DateTime.now(),
+        });
       });
     });
   }
@@ -60,7 +77,11 @@ class _ChatTestPageState extends State<_ChatTestPage> {
       });
       _channel.sink.add(message);
       setState(() {
-        _messages.add({'sender': 'me', 'message': _controller.text});
+        _messages.add({
+          'sender': 'me',
+          'message': _controller.text,
+          'time': DateTime.now(),
+        });
       });
       _controller.clear();
     }
@@ -69,6 +90,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   @override
   void dispose() {
     _channel.sink.close();
+    _guestMessageTimer?.cancel(); // 타이머 정리
     super.dispose();
   }
 
@@ -86,17 +108,26 @@ class _ChatTestPageState extends State<_ChatTestPage> {
               itemBuilder: (context, index) {
                 final message = _messages[index];
                 final isMe = message['sender'] == 'me';
+                final DateTime messageTime = message['time'];
+                final timeString =
+                    "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
+
+                bool showDateHeader = false;
+                if (index == 0) {
+                  showDateHeader = true;
+                } else {
+                  final prevTime = _messages[index - 1]['time'] as DateTime;
+                  showDateHeader =
+                      messageTime.day != prevTime.day ||
+                      messageTime.month != prevTime.month ||
+                      messageTime.year != prevTime.year;
+                }
+
                 final senderName = isMe ? "파릇" : "게스트";
                 final senderImage =
                     isMe
                         ? const AssetImage('lib/images/뜨개질.jpg')
                         : const AssetImage('lib/images/rion.jpg');
-
-                final messageTime = DateTime.now();
-                final timeString =
-                    "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
-
-                bool showDateHeader = index == 0;
 
                 return Column(
                   crossAxisAlignment:
@@ -166,7 +197,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  if (!isMe)
+                                  if (isMe)
                                     Padding(
                                       padding: const EdgeInsets.only(right: 6),
                                       child: Text(
@@ -210,7 +241,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                                       ),
                                     ),
                                   ),
-                                  if (isMe)
+                                  if (!isMe)
                                     Padding(
                                       padding: const EdgeInsets.only(left: 6),
                                       child: Text(
@@ -273,26 +304,18 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                     onChanged: (_) => setState(() {}),
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: '메시지를 입력하세요',
                       hintStyle: const TextStyle(color: Colors.grey),
                       filled: true,
-                      fillColor: Colors.grey[900],
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none,
                       ),
                     ),
                   ),
-                ),
-                IconButton(
-                  icon: Icon(
-                    Icons.emoji_emotions_outlined,
-                    color:
-                        _controller.text.isEmpty ? Colors.grey : Colors.black,
-                  ),
-                  onPressed: () {},
                 ),
                 if (_controller.text.isNotEmpty)
                   IconButton(
