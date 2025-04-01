@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/pages/signUpPage2.dart';
 
 class SelectAccountPage extends StatelessWidget {
   final List<UserVo> userList;
@@ -25,7 +26,10 @@ class SelectAccountPage extends StatelessWidget {
               // + 계정 추가 카드
               return GestureDetector(
                 onTap: () {
-                  _showComingSoonDialog(context); // 준비중입니다 모달 함수 불러오기
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignUpPage2()),
+                  );
                 },
                 child: Card(
                   color: Colors.grey.shade200,
@@ -77,22 +81,22 @@ class SelectAccountPage extends StatelessWidget {
   }
 
   // [yj] '준비중입니다' 함수
-  void _showComingSoonDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder:
-          (context) =>
-          AlertDialog(
-            title: const Text("준비중"),
-            content: const Text("해당 기능은 아직 준비중입니다."),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: const Text("확인"),
-              ),
-            ],
-          ),
-    );
-  }
+  // void _showComingSoonDialog(BuildContext context) {
+  //   showDialog(
+  //     context: context,
+  //     builder:
+  //         (context) =>
+  //         AlertDialog(
+  //           title: const Text("준비중"),
+  //           content: const Text("해당 기능은 아직 준비중입니다."),
+  //           actions: [
+  //             TextButton(
+  //               onPressed: () => Navigator.pop(context),
+  //               child: const Text("확인"),
+  //             ),
+  //           ],
+  //         ),
+  //   );
+  // }
 }
 

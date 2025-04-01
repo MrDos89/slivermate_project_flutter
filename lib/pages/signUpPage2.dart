@@ -3,11 +3,11 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
-class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+class SignUpPage2 extends StatefulWidget {
+  const SignUpPage2({super.key});
 
   @override
-  State<SignUpPage> createState() => _SignUpPageState();
+  State<SignUpPage2> createState() => _SignUpPageState();
 }
 
 Map<int, String> regionMap = {
@@ -23,7 +23,7 @@ Map<int, String> regionMap = {
   10 : "울릉도"
 };
 
-class _SignUpPageState extends State<SignUpPage> {
+class _SignUpPageState extends State<SignUpPage2> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController userIdController = TextEditingController();
@@ -50,18 +50,8 @@ class _SignUpPageState extends State<SignUpPage> {
     super.initState();
 
     // 두 입력 값이 변할 때마다 비교해서 상태 업데이트
-    passwordController.addListener(_validatePasswordMatch);
-    confirmPasswordController.addListener(_validatePasswordMatch);
     pinPasswordController.addListener(_validatePinMatch);
     confirmPinController.addListener(_validatePinMatch);
-  }
-
-  // [yj] 비밀번호, 비밀번호 확인
-  void _validatePasswordMatch() {
-    setState(() {
-      isPasswordMatching =
-          passwordController.text == confirmPasswordController.text;
-    });
   }
 
   // [yj] 핀 번호, 핀 번호 확인
@@ -74,8 +64,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
   @override
   void dispose() {
-    passwordController.dispose();
-    confirmPasswordController.dispose();
     pinPasswordController.dispose();
     confirmPinController.dispose();
     super.dispose();
@@ -109,34 +97,6 @@ class _SignUpPageState extends State<SignUpPage> {
     }
   }
 
-
-  // [yj] 아이디 중복 확인 함수
-  Future<bool> checkUserIdAvailable(String userId) async {
-    await Future.delayed(const Duration(milliseconds: 500)); // 가짜 서버 응답 지연
-
-    // TODO: 서버 완성되면 아래 부분을 실제 요청 코드로 교체
-
-    // 테스트용 로직: 'admin'은 중복된 아이디로 처리
-    if (userId.toLowerCase() == 'admin') return false;
-    return true;
-  }
-
-  void _checkUserIdDuplication() async {
-    final idText = userIdController.text.trim();
-
-    if (idText.isEmpty) {
-      _showDialog('오류', '아이디를 입력해주세요.');
-      return;
-    }
-
-    final available = await checkUserIdAvailable(idText);
-
-    if (available) {
-      _showDialog('확인', '사용 가능한 아이디입니다.');
-    } else {
-      _showDialog('중복', '이미 사용 중인 아이디입니다.');
-    }
-  }
 
   void _showDialog(String title, String message) {
     showDialog(
@@ -200,61 +160,6 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Expanded(
-                          flex: 3,
-                          child: TextFormField(
-                            decoration: const InputDecoration(labelText: '아이디'),
-                            controller: userIdController,
-                            onSaved: (value) => userId = value ?? '',
-                            validator: (value) => value == null || value.isEmpty ? '아이디를 입력해주세요.' : null,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          // flex: 1,
-                          child: ElevatedButton(
-                            onPressed: _checkUserIdDuplication,
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              backgroundColor: const Color(0xFFE0F8DF).withAlpha(128),
-                            ),
-                            child: const Text('중복 확인'),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormField(
-                          controller: passwordController,
-                          decoration: const InputDecoration(labelText: '비밀번호'),
-                          obscureText: true,
-                          onSaved: (value) => userPassword = value ?? '',
-                          validator: (value) => value == null || value.isEmpty ? '비밀번호를 입력해주세요.' : null,
-                        ),
-                        TextFormField(
-                          controller: confirmPasswordController,
-                          decoration: const InputDecoration(labelText: '비밀번호 확인'),
-                          obscureText: true,
-                          validator: (value) => value == null || value.isEmpty ? '비밀번호를 한 번 더 입력 해주세요.' : null,
-                        ),
-                        const SizedBox(height: 4),
-                        if (!isPasswordMatching)
-                          Row(
-                            children: const [
-                              Icon(Icons.error_outline, color: Colors.red, size: 18),
-                              SizedBox(width: 6),
-                              Text(
-                                '비밀번호가 다릅니다',
-                                style: TextStyle(color: Colors.red, fontSize: 12),
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
                     // [yj] 핀 번호 설정
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -296,7 +201,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               Icon(Icons.error_outline, color: Colors.red, size: 18),
                               SizedBox(width: 6),
                               Text(
-                                'PIN 비밀번호가 다릅니다',
+                                'PIN 번호가 다릅니다',
                                 style: TextStyle(color: Colors.red, fontSize: 12),
                               ),
                             ],
@@ -338,7 +243,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           // 디버깅 출력
                           debugPrint('회원가입 정보:');
                           debugPrint('이름: $userName, 닉네임: $nickname');
-                          debugPrint('아이디: $userId, 비번: $userPassword, PIN: $pinPassword');
+                          debugPrint('PIN: $pinPassword');
                           debugPrint('전화: $telNumber, 이메일: $email, 지역: $regionId');
                           debugPrint('유저타입: $userType');
 
@@ -347,13 +252,13 @@ class _SignUpPageState extends State<SignUpPage> {
                             context: context,
                             builder: (BuildContext context) {
                               return AlertDialog(
-                                title: const Text('회원가입 완료'),
-                                content: const Text('회원 가입에 성공했습니다!'),
+                                title: const Text('계정 추가 완료'),
+                                content: const Text('계정 추가에 성공했습니다!'),
                                 actions: [
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      Navigator.pushReplacementNamed(context, '/loginPage');// 모달 닫기
+                                      Navigator.pushReplacementNamed(context, '/selectAccount');// 모달 닫기
                                     },
                                     child: const Text('확인'),
                                   ),
@@ -368,7 +273,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           );
                         }
                       },
-                      child: const Text('회원가입'),
+                      child: const Text('계정추가'),
                     ),
                   ],
                 ),
