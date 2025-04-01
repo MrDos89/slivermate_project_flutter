@@ -50,7 +50,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
         _messages.add({
           'sender': 'guest',
           'message': message,
-          'time': DateTime.now(), //  받은 시각 기록
+          'time': DateTime.now(),
         });
       });
     });
@@ -67,7 +67,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
         _messages.add({
           'sender': 'me',
           'message': _controller.text,
-          'time': DateTime.now(), //  보낸 시각 기록
+          'time': DateTime.now(),
         });
       });
       _controller.clear();
@@ -98,7 +98,6 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                 final timeString =
                     "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
 
-                // 날짜 헤더 표시 조건
                 bool showDateHeader = false;
                 if (index == 0) {
                   showDateHeader = true;
@@ -115,12 +114,6 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                     isMe
                         ? const AssetImage('lib/images/뜨개질.jpg')
                         : const AssetImage('lib/images/rion.jpg');
-
-                // final messageTime = DateTime.now();
-                // final timeString =
-                //     "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
-
-                // bool showDateHeader = index == 0;
 
                 return Column(
                   crossAxisAlignment:
@@ -190,7 +183,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
-                                  if (!isMe)
+                                  if (isMe)
                                     Padding(
                                       padding: const EdgeInsets.only(right: 6),
                                       child: Text(
@@ -234,7 +227,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                                       ),
                                     ),
                                   ),
-                                  if (isMe)
+                                  if (!isMe)
                                     Padding(
                                       padding: const EdgeInsets.only(left: 6),
                                       child: Text(
@@ -310,14 +303,6 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                     ),
                   ),
                 ),
-                // IconButton(
-                //   icon: Icon(
-                //     Icons.emoji_emotions_outlined,
-                //     color:
-                //         _controller.text.isEmpty ? Colors.grey : Colors.black,
-                //   ),
-                //   onPressed: () {},
-                // ),
                 if (_controller.text.isNotEmpty)
                   IconButton(
                     icon: const Icon(Icons.send, color: Colors.black),
