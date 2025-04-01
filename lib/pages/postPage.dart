@@ -5,6 +5,8 @@ import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:readmore/readmore.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
+
 
 PostVo dummyPost = PostVo(
     userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
@@ -340,6 +342,7 @@ const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
 
 //  취미 ID를 문자열로 변환 (카테고리별로 따로 저장)
 const Map<int, String> indoorHobbies = {
+  -1: "전체",
   0: "일상",
   1: "뜨개질",
   2: "그림",
@@ -365,16 +368,24 @@ const Map<int, String> outdoorHobbies = {
 };
 
 Map<int, String> regionMap = {
-  1 : "서울특별시",
-  2 : "인천광역시",
-  3 : "대전광역시",
-  4 : "대구광역시",
-  5 : "울산광역시",
-  6 : "부산광역시",
-  7 : "광주광역시",
-  8 : "세종특별자치시",
-  9 : "제주도",
-  10 : "울릉도"
+  1: "서울특별시",
+  2: "부산광역시",
+  3: "대구광역시",
+  4: "인천광역시",
+  5: "광주광역시",
+  6: "대전광역시",
+  7: "울산광역시",
+  8: "세종특별자치시",
+  9: "경기도",
+  10: "강원도",
+  11: "충청북도",
+  12: "충청남도",
+  13: "전라북도",
+  14: "전라남도",
+  15: "경상북도",
+  16: "경상남도",
+  17: "제주특별자치도",
+  18: "울릉도",
 };
 
 class PostPage extends StatefulWidget {
@@ -496,8 +507,8 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     List<PostVo> filteredList = dummyPostList.where((post) {
-      bool regionMatch = _selectedRegionId == null ||
-          post.regionId == _selectedRegionId;
+      bool regionMatch = _selectedRegionId == null || post.regionId == _selectedRegionId;
+
       bool subCategoryMatch = _selectedSubCategoryIds.isEmpty ||
           _selectedSubCategoryIds.contains(post.subCategory);
 
@@ -518,39 +529,17 @@ class _PostPageState extends State<PostPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // 지역 드롭다운
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 0, vertical: 4),
-                  width: double.infinity,
-                  child: ButtonTheme(
-                    alignedDropdown: true,
-                    child: DropdownButtonHideUnderline(
-                      child: DropdownButton<int?>(
-                        isExpanded: true,
-                        value: _selectedRegionId,
-                        hint: const Text("지역 선택"),
-                        items: [
-                          const DropdownMenuItem<int?>(
-                            value: null,
-                            child: Text("전체 지역"),
-                          ),
-                          ...regionMap.entries.map((e) =>
-                              DropdownMenuItem(
-                                value: e.key,
-                                child: Text(e.value),
-                              )),
-                        ],
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedRegionId = value;
-                          });
-                        },
-                      ),
-                    ),
-                  ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: RegionDropdown(
+                    value: _selectedRegionId,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedRegionId = value; // null 허용됨
+                      });
+                    },
+                  )
                 ),
-
-
                 // const SizedBox(height: ),
 
                 // 카테고리 선택 (Chip 형태)
@@ -610,23 +599,39 @@ class _PostPageState extends State<PostPage> {
             ),
           ),
         ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            // 버튼 클릭 시 실행될 동작
+            // 예: Navigator.push(context, MaterialPageRoute(builder: (_) => NewPostPage()));
+          },
+          backgroundColor: Colors.green,
+          shape: const CircleBorder(),
+          child: const Icon(Icons.add, size: 28, color: Colors.white),
+        ),
       ),
     );
   }
 
   Widget postContainer(BuildContext context, {required List<PostVo> postList, required Future<void> Function() onRefresh}) {
     if (postList.isEmpty) {
-      return Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40),
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.grey.shade100,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          alignment: Alignment.center,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              const Icon(Icons.inbox, size: 60, color: Colors.grey),
+              const SizedBox(height: 12),
               Text(
                 "해당되는 피드가 없습니다.",
-                style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: 6),
               Text(
                 "첫 번째 피드를 남겨주세요.",
                 style: TextStyle(fontSize: 14, color: Colors.grey),
@@ -900,3 +905,53 @@ final postUserThumbnail = (dummyPost.userThumbnail.trim().isEmpty)
 
 // 유저 썸네일 기본 이미지, 설정 안했을 경우 나올 이미지 설정
 const String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
+
+// 지역 선택 위젯
+class RegionDropdown extends StatelessWidget {
+  final int? value;
+  final void Function(int?) onChanged;
+
+  const RegionDropdown({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField2<int?>(
+      isExpanded: true,
+      value: value,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        labelText: '지역 선택',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
+      ),
+      items: [
+        const DropdownMenuItem<int?>(
+          value: null, // null 값 허용
+          child: Text("전체 지역"),
+        ),
+        ...regionMap.entries.map(
+              (entry) => DropdownMenuItem<int?>(
+            value: entry.key,
+            child: Text(entry.value),
+          ),
+        ),
+      ],
+      onChanged: onChanged,
+      iconStyleData: const IconStyleData(
+        icon: Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+      ),
+      dropdownStyleData: DropdownStyleData(
+        maxHeight: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+      ),
+    );
+  }
+}
