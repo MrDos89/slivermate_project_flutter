@@ -18,6 +18,7 @@ class _LoginPageState extends State<LoginPage> {
   bool isLoading = false;
   String? errorText;
 
+
   Future<void> _login() async {
     setState(() {
       isLoading = true;
@@ -35,21 +36,55 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    // TODO: 로그인 API 연동
-    print("로그인 시도: $email / $password");
+    final dummy = widget.dummyUser;
 
-    setState(() {
-      isLoading = false;
-    });
+    if (dummy != null &&
+        email == dummy.userId &&
+        password == dummy.userPassword) { // 여기에 주의!
+      setState(() {
+        isLoading = false;
+      });
 
-    print("로그인 성공 - 사용자: $email");
+      print("로그인 성공 - 사용자: ${dummy.nickname}");
 
-    Navigator.pushNamed(
-      context,
-      '/selectAccount',
-      arguments: [widget.dummyUser],
-    );
+      Navigator.pushNamed(
+        context,
+        '/selectAccount',
+        arguments: [dummy],
+      );
+    } else {
+      setState(() {
+        isLoading = false;
+        errorText = "아이디 또는 비밀번호가 잘못되었습니다.";
+      });
+    }
 
+    // [yj] 서버랑 연동 시 사용할 코드
+    // final email = emailController.text.trim();
+    // final password = passwordController.text.trim();
+    //
+    // if (email.isEmpty || password.isEmpty) {
+    //   setState(() {
+    //     isLoading = false;
+    //     errorText = "아이디와 비밀번호를 모두 입력해주세요.";
+    //   });
+    //   return;
+    // }
+    //
+    // // TODO: 로그인 API 연동
+    // print("로그인 시도: $email / $password");
+    //
+    // setState(() {
+    //   isLoading = false;
+    // });
+    //
+    // print("로그인 성공 - 사용자: $email");
+    //
+    // Navigator.pushNamed(
+    //   context,
+    //   '/selectAccount',
+    //   arguments: [widget.dummyUser],
+    // );
 
 
   // void _goToFindPassword() {
