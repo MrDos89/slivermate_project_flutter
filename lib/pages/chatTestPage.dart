@@ -58,11 +58,11 @@ class _ChatTestPageState extends State<_ChatTestPage> {
     });
 
     // 일정 간격으로 guest 메시지 자동 추가
-    _guestMessageTimer = Timer.periodic(const Duration(seconds: 10), (timer) {
+    _guestMessageTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
       setState(() {
         _messages.add({
           'sender': 'guest',
-          'message': '자동으로 받은 guest 메시지입니다.',
+          'message': 'UI 테스트 메시지입니다.',
           'time': DateTime.now(),
         });
       });
@@ -304,12 +304,12 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                     onChanged: (_) => setState(() {}),
                     keyboardType: TextInputType.multiline,
                     maxLines: null,
-                    style: const TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.black),
                     decoration: InputDecoration(
                       hintText: '메시지를 입력하세요',
                       hintStyle: const TextStyle(color: Colors.grey),
                       filled: true,
-                      fillColor: Colors.grey[900],
+                      fillColor: Colors.white,
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(20),
                         borderSide: BorderSide.none,
