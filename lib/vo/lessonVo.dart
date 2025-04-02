@@ -18,6 +18,10 @@ class LessonVo {
   final String updDate;
   final String userName;
   final String userThumbnail;
+  final int lessonGroupId;
+  final int likeCount;
+  final int viewCount;
+
 
   LessonVo({
     required this.lessonId,
@@ -36,6 +40,10 @@ class LessonVo {
     required this.updDate,
     required this.userName,
     required this.userThumbnail,
+    required this.lessonGroupId,
+    required this.likeCount,
+    required this.viewCount,
+
   });
 
   //  JSON → LessonVO 변환
@@ -57,6 +65,9 @@ class LessonVo {
       updDate: json['upd_date'] ?? "없음",
       userName: json['user_name'] ?? "미정",
       userThumbnail: json['user_thumbnail'] ?? "",
+      lessonGroupId: json['lesson_group_id'] ?? 0,
+      likeCount: json['like_count'] ?? 0,
+      viewCount: json['view_count'] ?? 0,
     );
   }
 
@@ -90,6 +101,9 @@ class LessonVo {
       'upd_date': updDate,
       'user_name': userName,
       'user_thumbnail': userThumbnail,
+      'lesson_group_id': lessonGroupId,
+      'like_count': likeCount,
+      'view_count': viewCount,
     };
   }
 }

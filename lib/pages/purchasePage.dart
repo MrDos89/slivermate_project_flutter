@@ -81,6 +81,9 @@ class _PurchasePageState extends State<PurchasePage> {
             updDate: '골프 강의 영상',
             userName: "test",
             userThumbnail: "test",
+            lessonGroupId: 1,
+            likeCount: 1,
+            viewCount: 10
           );
         });
       }

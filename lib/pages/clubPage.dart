@@ -1,7 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 
+const Map<int, String> regionMap = {
+  1: "서울특별시",
+  2: "부산광역시",
+  3: "대구광역시",
+  4: "인천광역시",
+  5: "광주광역시",
+  6: "대전광역시",
+  7: "울산광역시",
+  8: "세종특별자치시",
+  9: "경기도",
+  10: "강원도",
+  11: "충청북도",
+  12: "충청남도",
+  13: "전라북도",
+  14: "전라남도",
+  15: "경상북도",
+  16: "경상남도",
+  17: "제주특별자치도",
+  18: "울릉도",
+};
 class ClubPage extends StatelessWidget {
   const ClubPage({super.key});
 
@@ -48,8 +69,8 @@ class _ClubPage extends StatefulWidget {
 class _ClubPageState extends State<_ClubPage> {
   List<String> selectedRegions = [];
   List<String> selectedCategories = [];
+  int? _selectedRegionId;
 
-  final List<String> allRegions = ["서울특별시", "인천광역시", "대전광역시", "대구광역시", "울산광역시", "부산광역시", "광주광역시", "세종특별자치시", "제주도", "울릉도"];
   final List<String> allCategories = [
     "뜨개질",
     "그림",
@@ -172,7 +193,7 @@ class _ClubPageState extends State<_ClubPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: const Color(0xFFF5F5F5), // 싱그러운 연초록 배경
+      color: const Color(0xFFF5F5F5),
       child: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -193,27 +214,29 @@ class _ClubPageState extends State<_ClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const SizedBox(
-              width: 60, // 제목 너비 고정
-              child: Text(
-                "지역",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-              ),
-            ),
-            Expanded(
-              child: SizedBox(
-                height: 40, // 높이 조정 가능
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  children: _buildRegionChips(),
+        // Row(
+        //   crossAxisAlignment: CrossAxisAlignment.start,
+        //   children: [
+            // const SizedBox(
+            //   width: 60, // 제목 너비 고정
+            //   child: Text(
+            //     "지역",
+            //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            //   ),
+            // ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+                child: RegionDropdown(
+                  value: _selectedRegionId,
+                  onChanged: (value) {
+                    setState(() {
+                      _selectedRegionId = value;
+                    });
+                  },
                 ),
               ),
-            ),
-          ],
-        ),
+          // ],
+        // ),
         const SizedBox(height: 5),
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,26 +263,28 @@ class _ClubPageState extends State<_ClubPage> {
     );
   }
 
-  List<Widget> _buildRegionChips() { // 지역 필터 리스트 함수
-    return allRegions.map((region) {
-      return Padding(
-        padding: const EdgeInsets.only(right: 8.0),
-        child: _buildFilterChip(
-          region,
-          selectedRegions.contains(region),
-              (bool value) {
-            setState(() {
-              if (value) {
-                selectedRegions.add(region);
-              } else {
-                selectedRegions.remove(region);
-              }
-            });
-          },
-        ),
-      );
-    }).toList();
-  }
+  // List<Widget> _buildRegionChips() { // 지역 필터 리스트 함수
+  //   return allRegions.map((region) {
+  //     return Padding(
+  //       padding: const EdgeInsets.only(right: 8.0),
+  //       child: _buildFilterChip(
+  //         region,
+  //         selectedRegions.contains(region),
+  //             (bool value) {
+  //           setState(() {
+  //             if (value) {
+  //               selectedRegions.add(region);
+  //             } else {
+  //               selectedRegions.remove(region);
+  //             }
+  //           });
+  //         },
+  //       ),
+  //     );
+  //   }).toList();
+  // }
+
+
 
   Widget _buildFilterChip(
     String label,
@@ -381,8 +406,9 @@ class _ClubPageState extends State<_ClubPage> {
           final region = club["region"] ?? "";
           final category = club["category"] ?? "";
 
-          final regionMatch =
-              selectedRegions.isEmpty || selectedRegions.contains(region);
+          final selectedRegionName = regionMap[_selectedRegionId];
+          final regionMatch = _selectedRegionId == null || region == selectedRegionName;
+
           final categoryMatch =
               selectedCategories.isEmpty ||
               selectedCategories.contains(category);
@@ -440,6 +466,56 @@ class _ClubPageState extends State<_ClubPage> {
         )
 
       ],
+    );
+  }
+}
+
+// [yj] 지역 선택 위젯
+class RegionDropdown extends StatelessWidget {
+  final int? value;
+  final void Function(int?) onChanged;
+
+  const RegionDropdown({
+    super.key,
+    required this.value,
+    required this.onChanged,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return DropdownButtonFormField2<int?>(
+      isExpanded: true,
+      value: value,
+      decoration: InputDecoration(
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        labelText: '지역 선택',
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
+      ),
+      items: [
+        const DropdownMenuItem<int?>(
+          value: null, // null 값 허용
+          child: Text("전체 지역"),
+        ),
+        ...regionMap.entries.map(
+              (entry) => DropdownMenuItem<int?>(
+            value: entry.key,
+            child: Text(entry.value),
+          ),
+        ),
+      ],
+      onChanged: onChanged,
+      iconStyleData: const IconStyleData(
+        icon: Icon(Icons.arrow_drop_down),
+        iconSize: 24,
+      ),
+      dropdownStyleData: DropdownStyleData(
+        maxHeight: 150,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(8),
+          color: Colors.white,
+          border: Border.all(color: Colors.grey.shade300),
+        ),
+      ),
     );
   }
 }
