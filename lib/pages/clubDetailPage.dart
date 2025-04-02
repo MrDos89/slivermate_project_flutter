@@ -5,6 +5,7 @@ import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
 import 'package:slivermate_project_flutter/components/postContainer.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
+import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 
 // final List<PostVo> dummyPostList = [
 //   PostVo(
@@ -68,6 +69,7 @@ class ClubDetailPage extends StatefulWidget {
 
 class _ClubDetailPageState extends State<ClubDetailPage> {
   List<PostVo> clubPosts = [];
+  bool _isJoined = false;
 
   Future<void> _refreshClubPosts() async {
     await Future.delayed(const Duration(seconds: 1));
@@ -320,26 +322,45 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             ],
           ),
         ),
-        floatingActionButton: SizedBox(
-          width: 70,
-          height: 80,
-          child: FloatingActionButton(
+
+        floatingActionButton: Padding(
+          padding: const EdgeInsets.only(bottom: 22),
+          child: _isJoined
+              ? FloatingActionButton(
             onPressed: () {
-              // 가입 로직 실행
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => NewPostPage()),
+              );
             },
             backgroundColor: Colors.green,
-            shape: const CircleBorder(),
-            child: const Text(
-              "가입하기",
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
+            child: const Icon(Icons.edit, color: Colors.white),
+          )
+              : SizedBox(
+            width: 70,
+            height: 80,
+            child: FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _isJoined = true;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("모임에 가입되었습니다!")),
+                );
+              },
+              backgroundColor: Colors.green,
+              shape: const CircleBorder(),
+              child: const Text(
+                "가입하기",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),
         ),
-
       ),
     );
   }
