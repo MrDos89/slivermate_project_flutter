@@ -12,6 +12,7 @@ class PostVo {
   final int countComment;
   final String? postImage;
   final DateTime registerDate;
+  final int clubId;
   final List<CommentVo> comments;
 
   PostVo({
@@ -25,6 +26,7 @@ class PostVo {
     required this.countComment,
     this.postImage,
     required this.registerDate,
+    required this.clubId,
     required this.comments,
   });
 }

@@ -1,9 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/vo/postVo.dart';
+import 'package:slivermate_project_flutter/pages/postPage.dart';
+import 'package:slivermate_project_flutter/components/postContainer.dart';
+import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
+
+// final List<PostVo> dummyPostList = [
+//   PostVo(
+//     userNickname: "라이언",
+//     postNote: "이번 주 등산 어때요?",
+//     postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+//     countLikes: 3,
+//     countComment: 2,
+//     registerDate: DateTime.now().subtract(Duration(hours: 5)),
+//     comments: [],
+//     userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
+//     regionId: 1,
+//     categoryNames: 2,
+//     subCategory: 1,
+//   ),
+//   PostVo(
+//     userNickname: "라이언",
+//     postNote: "이번 주 등산 어때요?",
+//     postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+//     countLikes: 3,
+//     countComment: 2,
+//     registerDate: DateTime.now().subtract(Duration(hours: 5)),
+//     comments: [],
+//     userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
+//     regionId: 1,
+//     categoryNames: 2,
+//     subCategory: 1,
+//   ),
+// ];
+
+final Map<int, List<Map<String, dynamic>>> dummyClubSchedules = {
+  1: [
+    {
+      "title": "4월 정기 등산",
+      "date": "2025.04.10 (토)",
+      "time": "오전 9시",
+      "location": "북한산 입구",
+      "description": "서울 등산 동호회 4월 정기 모임입니다.",
+    },
+    {
+      "title": "번개 산책 모임",
+      "date": "2025.04.15 (수)",
+      "time": "오후 7시",
+      "location": "한강 반포공원",
+      "description": "가볍게 산책하며 이야기 나눠요.",
+    },
+  ],
+  2: [], // 다른 클럽은 일정 없음
+};
+
 
 class ClubDetailPage extends StatefulWidget {
   final Map<String, dynamic> clubData;
+
 
   const ClubDetailPage({super.key, required this.clubData});
 
@@ -12,6 +67,14 @@ class ClubDetailPage extends StatefulWidget {
 }
 
 class _ClubDetailPageState extends State<ClubDetailPage> {
+  List<PostVo> clubPosts = [];
+
+  Future<void> _refreshClubPosts() async {
+    await Future.delayed(const Duration(seconds: 1));
+    setState(() {
+      // 클럽 관련 피드 새로 고침 로직
+    });
+  }
 
   int _selectedTabIndex = 0;
 
@@ -26,8 +89,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   //   "createdAt": "2024.05.01",
   //   "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTybiZUyvUiRXzKNYkxREbcGaVhB_8lrXE6uw&s",
   // };
-
-
 
   Widget _buildTabButton(String title, int index) {
     final isSelected = _selectedTabIndex == index;
@@ -62,16 +123,92 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   Widget _buildTabContent() {
     switch (_selectedTabIndex) {
       case 0:
-        return _buildIntroSection(); // 소개 탭
+        return _buildIntroSection();
       case 1:
-        return const Text("피드 내용 준비 중");
+        final clubId = widget.clubData["id"];
+        final clubPosts = dummyPostList.where((p) => p.clubId == clubId).toList();
+
+        return SizedBox(
+          height: 400,
+          child: postContainer(
+            context,
+            postList: clubPosts,
+            onRefresh: _refreshClubPosts,
+            isClubPage: true,
+          ),
+        );
       case 2:
-        return const Text("사진 탭 내용");
+        final clubId = widget.clubData["id"];
+        final imagePosts = dummyPostList.where((p) =>
+        p.clubId == clubId && p.postImage != null && p.postImage!.isNotEmpty
+        ).toList();
+
+        if (imagePosts.isEmpty) {
+          return SizedBox(
+            height: 300,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.photo_library_outlined, size: 60, color: Colors.grey),
+                  const SizedBox(height: 12),
+                  Text(
+                    "등록된 사진이 없습니다.",
+                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    "사진이 포함된 게시물을 올려주세요.",
+                    style: TextStyle(fontSize: 14, color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, // 3개씩 한 줄
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 1,
+            ),
+            itemCount: imagePosts.length,
+            itemBuilder: (context, index) {
+              final post = imagePosts[index];
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => PostDetailPage(Post: post)),
+                  );
+                },
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    post.postImage!,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          ),
+        );
       case 3:
-        return const Text("일정 탭 내용");
+        return _buildScheduleSection(widget.clubData["id"]);
       default:
         return const SizedBox.shrink();
     }
+  }
+
+  List<PostVo> filteredPostListForClub() {
+    // clubId를 기준으로 피드를 필터링
+    return dummyPostList.where((post) => post.clubId == widget.clubData["id"]).toList();
   }
 
   Widget _buildIntroSection() {
@@ -98,7 +235,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
                 ),
               ),
               Text(
-                "생성일: $createdAt",
+                "개설일: $createdAt",
                 style: const TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
@@ -109,12 +246,12 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             children: [
               Row(
                 children: [
-                  const Icon(Icons.workspace_premium, color: Colors.amber, size: 20),
                   const SizedBox(width: 4),
                   Text(
                     "모임장: $leader",
                     style: const TextStyle(fontSize: 16),
                   ),
+                  const Icon(Icons.workspace_premium, color: Colors.amber, size: 20),
                 ],
               ),
               Text(
@@ -208,3 +345,70 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   }
 }
 
+// 일정 탭 위젯
+Widget _buildScheduleSection(int clubId) {
+  final schedules = dummyClubSchedules[clubId] ?? [];
+
+  if (schedules.isEmpty) {
+    return SizedBox(
+      height: 300,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.event_busy, size: 60, color: Colors.grey),
+            const SizedBox(height: 12),
+            Text(
+              "예정된 일정이 없습니다.",
+              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+            ),
+            const SizedBox(height: 6),
+            Text(
+              "첫 모임 일정을 추가해보세요.",
+              style: TextStyle(fontSize: 14, color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  return Padding(
+    padding: const EdgeInsets.all(16.0),
+    child: Column(
+      children: schedules.map((schedule) {
+        return Card(
+          margin: const EdgeInsets.symmetric(vertical: 8),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(schedule["title"], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                const SizedBox(height: 6),
+                Row(
+                  children: [
+                    const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
+                    const SizedBox(width: 6),
+                    Text("${schedule["date"]} / ${schedule["time"]}", style: const TextStyle(color: Colors.grey)),
+                  ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    const Icon(Icons.place, size: 16, color: Colors.grey),
+                    const SizedBox(width: 6),
+                    Text(schedule["location"], style: const TextStyle(color: Colors.grey)),
+                  ],
+                ),
+                const SizedBox(height: 8),
+                Text(schedule["description"]),
+              ],
+            ),
+          ),
+        );
+      }).toList(),
+    ),
+  );
+}

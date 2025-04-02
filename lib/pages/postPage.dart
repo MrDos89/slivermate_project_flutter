@@ -7,6 +7,7 @@ import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:readmore/readmore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
+import 'package:slivermate_project_flutter/components/postContainer.dart';
 
 
 PostVo dummyPost = PostVo(
@@ -20,7 +21,8 @@ PostVo dummyPost = PostVo(
     countComment: 0,
     postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
     registerDate: DateTime.now(),
-    comments: [  // 👈 댓글 추가!
+    clubId: 0,
+    comments: [  // 댓글 추가!
       CommentVo(
         userThumbnail: "https://example.com/user1.jpg",
         userNickname: "철수",
@@ -48,6 +50,7 @@ List<PostVo> dummyPostList = [
     countComment: 3,
     postImage: "",
     registerDate: DateTime.now(),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -80,6 +83,7 @@ List<PostVo> dummyPostList = [
     countComment: 1,
     postImage: "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
     registerDate: DateTime(2025, 3, 28, 14, 32),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -100,6 +104,7 @@ List<PostVo> dummyPostList = [
     countComment: 2,
     postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
     registerDate: DateTime(2025, 3, 28, 14, 30),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -126,6 +131,7 @@ List<PostVo> dummyPostList = [
     countComment: 0,
     postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
     registerDate: DateTime(2024, 11, 25, 14, 30),
+    clubId: 0,
     comments: [], // 댓글 없음
   ),
   PostVo(
@@ -139,6 +145,7 @@ List<PostVo> dummyPostList = [
     countComment: 1,
     postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
     registerDate: DateTime(2025, 3, 25, 14, 30),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -159,6 +166,7 @@ List<PostVo> dummyPostList = [
     countComment: 2,
     postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 2)),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -185,6 +193,7 @@ List<PostVo> dummyPostList = [
     countComment: 1,
     postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 5)),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -205,6 +214,7 @@ List<PostVo> dummyPostList = [
     countComment: 4,
     postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 10)),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -243,6 +253,7 @@ List<PostVo> dummyPostList = [
     countComment: 2,
     postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 3)),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -269,6 +280,7 @@ List<PostVo> dummyPostList = [
     countComment: 3,
     postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 7)),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -301,6 +313,7 @@ List<PostVo> dummyPostList = [
     countComment: 2,
     postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(hours: 5)),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -327,6 +340,7 @@ List<PostVo> dummyPostList = [
     countComment: 1,
     postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
     registerDate: DateTime.now().subtract(Duration(days: 1, hours: 2)),
+    clubId: 0,
     comments: [
       CommentVo(
         userThumbnail: "",
@@ -335,6 +349,34 @@ List<PostVo> dummyPostList = [
         commentDate: DateTime.now().subtract(Duration(days: 1, hours: 1, minutes: 20)),
       ),
     ],
+  ),
+  PostVo(
+    userNickname: "라이언",
+    postNote: "이번 주 등산 어때요?",
+    postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+    countLikes: 3,
+    countComment: 2,
+    registerDate: DateTime.now().subtract(Duration(hours: 5)),
+    comments: [],
+    userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
+    regionId: 1,
+    categoryNames: 2,
+    subCategory: 1,
+    clubId: 1,
+  ),
+  PostVo(
+    userNickname: "라이언",
+    postNote: "이번 주 등산 어때요?",
+    postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+    countLikes: 3,
+    countComment: 2,
+    registerDate: DateTime.now().subtract(Duration(hours: 5)),
+    comments: [],
+    userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
+    regionId: 1,
+    categoryNames: 2,
+    subCategory: 1,
+    clubId: 1,
   ),
 ];
 
@@ -507,7 +549,10 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
+
     List<PostVo> filteredList = dummyPostList.where((post) {
+      bool isClubPost = post.clubId != 0;
+
       bool regionMatch = _selectedRegionId == null || post.regionId == _selectedRegionId;
 
       bool subCategoryMatch = _selectedSubCategoryIds.isEmpty ||
@@ -624,180 +669,186 @@ class _PostPageState extends State<PostPage> {
     );
   }
 
-  Widget postContainer(BuildContext context, {required List<PostVo> postList, required Future<void> Function() onRefresh}) {
-    if (postList.isEmpty) {
-      return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.7,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.grey.shade100,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          alignment: Alignment.center,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.inbox, size: 60, color: Colors.grey),
-              const SizedBox(height: 12),
-              Text(
-                "해당되는 피드가 없습니다.",
-                style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-              ),
-              const SizedBox(height: 6),
-              Text(
-                "첫 번째 피드를 남겨주세요.",
-                style: TextStyle(fontSize: 14, color: Colors.grey),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SizedBox(
-          height: MediaQuery.of(context).size.height * 0.71,
-          child: RefreshIndicator(
-            onRefresh: onRefresh,
-            child: ListView(
-              physics: const AlwaysScrollableScrollPhysics(),
-              children: [
-                const SizedBox(height: 40),
-                ...postList.map((dummyPost) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => PostDetailPage(Post: dummyPost),
-                        ),
-                      );
-                    },
-                    child: SizedBox(
-                      width: double.infinity,
-                      child: Card(
-                        margin: const EdgeInsets.symmetric(vertical: 8),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        elevation: 2,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  CircleAvatar(
-                                    radius: 16,
-                                    backgroundImage: NetworkImage(
-                                      dummyPost.userThumbnail.trim().isEmpty
-                                          ? defaultUserThumbnail
-                                          : dummyPost.userThumbnail,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 12),
-                                  Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        dummyPost.userNickname,
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1 ? indoorHobbies[dummyPost.subCategory] : outdoorHobbies[dummyPost.subCategory]}",
-                                        style: const TextStyle(color: Colors.grey),
-                                      ),
-                                    ],
-                                  ),
-                                ],
-                              ),
-                              if (dummyPost.postImage != null &&
-                                  dummyPost.postImage!.isNotEmpty)
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12),
-                                  child: Image.network(
-                                    dummyPost.postImage!,
-                                    fit: BoxFit.cover,
-                                    width: double.infinity,
-                                    height: 180,
-                                    loadingBuilder: (context, child, loadingProgress) {
-                                      if (loadingProgress == null) return child;
-                                      return Container(
-                                        alignment: Alignment.center,
-                                        height: 180,
-                                        child: const CircularProgressIndicator(),
-                                      );
-                                    },
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        alignment: Alignment.center,
-                                        height: 180,
-                                        color: Colors.grey[300],
-                                        child: const Icon(Icons.broken_image, color: Colors.grey),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              const SizedBox(height: 8),
-                              ReadMoreText(
-                                dummyPost.postNote,
-                                trimLines: 2,
-                                trimMode: TrimMode.Line,
-                                trimCollapsedText: ' ...더보기',
-                                trimExpandedText: ' 접기',
-                                style: const TextStyle(fontSize: 16),
-                                moreStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-                                lessStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Row(
-                                    children: [
-                                      LikeHeart(initialLikes: dummyPost.countLikes),
-                                      const SizedBox(width: 16),
-                                      GestureDetector(
-                                        onTap: () => _showCommentModal(context, dummyPost),
-                                        child: Row(
-                                          children: [
-                                            const Icon(Icons.comment_outlined,
-                                                size: 18, color: Colors.grey),
-                                            const SizedBox(width: 4),
-                                            Text('${dummyPost.comments.length}'),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    getTimeAgo(dummyPost.registerDate),
-                                    style: const TextStyle(fontSize: 12, color: Colors.grey),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ],
-            ),
-          ),
-        )
-      ],
-    );
-  }
+  // Widget postContainer(BuildContext context, {required List<PostVo> postList, required Future<void> Function() onRefresh, bool isClubPage = false}) {
+  //   // 동아리 게시물인지 여부를 확인
+  //   if (postList.isEmpty) {
+  //     return SizedBox(
+  //       height: MediaQuery.of(context).size.height * 0.7,
+  //       child: Container(
+  //         decoration: BoxDecoration(
+  //           color: Colors.grey.shade100,
+  //           borderRadius: BorderRadius.circular(12),
+  //         ),
+  //         alignment: Alignment.center,
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: [
+  //             const Icon(Icons.inbox, size: 60, color: Colors.grey),
+  //             const SizedBox(height: 12),
+  //             Text(
+  //               "해당되는 피드가 없습니다.",
+  //               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+  //             ),
+  //             const SizedBox(height: 6),
+  //             Text(
+  //               "첫 번째 피드를 남겨주세요.",
+  //               style: TextStyle(fontSize: 14, color: Colors.grey),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     );
+  //   }
+  //
+  //   // 동아리 피드를 필터링
+  //   final filteredList = isClubPage
+  //       ? postList.where((post) => post.clubId != 0).toList() // 동아리 게시물만
+  //       : postList.where((post) => post.clubId == 0).toList(); // 동아리 아닌 게시물만
+  //
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       SizedBox(
+  //         height: MediaQuery.of(context).size.height * 0.71,
+  //         child: RefreshIndicator(
+  //           onRefresh: onRefresh,
+  //           child: ListView(
+  //             physics: const AlwaysScrollableScrollPhysics(),
+  //             children: [
+  //               const SizedBox(height: 40),
+  //               ...filteredList.map((dummyPost) {
+  //                 return GestureDetector(
+  //                   onTap: () {
+  //                     Navigator.push(
+  //                       context,
+  //                       MaterialPageRoute(
+  //                         builder: (_) => PostDetailPage(Post: dummyPost),
+  //                       ),
+  //                     );
+  //                   },
+  //                   child: SizedBox(
+  //                     width: double.infinity,
+  //                     child: Card(
+  //                       margin: const EdgeInsets.symmetric(vertical: 8),
+  //                       shape: RoundedRectangleBorder(
+  //                         borderRadius: BorderRadius.circular(12),
+  //                       ),
+  //                       elevation: 2,
+  //                       child: Padding(
+  //                         padding: const EdgeInsets.all(16),
+  //                         child: Column(
+  //                           crossAxisAlignment: CrossAxisAlignment.start,
+  //                           children: [
+  //                             Row(
+  //                               crossAxisAlignment: CrossAxisAlignment.start,
+  //                               children: [
+  //                                 CircleAvatar(
+  //                                   radius: 16,
+  //                                   backgroundImage: NetworkImage(
+  //                                     dummyPost.userThumbnail.trim().isEmpty
+  //                                         ? defaultUserThumbnail
+  //                                         : dummyPost.userThumbnail,
+  //                                   ),
+  //                                 ),
+  //                                 const SizedBox(width: 12),
+  //                                 Column(
+  //                                   crossAxisAlignment: CrossAxisAlignment.start,
+  //                                   children: [
+  //                                     Text(
+  //                                       dummyPost.userNickname,
+  //                                       style: const TextStyle(
+  //                                         fontSize: 16,
+  //                                         fontWeight: FontWeight.bold,
+  //                                       ),
+  //                                     ),
+  //                                     const SizedBox(height: 4),
+  //                                     Text(
+  //                                       "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1 ? indoorHobbies[dummyPost.subCategory] : outdoorHobbies[dummyPost.subCategory]}",
+  //                                       style: const TextStyle(color: Colors.grey),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                             if (dummyPost.postImage != null &&
+  //                                 dummyPost.postImage!.isNotEmpty)
+  //                               ClipRRect(
+  //                                 borderRadius: BorderRadius.circular(12),
+  //                                 child: Image.network(
+  //                                   dummyPost.postImage!,
+  //                                   fit: BoxFit.cover,
+  //                                   width: double.infinity,
+  //                                   height: 180,
+  //                                   loadingBuilder: (context, child, loadingProgress) {
+  //                                     if (loadingProgress == null) return child;
+  //                                     return Container(
+  //                                       alignment: Alignment.center,
+  //                                       height: 180,
+  //                                       child: const CircularProgressIndicator(),
+  //                                     );
+  //                                   },
+  //                                   errorBuilder: (context, error, stackTrace) {
+  //                                     return Container(
+  //                                       alignment: Alignment.center,
+  //                                       height: 180,
+  //                                       color: Colors.grey[300],
+  //                                       child: const Icon(Icons.broken_image, color: Colors.grey),
+  //                                     );
+  //                                   },
+  //                                 ),
+  //                               ),
+  //                             const SizedBox(height: 8),
+  //                             ReadMoreText(
+  //                               dummyPost.postNote,
+  //                               trimLines: 2,
+  //                               trimMode: TrimMode.Line,
+  //                               trimCollapsedText: ' ...더보기',
+  //                               trimExpandedText: ' 접기',
+  //                               style: const TextStyle(fontSize: 16),
+  //                               moreStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+  //                               lessStyle: const TextStyle(fontSize: 14, color: Colors.grey),
+  //                             ),
+  //                             const SizedBox(height: 8),
+  //                             Row(
+  //                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                               children: [
+  //                                 Row(
+  //                                   children: [
+  //                                     LikeHeart(initialLikes: dummyPost.countLikes),
+  //                                     const SizedBox(width: 16),
+  //                                     GestureDetector(
+  //                                       onTap: () => _showCommentModal(context, dummyPost),
+  //                                       child: Row(
+  //                                         children: [
+  //                                           const Icon(Icons.comment_outlined,
+  //                                               size: 18, color: Colors.grey),
+  //                                           const SizedBox(width: 4),
+  //                                           Text('${dummyPost.comments.length}'),
+  //                                         ],
+  //                                       ),
+  //                                     ),
+  //                                   ],
+  //                                 ),
+  //                                 Text(
+  //                                   getTimeAgo(dummyPost.registerDate),
+  //                                   style: const TextStyle(fontSize: 12, color: Colors.grey),
+  //                                 ),
+  //                               ],
+  //                             ),
+  //                           ],
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 );
+  //               }).toList(),
+  //             ],
+  //           ),
+  //         ),
+  //       )
+  //     ],
+  //   );
+  // }
 
 }
 

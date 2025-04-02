@@ -3,8 +3,38 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:slivermate_project_flutter/pages/postPage.dart';
 
-const Map<int, String> regionMap = {
+const Map<int, String> categoryNames = {
+  1: "실내",
+  2: "실외",
+};
+
+const Map<int, String> indoorHobbies = {
+  1: "뜨개질",
+  2: "그림",
+  3: "독서",
+  4: "영화 감상",
+  5: "퍼즐",
+  6: "요리",
+  7: "통기타",
+  8: "당구",
+  9: "바둑",
+};
+
+const Map<int, String> outdoorHobbies = {
+  1: "등산",
+  2: "자전거",
+  3: "캠핑",
+  4: "낚시",
+  5: "러닝/마라톤",
+  6: "수영",
+  7: "골프",
+  8: "테니스",
+  9: "족구",
+};
+
+Map<int, String> regionMap = {
   1: "서울특별시",
   2: "부산광역시",
   3: "대구광역시",
@@ -24,6 +54,7 @@ const Map<int, String> regionMap = {
   17: "제주특별자치도",
   18: "울릉도",
 };
+
 class ClubPage extends StatelessWidget {
   const ClubPage({super.key});
 
@@ -72,28 +103,35 @@ class _ClubPageState extends State<_ClubPage> {
   List<String> selectedCategories = [];
   int? _selectedRegionId;
 
-  final List<String> allCategories = [
-    "뜨개질",
-    "그림",
-    "독서",
-    "영화감상",
-    "퍼즐",
-    "요리",
-    "통기타",
-    "당구",
-    "바둑",
-    "등산",
-    "자전거",
-    "캠핑",
-    "낚시",
-    "러닝/마라톤",
-    "수영",
-    "골프",
-    "테니스",
-    "족구",
-  ];
+  int toInt(dynamic value) {
+    if (value is int) return value;
+    if (value is String) return int.tryParse(value) ?? 0;
+    return 0;
+  }
 
-  List<Map<String, Object>> clubData = [];
+
+  // final List<String> allCategories = [
+  //   "뜨개질",
+  //   "그림",
+  //   "독서",
+  //   "영화감상",
+  //   "퍼즐",
+  //   "요리",
+  //   "통기타",
+  //   "당구",
+  //   "바둑",
+  //   "등산",
+  //   "자전거",
+  //   "캠핑",
+  //   "낚시",
+  //   "러닝/마라톤",
+  //   "수영",
+  //   "골프",
+  //   "테니스",
+  //   "족구",
+  // ];
+
+  List<Map<String, Object?>> clubData = [];
   bool isLoading = true;
 
   final PageController _pageController = PageController();
@@ -108,59 +146,100 @@ class _ClubPageState extends State<_ClubPage> {
 
     final dummyResponse = [
       {
-        "name": "서울 등산 동아리",
-        "region": "서울특별시",
-        "category": "등산",
-        "description": "주말마다 서울 근교 등산을 함께해요!",
-        "leader": "산개",
-        "memberCount": 12,
-        "maxMemberCount": 20,
-        "createdAt": "2024.05.01",
-        "thumbnailUrl": "https://lh3.googleusercontent.com/proxy/r1N3wBQEiaHzWjoASRoNrQd7xeqKzIlD-Mabk-59Dsda1BcBBSyGs--aAWCWqQBPxxVda6I0Jxu1VjrIVGHUltNI6u5VYUoUMigAYeVPPDzX_ecqHtwBkxYbjEJX1eAxPj72GbQU",
+        "clubId": 1,
+        "clubName": "서울 등산 동아리",
+        "clubRegion": 1,
+        "clubCategoryId": 2,
+        "clubSubCategoryId": 1,
+        "clubDesc": "주말마다 서울 근교 등산을 함께해요!",
+        "clubUserId": "산개",
+        "clubMemberCount": 12,
+        "clubMaxMemberCount": 20,
+        "clubRegisterDate": "2024.05.01",
+        "clubThumbnailUrl": "https://lh3.googleusercontent.com/proxy/r1N3wBQEiaHzWjoASRoNrQd7xeqKzIlD-Mabk-59Dsda1BcBBSyGs--aAWCWqQBPxxVda6I0Jxu1VjrIVGHUltNI6u5VYUoUMigAYeVPPDzX_ecqHtwBkxYbjEJX1eAxPj72GbQU",
       },
       {
-        "name": "경기 독서 모임",
-        "region": "인천광역시",
-        "category": "독서",
-        "description": "한 달 한 권 함께 읽고 이야기 나눠요.",
-        "leader": "책벌래",
-        "memberCount": 9,
-        "maxMemberCount": 15,
-        "createdAt": "2024.04.20",
-        "thumbnailUrl": "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1c8F/image/QQsbiyF9-kBvQasym-Vowm5wk-U.jpg",
+        "clubId": 2,
+        "clubName": "경기 독서 모임",
+        "clubRegion": 4,
+        "clubCategoryId": 1,
+        "clubSubCategoryId": 3,
+        "clubDesc": "한 달 한 권 함께 읽고 이야기 나눠요.",
+        "clubUserId": "책벌래",
+        "clubMemberCount": 9,
+        "clubMaxMemberCount": 15,
+        "clubRegisterDate": "2024.04.20",
+        "clubThumbnailUrl": "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1c8F/image/QQsbiyF9-kBvQasym-Vowm5wk-U.jpg",
       },
       {
-        "name": "부산 퍼즐 동호회",
-        "region": "부산광역시",
-        "category": "퍼즐",
-        "description": "퍼즐 좋아하는 분들 모여요!",
-        "leader": "퍼즐킹",
-        "memberCount": 7,
-        "maxMemberCount": 12,
-        "createdAt": "2024.03.10",
-        "thumbnailUrl": "https://cdn.crowdpic.net/detail-thumb/thumb_d_07D9AF521C33E48CF5A486668B15A779.jpg",
+        "clubId": 3,
+        "clubName": "부산 퍼즐 동호회",
+        "clubRegion": 2,
+        "clubCategoryId": 1,
+        "clubSubCategoryId": 5,
+        "clubDesc": "퍼즐 좋아하는 분들 모여요!",
+        "clubUserId": "퍼즐킹",
+        "clubMemberCount": 7,
+        "clubMaxMemberCount": 12,
+        "clubRegisterDate": "2024.03.10",
+        "clubThumbnailUrl": "https://cdn.crowdpic.net/detail-thumb/thumb_d_07D9AF521C33E48CF5A486668B15A779.jpg",
       },
       {
-        "name": "서울 테니스 동호회",
-        "region": "서울특별시",
-        "category": "테니스",
-        "description": "테니스 좋아하는 분들 모여요!",
-        "leader": "초테",
-        "memberCount": 16,
-        "maxMemberCount": 25,
-        "createdAt": "2024.02.15",
-        "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWIHbtHVx1GiQzv3PctdxJCsIr6MpOGgI8rg&s",
+        "clubId": 4,
+        "clubName": "서울 테니스 동호회",
+        "clubRegion": 1,
+        "clubCategoryId": 2,
+        "clubSubCategoryId": 8,
+        "clubDesc": "테니스 좋아하는 분들 모여요!",
+        "clubUserId": "초테",
+        "clubMemberCount": 16,
+        "clubMaxMemberCount": 25,
+        "clubRegisterDate": "2024.02.15",
+        "clubThumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWIHbtHVx1GiQzv3PctdxJCsIr6MpOGgI8rg&s",
       },
     ];
 
 
+    final mapped = dummyResponse.map((club) {
+      final int categoryId = toInt(club["clubCategoryId"]);
+      final int subCategoryId = toInt(club["clubSubCategoryId"]);
+      final int regionId = toInt(club["clubRegion"]);
+
+
+      final String category = categoryNames[categoryId] ?? "기타";
+      final String hobby = categoryId == 1
+          ? indoorHobbies[subCategoryId] ?? "기타"
+          : outdoorHobbies[subCategoryId] ?? "기타";
+      final String region = regionMap[regionId] ?? "기타";
+
+      return {
+        ...club,
+        "id": club["clubId"],
+        "category": hobby,
+        "region": region,
+        "name": club["clubName"],
+        "description": club["clubDesc"],
+        "leader": club["clubUserId"],
+        "createdAt": club["clubRegisterDate"],
+        "thumbnailUrl": club["clubThumbnailUrl"],
+        "memberCount": club["clubMemberCount"],
+        "maxMemberCount": club["clubMaxMemberCount"],
+      };
+    }).toList();
+
     setState(() {
-      clubData = dummyResponse;
+      clubData = List<Map<String, Object?>>.from(mapped);
       isLoading = false;
     });
+
   }
 
   List<Widget> _buildCategoryChipRows() {
+    final List<String> allCategories = [
+      ...indoorHobbies.values,
+      ...outdoorHobbies.values,
+    ];
+
     const int rowCount = 2;
     const int itemsPerRow = 9;
 
@@ -452,7 +531,6 @@ class _ClubPageState extends State<_ClubPage> {
               ...filtered.map((club) {
                 return InkWell(
                   onTap: () {
-                    print("클럽 데이터 확인: $club");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -470,22 +548,54 @@ class _ClubPageState extends State<_ClubPage> {
                       elevation: 2,
                       child: Padding(
                         padding: const EdgeInsets.all(16),
-                        child: Column(
+                        child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              club["name"] as String,
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                            // 썸네일 이미지
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.network(
+                                club["thumbnailUrl"] as String? ?? "",
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Container(
+                                    width: 80,
+                                    height: 80,
+                                    color: Colors.grey[300],
+                                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                                  );
+                                },
                               ),
                             ),
-                            Text(
-                              "${club["region"]} · ${club["category"]}",
-                              style: const TextStyle(color: Colors.grey),
+                            const SizedBox(width: 16),
+
+                            // 텍스트 정보
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    club["name"] as String,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    "${club["region"]} · ${club["category"]}",
+                                    style: const TextStyle(color: Colors.grey),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    club["description"] as String,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: 8),
-                            Text(club["description"] as String),
                           ],
                         ),
                       ),
