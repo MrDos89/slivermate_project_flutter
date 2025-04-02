@@ -142,18 +142,29 @@ class _NewClubPageState extends State<NewClubPage> {
           runSpacing: 10,
           children:
               interests.map((interest) {
-                return ChoiceChip(
-                  label: Text(interest),
-                  selected: selectedInterests.contains(interest),
-                  onSelected: (selected) {
+                return GestureDetector(
+                  onTap: () {
                     setState(() {
-                      if (selected) {
-                        selectedInterests.add(interest);
-                      } else {
+                      if (selectedInterests.contains(interest)) {
                         selectedInterests.remove(interest);
+                      } else {
+                        selectedInterests.add(interest);
                       }
                     });
                   },
+                  child: Chip(
+                    label: Text(interest),
+                    backgroundColor:
+                        selectedInterests.contains(interest)
+                            ? Colors.black
+                            : Colors.grey.shade300,
+                    labelStyle: TextStyle(
+                      color:
+                          selectedInterests.contains(interest)
+                              ? Colors.white
+                              : Colors.black,
+                    ),
+                  ),
                 );
               }).toList(),
         ),
