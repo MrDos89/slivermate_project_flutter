@@ -2,33 +2,95 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
+
+List<Map<String, dynamic>> groupAccounts = [
+  {'nickname': '엄마', 'userType': 1},
+  {'nickname': '아빠', 'userType': 1},
+  {'nickname': '아들', 'userType': 3},
+];
 
 class SignUpPage2 extends StatefulWidget {
-  const SignUpPage2({super.key});
+  final List<UserVo> userList;
+  const SignUpPage2({super.key, required this.userList});
 
   @override
   State<SignUpPage2> createState() => _SignUpPageState();
 }
 
 Map<int, String> regionMap = {
-  1 : "서울특별시",
-  2 : "인천광역시",
-  3 : "대전광역시",
-  4 : "대구광역시",
-  5 : "울산광역시",
-  6 : "부산광역시",
-  7 : "광주광역시",
-  8 : "세종특별자치시",
-  9 : "제주도",
-  10 : "울릉도"
+  1: "서울특별시",
+  2: "부산광역시",
+  3: "대구광역시",
+  4: "인천광역시",
+  5: "광주광역시",
+  6: "대전광역시",
+  7: "울산광역시",
+  8: "세종특별자치시",
+  9: "경기도",
+  10: "강원도",
+  11: "충청북도",
+  12: "충청남도",
+  13: "전라북도",
+  14: "전라남도",
+  15: "경상북도",
+  16: "경상남도",
+  17: "제주특별자치도",
+  18: "울릉도",
 };
+
+void _completeSignup(BuildContext context, List<UserVo> userList) {
+  if (userList.isEmpty) return;
+
+  final baseUser = userList.first; // 기존 계정 정보 참조
+
+  final newUser = UserVo(
+    uid: DateTime.now().millisecondsSinceEpoch, // 임시 고유값
+    userName: baseUser.userName,
+    nickname: "새 계정",
+    userId: baseUser.userId,
+    userPassword: baseUser.userPassword,
+    pinPassword: baseUser.pinPassword,
+    telNumber: baseUser.telNumber,
+    email: baseUser.email,
+    thumbnail: "",
+    regionId: baseUser.regionId,
+    recommendUid: baseUser.recommendUid,
+    registerDate: DateTime.now().toIso8601String(),
+    isDeleted: false,
+    isAdmin: false,
+    updDate: DateTime.now().toIso8601String(),
+    groupId: baseUser.groupId,
+    userType: 2, // 새 역할만 바뀜
+  );
+
+  userList.add(newUser);
+
+  Navigator.pushReplacementNamed(
+    context,
+    '/selectAccount',
+    arguments: userList,
+  );
+}
+
+@override
+Widget build(BuildContext context) {
+
+  return Scaffold(
+    appBar: AppBar(title: const Text("역할 추가")),
+    body: Center(
+      child: ElevatedButton(
+        onPressed: () => _completeSignup,
+        child: const Text("새 계정 추가하기"),
+      ),
+    ),
+  );
+}
+
 
 class _SignUpPageState extends State<SignUpPage2> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nicknameController = TextEditingController();
-  final TextEditingController userIdController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
   final TextEditingController pinPasswordController = TextEditingController();
   final TextEditingController confirmPinController = TextEditingController();
 
@@ -61,6 +123,23 @@ class _SignUpPageState extends State<SignUpPage2> {
           pinPasswordController.text == confirmPinController.text;
     });
   }
+
+  // [yj] 유저 타입1 최대 2개 제한 걸기
+  int getTotalParentCount() {
+    // userType 1(엄마), 2(아빠) 포함
+    return groupAccounts.where((user) => user['userType'] == 1 || user['userType'] == 2).length;
+  }
+
+  void _onUserTypeChanged(int? newType) {
+    if ((newType == 1 || newType == 2) && getTotalParentCount() >= 2) {
+      _showDialog('제한', '엄마/아빠 계정은 최대 2명까지만 등록할 수 있어요.');
+      return;
+    }
+    setState(() {
+      userType = newType ?? 1;
+    });
+  }
+
 
   @override
   void dispose() {
@@ -120,10 +199,12 @@ class _SignUpPageState extends State<SignUpPage2> {
 
   @override
   Widget build(BuildContext context) {
+    final userList = ModalRoute.of(context)!.settings.arguments as List<UserVo>;
+
     return MainLayout(
       child: Column(
         children: [
-          const HeaderPage(pageTitle: "회원가입", showBackButton: true),
+          const HeaderPage(pageTitle: "계정생성", showBackButton: true),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -229,7 +310,7 @@ class _SignUpPageState extends State<SignUpPage2> {
                     const SizedBox(height: 20),
                     UserTypeDropdown(
                       value: userType,
-                      onChanged: (val) => setState(() => userType = val ?? 1),
+                      onChanged: _onUserTypeChanged,
                       onSaved: (val) => userType = val ?? 1,
                     ),
                     const SizedBox(height: 20),
@@ -247,7 +328,7 @@ class _SignUpPageState extends State<SignUpPage2> {
                           debugPrint('전화: $telNumber, 이메일: $email, 지역: $regionId');
                           debugPrint('유저타입: $userType');
 
-                          // 회원가입 성공 모달 띄우기
+                          // 계정 추가 성공 모달 띄우기
                           showDialog(
                             context: context,
                             builder: (BuildContext context) {
@@ -258,7 +339,7 @@ class _SignUpPageState extends State<SignUpPage2> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      Navigator.pushReplacementNamed(context, '/selectAccount');// 모달 닫기
+                                      Navigator.pushReplacementNamed(context, '/selectAccount', arguments: userList,);
                                     },
                                     child: const Text('확인'),
                                   ),
@@ -376,14 +457,14 @@ class UserTypeDropdown extends StatelessWidget {
           value: 1,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text('부모1'),
+            child: Text('엄마'),
           ),
         ),
         DropdownMenuItem(
           value: 2,
           child: Align(
             alignment: Alignment.centerLeft,
-            child: Text('부모2'),
+            child: Text('아빠'),
           ),
         ),
         DropdownMenuItem(
