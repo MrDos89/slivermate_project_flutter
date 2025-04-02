@@ -114,7 +114,7 @@ class _IntroducePageState extends State<IntroducePage> {
 
       final Dio dio = Dio();
       final purchaseResponse = await dio.get(
-        'http://13.125.197.66:18090/api/purchase/u/${widget.dummyUser!.uid}',
+        'http://54.180.127.164:18090/api/purchase/u/${widget.dummyUser!.uid}',
         options: Options(validateStatus: (status) => true),
       );
 
@@ -138,7 +138,7 @@ class _IntroducePageState extends State<IntroducePage> {
 
       if (widget.hasPurchased) {
         await dio.patch(
-          'http://13.125.197.66:18090/api/purchase/${fetchedLesson.lessonId}/${widget.dummyUser!.uid}',
+          'http://54.180.127.164:18090/api/purchase/${fetchedLesson.lessonId}/${widget.dummyUser!.uid}',
         );
       }
 
