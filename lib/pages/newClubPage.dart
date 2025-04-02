@@ -17,7 +17,8 @@ class _NewClubPageState extends State<NewClubPage> {
   List<String> selectedInterests = [];
 
   // 정기 모임 선택 체크박스
-  List<String> meetingFrequency = ['매일'];
+  String selectedMeetingFrequency = ''; // 모임 횟수 선택
+  String selectedCapacity = ''; // 모임 가입 인원 선택
 
   // 모임 썸네일 URL
   String thumbnailURL = '';
@@ -71,7 +72,7 @@ class _NewClubPageState extends State<NewClubPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "모임명을 입력해 주세요.",
+          "모임 이름을 만들어주세요.",
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
@@ -183,48 +184,99 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        // Text(
+        //   "정기 모임 선택",
+        //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+        // ),
+
+        // 모임 횟수
         Text(
-          "정기 모임 선택",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          "모임 횟수",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        CheckboxListTile(
-          title: Text("매일"),
-          value: meetingFrequency.contains('매일'),
-          onChanged: (bool? value) {
-            setState(() {
-              if (value == true) {
-                meetingFrequency.add('매일');
-              } else {
-                meetingFrequency.remove('매일');
-              }
-            });
-          },
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children:
+              [
+                '매일',
+                '주 1회',
+                '주 2~3회',
+                '주 4회',
+                '주 5~7회',
+                '월 1회',
+                '월 2~3회',
+                '월 4회',
+                '월 5~6회',
+                '월 7~9회',
+              ].map((frequency) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedMeetingFrequency = frequency;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    decoration: BoxDecoration(
+                      color:
+                          selectedMeetingFrequency == frequency
+                              ? Colors.black
+                              : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      frequency,
+                      style: TextStyle(
+                        color:
+                            selectedMeetingFrequency == frequency
+                                ? Colors.white
+                                : Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
         ),
-        CheckboxListTile(
-          title: Text("주 몇 회"),
-          value: meetingFrequency.contains('주 몇 회'),
-          onChanged: (bool? value) {
-            setState(() {
-              if (value == true) {
-                meetingFrequency.add('주 몇 회');
-              } else {
-                meetingFrequency.remove('주 몇 회');
-              }
-            });
-          },
+
+        SizedBox(height: 20), // 간격 조정
+        // 모임 가입 인원
+        Text(
+          "모임 가입 인원",
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
-        CheckboxListTile(
-          title: Text("월 몇 회"),
-          value: meetingFrequency.contains('월 몇 회'),
-          onChanged: (bool? value) {
-            setState(() {
-              if (value == true) {
-                meetingFrequency.add('월 몇 회');
-              } else {
-                meetingFrequency.remove('월 몇 회');
-              }
-            });
-          },
+        Wrap(
+          spacing: 10,
+          runSpacing: 10,
+          children:
+              ['~10명', '~20명', '~30명', '~50명', '~100명'].map((capacity) {
+                return GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      selectedCapacity = capacity;
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    decoration: BoxDecoration(
+                      color:
+                          selectedCapacity == capacity
+                              ? Colors.black
+                              : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      capacity,
+                      style: TextStyle(
+                        color:
+                            selectedCapacity == capacity
+                                ? Colors.white
+                                : Colors.black,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
         ),
       ],
     );
