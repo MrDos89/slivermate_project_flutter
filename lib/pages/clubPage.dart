@@ -653,7 +653,7 @@ class RegionDropdown extends StatelessWidget {
         maxHeight: 150,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Colors.white,
+          color: const Color(0xFFF5F5F5),
           border: Border.all(color: Colors.grey.shade300),
         ),
       ),

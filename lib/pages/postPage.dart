@@ -986,7 +986,7 @@ class RegionDropdown extends StatelessWidget {
       isExpanded: true,
       value: value,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
         labelText: '지역 선택',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
       ),
@@ -1011,8 +1011,8 @@ class RegionDropdown extends StatelessWidget {
         maxHeight: 150,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8),
-          color: Colors.white,
-          border: Border.all(color: Colors.grey.shade300),
+          color: Color(0xFFF5F5F5),
+          border: Border.all(color: Colors.grey.shade100),
         ),
       ),
     );
