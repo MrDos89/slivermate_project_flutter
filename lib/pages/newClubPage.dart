@@ -152,17 +152,23 @@ class _NewClubPageState extends State<NewClubPage> {
                       }
                     });
                   },
-                  child: Chip(
-                    label: Text(interest),
-                    backgroundColor:
-                        selectedInterests.contains(interest)
-                            ? Colors.black
-                            : Colors.grey.shade300,
-                    labelStyle: TextStyle(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                    decoration: BoxDecoration(
                       color:
                           selectedInterests.contains(interest)
-                              ? Colors.white
-                              : Colors.black,
+                              ? Colors.black
+                              : Colors.grey.shade300,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      interest,
+                      style: TextStyle(
+                        color:
+                            selectedInterests.contains(interest)
+                                ? Colors.white
+                                : Colors.black,
+                      ),
                     ),
                   ),
                 );
