@@ -17,7 +17,10 @@ class ChatTestPage extends StatelessWidget {
           preferredSize: const Size.fromHeight(70),
           child: HeaderPage(pageTitle: "채팅 테스트 페이지"),
         ),
-        body: Container(color: Colors.grey[100], child: const _ChatTestPage()),
+        body: Container(
+          color: const Color(0xFFE8F5E9),
+          child: const _ChatTestPage(),
+        ),
       ),
     );
   }
@@ -58,7 +61,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
     });
 
     // 일정 간격으로 guest 메시지 자동 추가
-    _guestMessageTimer = Timer.periodic(const Duration(seconds: 30), (timer) {
+    _guestMessageTimer = Timer.periodic(const Duration(seconds: 60), (timer) {
       setState(() {
         _messages.add({
           'sender': 'guest',
@@ -97,7 +100,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.transparent,
       appBar: AppBar(title: const Text('채팅 테스트 중')),
       body: Column(
         children: [
@@ -220,7 +223,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                                       color:
                                           isMe
                                               ? Colors.yellow[700]
-                                              : Colors.grey[800],
+                                              : Colors.white,
                                       borderRadius: BorderRadius.only(
                                         topLeft: const Radius.circular(12),
                                         topRight: const Radius.circular(12),
@@ -235,8 +238,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                                     child: Text(
                                       message['message'] ?? '',
                                       style: TextStyle(
-                                        color:
-                                            isMe ? Colors.black : Colors.white,
+                                        color: Colors.black,
                                         fontSize: 16,
                                       ),
                                     ),
