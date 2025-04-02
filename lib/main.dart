@@ -19,6 +19,7 @@ import 'package:slivermate_project_flutter/pages/signUpPage.dart';
 import 'package:slivermate_project_flutter/pages/selectAccountPage.dart';
 import 'package:slivermate_project_flutter/pages/signUpPage2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
+import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -102,6 +103,7 @@ class MyApp extends StatelessWidget {
         },
         "/newPostPage": (context) => NewPostPage(),
 
+        "/clubDetailPage": (context) => ClubDetailPage(),
 
         // test
         "/chatTest": (context) => ChatTestPage(),

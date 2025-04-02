@@ -109,6 +109,14 @@ class _ConfigPageState extends State<_ConfigPage> {
                 child: Text("새 피드 페이지로 이동"),
               ),
             ),
+            SizedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/clubDetailPage");
+                },
+                child: Text("모임 상세 페이지"),
+              ),
+            ),
             // SizedBox(
             //   child: ElevatedButton(
             //     onPressed: () {
