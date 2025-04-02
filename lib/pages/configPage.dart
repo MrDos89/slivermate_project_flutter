@@ -117,6 +117,22 @@ class _ConfigPageState extends State<_ConfigPage> {
                 child: Text("모임 상세 페이지"),
               ),
             ),
+            SizedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/newClubPage");
+                },
+                child: Text("새 모임 만들기 페이지로 이동"),
+              ),
+            ),
+            // SizedBox(
+            //   child: ElevatedButton(
+            //     onPressed: () {
+            //       Navigator.pushNamed(context, "/settingPage");
+            //     },
+            //     child: Text("설정 페이지로 이동"),
+            //   ),
+            // ),
             // SizedBox(
             //   child: ElevatedButton(
             //     onPressed: () {

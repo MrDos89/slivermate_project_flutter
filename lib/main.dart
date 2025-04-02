@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/pages/mainPage.dart';
 import 'package:slivermate_project_flutter/pages/introducePage.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart';
+import 'package:slivermate_project_flutter/pages/newClubPage.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
 import 'package:slivermate_project_flutter/pages/notificationPage.dart';
@@ -20,7 +21,6 @@ import 'package:slivermate_project_flutter/pages/selectAccountPage.dart';
 import 'package:slivermate_project_flutter/pages/signUpPage2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
-
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 void main() async {
@@ -57,7 +57,6 @@ class MyApp extends StatelessWidget {
       userType: 1,
     );
 
-
     return MaterialApp(
       title: 'Slivermate Project', //@dhkim - 가제
       theme: ThemeData(
@@ -84,7 +83,9 @@ class MyApp extends StatelessWidget {
             (context) => ConfigPage(),
         "/purchase": (context) => PurchasePage(dummyUser: dummyUser),
         "/call": (context) => CallStaffPage(dummyUser: dummyUser),
-        "/notifications": (context) => NotificationPage(dummyUser: dummyUser, isEditing: false),
+        "/notifications":
+            (context) =>
+                NotificationPage(dummyUser: dummyUser, isEditing: false),
         "/config": (context) => ConfigPage(),
         "/userprofile": (context) => UserProfilePage(),
         "/chat": (context) => ChatPage(),
@@ -94,16 +95,19 @@ class MyApp extends StatelessWidget {
         "/loginPage": (context) => LoginPage(dummyUser: dummyUser),
         "/signUpPage": (context) => SignUpPage(),
         "/selectAccount": (context) {
-          final args = ModalRoute.of(context)?.settings.arguments as List<UserVo>;
+          final args =
+              ModalRoute.of(context)?.settings.arguments as List<UserVo>;
           return SelectAccountPage(userList: args);
         },
         "/signUpPage2": (context) {
-          final args = ModalRoute.of(context)!.settings.arguments as List<UserVo>;
+          final args =
+              ModalRoute.of(context)!.settings.arguments as List<UserVo>;
           return SignUpPage2(userList: args);
         },
         "/newPostPage": (context) => NewPostPage(),
 
         // "/clubDetailPage": (context) => ClubDetailPage(),
+        "/newClubPage": (context) => NewClubPage(),
 
         // test
         "/chatTest": (context) => ChatTestPage(),
