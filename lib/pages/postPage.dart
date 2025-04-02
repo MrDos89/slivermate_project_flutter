@@ -575,10 +575,18 @@ class _PostPageState extends State<PostPage> {
                                     selected: isSelected,
                                     onSelected: (selected) {
                                       setState(() {
-                                        if (selected) {
-                                          _selectedSubCategoryIds.add(e.key);
+                                        if (e.key == -1) {
+                                          // '전체' 선택 시 모든 선택 초기화
+                                          if (selected) {
+                                            _selectedSubCategoryIds.clear();
+                                          }
                                         } else {
-                                          _selectedSubCategoryIds.remove(e.key);
+                                          if (selected) {
+                                            _selectedSubCategoryIds.add(e.key);
+                                            _selectedSubCategoryIds.remove(-1); // 다른 항목 선택 시 '전체' 제거
+                                          } else {
+                                            _selectedSubCategoryIds.remove(e.key);
+                                          }
                                         }
                                       });
                                     },

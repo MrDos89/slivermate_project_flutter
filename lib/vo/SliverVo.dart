@@ -47,7 +47,7 @@ class SliverVo {
   }
 
   ///  **API 요청 기능 추가 (Dio 사용)**
-  static const String apiUrl = "http://13.125.197.66:18090/api/report";
+  static const String apiUrl = "http://54.180.127.164:18090/api/report";
   static final Dio dio = Dio();
 
   ///  신고 데이터 전송 (POST)

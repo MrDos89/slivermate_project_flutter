@@ -32,7 +32,7 @@ class CategoryVo {
 
 class CategoryService {
   static const String apiEndpoint =
-      "http://13.125.197.66:18090/api/category"; // 서버 URL
+      "http://54.180.127.164:18090/api/category"; // 서버 URL
   static final Dio dio = Dio();
 
   //  전체 카테고리 리스트 가져오기

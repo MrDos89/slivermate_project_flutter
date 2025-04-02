@@ -2,10 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/pages/signUpPage2.dart';
 
-class SelectAccountPage extends StatelessWidget {
+class SelectAccountPage extends StatefulWidget {
   final List<UserVo> userList;
 
   const SelectAccountPage({super.key, required this.userList});
+
+  @override
+  State<SelectAccountPage> createState() => _SelectAccountPageState();
+}
+
+
+class _SelectAccountPageState extends State<SelectAccountPage> {
+  late List<UserVo> _accounts;
+
+
+  @override
+  void initState() {
+    super.initState();
+    _accounts = widget.userList;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +29,7 @@ class SelectAccountPage extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: GridView.builder(
-          itemCount: userList.length < 4 ? userList.length + 1 : userList.length,
+          itemCount: _accounts.length < 4 ? _accounts.length + 1 : _accounts.length,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
             mainAxisSpacing: 12,
@@ -22,14 +37,21 @@ class SelectAccountPage extends StatelessWidget {
             childAspectRatio: 0.9,
           ),
           itemBuilder: (context, index) {
-            if (userList.length < 4 && index == userList.length) {
-              // + 계정 추가 카드
+            if (_accounts.length < 4 && index == _accounts.length) {
               return GestureDetector(
-                onTap: () {
-                  Navigator.push(
+                onTap: () async {
+                  final result = await Navigator.pushNamed(
                     context,
-                    MaterialPageRoute(builder: (context) => SignUpPage2()),
+                    '/signUpPage2',
+                    arguments: _accounts,
                   );
+
+                  // 새로 추가된 계정이 있다면 갱신
+                  if (result is List<UserVo>) {
+                    setState(() {
+                      _accounts = result;
+                    });
+                  }
                 },
                 child: Card(
                   color: Colors.grey.shade200,
@@ -50,8 +72,7 @@ class SelectAccountPage extends StatelessWidget {
               );
             }
 
-            // 기존 계정 카드
-            final user = userList[index];
+            final user = _accounts[index];
             return GestureDetector(
               onTap: () {
                 Navigator.pushNamed(
@@ -79,6 +100,8 @@ class SelectAccountPage extends StatelessWidget {
       ),
     );
   }
+}
+
 
   // [yj] '준비중입니다' 함수
   // void _showComingSoonDialog(BuildContext context) {
@@ -98,5 +121,7 @@ class SelectAccountPage extends StatelessWidget {
   //         ),
   //   );
   // }
-}
+
+
+
 

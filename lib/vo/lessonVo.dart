@@ -96,7 +96,7 @@ class LessonVo {
 
 //  API 요청을 처리하는 함수
 class LessonService {
-  static const String apiEndpoint = "http://13.125.197.66:18090/api/lesson";
+  static const String apiEndpoint = "http://54.180.127.164:18090/api/lesson";
   static final Dio dio = Dio();
 
   static Future<LessonVo?> fetchLessonData(
