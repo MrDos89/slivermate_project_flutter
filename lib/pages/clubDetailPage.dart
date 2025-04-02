@@ -3,7 +3,9 @@ import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 
 class ClubDetailPage extends StatefulWidget {
-  const ClubDetailPage({super.key});
+  final Map<String, dynamic> clubData;
+
+  const ClubDetailPage({super.key, required this.clubData});
 
   @override
   State<ClubDetailPage> createState() => _ClubDetailPageState();
@@ -13,17 +15,17 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
   int _selectedTabIndex = 0;
 
-  final Map<String, dynamic> dummyClubData = {
-    "name": "서울 등산 동아리",
-    "region": "서울특별시",
-    "category": "운동",
-    "description": "주말마다 서울 근교 등산을 함께해요!",
-    "leader": "홍길동",
-    "memberCount": 12,
-    "maxMemberCount": 20,
-    "createdAt": "2024.05.01",
-    "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTybiZUyvUiRXzKNYkxREbcGaVhB_8lrXE6uw&s",
-  };
+  // final Map<String, dynamic> dummyClubData = {
+  //   "name": "서울 등산 동아리",
+  //   "region": "서울특별시",
+  //   "category": "운동",
+  //   "description": "주말마다 서울 근교 등산을 함께해요!",
+  //   "leader": "홍길동",
+  //   "memberCount": 12,
+  //   "maxMemberCount": 20,
+  //   "createdAt": "2024.05.01",
+  //   "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTybiZUyvUiRXzKNYkxREbcGaVhB_8lrXE6uw&s",
+  // };
 
 
 
@@ -71,21 +73,20 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         return const SizedBox.shrink();
     }
   }
+
   Widget _buildIntroSection() {
-    final String name = dummyClubData["name"] ?? "이름 없음";
-    final String createdAt = dummyClubData["createdAt"] ?? "-";
-    final String leader = dummyClubData["leader"] ?? "-";
-    final int memberCount = dummyClubData["memberCount"] ?? 0;
-    final int maxCount = dummyClubData["maxMemberCount"] ?? 0;
-    // final String category = dummyClubData["category"] ?? "-";
-    final String description = dummyClubData["description"] ?? "-";
+    final String name = widget.clubData["name"]?.toString() ?? "이름 없음";
+    final String createdAt = widget.clubData["createdAt"]?.toString() ?? "-";
+    final String leader = widget.clubData["leader"]?.toString() ?? "-";
+    final int memberCount = widget.clubData["memberCount"] as int? ?? 0;
+    final int maxCount = widget.clubData["maxMemberCount"] as int? ?? 0;
+    final String description = widget.clubData["description"]?.toString() ?? "-";
 
     return Padding(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 이름 + 생성일
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -103,8 +104,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             ],
           ),
           const SizedBox(height: 12),
-
-          // 모임장 + 인원
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -125,15 +124,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             ],
           ),
           const SizedBox(height: 12),
-
-          // 카테고리
-          // Text(
-          //   "카테고리: $category",
-          //   style: const TextStyle(fontSize: 16),
-          // ),
-          // const SizedBox(height: 12),
-
-          // 소개
           Text(
             description,
             style: const TextStyle(fontSize: 16),
@@ -142,8 +132,9 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       ),
     );
   }
+
   Widget _buildThumbnail() {
-    final String thumbnailUrl = dummyClubData["thumbnailUrl"] ?? "";
+    final String thumbnailUrl = widget.clubData["thumbnailUrl"]?.toString() ?? "";
 
     return SizedBox(
       width: double.infinity,
@@ -157,6 +148,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       ),
     );
   }
+
 
 
   @override

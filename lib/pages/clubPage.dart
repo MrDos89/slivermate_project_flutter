@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
+import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 
 const Map<int, String> regionMap = {
@@ -92,7 +93,7 @@ class _ClubPageState extends State<_ClubPage> {
     "족구",
   ];
 
-  List<Map<String, String>> clubData = [];
+  List<Map<String, Object>> clubData = [];
   bool isLoading = true;
 
   final PageController _pageController = PageController();
@@ -109,28 +110,49 @@ class _ClubPageState extends State<_ClubPage> {
       {
         "name": "서울 등산 동아리",
         "region": "서울특별시",
-        "category": "운동",
+        "category": "등산",
         "description": "주말마다 서울 근교 등산을 함께해요!",
+        "leader": "산개",
+        "memberCount": 12,
+        "maxMemberCount": 20,
+        "createdAt": "2024.05.01",
+        "thumbnailUrl": "https://lh3.googleusercontent.com/proxy/r1N3wBQEiaHzWjoASRoNrQd7xeqKzIlD-Mabk-59Dsda1BcBBSyGs--aAWCWqQBPxxVda6I0Jxu1VjrIVGHUltNI6u5VYUoUMigAYeVPPDzX_ecqHtwBkxYbjEJX1eAxPj72GbQU",
       },
       {
         "name": "경기 독서 모임",
         "region": "인천광역시",
         "category": "독서",
         "description": "한 달 한 권 함께 읽고 이야기 나눠요.",
+        "leader": "책벌래",
+        "memberCount": 9,
+        "maxMemberCount": 15,
+        "createdAt": "2024.04.20",
+        "thumbnailUrl": "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1c8F/image/QQsbiyF9-kBvQasym-Vowm5wk-U.jpg",
       },
       {
         "name": "부산 퍼즐 동호회",
         "region": "부산광역시",
         "category": "퍼즐",
         "description": "퍼즐 좋아하는 분들 모여요!",
+        "leader": "퍼즐킹",
+        "memberCount": 7,
+        "maxMemberCount": 12,
+        "createdAt": "2024.03.10",
+        "thumbnailUrl": "https://cdn.crowdpic.net/detail-thumb/thumb_d_07D9AF521C33E48CF5A486668B15A779.jpg",
       },
       {
         "name": "서울 테니스 동호회",
         "region": "서울특별시",
         "category": "테니스",
         "description": "테니스 좋아하는 분들 모여요!",
+        "leader": "초테",
+        "memberCount": 16,
+        "maxMemberCount": 25,
+        "createdAt": "2024.02.15",
+        "thumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWIHbtHVx1GiQzv3PctdxJCsIr6MpOGgI8rg&s",
       },
     ];
+
 
     setState(() {
       clubData = dummyResponse;
@@ -145,9 +167,9 @@ class _ClubPageState extends State<_ClubPage> {
     return List.generate(rowCount, (rowIndex) {
       final start = rowIndex * itemsPerRow;
       final end =
-          (start + itemsPerRow) <= allCategories.length
-              ? start + itemsPerRow
-              : allCategories.length;
+      (start + itemsPerRow) <= allCategories.length
+          ? start + itemsPerRow
+          : allCategories.length;
 
       final rowItems = allCategories.sublist(start, end);
 
@@ -155,24 +177,24 @@ class _ClubPageState extends State<_ClubPage> {
         padding: const EdgeInsets.only(bottom: 8),
         child: Row(
           children:
-              rowItems.map((category) {
-                return Padding(
-                  padding: const EdgeInsets.only(right: 8.0),
-                  child: _buildFilterChip(
-                    category,
-                    selectedCategories.contains(category),
+          rowItems.map((category) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 8.0),
+              child: _buildFilterChip(
+                category,
+                selectedCategories.contains(category),
                     (bool value) {
-                      setState(() {
-                        if (value) {
-                          selectedCategories.add(category);
-                        } else {
-                          selectedCategories.remove(category);
-                        }
-                      });
-                    },
-                  ),
-                );
-              }).toList(),
+                  setState(() {
+                    if (value) {
+                      selectedCategories.add(category);
+                    } else {
+                      selectedCategories.remove(category);
+                    }
+                  });
+                },
+              ),
+            );
+          }).toList(),
         ),
       );
     });
@@ -217,25 +239,25 @@ class _ClubPageState extends State<_ClubPage> {
         // Row(
         //   crossAxisAlignment: CrossAxisAlignment.start,
         //   children: [
-            // const SizedBox(
-            //   width: 60, // 제목 너비 고정
-            //   child: Text(
-            //     "지역",
-            //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            //   ),
-            // ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
-                child: RegionDropdown(
-                  value: _selectedRegionId,
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedRegionId = value;
-                    });
-                  },
-                ),
-              ),
-          // ],
+        // const SizedBox(
+        //   width: 60, // 제목 너비 고정
+        //   child: Text(
+        //     "지역",
+        //     style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        //   ),
+        // ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 8),
+          child: RegionDropdown(
+            value: _selectedRegionId,
+            onChanged: (value) {
+              setState(() {
+                _selectedRegionId = value;
+              });
+            },
+          ),
+        ),
+        // ],
         // ),
         const SizedBox(height: 5),
         Row(
@@ -285,12 +307,9 @@ class _ClubPageState extends State<_ClubPage> {
   // }
 
 
-
-  Widget _buildFilterChip(
-    String label,
-    bool selected,
-    Function(bool) onSelected,
-  ) {
+  Widget _buildFilterChip(String label,
+      bool selected,
+      Function(bool) onSelected,) {
     return FilterChip(
       label: Text(
         label,
@@ -301,8 +320,10 @@ class _ClubPageState extends State<_ClubPage> {
       ),
       selected: selected,
       onSelected: onSelected,
-      selectedColor: const Color(0xFF88D498), // 연초록
-      backgroundColor: const Color(0xFFE2F0CB), // 기본 배경
+      selectedColor: const Color(0xFF88D498),
+      // 연초록
+      backgroundColor: const Color(0xFFE2F0CB),
+      // 기본 배경
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
         side: BorderSide(
@@ -338,7 +359,10 @@ class _ClubPageState extends State<_ClubPage> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
@@ -383,9 +407,9 @@ class _ClubPageState extends State<_ClubPage> {
                 height: 8,
                 decoration: BoxDecoration(
                   color:
-                      _currentPage == index
-                          ? Colors.blueAccent
-                          : Colors.grey[300],
+                  _currentPage == index
+                      ? Colors.blueAccent
+                      : Colors.grey[300],
                   borderRadius: BorderRadius.circular(4),
                 ),
               );
@@ -401,20 +425,18 @@ class _ClubPageState extends State<_ClubPage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    final filtered =
-        clubData.where((club) {
-          final region = club["region"] ?? "";
-          final category = club["category"] ?? "";
+    final filtered = clubData.where((club) {
+      final region = club["region"] ?? "";
+      final category = club["category"] ?? "";
 
-          final selectedRegionName = regionMap[_selectedRegionId];
-          final regionMatch = _selectedRegionId == null || region == selectedRegionName;
+      final selectedRegionName = regionMap[_selectedRegionId];
+      final regionMatch = _selectedRegionId == null ||
+          region == selectedRegionName;
+      final categoryMatch =
+          selectedCategories.isEmpty || selectedCategories.contains(category);
 
-          final categoryMatch =
-              selectedCategories.isEmpty ||
-              selectedCategories.contains(category);
-
-          return regionMatch && categoryMatch;
-        }).toList();
+      return regionMatch && categoryMatch;
+    }).toList();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,44 +449,53 @@ class _ClubPageState extends State<_ClubPage> {
           height: 300,
           child: ListView(
             children: [
-              // SizedBox(height: ),
               ...filtered.map((club) {
-                return SizedBox(
-                  width: double.infinity, // 와이드 꽉 채우기
-                  child: Card(
-                    margin: const EdgeInsets.symmetric(vertical: 8),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    elevation: 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            club["name"]!,
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
+                return InkWell(
+                  onTap: () {
+                    print("클럽 데이터 확인: $club");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ClubDetailPage(clubData: club),
+                      ),
+                    );
+                  },
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: Card(
+                      margin: const EdgeInsets.symmetric(vertical: 8),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      elevation: 2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              club["name"] as String,
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          // const SizedBox(height: 2),
-                          Text(
-                            "${club["region"]} · ${club["category"]}",
-                            style: const TextStyle(color: Colors.grey),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(club["description"]!),
-                        ],
+                            Text(
+                              "${club["region"]} · ${club["category"]}",
+                              style: const TextStyle(color: Colors.grey),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(club["description"] as String),
+                          ],
+                        ),
                       ),
                     ),
                   ),
                 );
-              }).toList(),],
+              }).toList(),
+            ],
           ),
-        )
-
+        ),
       ],
     );
   }

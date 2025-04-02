@@ -103,7 +103,7 @@ class MyApp extends StatelessWidget {
         },
         "/newPostPage": (context) => NewPostPage(),
 
-        "/clubDetailPage": (context) => ClubDetailPage(),
+        // "/clubDetailPage": (context) => ClubDetailPage(),
 
         // test
         "/chatTest": (context) => ChatTestPage(),
