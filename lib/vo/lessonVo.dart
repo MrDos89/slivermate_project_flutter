@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class LessonVo {
   final int lessonId;
@@ -22,7 +23,6 @@ class LessonVo {
   final int likeCount;
   final int viewCount;
 
-
   LessonVo({
     required this.lessonId,
     required this.userId,
@@ -43,7 +43,6 @@ class LessonVo {
     required this.lessonGroupId,
     required this.likeCount,
     required this.viewCount,
-
   });
 
   //  JSON → LessonVO 변환
@@ -110,7 +109,9 @@ class LessonVo {
 
 //  API 요청을 처리하는 함수
 class LessonService {
-  static const String apiEndpoint = "http://54.180.127.164:18090/api/lesson";
+  static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static String ec2Port = dotenv.get("EC2_PORT");
+  static final String apiEndpoint = "http://$ec2IpAddress:$ec2Port/api/lesson";
   static final Dio dio = Dio();
 
   static Future<LessonVo?> fetchLessonData(

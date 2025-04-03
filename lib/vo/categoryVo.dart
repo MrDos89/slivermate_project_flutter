@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class CategoryVo {
   final int categoryId;
@@ -31,8 +32,11 @@ class CategoryVo {
 }
 
 class CategoryService {
-  static const String apiEndpoint =
-      "http://54.180.127.164:18090/api/category"; // 서버 URL
+  static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static String ec2Port = dotenv.get("EC2_PORT");
+
+  static final String apiEndpoint =
+      "http://$ec2IpAddress:$ec2Port/api/category"; // 서버 URL
   static final Dio dio = Dio();
 
   //  전체 카테고리 리스트 가져오기

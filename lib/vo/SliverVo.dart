@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 ///  신고 데이터 모델 + API 연동 (Vo + Service 합침)
 class SliverVo {
@@ -47,7 +48,10 @@ class SliverVo {
   }
 
   ///  **API 요청 기능 추가 (Dio 사용)**
-  static const String apiUrl = "http://54.180.127.164:18090/api/report";
+  static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static String ec2Port = dotenv.get("EC2_PORT");
+
+  static final String apiUrl = "http://$ec2IpAddress:$ec2Port/api/report";
   static final Dio dio = Dio();
 
   ///  신고 데이터 전송 (POST)

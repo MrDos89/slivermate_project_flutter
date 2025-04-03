@@ -61,7 +61,7 @@ class PurchaseVo {
 
 //  API 요청을 처리하는 함수
 class PurchaseService {
-  static const String apiEndPoint = "http://54.180.127.164:18090/api/purchase";
+  static const String apiEndPoint = `http://$EC2_IP_ADDRESS:18090/api/purchase`;
   static final Dio dio = Dio();
 
   static Future<bool> fetchPurchaseData(PurchaseVo purchaseVo) async {

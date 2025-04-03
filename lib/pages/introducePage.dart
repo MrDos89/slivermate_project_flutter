@@ -5,6 +5,7 @@ import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 //  카테고리 ID를 문자열로 변환
 const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
@@ -96,6 +97,9 @@ class _IntroducePageState extends State<IntroducePage> {
 
   // [yj] API 데이터 가져오기 및 결제 정보 확인해서 강의 로드
   Future<void> fetchLessonData() async {
+    String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+    String ec2Port = dotenv.get("EC2_PORT");
+
     try {
       final fetchedLesson = await LessonService.fetchLessonData(
         widget.lessonCategory,
@@ -114,7 +118,7 @@ class _IntroducePageState extends State<IntroducePage> {
 
       final Dio dio = Dio();
       final purchaseResponse = await dio.get(
-        'http://54.180.127.164:18090/api/purchase/u/${widget.dummyUser!.uid}',
+        'http://$ec2IpAddress:$ec2Port/api/purchase/u/${widget.dummyUser!.uid}',
         options: Options(validateStatus: (status) => true),
       );
 
@@ -138,7 +142,7 @@ class _IntroducePageState extends State<IntroducePage> {
 
       if (widget.hasPurchased) {
         await dio.patch(
-          'http://54.180.127.164:18090/api/purchase/${fetchedLesson.lessonId}/${widget.dummyUser!.uid}',
+          'http://$ec2IpAddress:$ec2Port/api/purchase/${fetchedLesson.lessonId}/${widget.dummyUser!.uid}',
         );
       }
 

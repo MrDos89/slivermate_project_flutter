@@ -36,7 +36,8 @@ class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController userIdController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
   final TextEditingController pinPasswordController = TextEditingController();
   final TextEditingController confirmPinController = TextEditingController();
 
@@ -75,8 +76,7 @@ class _SignUpPageState extends State<SignUpPage> {
   // [yj] 핀 번호, 핀 번호 확인
   void _validatePinMatch() {
     setState(() {
-      isPinMatching =
-          pinPasswordController.text == confirmPinController.text;
+      isPinMatching = pinPasswordController.text == confirmPinController.text;
     });
   }
 
@@ -116,7 +116,6 @@ class _SignUpPageState extends State<SignUpPage> {
       _showDialog('중복', '이미 사용 중인 닉네임입니다.');
     }
   }
-
 
   // [yj] 아이디 중복 확인 함수
   Future<bool> checkUserIdAvailable(String userId) async {
@@ -182,7 +181,11 @@ class _SignUpPageState extends State<SignUpPage> {
                     TextFormField(
                       decoration: const InputDecoration(labelText: '이름'),
                       onSaved: (value) => userName = value ?? '',
-                      validator: (value) => value == null || value.isEmpty ? '이름을 입력해주세요.' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? '이름을 입력해주세요.'
+                                  : null,
                     ),
                     Row(
                       children: [
@@ -191,7 +194,11 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: TextFormField(
                             decoration: const InputDecoration(labelText: '닉네임'),
                             onSaved: (value) => nickname = value ?? '',
-                            validator: (value) => value == null || value.isEmpty ? '닉네임을 입력해주세요.' : null,
+                            validator:
+                                (value) =>
+                                    value == null || value.isEmpty
+                                        ? '닉네임을 입력해주세요.'
+                                        : null,
                             controller: nicknameController,
                           ),
                         ),
@@ -201,7 +208,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             onPressed: _checkNicknameDuplication,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 8),
-                              backgroundColor: const Color(0xFFE0F8DF).withAlpha(128),
+                              backgroundColor: const Color(
+                                0xFFE0F8DF,
+                              ).withAlpha(128),
                             ),
                             child: const Text('중복 확인'),
                           ),
@@ -216,7 +225,11 @@ class _SignUpPageState extends State<SignUpPage> {
                             decoration: const InputDecoration(labelText: '아이디'),
                             controller: userIdController,
                             onSaved: (value) => userId = value ?? '',
-                            validator: (value) => value == null || value.isEmpty ? '아이디를 입력해주세요.' : null,
+                            validator:
+                                (value) =>
+                                    value == null || value.isEmpty
+                                        ? '아이디를 입력해주세요.'
+                                        : null,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -226,7 +239,9 @@ class _SignUpPageState extends State<SignUpPage> {
                             onPressed: _checkUserIdDuplication,
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(vertical: 8),
-                              backgroundColor: const Color(0xFFE0F8DF).withAlpha(128),
+                              backgroundColor: const Color(
+                                0xFFE0F8DF,
+                              ).withAlpha(128),
                             ),
                             child: const Text('중복 확인'),
                           ),
@@ -241,23 +256,40 @@ class _SignUpPageState extends State<SignUpPage> {
                           decoration: const InputDecoration(labelText: '비밀번호'),
                           obscureText: true,
                           onSaved: (value) => userPassword = value ?? '',
-                          validator: (value) => value == null || value.isEmpty ? '비밀번호를 입력해주세요.' : null,
+                          validator:
+                              (value) =>
+                                  value == null || value.isEmpty
+                                      ? '비밀번호를 입력해주세요.'
+                                      : null,
                         ),
                         TextFormField(
                           controller: confirmPasswordController,
-                          decoration: const InputDecoration(labelText: '비밀번호 확인'),
+                          decoration: const InputDecoration(
+                            labelText: '비밀번호 확인',
+                          ),
                           obscureText: true,
-                          validator: (value) => value == null || value.isEmpty ? '비밀번호를 한 번 더 입력 해주세요.' : null,
+                          validator:
+                              (value) =>
+                                  value == null || value.isEmpty
+                                      ? '비밀번호를 한 번 더 입력 해주세요.'
+                                      : null,
                         ),
                         const SizedBox(height: 4),
                         if (!isPasswordMatching)
                           Row(
                             children: const [
-                              Icon(Icons.error_outline, color: Colors.red, size: 18),
+                              Icon(
+                                Icons.error_outline,
+                                color: Colors.red,
+                                size: 18,
+                              ),
                               SizedBox(width: 6),
                               Text(
                                 '비밀번호가 다릅니다',
-                                style: TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -275,12 +307,20 @@ class _SignUpPageState extends State<SignUpPage> {
                           obscureText: true,
                           keyboardType: TextInputType.number,
                           onSaved: (value) => pinPassword = value ?? '',
-                          validator: (value) => value == null || value.isEmpty ? '핀 번호를 입력해주세요.' : null,
+                          validator:
+                              (value) =>
+                                  value == null || value.isEmpty
+                                      ? '핀 번호를 입력해주세요.'
+                                      : null,
                         ),
                         const SizedBox(height: 4),
                         Row(
                           children: [
-                            const Icon(Icons.error_outline, color: Colors.red, size: 18),
+                            const Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                              size: 18,
+                            ),
                             const SizedBox(width: 6),
                             const Text(
                               '계정 비밀번호 설정입니다.',
@@ -291,21 +331,34 @@ class _SignUpPageState extends State<SignUpPage> {
                         const SizedBox(height: 4),
                         TextFormField(
                           controller: confirmPinController,
-                          decoration: const InputDecoration(labelText: 'PIN 번호 확인'),
+                          decoration: const InputDecoration(
+                            labelText: 'PIN 번호 확인',
+                          ),
                           obscureText: true,
                           keyboardType: TextInputType.number,
                           onSaved: (value) => pinPassword = value ?? '',
-                          validator: (value) => value == null || value.isEmpty ? '핀 번호를 한 번 더 입력 해주세요.' : null,
+                          validator:
+                              (value) =>
+                                  value == null || value.isEmpty
+                                      ? '핀 번호를 한 번 더 입력 해주세요.'
+                                      : null,
                         ),
                         const SizedBox(height: 4),
                         if (!isPinMatching)
                           Row(
                             children: const [
-                              Icon(Icons.error_outline, color: Colors.red, size: 18),
+                              Icon(
+                                Icons.error_outline,
+                                color: Colors.red,
+                                size: 18,
+                              ),
                               SizedBox(width: 6),
                               Text(
                                 'PIN 비밀번호가 다릅니다',
-                                style: TextStyle(color: Colors.red, fontSize: 12),
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12,
+                                ),
                               ),
                             ],
                           ),
@@ -315,13 +368,21 @@ class _SignUpPageState extends State<SignUpPage> {
                       decoration: const InputDecoration(labelText: '전화번호'),
                       keyboardType: TextInputType.phone,
                       onSaved: (value) => telNumber = value ?? '',
-                      validator: (value) => value == null || value.isEmpty ? '전화번호를 입력해주세요.' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? '전화번호를 입력해주세요.'
+                                  : null,
                     ),
                     TextFormField(
                       decoration: const InputDecoration(labelText: '이메일'),
                       keyboardType: TextInputType.emailAddress,
                       onSaved: (value) => email = value ?? '',
-                      validator: (value) => value == null || value.isEmpty ? '이메일을 입력해주세요.' : null,
+                      validator:
+                          (value) =>
+                              value == null || value.isEmpty
+                                  ? '이메일을 입력해주세요.'
+                                  : null,
                     ),
                     const SizedBox(height: 10),
                     RegionDropdown(
@@ -346,8 +407,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           // 디버깅 출력
                           debugPrint('회원가입 정보:');
                           debugPrint('이름: $userName, 닉네임: $nickname');
-                          debugPrint('아이디: $userId, 비번: $userPassword, PIN: $pinPassword');
-                          debugPrint('전화: $telNumber, 이메일: $email, 지역: $regionId');
+                          debugPrint(
+                            '아이디: $userId, 비번: $userPassword, PIN: $pinPassword',
+                          );
+                          debugPrint(
+                            '전화: $telNumber, 이메일: $email, 지역: $regionId',
+                          );
                           debugPrint('유저타입: $userType');
 
                           // 회원가입 성공 모달 띄우기
@@ -361,7 +426,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                   TextButton(
                                     onPressed: () {
                                       Navigator.of(context).pop();
-                                      Navigator.pushReplacementNamed(context, '/loginPage');// 모달 닫기
+                                      Navigator.pushReplacementNamed(
+                                        context,
+                                        '/loginPage',
+                                      ); // 모달 닫기
                                     },
                                     child: const Text('확인'),
                                   ),
@@ -414,15 +482,16 @@ class RegionDropdown extends StatelessWidget {
         // contentPadding: EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       ),
       value: value,
-      items: regionMap.entries.map((entry) {
-        return DropdownMenuItem<int>(
-          value: entry.key,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text(entry.value),
-          ),
-        );
-      }).toList(),
+      items:
+          regionMap.entries.map((entry) {
+            return DropdownMenuItem<int>(
+              value: entry.key,
+              child: Align(
+                alignment: Alignment.centerLeft,
+                child: Text(entry.value),
+              ),
+            );
+          }).toList(),
       onChanged: onChanged,
       onSaved: onSaved,
       buttonStyleData: const ButtonStyleData(
@@ -447,7 +516,6 @@ class RegionDropdown extends StatelessWidget {
     );
   }
 }
-
 
 // [yj] 유저 유형 드롭다운 위젯
 class UserTypeDropdown extends StatelessWidget {
@@ -477,31 +545,19 @@ class UserTypeDropdown extends StatelessWidget {
       items: const [
         DropdownMenuItem(
           value: 1,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('부모1'),
-          ),
+          child: Align(alignment: Alignment.centerLeft, child: Text('엄마')),
         ),
         DropdownMenuItem(
           value: 2,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('부모2'),
-          ),
+          child: Align(alignment: Alignment.centerLeft, child: Text('아빠')),
         ),
         DropdownMenuItem(
           value: 3,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('아들'),
-          ),
+          child: Align(alignment: Alignment.centerLeft, child: Text('아들')),
         ),
         DropdownMenuItem(
           value: 4,
-          child: Align(
-            alignment: Alignment.centerLeft,
-            child: Text('딸'),
-          ),
+          child: Align(alignment: Alignment.centerLeft, child: Text('딸')),
         ),
       ],
       onChanged: onChanged,
@@ -530,4 +586,3 @@ class UserTypeDropdown extends StatelessWidget {
     );
   }
 }
-
