@@ -49,15 +49,31 @@ class _NewClubPageState extends State<NewClubPage> {
                 // 모임 이름 입력창
                 buildClubNameInput(),
 
+                Divider(), // 구분선 추가
                 // 취미 / 관심사 선택 버튼
                 buildInterestCategorySelector(),
 
+                SizedBox(height: 15), // 간격 추가
+
+                Divider(), // 구분선 추가
                 // 정기 모임 선택 체크박스
                 buildRegularMeetingSelector(),
 
+                SizedBox(height: 15), // 간격 추가
+
+                Divider(), // 구분선 추가
+                // 모임 가입 인원 선택
+                buildCapacitySelector(),
+
+                SizedBox(height: 15), // 간격 추가
+
+                Divider(), // 구분선 추가
                 // 모임 소개글 입력창
                 buildDescriptionInput(),
 
+                SizedBox(height: 15), // 간격 추가
+
+                Divider(), // 구분선 추가
                 // 모임 썸네일 입력창
                 buildThumbnailInput(),
 
@@ -79,12 +95,12 @@ class _NewClubPageState extends State<NewClubPage> {
         Text(
           "모임 이름을 만들어주세요.",
           style: TextStyle(
-            fontSize: 20,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.black, // 글씨 색상
+            color: Colors.black,
           ),
         ),
-        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈을 만듦
+        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
         TextField(
           onChanged: (value) {
             setState(() {
@@ -94,19 +110,14 @@ class _NewClubPageState extends State<NewClubPage> {
           maxLength: maxClubNameLength,
           decoration: InputDecoration(
             hintText: "짧고 간결하게 입력해주세요.",
-            hintStyle: TextStyle(
-              fontSize: 14,
-              color: Colors.grey,
-            ), // 힌트 텍스트 스타일
+            hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
             counterText: "${clubName.length}/$maxClubNameLength",
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8),
-              borderSide: BorderSide(
-                color: Colors.grey.shade400, // 테두리 색상
-              ),
+              borderSide: BorderSide(color: Colors.grey.shade400),
             ),
             filled: true,
-            fillColor: Colors.grey.shade100, // 배경 색상
+            fillColor: Colors.grey.shade100,
           ),
         ),
       ],
@@ -151,8 +162,8 @@ class _NewClubPageState extends State<NewClubPage> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedInterests.clear(); //  선택된 값이 있으면 초기화
-                      selectedInterests.add(interest); //  하나만 선택 가능
+                      selectedInterests.clear(); // 선택된 값이 있으면 초기화
+                      selectedInterests.add(interest); // 하나만 선택 가능
                     });
                   },
                   child: Container(
@@ -186,7 +197,6 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // 모임 횟수
         Text(
           "모임 횟수",
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -210,10 +220,7 @@ class _NewClubPageState extends State<NewClubPage> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (selectedMeetingFrequency == frequency) {
-                      } else {
-                        selectedMeetingFrequency = frequency; //  새로운 선택
-                      }
+                      selectedMeetingFrequency = frequency; // 선택
                     });
                   },
                   child: Container(
@@ -238,9 +245,15 @@ class _NewClubPageState extends State<NewClubPage> {
                 );
               }).toList(),
         ),
+      ],
+    );
+  }
 
-        SizedBox(height: 20), // 간격 조정
-        // 모임 가입 인원
+  // 4. 모임 가입 인원 선택
+  Widget buildCapacitySelector() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Text(
           "모임 가입 인원",
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -253,10 +266,7 @@ class _NewClubPageState extends State<NewClubPage> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (selectedCapacity == capacity) {
-                      } else {
-                        selectedCapacity = capacity; // 새로운 선택
-                      }
+                      selectedCapacity = capacity; // 선택
                     });
                   },
                   child: Container(
@@ -285,7 +295,7 @@ class _NewClubPageState extends State<NewClubPage> {
     );
   }
 
-  // 4. 모임 소개글 입력창
+  // 5. 모임 소개글 입력창
   Widget buildDescriptionInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -309,7 +319,7 @@ class _NewClubPageState extends State<NewClubPage> {
     );
   }
 
-  // 5. 모임 썸네일 입력창
+  // 6. 모임 썸네일 입력창
   Widget buildThumbnailInput() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -318,23 +328,15 @@ class _NewClubPageState extends State<NewClubPage> {
           "모임 썸네일",
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
         ),
-        TextField(
-          onChanged: (value) {
-            setState(() {
-              thumbnailURL = value;
-            });
-          },
-          decoration: InputDecoration(
-            hintText: "썸네일 URL을 입력하세요",
-            border: OutlineInputBorder(),
-          ),
+        Container(
+          color: Colors.grey.shade300,
+          height: 150,
+          width: double.infinity,
+          child:
+              thumbnailURL.isEmpty
+                  ? Icon(Icons.camera_alt, color: Colors.grey.shade700)
+                  : Image.network(thumbnailURL, fit: BoxFit.cover),
         ),
-        // 썸네일 이미지를 화면에 표시 (이미지 URL을 입력받아 표시)
-        if (thumbnailURL.isNotEmpty)
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Image.network(thumbnailURL),
-          ),
       ],
     );
   }
@@ -349,7 +351,6 @@ class _NewClubPageState extends State<NewClubPage> {
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // 취소 버튼 클릭 시
                   showDialog(
                     context: context,
                     builder:
@@ -358,7 +359,7 @@ class _NewClubPageState extends State<NewClubPage> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context); // 알림 닫기
+                                Navigator.pop(context);
                               },
                               child: Text('확인'),
                             ),
@@ -369,24 +370,23 @@ class _NewClubPageState extends State<NewClubPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // 둥근 버튼
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: Text(
                   '모임 취소하기',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 5), // 두 버튼 사이에 5px 틈
+            SizedBox(width: 5),
             Expanded(
               child: ElevatedButton(
                 onPressed: () {
-                  // 모임 만들기 버튼 클릭 시
                   showDialog(
                     context: context,
                     builder:
@@ -395,7 +395,7 @@ class _NewClubPageState extends State<NewClubPage> {
                           actions: [
                             TextButton(
                               onPressed: () {
-                                Navigator.pop(context); // 알림 닫기
+                                Navigator.pop(context);
                               },
                               child: Text('확인'),
                             ),
@@ -406,13 +406,13 @@ class _NewClubPageState extends State<NewClubPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30), // 둥근 버튼
+                    borderRadius: BorderRadius.circular(30),
                   ),
                 ),
                 child: Text(
                   '모임 만들기',
                   style: TextStyle(
-                    fontSize: 14,
+                    fontSize: 16,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
