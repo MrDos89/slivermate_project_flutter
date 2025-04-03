@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:slivermate_project_flutter/components/uploadImage.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -178,6 +179,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 key: _formKey,
                 child: ListView(
                   children: [
+                    UploadImage(),
                     TextFormField(
                       decoration: const InputDecoration(labelText: '이름'),
                       onSaved: (value) => userName = value ?? '',
