@@ -219,13 +219,12 @@ class _NewClubPageState extends State<NewClubPage> {
                 '매일',
                 '주 1회',
                 '주 2~3회',
-                '주 4회',
-                '주 5~7회',
+                '주 5회이상',
                 '월 1회',
                 '월 2~3회',
-                '월 4회',
-                '월 5~6회',
-                '월 7~9회',
+                '매월 주말마다',
+                '매월 토요일마다',
+                '매월 일요일마다',
               ].map((frequency) {
                 return GestureDetector(
                   onTap: () {
