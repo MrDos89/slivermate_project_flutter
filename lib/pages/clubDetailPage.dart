@@ -9,35 +9,6 @@ import 'package:slivermate_project_flutter/pages/newClubPostPage.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:slivermate_project_flutter/vo/commentVo.dart';
 
-// final List<PostVo> dummyPostList = [
-//   PostVo(
-//     userNickname: "라이언",
-//     postNote: "이번 주 등산 어때요?",
-//     postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
-//     countLikes: 3,
-//     countComment: 2,
-//     registerDate: DateTime.now().subtract(Duration(hours: 5)),
-//     comments: [],
-//     userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
-//     regionId: 1,
-//     categoryNames: 2,
-//     subCategory: 1,
-//   ),
-//   PostVo(
-//     userNickname: "라이언",
-//     postNote: "이번 주 등산 어때요?",
-//     postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
-//     countLikes: 3,
-//     countComment: 2,
-//     registerDate: DateTime.now().subtract(Duration(hours: 5)),
-//     comments: [],
-//     userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
-//     regionId: 1,
-//     categoryNames: 2,
-//     subCategory: 1,
-//   ),
-// ];
-
 final Map<int, List<Map<String, dynamic>>> dummyClubSchedules = {
   1: [
     {
@@ -46,6 +17,7 @@ final Map<int, List<Map<String, dynamic>>> dummyClubSchedules = {
       "time": "오전 9시",
       "location": "북한산 입구",
       "description": "서울 등산 동호회 4월 정기 모임입니다.",
+      "attendingUsers": <String>[],
     },
     {
       "title": "번개 산책 모임",
@@ -57,6 +29,22 @@ final Map<int, List<Map<String, dynamic>>> dummyClubSchedules = {
   ],
   2: [], // 다른 클럽은 일정 없음
 };
+
+const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
+
+void _handleAttend(Map<String, dynamic> schedule) {
+  if (!schedule.containsKey("attendingUsers")) {
+    schedule["attendingUsers"] = <String>[];
+  }
+  if (!schedule["attendingUsers"].contains(currentUser)) {
+    schedule["attendingUsers"].add(currentUser);
+  }
+}
+
+void _handleDecline(Map<String, dynamic> schedule) {
+  schedule["attendingUsers"]?.remove(currentUser);
+}
+
 
 class ClubDetailPage extends StatefulWidget {
   final Map<String, dynamic> clubData;
@@ -393,51 +381,54 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    return MainLayout(
-      child: Scaffold(
-        backgroundColor: const Color(0xFFF5F5F5),
-        appBar: const HeaderPage(pageTitle: "모임 상세", showBackButton: true),
-        body: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // 썸네일 이미지
-              _buildThumbnail(),
-              // [yj] 가로 버튼들
-              Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 12,
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildTabButton("소개", 0),
-                    _buildTabButton("피드", 1),
-                    _buildTabButton("사진", 2),
-                    _buildTabButton("일정", 3),
-                  ],
-                ),
+    return Stack(
+      children: [
+        MainLayout(
+          child: Scaffold(
+            backgroundColor: const Color(0xFFF5F5F5),
+            appBar: const HeaderPage(pageTitle: "모임 상세", showBackButton: true),
+            body: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildThumbnail(),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildTabButton("소개", 0),
+                        _buildTabButton("피드", 1),
+                        _buildTabButton("사진", 2),
+                        _buildTabButton("일정", 3),
+                      ],
+                    ),
+                  ),
+                  _buildTabContent(),
+                ],
               ),
-              _buildTabContent(),
-            ],
+            ),
+            // 여기선 FAB 삭제!
           ),
         ),
 
-        floatingActionButton: Padding(
-          padding: const EdgeInsets.only(bottom: 22),
+        Positioned(
+          bottom: 80,
+          right: 16,
           child: _isJoined
               ? FloatingActionButton(
             onPressed: () async {
               final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => NewClubPostPage(clubId: widget.clubData["id"]),
+                  builder: (_) =>
+                      NewClubPostPage(clubId: widget.clubData["id"]),
                 ),
               );
 
               if (result == true) {
-                await _refreshClubPosts(); // 새로고침도 함께!
+                await _refreshClubPosts();
               }
             },
             backgroundColor: Colors.green,
@@ -445,7 +436,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
           )
               : SizedBox(
             width: 70,
-            height: 80,
+            height: 70,
             child: FloatingActionButton(
               onPressed: () {
                 setState(() {
@@ -468,11 +459,10 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             ),
           ),
         ),
-      ),
+      ],
     );
   }
 }
-
 
 // 일정 탭 위젯
 Widget _buildScheduleSection(int clubId) {
@@ -522,46 +512,116 @@ Widget _buildScheduleSection(int clubId) {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return AlertDialog(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        title: Text(
-                          "${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일 일정",
-                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        content: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: events.map<Widget>(
-                                  (event) => Column(
+                      return StatefulBuilder(
+                        builder: (context, setModalState) {
+                          return AlertDialog(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            title: Text(
+                              "${selectedDay.year}년 ${selectedDay
+                                  .month}월 ${selectedDay.day}일 일정",
+                              style: const TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            content: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    event['title'],
-                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text("${event['time']} · ${event['location']}"),
-                                  const SizedBox(height: 4),
-                                  Text(event['description']),
-                                ],
+                                children: events.map<Widget>((event) {
+                                  final List<
+                                      String> attendingUsers = event["attendingUsers"] ??
+                                      <String>[];
+
+                                  return Column(
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
+                                    children: [
+                                      Text(event['title'],
+                                          style: const TextStyle(fontSize: 16,
+                                              fontWeight: FontWeight.bold)),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                          "${event['time']} · ${event['location']}"),
+                                      const SizedBox(height: 4),
+                                      Text(event['description']),
+                                      const SizedBox(height: 10),
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment
+                                            .spaceBetween,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              ElevatedButton(
+                                                onPressed: () {
+                                                  if (!attendingUsers.contains(
+                                                      currentUser)) {
+                                                    setModalState(() {
+                                                      attendingUsers.add(
+                                                          currentUser);
+                                                      event["attendingUsers"] =
+                                                          attendingUsers;
+                                                    });
+                                                  }
+                                                },
+                                                style: ElevatedButton.styleFrom(
+                                                    minimumSize: const Size(
+                                                        50, 30)),
+                                                child: const Text("참석",
+                                                    style: TextStyle(
+                                                        fontSize: 12)),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              OutlinedButton(
+                                                onPressed: () {
+                                                  setModalState(() {
+                                                    attendingUsers.remove(
+                                                        currentUser);
+                                                    event["attendingUsers"] =
+                                                        attendingUsers;
+                                                  });
+                                                },
+                                                style: OutlinedButton.styleFrom(
+                                                    minimumSize: const Size(
+                                                        50, 30)),
+                                                child: const Text("불참",
+                                                    style: TextStyle(
+                                                        fontSize: 12)),
+                                              ),
+                                            ],
+                                          ),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.people, size: 16,
+                                                  color: Colors.grey),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                "참석 ${attendingUsers.length}명",
+                                                style: const TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.grey),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  );
+                                }).toList(),
                               ),
-                            ).toList(),
-                          ),
-                        ),
-                        actions: [
-                          TextButton(
-                            onPressed: () => Navigator.pop(context),
-                            child: const Text("닫기"),
-                          ),
-                        ],
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text("닫기"),
+                              ),
+                            ],
+                          );
+                        },
                       );
                     },
                   );
                 }
-
               },
               calendarFormat: CalendarFormat.month,
               onFormatChanged: (_) {},
@@ -610,12 +670,10 @@ Widget _buildScheduleSection(int clubId) {
                       ),
                     );
                   }
-
-                  return null; // 기본 날짜는 기본 스타일 유지
+                  return null;
                 },
               ),
             ),
-
             const SizedBox(height: 12),
             if (_selectedDay != null && scheduleMap[_selectedDay] != null)
               ...scheduleMap[_selectedDay]!.map((schedule) => Card(
