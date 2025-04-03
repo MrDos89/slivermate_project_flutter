@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PurchaseVo {
   // final int id; //  결제 고유 아이디
@@ -61,7 +62,11 @@ class PurchaseVo {
 
 //  API 요청을 처리하는 함수
 class PurchaseService {
-  static const String apiEndPoint = `http://$EC2_IP_ADDRESS:18090/api/purchase`;
+  static final String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static final String ec2Port = dotenv.get("EC2_PORT");
+
+  static final String apiEndPoint =
+      "http://$ec2IpAddress:$ec2Port/api/purchase";
   static final Dio dio = Dio();
 
   static Future<bool> fetchPurchaseData(PurchaseVo purchaseVo) async {
