@@ -99,7 +99,7 @@ class _UploadImageState extends State<UploadImage> {
         _selectedFile != null
             ? ElevatedButton(
               onPressed: _uploadToS3,
-              child: const Text("Upload to S3"),
+              child: const Text("프로필 사진 업로드"),
             )
             : const SizedBox(),
         _progress > 0
