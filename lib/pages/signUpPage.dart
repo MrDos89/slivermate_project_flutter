@@ -3,6 +3,9 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/components/uploadImage.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -33,6 +36,14 @@ Map<int, String> regionMap = {
 };
 
 class _SignUpPageState extends State<SignUpPage> {
+  ///  **API 요청 기능 추가 (Dio 사용)**
+  static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static String ec2Port = dotenv.get("EC2_PORT");
+
+  static final Dio dio = Dio();
+  static String signUpUrl = "http://$ec2IpAddress:$ec2Port/api/user";
+  static String userGroupUrl = "http://$ec2IpAddress:$ec2Port/api/usergroup";
+
   final _formKey = GlobalKey<FormState>();
   final TextEditingController nicknameController = TextEditingController();
   final TextEditingController userIdController = TextEditingController();
@@ -53,7 +64,16 @@ class _SignUpPageState extends State<SignUpPage> {
   String telNumber = '';
   String email = '';
   int? regionId = 1;
-  int userType = 1;
+  int? userType = 1;
+  int? groupId = 0;
+
+  String? thumbnail;
+
+  void handleImageUpload(String imageUrl) {
+    setState(() {
+      thumbnail = imageUrl;
+    });
+  }
 
   @override
   void initState() {
@@ -64,6 +84,26 @@ class _SignUpPageState extends State<SignUpPage> {
     confirmPasswordController.addListener(_validatePasswordMatch);
     pinPasswordController.addListener(_validatePinMatch);
     confirmPinController.addListener(_validatePinMatch);
+
+    // userGroup 데이터 가져와서 groupId 설정
+    fetchUserGroupCount();
+  }
+
+  Future<void> fetchUserGroupCount() async {
+    try {
+      Response response = await dio.get(userGroupUrl);
+
+      if (response.statusCode == 200 && response.data is List) {
+        int groupCount = response.data.length;
+        setState(() {
+          groupId = groupCount + 1;
+        });
+      } else {
+        debugPrint("userGroup 데이터를 불러오는 데 실패했습니다.");
+      }
+    } catch (e) {
+      debugPrint("userGroup 요청 실패: $e");
+    }
   }
 
   // [yj] 비밀번호, 비밀번호 확인
@@ -122,8 +162,6 @@ class _SignUpPageState extends State<SignUpPage> {
   Future<bool> checkUserIdAvailable(String userId) async {
     await Future.delayed(const Duration(milliseconds: 500)); // 가짜 서버 응답 지연
 
-    // TODO: 서버 완성되면 아래 부분을 실제 요청 코드로 교체
-
     // 테스트용 로직: 'admin'은 중복된 아이디로 처리
     if (userId.toLowerCase() == 'admin') return false;
     return true;
@@ -166,6 +204,79 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  Future<void> submitSignUp() async {
+    debugPrint(thumbnail);
+
+    if (thumbnail == null) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("프로필 이미지를 업로드해주세요!")));
+      return;
+    }
+
+    if (!(_formKey.currentState?.validate() ?? false)) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('입력되지 않은 정보가 있습니다.')));
+      return;
+    }
+
+    _formKey.currentState?.save(); // 폼 입력값 저장
+
+    // 서버로 전송할 회원가입 데이터
+    Map<String, dynamic> signUpData = {
+      "user_name": userName,
+      "nickname": nickname,
+      "user_id": userId,
+      "user_password": userPassword,
+      "pin_password": pinPassword,
+      "tel_number": telNumber,
+      "email": email,
+      "region_id": regionId,
+      "user_type": userType,
+      "thumbnail": thumbnail, // 업로드된 이미지 URL
+      "group_id": groupId,
+    };
+
+    try {
+      Response response = await dio.post(signUpUrl, data: signUpData);
+
+      if (response.statusCode == 200) {
+        debugPrint("회원가입 성공: ${response.data}");
+
+        // 성공 메시지 표시 후 로그인 페이지로 이동
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('회원가입 완료'),
+              content: const Text('회원 가입에 성공했습니다!'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    Navigator.pushReplacementNamed(context, '/loginPage');
+                  },
+                  child: const Text('확인'),
+                ),
+              ],
+            );
+          },
+        );
+      } else {
+        debugPrint("서버 응답 오류: ${response.statusCode}");
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("회원가입 실패! 다시 시도해주세요.")));
+      }
+    } catch (e) {
+      debugPrint("서버 요청 실패: $e");
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("네트워크 오류! 다시 시도해주세요.")));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MainLayout(
@@ -179,7 +290,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    UploadImage(),
+                    UploadImage(onUpload: handleImageUpload),
                     TextFormField(
                       decoration: const InputDecoration(labelText: '이름'),
                       onSaved: (value) => userName = value ?? '',
@@ -400,52 +511,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
-                      onPressed: () {
-                        // 먼저 입력값 검증
-                        if (_formKey.currentState?.validate() ?? false) {
-                          // 검증 통과 시 입력값 저장
-                          _formKey.currentState?.save();
-
-                          // 디버깅 출력
-                          debugPrint('회원가입 정보:');
-                          debugPrint('이름: $userName, 닉네임: $nickname');
-                          debugPrint(
-                            '아이디: $userId, 비번: $userPassword, PIN: $pinPassword',
-                          );
-                          debugPrint(
-                            '전화: $telNumber, 이메일: $email, 지역: $regionId',
-                          );
-                          debugPrint('유저타입: $userType');
-
-                          // 회원가입 성공 모달 띄우기
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                title: const Text('회원가입 완료'),
-                                content: const Text('회원 가입에 성공했습니다!'),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                      Navigator.pushReplacementNamed(
-                                        context,
-                                        '/loginPage',
-                                      ); // 모달 닫기
-                                    },
-                                    child: const Text('확인'),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        } else {
-                          // 유효성 검증 실패 시 안내
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('입력되지 않은 정보가 있습니다.')),
-                          );
-                        }
-                      },
+                      onPressed: submitSignUp,
                       child: const Text('회원가입'),
                     ),
                   ],

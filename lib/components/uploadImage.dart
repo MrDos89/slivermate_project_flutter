@@ -5,6 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class UploadImage extends StatefulWidget {
+  final Function(String) onUpload; // 콜백 추가
+
+  const UploadImage({Key? key, required this.onUpload}) : super(key: key);
+
   @override
   _UploadImageState createState() => _UploadImageState();
 }
@@ -34,7 +38,7 @@ class _UploadImageState extends State<UploadImage> {
     final String ec2Port = dotenv.get("EC2_PORT");
 
     String fileName =
-        "upload/${DateTime.now().millisecondsSinceEpoch}-${_selectedFile!.path.split('/').last}";
+        "upload/profile/${DateTime.now().millisecondsSinceEpoch}-${_selectedFile!.path.split('/').last}";
     String url =
         "http://$ec2IpAddress:$ec2Port/s3/presigned-url?fileName=$fileName";
 
@@ -61,6 +65,7 @@ class _UploadImageState extends State<UploadImage> {
           setState(() {
             _uploadedUrl = presignedUrl.split("?")[0]; // S3 이미지 URL 저장
           });
+          widget.onUpload(_uploadedUrl!);
         }
       }
     } catch (e) {

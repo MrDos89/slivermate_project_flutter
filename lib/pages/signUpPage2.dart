@@ -106,6 +106,14 @@ class _SignUpPageState extends State<SignUpPage2> {
   int? regionId = 1;
   int userType = 1;
 
+  String? thumbnail;
+
+  void handleImageUpload(String imageUrl) {
+    setState(() {
+      thumbnail = imageUrl;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -210,7 +218,7 @@ class _SignUpPageState extends State<SignUpPage2> {
                 key: _formKey,
                 child: ListView(
                   children: [
-                    UploadImage(),
+                    UploadImage(onUpload: handleImageUpload),
                     TextFormField(
                       decoration: const InputDecoration(labelText: '이름'),
                       onSaved: (value) => userName = value ?? '',
