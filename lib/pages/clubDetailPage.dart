@@ -5,7 +5,8 @@ import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
 import 'package:slivermate_project_flutter/components/postContainer.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
-import 'package:slivermate_project_flutter/pages/newPostPage.dart';
+import 'package:slivermate_project_flutter/pages/newClubPostPage.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 // final List<PostVo> dummyPostList = [
 //   PostVo(
@@ -126,8 +127,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         return _buildIntroSection();
       case 1:
         final clubId = widget.clubData["id"];
-        final clubPosts =
-            dummyPostList.where((p) => p.clubId == clubId).toList();
+        final clubPosts = dummyPostList.where((p) => p.clubId == clubId).toList();
 
         return SizedBox(
           height: 400,
@@ -140,15 +140,9 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         );
       case 2:
         final clubId = widget.clubData["id"];
-        final imagePosts =
-            dummyPostList
-                .where(
-                  (p) =>
-                      p.clubId == clubId &&
-                      p.postImage != null &&
-                      p.postImage!.isNotEmpty,
-                )
-                .toList();
+        final imagePosts = dummyPostList.where((p) =>
+        p.clubId == clubId && p.postImage != null && p.postImage!.isNotEmpty
+        ).toList();
 
         if (imagePosts.isEmpty) {
           return SizedBox(
@@ -157,11 +151,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(
-                    Icons.photo_library_outlined,
-                    size: 60,
-                    color: Colors.grey,
-                  ),
+                  const Icon(Icons.photo_library_outlined, size: 60, color: Colors.grey),
                   const SizedBox(height: 12),
                   Text(
                     "등록된 사진이 없습니다.",
@@ -333,131 +323,220 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 22),
-          child:
-              _isJoined
-                  ? FloatingActionButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (_) => NewPostPage()),
-                      );
-                    },
-                    backgroundColor: Colors.green,
-                    child: const Icon(Icons.edit, color: Colors.white),
-                  )
-                  : SizedBox(
-                    width: 70,
-                    height: 80,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        setState(() {
-                          _isJoined = true;
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("모임에 가입되었습니다!")),
-                        );
-                      },
-                      backgroundColor: Colors.green,
-                      shape: const CircleBorder(),
-                      child: const Text(
-                        "가입하기",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+          child: _isJoined
+              ? FloatingActionButton(
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => NewClubPostPage(clubId: widget.clubData["id"]),
+                ),
+              );
+
+              if (result == true) {
+                await _refreshClubPosts(); // 새로고침도 함께!
+              }
+            },
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.edit, color: Colors.white),
+          )
+              : SizedBox(
+            width: 70,
+            height: 80,
+            child: FloatingActionButton(
+              onPressed: () {
+                setState(() {
+                  _isJoined = true;
+                });
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("모임에 가입되었습니다!")),
+                );
+              },
+              backgroundColor: Colors.green,
+              shape: const CircleBorder(),
+              child: const Text(
+                "가입하기",
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
+
 // 일정 탭 위젯
 Widget _buildScheduleSection(int clubId) {
   final schedules = dummyClubSchedules[clubId] ?? [];
 
-  if (schedules.isEmpty) {
-    return SizedBox(
-      height: 300,
-      child: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Icon(Icons.event_busy, size: 60, color: Colors.grey),
-            const SizedBox(height: 12),
-            Text(
-              "예정된 일정이 없습니다.",
-              style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-            ),
-            const SizedBox(height: 6),
-            Text(
-              "첫 모임 일정을 추가해보세요.",
-              style: TextStyle(fontSize: 14, color: Colors.grey),
-            ),
-          ],
-        ),
-      ),
-    );
+  // 날짜별로 일정 맵핑
+  final Map<DateTime, List<Map<String, dynamic>>> scheduleMap = {};
+  for (var item in schedules) {
+    final parts = item['date'].split('.');
+    final year = int.parse(parts[0]);
+    final month = int.parse(parts[1]);
+    final day = int.parse(parts[2].split(' ')[0]);
+    final date = DateTime.utc(year, month, day);
+    scheduleMap.putIfAbsent(date, () => []).add(item);
   }
 
-  return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: Column(
-      children:
-          schedules.map((schedule) {
-            return Card(
-              margin: const EdgeInsets.symmetric(vertical: 8),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
+
+  return StatefulBuilder(
+    builder: (context, setState) {
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            TableCalendar(
+              firstDay: DateTime.utc(2020, 1, 1),
+              lastDay: DateTime.utc(2030, 12, 31),
+              focusedDay: _focusedDay,
+              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
+              eventLoader: (day) {
+                final dateKey = DateTime.utc(day.year, day.month, day.day);
+                return scheduleMap[dateKey] ?? [];
+              },
+              onDaySelected: (selectedDay, focusedDay) {
+                setState(() {
+                  _selectedDay = selectedDay;
+                  _focusedDay = focusedDay;
+                });
+              },
+              onDayLongPressed: (selectedDay, focusedDay) {
+                final dateKey = DateTime.utc(
+                    selectedDay.year, selectedDay.month, selectedDay.day);
+                final events = scheduleMap[dateKey] ?? [];
+
+                if (events.isNotEmpty) {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        title: Text(
+                          "${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일 일정",
+                          style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        content: SingleChildScrollView(
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: events.map<Widget>(
+                                  (event) => Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    event['title'],
+                                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                                  ),
+                                  const SizedBox(height: 4),
+                                  Text("${event['time']} · ${event['location']}"),
+                                  const SizedBox(height: 4),
+                                  Text(event['description']),
+                                ],
+                              ),
+                            ).toList(),
+                          ),
+                        ),
+                        actions: [
+                          TextButton(
+                            onPressed: () => Navigator.pop(context),
+                            child: const Text("닫기"),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                }
+
+              },
+              calendarFormat: CalendarFormat.month,
+              onFormatChanged: (_) {},
+              headerStyle: const HeaderStyle(
+                formatButtonVisible: false,
+                titleCentered: true,
               ),
-              child: Padding(
-                padding: const EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      schedule["title"],
+              calendarStyle: const CalendarStyle(
+                markersMaxCount: 0,
+                selectedDecoration: BoxDecoration(),
+              ),
+              calendarBuilders: CalendarBuilders(
+                selectedBuilder: (context, day, focusedDay) {
+                  return Container(
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      color: Colors.green,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      '${day.day}',
                       style: const TextStyle(
-                        fontSize: 18,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 6),
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today,
-                          size: 16,
-                          color: Colors.grey,
+                  );
+                },
+                defaultBuilder: (context, day, focusedDay) {
+                  final dateKey = DateTime.utc(day.year, day.month, day.day);
+                  final hasEvents = scheduleMap[dateKey]?.isNotEmpty ?? false;
+
+                  if (hasEvents) {
+                    return Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.green.shade100,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Text(
+                        '${day.day}',
+                        style: const TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w500,
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          "${schedule["date"]} / ${schedule["time"]}",
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4),
-                    Row(
-                      children: [
-                        const Icon(Icons.place, size: 16, color: Colors.grey),
-                        const SizedBox(width: 6),
-                        Text(
-                          schedule["location"],
-                          style: const TextStyle(color: Colors.grey),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 8),
-                    Text(schedule["description"]),
-                  ],
-                ),
+                      ),
+                    );
+                  }
+
+                  return null; // 기본 날짜는 기본 스타일 유지
+                },
               ),
-            );
-          }).toList(),
-    ),
+            ),
+
+            const SizedBox(height: 12),
+            if (_selectedDay != null && scheduleMap[_selectedDay] != null)
+              ...scheduleMap[_selectedDay]!.map((schedule) => Card(
+                margin: const EdgeInsets.symmetric(vertical: 6),
+                child: Padding(
+                  padding: const EdgeInsets.all(12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(schedule["title"], style: const TextStyle(fontWeight: FontWeight.bold)),
+                      const SizedBox(height: 4),
+                      Text("${schedule["date"]} / ${schedule["time"]}"),
+                      Text("장소: ${schedule["location"]}"),
+                      const SizedBox(height: 6),
+                      Text(schedule["description"]),
+                    ],
+                  ),
+                ),
+              )),
+            if (_selectedDay == null || scheduleMap[_selectedDay] == null)
+              const Text("해당 날짜에 일정이 없습니다."),
+          ],
+        ),
+      );
+    },
   );
 }

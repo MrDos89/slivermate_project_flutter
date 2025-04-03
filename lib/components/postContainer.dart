@@ -140,6 +140,19 @@ Widget postContainer(
                       trimExpandedText: ' 접기',
                       style: const TextStyle(fontSize: 16),
                     ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.favorite_border, color: Colors.red[300], size: 20),
+                        const SizedBox(width: 4),
+                        Text("${post.countLikes}"),
+                        const SizedBox(width: 16),
+                        Icon(Icons.mode_comment_outlined, color: Colors.grey, size: 20),
+                        const SizedBox(width: 4),
+                        Text("${post.countComment}"),
+                      ],
+                    ),
+
                   ],
                 ),
               ),
