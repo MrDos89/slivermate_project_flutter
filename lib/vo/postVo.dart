@@ -8,7 +8,7 @@ class PostVo {
   final int categoryNames;
   final int subCategory;
   final String postNote;
-  final int countLikes;
+  int countLikes;
   final int countComment;
   final String? postImage;
   final DateTime registerDate;

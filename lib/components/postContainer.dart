@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
+import 'package:slivermate_project_flutter/pages/postPage.dart';
+import 'package:slivermate_project_flutter/vo/postVo.dart';
 
-const String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
+// const String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
 
 const Map<int, String> indoorHobbies = {
   -1: "전체",
@@ -56,6 +58,8 @@ Widget postContainer(
     BuildContext context, {
       required List<PostVo> postList,
       required Future<void> Function() onRefresh,
+      required void Function(PostVo post) onLikeTap,
+      required void Function(BuildContext context, PostVo post) onCommentTap,
       bool isClubPage = false,
     }) {
   final filteredList = isClubPage
@@ -143,13 +147,27 @@ Widget postContainer(
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.favorite_border, color: Colors.red[300], size: 20),
-                        const SizedBox(width: 4),
-                        Text("${post.countLikes}"),
+                        LikeHeart(
+                          initialLikes: post.countLikes,
+                          initiallyLiked: false,
+                        ),
                         const SizedBox(width: 16),
-                        Icon(Icons.mode_comment_outlined, color: Colors.grey, size: 20),
+                        GestureDetector(
+                          onTap: () => onCommentTap(context, post),
+                          child: const Icon(Icons.comment_outlined, color: Colors.grey, size: 20),
+                        ),
                         const SizedBox(width: 4),
-                        Text("${post.countComment}"),
+                        Text("${post.comments.length}"),
+
+                        const Spacer(), // 👈 왼쪽 요소들 다 밀어주고
+
+                        Text(
+                          getTimeAgo(post.registerDate),
+                          style: const TextStyle(
+                            color: Colors.grey,       // ✅ 회색
+                            fontSize: 12,
+                          ),
+                        ),
                       ],
                     ),
 

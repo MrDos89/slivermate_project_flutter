@@ -3,8 +3,9 @@ import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
+import 'package:slivermate_project_flutter/pages/postPage.dart';
 
-const String defaultUserThumbnail = "https://yourdomain.com/default_profile.png"; // 기본 이미지 URL
+// const String defaultUserThumbnail = "https://yourdomain.com/default_profile.png"; // 기본 이미지 URL
 
 //  취미 ID를 문자열로 변환 (카테고리별로 따로 저장)
 const Map<int, String> indoorHobbies = {
@@ -92,7 +93,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     }
   }
 
-  String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
+  // String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
 
   @override
   Widget build(BuildContext context) {

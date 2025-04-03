@@ -7,6 +7,7 @@ import 'package:slivermate_project_flutter/components/postContainer.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:slivermate_project_flutter/pages/newClubPostPage.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:slivermate_project_flutter/vo/commentVo.dart';
 
 // final List<PostVo> dummyPostList = [
 //   PostVo(
@@ -79,6 +80,102 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
   int _selectedTabIndex = 0;
 
+  // [yj] 댓글 모달
+  void _showCommentModal(BuildContext context, PostVo post) {
+    final TextEditingController commentController = TextEditingController();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: MediaQuery
+                  .of(context)
+                  .viewInsets,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                height: 400,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text('댓글', style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Divider(),
+
+                    Expanded(
+                      child: post.comments.isEmpty
+                          ? const Center(child: Text("아직 등록된 댓글이 없습니다."))
+                          : ListView.builder(
+                        itemCount: post.comments.length,
+                        itemBuilder: (context, index) {
+                          final comment = post.comments[index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              radius: 16,
+                              backgroundImage: NetworkImage(
+                                comment.userThumbnail
+                                    .trim()
+                                    .isEmpty ? defaultUserThumbnail : comment
+                                    .userThumbnail,
+                              )
+                              ,
+                            ),
+                            title: Text(comment.userNickname,
+                                style: const TextStyle(
+                                    fontWeight: FontWeight.bold)),
+                            subtitle: Text(comment.commentText),
+                            trailing: Text(
+                              "${comment.commentDate.hour}:${comment.commentDate
+                                  .minute.toString().padLeft(2, '0')}",
+                              style: const TextStyle(
+                                  fontSize: 12, color: Colors.grey),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    // 댓글 입력 필드
+                    TextField(
+                      controller: commentController,
+                      decoration: InputDecoration(
+                        hintText: '댓글을 입력하세요',
+                        suffixIcon: IconButton(
+                          icon: const Icon(Icons.send),
+                          onPressed: () {
+                            if (commentController.text
+                                .trim()
+                                .isNotEmpty) {
+                              setModalState(() {
+                                post.comments.add(CommentVo(
+                                  userThumbnail: "", // 현재 사용자 프로필 이미지
+                                  userNickname: "현재 사용자", // 현재 사용자 닉네임
+                                  commentText: commentController.text.trim(),
+                                  commentDate: DateTime.now(),
+                                ));
+                                commentController.clear();
+                              });
+
+                              setState(() {}); // 메인 화면 업데이트
+                            }
+                          },
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
   // final Map<String, dynamic> dummyClubData = {
   //   "name": "서울 등산 동아리",
   //   "region": "서울특별시",
@@ -135,6 +232,12 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             context,
             postList: clubPosts,
             onRefresh: _refreshClubPosts,
+            onLikeTap: (post) {
+              setState(() {
+                post.countLikes += 1;
+              });
+            },
+            onCommentTap: _showCommentModal,
             isClubPage: true,
           ),
         );
