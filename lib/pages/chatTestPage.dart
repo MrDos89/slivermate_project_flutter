@@ -51,13 +51,24 @@ class _ChatTestPageState extends State<_ChatTestPage> {
     );
 
     _channel.stream.listen((message) {
-      setState(() {
-        _messages.add({
-          'sender': 'guest',
-          'message': message,
-          'time': DateTime.now(),
+      try {
+        // 서버에서 받은 메시지를 JSON으로 변환
+        var decodedMessage = json.decode(message);
+
+        // 서버에서 받은 메시지를 제대로 처리할 수 있도록 수정
+        String receivedMessage = decodedMessage['message'] ?? 'No message';
+
+        // UI에 메시지 추가
+        setState(() {
+          _messages.add({
+            'sender': 'guest',
+            'message': receivedMessage, // 메시지 내용만 추가
+            'time': DateTime.now(),
+          });
         });
-      });
+      } catch (e) {
+        print('Error decoding message: $e');
+      }
     });
 
     // 일정 간격으로 guest 메시지 자동 추가
