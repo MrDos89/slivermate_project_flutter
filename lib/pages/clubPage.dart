@@ -4,6 +4,7 @@ import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
+import 'package:slivermate_project_flutter/pages/newClubPage.dart';
 
 const Map<int, String> categoryNames = {
   1: "실내",
@@ -86,6 +87,31 @@ class ClubPage extends StatelessWidget {
           // ),
         ),
         body: const _ClubPage(),
+        floatingActionButton: SizedBox(
+          width: 70,  // ✔ 동그라미 지름
+          height: 70,
+          child: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const NewClubPage(),
+                ),
+              );
+            },
+            backgroundColor: Colors.green,
+            shape: const CircleBorder(), // ✔ 동그라미
+            child: const Text(
+              "모임\n만들기",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 14, // ✔ 글씨 크기 조절
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
