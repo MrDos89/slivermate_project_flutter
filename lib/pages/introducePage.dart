@@ -95,11 +95,8 @@ class _IntroducePageState extends State<IntroducePage> {
   //   fetchLessonData(0); // 데이터 불러오기
   // }
 
-  // [yj] API 데이터 가져오기 및 결제 정보 확인해서 강의 로드
+  // [yj] API 데이터 가져와서 강의 로드
   Future<void> fetchLessonData() async {
-    String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
-    String ec2Port = dotenv.get("EC2_PORT");
-
     try {
       final fetchedLesson = await LessonService.fetchLessonData(
         widget.lessonCategory,
@@ -111,59 +108,16 @@ class _IntroducePageState extends State<IntroducePage> {
         return;
       }
 
-      // [yj] 강의 정보가 제대로 들어왔는지 확인
       print(" 불러온 강의 정보: ${fetchedLesson.lessonName}");
-      print("    무료 강의 URL: ${fetchedLesson.lessonFreeLecture}");
-      print("    유료 강의 URL: ${fetchedLesson.lessonCostLecture}");
+      print(" 영상 URL: ${fetchedLesson.lessonLecture}");
 
-      final Dio dio = Dio();
-      final purchaseResponse = await dio.get(
-        'http://$ec2IpAddress:$ec2Port/api/purchase/u/${widget.dummyUser!.uid}',
-        options: Options(validateStatus: (status) => true),
-      );
-
-      // bool hasPurchased = false;
-
-      if (purchaseResponse.statusCode == 200) {
-        final purchaseData = purchaseResponse.data;
-
-        if (purchaseData is List && purchaseData.isNotEmpty) {
-          widget.hasPurchased = purchaseData.any(
-            (item) => item['lesson_id'] == fetchedLesson.lessonId,
-          );
-        }
-      } else {
-        print(" 결제 정보 로딩 실패: ${purchaseResponse.statusCode}");
-        return;
-      }
-
-      //  [2] 결제 여부 확인
-      print(" 결제 여부(hasPurchased): ${widget.hasPurchased}");
-
-      if (widget.hasPurchased) {
-        await dio.patch(
-          'http://$ec2IpAddress:$ec2Port/api/purchase/${fetchedLesson.lessonId}/${widget.dummyUser!.uid}',
-        );
-      }
-
-      //  [yj] 영상 URL 두 개를 다 관리하고, 선택적으로 제공
-      String freeVideoUrl = fetchedLesson.lessonFreeLecture;
-      String costVideoUrl = fetchedLesson.lessonCostLecture;
-
-      // 유료 결제 여부에 따라 URL 선택
-      String videoUrl =
-          widget.hasPurchased && costVideoUrl.isNotEmpty
-              ? costVideoUrl
-              : freeVideoUrl;
-
-      // [yj] 최종 선택된 영상 확인
-      print(" 최종 선택된 영상 URL: $videoUrl");
+      String videoUrl = fetchedLesson.lessonLecture;
 
       setState(() {
         lesson = fetchedLesson;
         if (videoUrl.isNotEmpty) {
           initializeYoutubePlayer(videoUrl);
-          print(widget.hasPurchased ? " 유료 강의를 로드합니다." : " 무료 강의를 로드합니다.");
+          print(" 강의 영상 로드 완료");
         } else {
           print(" 영상 URL이 없습니다!");
         }
@@ -172,6 +126,7 @@ class _IntroducePageState extends State<IntroducePage> {
       print(" API 호출 중 에러 발생: $e");
     }
   }
+
 
   void initializeYoutubePlayer(String youtubeUrl) {
     final videoId = YoutubePlayer.convertUrlToId(youtubeUrl) ?? "";

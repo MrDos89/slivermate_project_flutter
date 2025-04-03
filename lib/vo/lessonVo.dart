@@ -10,8 +10,7 @@ class LessonVo {
   final String lessonCostDesc;
   final int lessonCategory;
   final int lessonSubCategory;
-  final String lessonFreeLecture;
-  final String lessonCostLecture;
+  final String lessonLecture;
   final String lessonThumbnail;
   final int lessonPrice;
   final String registerDate;
@@ -31,8 +30,7 @@ class LessonVo {
     required this.lessonCostDesc,
     required this.lessonCategory,
     required this.lessonSubCategory,
-    required this.lessonFreeLecture,
-    required this.lessonCostLecture,
+    required this.lessonLecture,
     required this.lessonThumbnail,
     required this.lessonPrice,
     required this.registerDate,
@@ -55,8 +53,7 @@ class LessonVo {
       lessonCostDesc: json['lesson_cost_desc'] ?? "유료 영상 설명이 없습니다.",
       lessonCategory: json['lesson_category'] ?? 0,
       lessonSubCategory: json['lesson_sub_category'] ?? 0,
-      lessonFreeLecture: json['lesson_free_lecture'] ?? "",
-      lessonCostLecture: json['lesson_cost_lecture'] ?? "",
+      lessonLecture:json['lesson_lecture'] ?? "없음",
       lessonThumbnail: json['lesson_thumbnail'] ?? "",
       lessonPrice: json['lesson_price'] ?? 0,
       registerDate: json['register_date'] ?? "없음",
@@ -91,8 +88,7 @@ class LessonVo {
       'lesson_cost_desc': lessonDesc,
       'lesson_category': lessonCategory,
       'lesson_sub_category': lessonSubCategory,
-      'lesson_free_lecture': lessonFreeLecture,
-      'lesson_cost_lecture': lessonCostLecture,
+      'lesson_lecture': lessonLecture,
       'lesson_thumbnail': lessonThumbnail,
       'lesson_price': lessonPrice,
       'register_date': registerDate,
