@@ -3,8 +3,6 @@ import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/vo/commentVo.dart';
-import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
-import 'package:readmore/readmore.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:slivermate_project_flutter/components/postContainer.dart';
@@ -551,7 +549,7 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
 
     List<PostVo> filteredList = dummyPostList.where((post) {
-      bool isClubPost = post.clubId != 0;
+      // bool isClubPost = post.clubId != 0;
 
       bool regionMatch = _selectedRegionId == null || post.regionId == _selectedRegionId;
 
@@ -646,7 +644,17 @@ class _PostPageState extends State<PostPage> {
                   ),
                 ),
               SizedBox(
-                child: postContainer(context, postList: filteredList, onRefresh: _refreshDummyPostList),
+                child: postContainer(
+                  context,
+                  postList: filteredList,
+                  onRefresh: _refreshDummyPostList,
+                  onLikeTap: (post) {
+                    setState(() {
+                      post.countLikes += 1;
+                    });
+                  },
+                  onCommentTap: _showCommentModal,
+                ),
               )
 
               ],
@@ -872,9 +880,14 @@ class _PostPageState extends State<PostPage> {
 // }
 
 class LikeHeart extends StatefulWidget {
-  final int initialLikes;
+  final int initialLikes;        // 총 좋아요 수
+  final bool initiallyLiked;     // 내가 눌렀는지 여부
 
-  const LikeHeart({super.key, required this.initialLikes});
+  const LikeHeart({
+    super.key,
+    required this.initialLikes,
+    this.initiallyLiked = false,
+  });
 
   @override
   State<LikeHeart> createState() => _LikeHeartState();
@@ -882,7 +895,7 @@ class LikeHeart extends StatefulWidget {
 
 class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMixin {
   late int _likes;
-  bool _isLiked = false;
+  late bool _isLiked;
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
 
@@ -890,6 +903,7 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
   void initState() {
     super.initState();
     _likes = widget.initialLikes;
+    _isLiked = widget.initiallyLiked;
 
     _controller = AnimationController(
       vsync: this,

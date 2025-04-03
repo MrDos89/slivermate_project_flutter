@@ -49,33 +49,39 @@ class _NewClubPageState extends State<NewClubPage> {
                 // 모임 이름 입력창
                 buildClubNameInput(),
 
+                SizedBox(height: 20), // 간격 추가
+
                 Divider(), // 구분선 추가
                 // 취미 / 관심사 선택 버튼
                 buildInterestCategorySelector(),
 
-                SizedBox(height: 15), // 간격 추가
+                SizedBox(height: 30), // 간격 추가
 
                 Divider(), // 구분선 추가
                 // 정기 모임 선택 체크박스
                 buildRegularMeetingSelector(),
 
-                SizedBox(height: 15), // 간격 추가
+                SizedBox(height: 30), // 간격 추가
 
                 Divider(), // 구분선 추가
                 // 모임 가입 인원 선택
                 buildCapacitySelector(),
 
-                SizedBox(height: 15), // 간격 추가
+                SizedBox(height: 30), // 간격 추가
 
                 Divider(), // 구분선 추가
                 // 모임 소개글 입력창
                 buildDescriptionInput(),
 
-                SizedBox(height: 15), // 간격 추가
+                SizedBox(height: 30), // 간격 추가
 
                 Divider(), // 구분선 추가
                 // 모임 썸네일 입력창
                 buildThumbnailInput(),
+
+                SizedBox(height: 30),
+
+                Divider(),
 
                 // 모임 취소하기 및 모임 만들기 버튼
                 buildActionButtons(),
@@ -95,12 +101,12 @@ class _NewClubPageState extends State<NewClubPage> {
         Text(
           "모임 이름을 만들어주세요.",
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 25,
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
-        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
+        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈
         TextField(
           onChanged: (value) {
             setState(() {
@@ -110,14 +116,14 @@ class _NewClubPageState extends State<NewClubPage> {
           maxLength: maxClubNameLength,
           decoration: InputDecoration(
             hintText: "짧고 간결하게 입력해주세요.",
-            hintStyle: TextStyle(fontSize: 14, color: Colors.grey),
+            hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
             counterText: "${clubName.length}/$maxClubNameLength",
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.circular(5),
               borderSide: BorderSide(color: Colors.grey.shade400),
             ),
             filled: true,
-            fillColor: Colors.grey.shade100,
+            fillColor: Colors.white,
           ),
         ),
       ],
@@ -150,13 +156,15 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
         Text(
           "취미 / 관심사",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈
         Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 15,
+          runSpacing: 25,
           children:
               interests.map((interest) {
                 return GestureDetector(
@@ -173,7 +181,7 @@ class _NewClubPageState extends State<NewClubPage> {
                           selectedInterests.contains(interest)
                               ? Colors.black
                               : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       interest,
@@ -197,25 +205,26 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
         Text(
           "모임 횟수",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈
         Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 15,
+          runSpacing: 25,
           children:
               [
                 '매일',
                 '주 1회',
                 '주 2~3회',
-                '주 4회',
-                '주 5~7회',
+                '주 5회이상',
                 '월 1회',
                 '월 2~3회',
-                '월 4회',
-                '월 5~6회',
-                '월 7~9회',
+                '매월 주말마다',
+                '매월 토요일마다',
+                '매월 일요일마다',
               ].map((frequency) {
                 return GestureDetector(
                   onTap: () {
@@ -230,7 +239,7 @@ class _NewClubPageState extends State<NewClubPage> {
                           selectedMeetingFrequency == frequency
                               ? Colors.black
                               : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       frequency,
@@ -254,13 +263,15 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
         Text(
           "모임 가입 인원",
-          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈
         Wrap(
-          spacing: 10,
-          runSpacing: 10,
+          spacing: 50,
+          runSpacing: 25,
           children:
               ['~10명', '~20명', '~30명', '~50명', '~100명'].map((capacity) {
                 return GestureDetector(
@@ -276,7 +287,7 @@ class _NewClubPageState extends State<NewClubPage> {
                           selectedCapacity == capacity
                               ? Colors.black
                               : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.circular(5),
                     ),
                     child: Text(
                       capacity,
@@ -300,10 +311,12 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
         Text(
           "모임 소개글",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈
         TextField(
           onChanged: (value) {
             setState(() {
@@ -312,6 +325,7 @@ class _NewClubPageState extends State<NewClubPage> {
           },
           decoration: InputDecoration(
             hintText: "모임에 대해 간단히 설명해주세요",
+            hintStyle: TextStyle(fontSize: 20, color: Colors.grey),
             border: OutlineInputBorder(),
           ),
         ),
@@ -324,10 +338,12 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
         Text(
           "모임 썸네일",
-          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
+        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈
         Container(
           color: Colors.grey.shade300,
           height: 150,
@@ -370,13 +386,13 @@ class _NewClubPageState extends State<NewClubPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.grey,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: Text(
                   '모임 취소하기',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
@@ -406,13 +422,13 @@ class _NewClubPageState extends State<NewClubPage> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: Text(
                   '모임 만들기',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
                   ),
