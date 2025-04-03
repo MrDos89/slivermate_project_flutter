@@ -56,10 +56,8 @@ final Map<int, List<Map<String, dynamic>>> dummyClubSchedules = {
   2: [], // 다른 클럽은 일정 없음
 };
 
-
 class ClubDetailPage extends StatefulWidget {
   final Map<String, dynamic> clubData;
-
 
   const ClubDetailPage({super.key, required this.clubData});
 
@@ -128,7 +126,8 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         return _buildIntroSection();
       case 1:
         final clubId = widget.clubData["id"];
-        final clubPosts = dummyPostList.where((p) => p.clubId == clubId).toList();
+        final clubPosts =
+            dummyPostList.where((p) => p.clubId == clubId).toList();
 
         return SizedBox(
           height: 400,
@@ -141,9 +140,15 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         );
       case 2:
         final clubId = widget.clubData["id"];
-        final imagePosts = dummyPostList.where((p) =>
-        p.clubId == clubId && p.postImage != null && p.postImage!.isNotEmpty
-        ).toList();
+        final imagePosts =
+            dummyPostList
+                .where(
+                  (p) =>
+                      p.clubId == clubId &&
+                      p.postImage != null &&
+                      p.postImage!.isNotEmpty,
+                )
+                .toList();
 
         if (imagePosts.isEmpty) {
           return SizedBox(
@@ -152,7 +157,11 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Icon(Icons.photo_library_outlined, size: 60, color: Colors.grey),
+                  const Icon(
+                    Icons.photo_library_outlined,
+                    size: 60,
+                    color: Colors.grey,
+                  ),
                   const SizedBox(height: 12),
                   Text(
                     "등록된 사진이 없습니다.",
@@ -187,15 +196,14 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (_) => PostDetailPage(Post: post)),
+                    MaterialPageRoute(
+                      builder: (_) => PostDetailPage(Post: post),
+                    ),
                   );
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    post.postImage!,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Image.network(post.postImage!, fit: BoxFit.cover),
                 ),
               );
             },
@@ -210,7 +218,9 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
   List<PostVo> filteredPostListForClub() {
     // clubId를 기준으로 피드를 필터링
-    return dummyPostList.where((post) => post.clubId == widget.clubData["id"]).toList();
+    return dummyPostList
+        .where((post) => post.clubId == widget.clubData["id"])
+        .toList();
   }
 
   Widget _buildIntroSection() {
@@ -219,7 +229,8 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
     final String leader = widget.clubData["leader"]?.toString() ?? "-";
     final int memberCount = widget.clubData["memberCount"] as int? ?? 0;
     final int maxCount = widget.clubData["maxMemberCount"] as int? ?? 0;
-    final String description = widget.clubData["description"]?.toString() ?? "-";
+    final String description =
+        widget.clubData["description"]?.toString() ?? "-";
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -249,11 +260,12 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
               Row(
                 children: [
                   const SizedBox(width: 4),
-                  Text(
-                    "모임장: $leader",
-                    style: const TextStyle(fontSize: 16),
+                  Text("모임장: $leader", style: const TextStyle(fontSize: 16)),
+                  const Icon(
+                    Icons.workspace_premium,
+                    color: Colors.amber,
+                    size: 20,
                   ),
-                  const Icon(Icons.workspace_premium, color: Colors.amber, size: 20),
                 ],
               ),
               Text(
@@ -263,17 +275,15 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             ],
           ),
           const SizedBox(height: 12),
-          Text(
-            description,
-            style: const TextStyle(fontSize: 16),
-          ),
+          Text(description, style: const TextStyle(fontSize: 16)),
         ],
       ),
     );
   }
 
   Widget _buildThumbnail() {
-    final String thumbnailUrl = widget.clubData["thumbnailUrl"]?.toString() ?? "";
+    final String thumbnailUrl =
+        widget.clubData["thumbnailUrl"]?.toString() ?? "";
 
     return SizedBox(
       width: double.infinity,
@@ -288,17 +298,12 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return MainLayout(
       child: Scaffold(
         backgroundColor: const Color(0xFFF5F5F5),
-        appBar: const HeaderPage(
-          pageTitle: "모임 상세",
-          showBackButton: true,
-        ),
+        appBar: const HeaderPage(pageTitle: "모임 상세", showBackButton: true),
         body: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -307,7 +312,10 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
               _buildThumbnail(),
               // [yj] 가로 버튼들
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -325,41 +333,42 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
         floatingActionButton: Padding(
           padding: const EdgeInsets.only(bottom: 22),
-          child: _isJoined
-              ? FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => NewPostPage()),
-              );
-            },
-            backgroundColor: Colors.green,
-            child: const Icon(Icons.edit, color: Colors.white),
-          )
-              : SizedBox(
-            width: 70,
-            height: 80,
-            child: FloatingActionButton(
-              onPressed: () {
-                setState(() {
-                  _isJoined = true;
-                });
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("모임에 가입되었습니다!")),
-                );
-              },
-              backgroundColor: Colors.green,
-              shape: const CircleBorder(),
-              child: const Text(
-                "가입하기",
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
+          child:
+              _isJoined
+                  ? FloatingActionButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (_) => NewPostPage()),
+                      );
+                    },
+                    backgroundColor: Colors.green,
+                    child: const Icon(Icons.edit, color: Colors.white),
+                  )
+                  : SizedBox(
+                    width: 70,
+                    height: 80,
+                    child: FloatingActionButton(
+                      onPressed: () {
+                        setState(() {
+                          _isJoined = true;
+                        });
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text("모임에 가입되었습니다!")),
+                        );
+                      },
+                      backgroundColor: Colors.green,
+                      shape: const CircleBorder(),
+                      child: const Text(
+                        "가입하기",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
         ),
       ),
     );
@@ -397,39 +406,58 @@ Widget _buildScheduleSection(int clubId) {
   return Padding(
     padding: const EdgeInsets.all(16.0),
     child: Column(
-      children: schedules.map((schedule) {
-        return Card(
-          margin: const EdgeInsets.symmetric(vertical: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(schedule["title"], style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 6),
-                Row(
+      children:
+          schedules.map((schedule) {
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(Icons.calendar_today, size: 16, color: Colors.grey),
-                    const SizedBox(width: 6),
-                    Text("${schedule["date"]} / ${schedule["time"]}", style: const TextStyle(color: Colors.grey)),
+                    Text(
+                      schedule["title"],
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Row(
+                      children: [
+                        const Icon(
+                          Icons.calendar_today,
+                          size: 16,
+                          color: Colors.grey,
+                        ),
+                        const SizedBox(width: 6),
+                        Text(
+                          "${schedule["date"]} / ${schedule["time"]}",
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Row(
+                      children: [
+                        const Icon(Icons.place, size: 16, color: Colors.grey),
+                        const SizedBox(width: 6),
+                        Text(
+                          schedule["location"],
+                          style: const TextStyle(color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 8),
+                    Text(schedule["description"]),
                   ],
                 ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    const Icon(Icons.place, size: 16, color: Colors.grey),
-                    const SizedBox(width: 6),
-                    Text(schedule["location"], style: const TextStyle(color: Colors.grey)),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(schedule["description"]),
-              ],
-            ),
-          ),
-        );
-      }).toList(),
+              ),
+            );
+          }).toList(),
     ),
   );
 }

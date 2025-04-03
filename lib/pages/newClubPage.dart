@@ -13,12 +13,14 @@ class _NewClubPageState extends State<NewClubPage> {
   // 선택된 모임 이름
   String clubName = '';
 
-  // 취미/관심사 버튼 선택
-  List<String> selectedInterests = [];
+  // 취미/관심사 버튼 선택 (기본값 첫 번째 항목 선택)
+  List<String> selectedInterests = ['뜨개질'];
 
-  // 정기 모임 선택 체크박스
-  String selectedMeetingFrequency = ''; // 모임 횟수 선택
-  String selectedCapacity = ''; // 모임 가입 인원 선택
+  // 정기 모임 선택 체크박스 (기본값 첫 번째 항목 선택)
+  String selectedMeetingFrequency = '매일';
+
+  // 모임 가입 인원 선택 (기본값 첫 번째 항목 선택)
+  String selectedCapacity = '~10명';
 
   // 모임 썸네일 URL
   String thumbnailURL = '';
@@ -58,6 +60,9 @@ class _NewClubPageState extends State<NewClubPage> {
 
                 // 모임 썸네일 입력창
                 buildThumbnailInput(),
+
+                // 모임 취소하기 및 모임 만들기 버튼
+                buildActionButtons(),
               ],
             ),
           ),
@@ -146,11 +151,8 @@ class _NewClubPageState extends State<NewClubPage> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      if (selectedInterests.contains(interest)) {
-                        selectedInterests.remove(interest);
-                      } else {
-                        selectedInterests.add(interest);
-                      }
+                      selectedInterests.clear(); //  선택된 값이 있으면 초기화
+                      selectedInterests.add(interest); //  하나만 선택 가능
                     });
                   },
                   child: Container(
@@ -184,11 +186,6 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Text(
-        //   "정기 모임 선택",
-        //   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-        // ),
-
         // 모임 횟수
         Text(
           "모임 횟수",
@@ -213,7 +210,10 @@ class _NewClubPageState extends State<NewClubPage> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedMeetingFrequency = frequency;
+                      if (selectedMeetingFrequency == frequency) {
+                      } else {
+                        selectedMeetingFrequency = frequency; //  새로운 선택
+                      }
                     });
                   },
                   child: Container(
@@ -253,7 +253,10 @@ class _NewClubPageState extends State<NewClubPage> {
                 return GestureDetector(
                   onTap: () {
                     setState(() {
-                      selectedCapacity = capacity;
+                      if (selectedCapacity == capacity) {
+                      } else {
+                        selectedCapacity = capacity; // 새로운 선택
+                      }
                     });
                   },
                   child: Container(
@@ -332,6 +335,92 @@ class _NewClubPageState extends State<NewClubPage> {
             padding: const EdgeInsets.symmetric(vertical: 8.0),
             child: Image.network(thumbnailURL),
           ),
+      ],
+    );
+  }
+
+  // 모임 취소하기 및 모임 만들기 버튼
+  Widget buildActionButtons() {
+    return Column(
+      children: [
+        SizedBox(height: 20), // 버튼 간 간격
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // 취소 버튼 클릭 시
+                  showDialog(
+                    context: context,
+                    builder:
+                        (context) => AlertDialog(
+                          title: Text('모임 가입이 취소되었습니다'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context); // 알림 닫기
+                              },
+                              child: Text('확인'),
+                            ),
+                          ],
+                        ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.grey,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // 둥근 버튼
+                  ),
+                ),
+                child: Text(
+                  '모임 취소하기',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 5), // 두 버튼 사이에 5px 틈
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // 모임 만들기 버튼 클릭 시
+                  showDialog(
+                    context: context,
+                    builder:
+                        (context) => AlertDialog(
+                          title: Text('모임 만들기에 성공하였습니다'),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context); // 알림 닫기
+                              },
+                              child: Text('확인'),
+                            ),
+                          ],
+                        ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30), // 둥근 버튼
+                  ),
+                ),
+                child: Text(
+                  '모임 만들기',
+                  style: TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
       ],
     );
   }
