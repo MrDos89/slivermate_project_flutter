@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/components/addAnnounceForm.dart';
+import 'package:slivermate_project_flutter/components/addMeetingForm.dart';
 
 class AddMeetingPage extends StatefulWidget {
   final DateTime selectedDate;
@@ -11,8 +13,10 @@ class AddMeetingPage extends StatefulWidget {
   State<AddMeetingPage> createState() => _AddMeetingPageState();
 }
 
+
 class _AddMeetingPageState extends State<AddMeetingPage> {
-  int selectedType = 1; // 1: 공지, 2: 모임
+  int selectedType = 2; // 1: 공지, 2: 모임
+  final TextEditingController _feeController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -51,57 +55,14 @@ class _AddMeetingPageState extends State<AddMeetingPage> {
                   ],
                 ),
                 const SizedBox(height: 24),
-                if (selectedType == 1) _buildNoticeForm(),
-                if (selectedType == 2) _buildMeetingForm(),
+                selectedType == 1
+                    ? AddAnnounceForm(selectedDate: widget.selectedDate)
+                    : AddMeetingForm(selectedDate: widget.selectedDate),
               ],
             ),
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildNoticeForm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('📌 공지 제목'),
-        const SizedBox(height: 8),
-        const TextField(decoration: InputDecoration(border: OutlineInputBorder())),
-        const SizedBox(height: 16),
-        const Text('🗓 날짜'),
-        const SizedBox(height: 8),
-        Text(
-          "${widget.selectedDate.toLocal()}".split(' ')[0],
-          style: const TextStyle(fontSize: 16),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildMeetingForm() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text('👥 모임 제목'),
-        const SizedBox(height: 8),
-        const TextField(decoration: InputDecoration(border: OutlineInputBorder())),
-        const SizedBox(height: 16),
-        const Text('📍 장소'),
-        const SizedBox(height: 8),
-        const TextField(decoration: InputDecoration(border: OutlineInputBorder())),
-        const SizedBox(height: 16),
-        const Text('💰 회비'),
-        const SizedBox(height: 8),
-        const TextField(decoration: InputDecoration(border: OutlineInputBorder())),
-        const SizedBox(height: 16),
-        const Text('🗓 날짜'),
-        const SizedBox(height: 8),
-        Text(
-          "${widget.selectedDate.toLocal()}".split(' ')[0],
-          style: const TextStyle(fontSize: 16),
-        ),
-      ],
     );
   }
 }
