@@ -6,7 +6,8 @@ class AnnounceVo {
   final String description;
   final String meetingPrice;
   final int attendingCount;
-  final int type; // 1: 공지 / 2: 모임
+  final int type;// 1: 공지 / 2: 모임
+  final DateTime updDate;
 
   const AnnounceVo({
     required this.title,
@@ -17,6 +18,7 @@ class AnnounceVo {
     required this.meetingPrice,
     required this.attendingCount,
     required this.type,
+    required this.updDate,
   });
 
   bool get isAnnounce => type == 1;

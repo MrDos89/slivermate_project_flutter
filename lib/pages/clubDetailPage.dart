@@ -24,6 +24,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "5,000원",
       attendingCount: 12,
       type: 2,
+      updDate: DateTime.parse("2025-04-01"),
     ),
     AnnounceVo(
       title: "번개 산책 모임",
@@ -34,6 +35,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "무료",
       attendingCount: 5,
       type: 2,
+      updDate: DateTime.parse("2025-04-02"),
     ),
     AnnounceVo(
       title: "다음 달 등산 일정 사전 안내",
@@ -44,6 +46,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      updDate: DateTime.parse("2025-04-03"),
     ),
     AnnounceVo(
       title: "5월 모임 일정 공지",
@@ -54,6 +57,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      updDate: DateTime.parse("2025-04-05"),
     ),
 
     AnnounceVo(
@@ -65,6 +69,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      updDate: DateTime.parse("2025-04-06"),
     ),
 
     AnnounceVo(
@@ -76,6 +81,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      updDate: DateTime.parse("2025-04-07"),
     ),
 
     AnnounceVo(
@@ -87,6 +93,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      updDate: DateTime.parse("2025-04-08"),
     ),
 
     AnnounceVo(
@@ -98,6 +105,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      updDate: DateTime.parse("2025-04-09"),
     ),
 
   ],
@@ -702,6 +710,7 @@ Widget _buildScheduleSection({
                                                       meetingPrice: event.meetingPrice,
                                                       attendingCount: event.attendingCount + 1,
                                                       type: event.type,
+                                                      updDate: event.updDate,
                                                     );
 
                                                     final index = schedules.indexOf(event);
@@ -745,6 +754,7 @@ Widget _buildScheduleSection({
                                                       meetingPrice: event.meetingPrice,
                                                       attendingCount: (event.attendingCount > 0) ? event.attendingCount - 1 : 0,
                                                       type: event.type,
+                                                      updDate: event.updDate,
                                                     );
 
                                                     final index = schedules.indexOf(event);
