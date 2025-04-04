@@ -20,7 +20,7 @@ class _PaymentPageState extends State<PaymentPage> {
           preferredSize: const Size.fromHeight(70),
           child: HeaderPage(pageTitle: "결제"),
         ),
-        body: Padding(
+        body: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,8 +96,32 @@ class _PaymentPageState extends State<PaymentPage> {
                     secondary: Icon(Icons.payment),
                   ),
                   RadioListTile<int>(
-                    title: const Text("애플페이"),
+                    title: const Text("네이버페이"),
                     value: 3,
+                    groupValue: _selectedPaymentMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedPaymentMethod = value;
+                      });
+                    },
+                    secondary: Icon(Icons.payment),
+                  ),
+
+                  RadioListTile<int>(
+                    title: const Text("토스페이"),
+                    value: 4,
+                    groupValue: _selectedPaymentMethod,
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedPaymentMethod = value;
+                      });
+                    },
+                    secondary: Icon(Icons.payment),
+                  ),
+
+                  RadioListTile<int>(
+                    title: const Text("애플페이"),
+                    value: 5,
                     groupValue: _selectedPaymentMethod,
                     onChanged: (value) {
                       setState(() {
@@ -108,7 +132,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   ),
                   RadioListTile<int>(
                     title: const Text("휴대폰 결제"),
-                    value: 4,
+                    value: 6,
                     groupValue: _selectedPaymentMethod,
                     onChanged: (value) {
                       setState(() {
@@ -125,16 +149,28 @@ class _PaymentPageState extends State<PaymentPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("결제금액", style: TextStyle(fontSize: 16)),
-                  Text("22,900원", style: TextStyle(fontSize: 16)),
+                  Text("결제금액", style: TextStyle(fontSize: 30)),
+                  Text("22,900원", style: TextStyle(fontSize: 30)),
                 ],
               ),
+
               const SizedBox(height: 8),
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("수수료", style: TextStyle(fontSize: 16)),
-                  Text("0원", style: TextStyle(fontSize: 16)),
+                  Text("회비", style: TextStyle(fontSize: 25)),
+                  Text("22,900", style: TextStyle(fontSize: 25)),
+                ],
+              ),
+
+              const SizedBox(height: 8),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("수수료", style: TextStyle(fontSize: 20)),
+                  Text("0원", style: TextStyle(fontSize: 20)),
                 ],
               ),
               const SizedBox(height: 20),
