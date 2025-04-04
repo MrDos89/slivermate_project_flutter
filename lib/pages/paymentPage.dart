@@ -82,8 +82,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         _selectedPaymentMethod = value;
                       });
                     },
-                    secondary: Icon(Icons.credit_card),
+                    // secondary: Icon(Icons.credit_card),
                   ),
+                  Divider(),
                   RadioListTile<int>(
                     title: const Text("카카오페이"),
                     value: 2,
@@ -93,8 +94,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         _selectedPaymentMethod = value;
                       });
                     },
-                    secondary: Icon(Icons.payment),
+                    // secondary: Icon(Icons.payment),
                   ),
+                  Divider(),
                   RadioListTile<int>(
                     title: const Text("네이버페이"),
                     value: 3,
@@ -104,8 +106,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         _selectedPaymentMethod = value;
                       });
                     },
-                    secondary: Icon(Icons.payment),
+                    // secondary: Icon(Icons.payment),
                   ),
+                  Divider(),
 
                   RadioListTile<int>(
                     title: const Text("토스페이"),
@@ -116,9 +119,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         _selectedPaymentMethod = value;
                       });
                     },
-                    secondary: Icon(Icons.payment),
+                    // secondary: Icon(Icons.payment),
                   ),
-
+                  Divider(),
                   RadioListTile<int>(
                     title: const Text("애플페이"),
                     value: 5,
@@ -128,8 +131,9 @@ class _PaymentPageState extends State<PaymentPage> {
                         _selectedPaymentMethod = value;
                       });
                     },
-                    secondary: Icon(Icons.apple),
+                    // secondary: Icon(Icons.apple),
                   ),
+                  Divider(),
                   RadioListTile<int>(
                     title: const Text("휴대폰 결제"),
                     value: 6,
@@ -139,18 +143,19 @@ class _PaymentPageState extends State<PaymentPage> {
                         _selectedPaymentMethod = value;
                       });
                     },
-                    secondary: Icon(Icons.phone_iphone),
+                    // secondary: Icon(Icons.phone_iphone),
                   ),
                 ],
               ),
+              Divider(),
               const SizedBox(height: 20),
 
               // 결제금액, 프립금액, 수수료 표시
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("결제금액", style: TextStyle(fontSize: 30)),
-                  Text("22,900원", style: TextStyle(fontSize: 30)),
+                  Text("결제금액", style: TextStyle(fontSize: 23)),
+                  Text("22,900원", style: TextStyle(fontSize: 23)),
                 ],
               ),
 
@@ -159,8 +164,8 @@ class _PaymentPageState extends State<PaymentPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text("회비", style: TextStyle(fontSize: 25)),
-                  Text("22,900", style: TextStyle(fontSize: 25)),
+                  Text("회비", style: TextStyle(fontSize: 20)),
+                  Text("22,900원", style: TextStyle(fontSize: 20)),
                 ],
               ),
 
@@ -185,8 +190,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 30,
+                        vertical: 20,
+                        horizontal: 60,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.purple,
@@ -194,7 +199,11 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                       child: const Text(
                         "결제하기",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
@@ -206,8 +215,8 @@ class _PaymentPageState extends State<PaymentPage> {
                     },
                     child: Container(
                       padding: const EdgeInsets.symmetric(
-                        vertical: 15,
-                        horizontal: 30,
+                        vertical: 20,
+                        horizontal: 60,
                       ),
                       decoration: BoxDecoration(
                         color: Colors.grey,
@@ -215,7 +224,11 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                       child: const Text(
                         "취소하기",
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
