@@ -94,7 +94,7 @@ class MyApp extends StatelessWidget {
         "/post": (context) => PostPage(dummyPost: dummyPost),
         "/category": (context) => CategoryPage(dummyUser: dummyUser),
         "/club": (context) => ClubPage(),
-        "/loginPage": (context) => LoginPage(dummyUser: dummyUser),
+        "/loginPage": (context) => LoginPage(),
         "/signUpPage": (context) => SignUpPage(),
         "/selectAccount": (context) {
           final args =

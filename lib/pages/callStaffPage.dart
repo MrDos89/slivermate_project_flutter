@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
-import 'package:slivermate_project_flutter/vo/SliverVo.dart';
+import 'package:slivermate_project_flutter/vo/reportVo.dart';
 
 class CallStaffPage extends StatefulWidget {
   final UserVo? dummyUser;
@@ -33,7 +33,7 @@ class _CallStaffPageState extends State<CallStaffPage> {
     });
 
     // 신고 데이터 생성
-    SliverVo report = SliverVo(
+    ReportVo report = ReportVo(
       userId: 1, // TODO: 실제 로그인한 유저 ID로 변경
       lessonId: 100, // TODO: 신고 대상 ID로 변경
       reportId: selectedReasonId!,
@@ -43,7 +43,7 @@ class _CallStaffPageState extends State<CallStaffPage> {
     );
 
     // 서버로 데이터 전송
-    bool success = await SliverVo.sendReport(report);
+    bool success = await ReportVo.sendReport(report);
 
     // 호출 완료 모달을 2초 후에 띄우도록
     Future.delayed(const Duration(seconds: 2), () {

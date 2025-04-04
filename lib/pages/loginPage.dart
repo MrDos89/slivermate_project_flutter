@@ -1,11 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class LoginPage extends StatefulWidget {
-  final UserVo? dummyUser;
-  const LoginPage({super.key, required this.dummyUser});
+  const LoginPage({super.key});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -14,10 +19,34 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
   bool isLoading = false;
   String? errorText;
 
+  static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static String ec2Port = dotenv.get("EC2_PORT");
+  static final Dio dio = Dio();
+  static String loginUrl = "http://$ec2IpAddress:$ec2Port/api/user/login";
+  static String userGroupUrl = "http://$ec2IpAddress:$ec2Port/api/usergroup";
+  static String sessionCheckUrl =
+      "http://$ec2IpAddress:$ec2Port/api/user/session";
+
+  late PersistCookieJar cookieJar;
+
+  @override
+  void initState() {
+    super.initState();
+    _initDioAndCheckLogin();
+  }
+
+  Future<void> _initDioAndCheckLogin() async {
+    final appDocDir = await getApplicationDocumentsDirectory();
+    cookieJar = PersistCookieJar(
+      storage: FileStorage("${appDocDir.path}/.cookies/"),
+    );
+    dio.interceptors.add(CookieManager(cookieJar));
+
+    await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
+  }
 
   Future<void> _login() async {
     setState(() {
@@ -25,10 +54,10 @@ class _LoginPageState extends State<LoginPage> {
       errorText = null;
     });
 
-    final email = emailController.text.trim();
+    final userId = emailController.text.trim();
     final password = passwordController.text.trim();
 
-    if (email.isEmpty || password.isEmpty) {
+    if (userId.isEmpty || password.isEmpty) {
       setState(() {
         isLoading = false;
         errorText = "아이디와 비밀번호를 모두 입력해주세요.";
@@ -36,84 +65,84 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final dummy = widget.dummyUser;
-
-    if (dummy != null &&
-        email == dummy.userId &&
-        password == dummy.userPassword) { // 여기에 주의!
-      setState(() {
-        isLoading = false;
-      });
-
-      print("로그인 성공 - 사용자: ${dummy.nickname}");
-
-      Navigator.pushNamed(
-        context,
-        '/selectAccount',
-        arguments: [dummy],
+    try {
+      final response = await dio.post(
+        loginUrl,
+        data: {"user_id": userId, "password": password},
+        options: Options(
+          contentType: "application/json",
+          validateStatus: (status) => status! < 500,
+        ),
       );
-    } else {
+
+      if (response.statusCode == 200) {
+        final userData = UserVo.fromJson(response.data);
+        await loadUserGroupByGroupId(userData.groupId);
+
+        // 로그인 성공: 세션 쿠키 자동 저장됨
+        setState(() {
+          isLoading = false;
+        });
+      } else {
+        setState(() {
+          isLoading = false;
+          errorText = "아이디 또는 비밀번호가 잘못되었습니다.";
+        });
+      }
+    } catch (error) {
+      print('로그인 요청 중 오류 발생: $error');
       setState(() {
         isLoading = false;
-        errorText = "아이디 또는 비밀번호가 잘못되었습니다.";
+        errorText = "서버 연결에 실패했습니다.";
       });
     }
+  }
 
-    // [yj] 서버랑 연동 시 사용할 코드
-    // final email = emailController.text.trim();
-    // final password = passwordController.text.trim();
-    //
-    // if (email.isEmpty || password.isEmpty) {
-    //   setState(() {
-    //     isLoading = false;
-    //     errorText = "아이디와 비밀번호를 모두 입력해주세요.";
-    //   });
-    //   return;
-    // }
-    //
-    // // TODO: 로그인 API 연동
-    // print("로그인 시도: $email / $password");
-    //
-    // setState(() {
-    //   isLoading = false;
-    // });
-    //
-    // print("로그인 성공 - 사용자: $email");
-    //
-    // Navigator.pushNamed(
-    //   context,
-    //   '/selectAccount',
-    //   arguments: [widget.dummyUser],
-    // );
+  Future<void> loadUserGroupByGroupId(int groupId) async {
+    try {
+      final response = await dio.get('$userGroupUrl/$groupId');
 
+      if (response.statusCode == 200) {
+        final responseData = response.data;
 
-  // void _goToFindPassword() {
-  //   Navigator.pushNamed(context, '/find-password');
-  // }
-
-  // void _showComingSoonDialog(BuildContext context) {
-  // showDialog(
-  //   context: context,
-  //   builder:
-  //       (context) => AlertDialog(
-  //         title: const Text("준비중"),
-  //         content: const Text("해당 기능은 아직 준비중입니다."),
-  //         actions: [
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: const Text("확인"),
-  //           ),
-  //         ],
-  //       ),
-  // );
-}
-
-void _goToSignup() {
-      Navigator.pushNamed(context, '/signUpPage');
+        if (responseData is List) {
+          // 🚀 responseData가 List라면, UserVo 리스트로 변환
+          final List<UserVo> userList =
+              responseData
+                  .map((e) => UserVo.fromJson(e as Map<String, dynamic>))
+                  .toList();
+          Navigator.pushNamed(context, '/selectAccount', arguments: userList);
+        } else {
+          setState(() {
+            isLoading = false;
+            errorText = "서버 응답이 예상과 다릅니다. 관리자에게 문의하세요.";
+          });
+        }
+      }
+    } catch (error) {
+      debugPrint('유저 그룹 호출 중 오류 발생: $error');
     }
+  }
 
+  Future<void> checkLoginStatus() async {
+    try {
+      final response = await dio.get(sessionCheckUrl);
 
-    @override
+      if (response.statusCode == 200) {
+        print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
+      } else {
+        print("로그인되지 않음.");
+      }
+    } catch (error) {
+      print('로그인 상태 확인 중 오류 발생: $error');
+    }
+  }
+
+  void _goToSignup() {
+    Navigator.pushNamed(context, '/signUpPage');
+  }
+
+  @override
   Widget build(BuildContext context) {
     final inputDecoration = InputDecorationTheme(
       focusedBorder: OutlineInputBorder(
@@ -135,9 +164,9 @@ void _goToSignup() {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 32),
                 child: Theme(
-                  data: Theme.of(context).copyWith(
-                    inputDecorationTheme: inputDecoration,
-                  ),
+                  data: Theme.of(
+                    context,
+                  ).copyWith(inputDecorationTheme: inputDecoration),
                   child: SingleChildScrollView(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
@@ -146,7 +175,10 @@ void _goToSignup() {
                           controller: emailController,
                           decoration: InputDecoration(
                             labelText: '아이디를 입력해주세요.',
-                            labelStyle: TextStyle(color: Colors.grey[400], fontWeight: FontWeight.bold),
+                            labelStyle: TextStyle(
+                              color: Colors.grey[400],
+                              fontWeight: FontWeight.bold,
+                            ),
                             alignLabelWithHint: true,
                           ),
                         ),
@@ -156,14 +188,19 @@ void _goToSignup() {
                           obscureText: true,
                           decoration: InputDecoration(
                             labelText: '비밀번호를 입력해주세요.',
-                            labelStyle: TextStyle(color: Colors.grey[400], fontWeight: FontWeight.bold),
+                            labelStyle: TextStyle(
+                              color: Colors.grey[400],
+                              fontWeight: FontWeight.bold,
+                            ),
                             alignLabelWithHint: true,
                           ),
                         ),
                         const SizedBox(height: 16),
                         if (errorText != null)
-                          Text(errorText!,
-                              style: const TextStyle(color: Colors.red)),
+                          Text(
+                            errorText!,
+                            style: const TextStyle(color: Colors.red),
+                          ),
                         const SizedBox(height: 16),
                         Row(
                           children: [
@@ -172,13 +209,22 @@ void _goToSignup() {
                                 onPressed: isLoading ? null : _login,
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF84C99C),
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                 ),
-                                child: isLoading
-                                    ? const CircularProgressIndicator(
-                                  color: Colors.white,
-                                )
-                                    : const Text('로그인', style: TextStyle(fontSize: 20,  fontWeight: FontWeight.bold)),
+                                child:
+                                    isLoading
+                                        ? const CircularProgressIndicator(
+                                          color: Colors.white,
+                                        )
+                                        : const Text(
+                                          '로그인',
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
                               ),
                             ),
                             const SizedBox(width: 12),
@@ -188,36 +234,30 @@ void _goToSignup() {
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: Colors.grey.shade300,
                                   foregroundColor: Colors.black87,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                 ),
-                                child: const Text('회원가입', style: TextStyle(fontSize: 19,  fontWeight: FontWeight.bold)),
+                                child: const Text(
+                                  '회원가입',
+                                  style: TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
                               ),
                             ),
                           ],
                         ),
-
-                        // const SizedBox(height: 12),
-                        //
-                        // // 비밀번호 찾기
-                        // Align(
-                        //   alignment: Alignment.center,
-                        //   child: TextButton(
-                        //     onPressed: () => _showComingSoonDialog(context),
-                        //     child: const Text(
-                        //       '비밀번호를 잊으셨나요?',
-                        //       style: TextStyle(fontSize: 14, color: Colors.grey),
-                        //     ),
-                        //   ),
-                        // ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
               ),
             ),
-          ],
-        ),
-      );
-    }
+          ),
+        ],
+      ),
+    );
   }
+}

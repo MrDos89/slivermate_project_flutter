@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 ///  신고 데이터 모델 + API 연동 (Vo + Service 합침)
-class SliverVo {
+class ReportVo {
   final int? id; // 신고글 번호
   final int userId; // 신고한 유저 번호
   final int lessonId; // 신고당한 게시글 번호
@@ -11,7 +11,7 @@ class SliverVo {
   final bool isConfirmed; // 신고 처리 완료 여부
   final DateTime updDate; // 신고 일시
 
-  SliverVo({
+  ReportVo({
     this.id,
     required this.userId,
     required this.lessonId,
@@ -22,8 +22,8 @@ class SliverVo {
   });
 
   ///  **JSON → 객체 변환 (fromJson)**
-  factory SliverVo.fromJson(Map<String, dynamic> json) {
-    return SliverVo(
+  factory ReportVo.fromJson(Map<String, dynamic> json) {
+    return ReportVo(
       id: json['id'],
       userId: json['user_id'],
       lessonId: json['lesson_id'],
@@ -55,7 +55,7 @@ class SliverVo {
   static final Dio dio = Dio();
 
   ///  신고 데이터 전송 (POST)
-  static Future<bool> sendReport(SliverVo report) async {
+  static Future<bool> sendReport(ReportVo report) async {
     try {
       Response response = await dio.post(apiUrl, data: report.toJson());
 
@@ -73,14 +73,14 @@ class SliverVo {
   }
 
   /// 🔹 신고 내역 조회 (GET)
-  static Future<List<SliverVo>> fetchReports() async {
+  static Future<List<ReportVo>> fetchReports() async {
     try {
       Response response = await dio.get(apiUrl);
 
       if (response.statusCode == 200) {
         List<dynamic> data = response.data;
-        List<SliverVo> reports =
-            data.map((json) => SliverVo.fromJson(json)).toList();
+        List<ReportVo> reports =
+            data.map((json) => ReportVo.fromJson(json)).toList();
         print(" 신고 내역 가져오기 성공: ${reports.length}개");
         return reports;
       } else {

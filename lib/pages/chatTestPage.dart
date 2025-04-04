@@ -5,6 +5,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 
 class ChatTestPage extends StatelessWidget {
   const ChatTestPage({super.key});
@@ -34,6 +36,16 @@ class _ChatTestPage extends StatefulWidget {
 }
 
 class _ChatTestPageState extends State<_ChatTestPage> {
+  ///  **API 요청 기능 추가 (Dio 사용)**
+  static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static String ec2Port = dotenv.get("EC2_PORT");
+
+  static final Dio dio = Dio();
+  static String signUpUrl = "http://$ec2IpAddress:$ec2Port/api/user";
+
+  bool isLoggedIn = false;
+  Map<String, dynamic>? user;
+
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
   final List<Map<String, dynamic>> _messages = [];
@@ -71,16 +83,44 @@ class _ChatTestPageState extends State<_ChatTestPage> {
       }
     });
 
+    checkLoginStatus();
+
     // 일정 간격으로 guest 메시지 자동 추가
-    _guestMessageTimer = Timer.periodic(const Duration(seconds: 60), (timer) {
-      setState(() {
-        _messages.add({
-          'sender': 'guest',
-          'message': 'UI 테스트 메시지입니다.',
-          'time': DateTime.now(),
+    // _guestMessageTimer = Timer.periodic(const Duration(seconds: 60), (timer) {
+    //   setState(() {
+    //     _messages.add({
+    //       'sender': 'guest',
+    //       'message': 'UI 테스트 메시지입니다.',
+    //       'time': DateTime.now(),
+    //     });
+    //   });
+    // });
+  }
+
+  Future<void> checkLoginStatus() async {
+    try {
+      final response = await http.get(
+        Uri.parse('http://localhost:18090/api/gogumauser/session'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        setState(() {
+          isLoggedIn = true;
+          user = data;
         });
+      } else {
+        setState(() {
+          isLoggedIn = false;
+        });
+      }
+    } catch (error) {
+      print('로그인 상태 확인 중 오류 발생: $error');
+      setState(() {
+        isLoggedIn = false;
       });
-    });
+    }
   }
 
   void _sendMessage() {
