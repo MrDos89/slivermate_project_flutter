@@ -3,6 +3,7 @@ import 'package:slivermate_project_flutter/pages/mainPage.dart';
 import 'package:slivermate_project_flutter/pages/introducePage.dart';
 import 'package:slivermate_project_flutter/pages/categoryPage.dart';
 import 'package:slivermate_project_flutter/pages/newClubPage.dart';
+import 'package:slivermate_project_flutter/pages/paymentPage.dart';
 import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
 import 'package:slivermate_project_flutter/pages/notificationPage.dart';
@@ -22,6 +23,7 @@ import 'package:slivermate_project_flutter/pages/signUpPage2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:slivermate_project_flutter/pages/paymentPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -108,6 +110,8 @@ class MyApp extends StatelessWidget {
 
         // "/clubDetailPage": (context) => ClubDetailPage(),
         "/newClubPage": (context) => NewClubPage(),
+
+        "/paymentPage": (context) => PaymentPage(),
 
         // test
         "/chatTest": (context) => ChatTestPage(),

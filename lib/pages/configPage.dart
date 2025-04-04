@@ -125,6 +125,14 @@ class _ConfigPageState extends State<_ConfigPage> {
                 child: Text("새 모임 만들기 페이지로 이동"),
               ),
             ),
+            SizedBox(
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, "/paymentPage");
+                },
+                child: Text("결제 페이지로 이동"),
+              ),
+            ),
             // SizedBox(
             //   child: ElevatedButton(
             //     onPressed: () {
