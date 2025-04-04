@@ -5,7 +5,7 @@ import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
 import 'package:slivermate_project_flutter/pages/newClubPage.dart';
-
+import 'package:slivermate_project_flutter/vo/clubVo.dart';
 const Map<int, String> categoryNames = {
   1: "실내",
   2: "실외",
@@ -170,93 +170,103 @@ class _ClubPageState extends State<_ClubPage> {
 
     await Future.delayed(const Duration(milliseconds: 500)); // 서버 대기 시뮬레이션
 
-    final dummyResponse = [
-      {
-        "clubId": 1,
-        "clubName": "서울 등산 동아리",
-        "clubRegion": 1,
-        "clubCategoryId": 2,
-        "clubSubCategoryId": 1,
-        "clubDesc": "주말마다 서울 근교 등산을 함께해요!",
-        "clubUserId": "산개",
-        "clubMemberCount": 12,
-        "clubMaxMemberCount": 20,
-        "clubRegisterDate": "2024.05.01",
-        "clubThumbnailUrl": "https://lh3.googleusercontent.com/proxy/r1N3wBQEiaHzWjoASRoNrQd7xeqKzIlD-Mabk-59Dsda1BcBBSyGs--aAWCWqQBPxxVda6I0Jxu1VjrIVGHUltNI6u5VYUoUMigAYeVPPDzX_ecqHtwBkxYbjEJX1eAxPj72GbQU",
-      },
-      {
-        "clubId": 2,
-        "clubName": "경기 독서 모임",
-        "clubRegion": 4,
-        "clubCategoryId": 1,
-        "clubSubCategoryId": 3,
-        "clubDesc": "한 달 한 권 함께 읽고 이야기 나눠요.",
-        "clubUserId": "책벌래",
-        "clubMemberCount": 9,
-        "clubMaxMemberCount": 15,
-        "clubRegisterDate": "2024.04.20",
-        "clubThumbnailUrl": "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1c8F/image/QQsbiyF9-kBvQasym-Vowm5wk-U.jpg",
-      },
-      {
-        "clubId": 3,
-        "clubName": "부산 퍼즐 동호회",
-        "clubRegion": 2,
-        "clubCategoryId": 1,
-        "clubSubCategoryId": 5,
-        "clubDesc": "퍼즐 좋아하는 분들 모여요!",
-        "clubUserId": "퍼즐킹",
-        "clubMemberCount": 7,
-        "clubMaxMemberCount": 12,
-        "clubRegisterDate": "2024.03.10",
-        "clubThumbnailUrl": "https://cdn.crowdpic.net/detail-thumb/thumb_d_07D9AF521C33E48CF5A486668B15A779.jpg",
-      },
-      {
-        "clubId": 4,
-        "clubName": "서울 테니스 동호회",
-        "clubRegion": 1,
-        "clubCategoryId": 2,
-        "clubSubCategoryId": 8,
-        "clubDesc": "테니스 좋아하는 분들 모여요!",
-        "clubUserId": "초테",
-        "clubMemberCount": 16,
-        "clubMaxMemberCount": 25,
-        "clubRegisterDate": "2024.02.15",
-        "clubThumbnailUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWIHbtHVx1GiQzv3PctdxJCsIr6MpOGgI8rg&s",
-      },
+    final List<ClubVo> dummyClubs = [
+      ClubVo(
+        clubId: 1,
+        clubName: "서울 등산 동아리",
+        clubUserId: 101, // ← 사용자 ID 숫자로 설정 (예시)
+        clubCategoryId: 2,
+        clubSubCategoryId: 1,
+        clubThumbnail: "https://lh3.googleusercontent.com/proxy/r1N3wBQEiaHzWjoASRoNrQd7xeqKzIlD-Mabk-59Dsda1BcBBSyGs--aAWCWqQBPxxVda6I0Jxu1VjrIVGHUltNI6u5VYUoUMigAYeVPPDzX_ecqHtwBkxYbjEJX1eAxPj72GbQU",
+        clubMovie: "",
+        clubDesc: "주말마다 서울 근교 등산을 함께해요!",
+        clubMemberNumber: 12,
+        clubMemberMax: 20,
+        clubReportCnt: 0,
+        clubRegisterDate: DateTime.parse("2024-05-01"),
+        isDeleted: false,
+        updDate: DateTime.now(),
+      ),
+      ClubVo(
+        clubId: 2,
+        clubName: "경기 독서 모임",
+        clubUserId: 102,
+        clubCategoryId: 1,
+        clubSubCategoryId: 3,
+        clubThumbnail: "https://t1.daumcdn.net/thumb/R720x0/?fname=http://t1.daumcdn.net/brunch/service/user/1c8F/image/QQsbiyF9-kBvQasym-Vowm5wk-U.jpg",
+        clubMovie: "",
+        clubDesc: "한 달 한 권 함께 읽고 이야기 나눠요.",
+        clubMemberNumber: 9,
+        clubMemberMax: 15,
+        clubReportCnt: 0,
+        clubRegisterDate: DateTime.parse("2024-04-20"),
+        isDeleted: false,
+        updDate: DateTime.now(),
+      ),
+      ClubVo(
+        clubId: 3,
+        clubName: "부산 퍼즐 동호회",
+        clubUserId: 103,
+        clubCategoryId: 1,
+        clubSubCategoryId: 5,
+        clubThumbnail: "https://cdn.crowdpic.net/detail-thumb/thumb_d_07D9AF521C33E48CF5A486668B15A779.jpg",
+        clubMovie: "",
+        clubDesc: "퍼즐 좋아하는 분들 모여요!",
+        clubMemberNumber: 7,
+        clubMemberMax: 12,
+        clubReportCnt: 0,
+        clubRegisterDate: DateTime.parse("2024-03-10"),
+        isDeleted: false,
+        updDate: DateTime.now(),
+      ),
+      ClubVo(
+        clubId: 4,
+        clubName: "서울 테니스 동호회",
+        clubUserId: 104,
+        clubCategoryId: 2,
+        clubSubCategoryId: 8,
+        clubThumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWIHbtHVx1GiQzv3PctdxJCsIr6MpOGgI8rg&s",
+        clubMovie: "",
+        clubDesc: "테니스 좋아하는 분들 모여요!",
+        clubMemberNumber: 16,
+        clubMemberMax: 25,
+        clubReportCnt: 0,
+        clubRegisterDate: DateTime.parse("2024-02-15"),
+        isDeleted: false,
+        updDate: DateTime.now(),
+      ),
     ];
 
 
-    final mapped = dummyResponse.map((club) {
-      final int categoryId = toInt(club["clubCategoryId"]);
-      final int subCategoryId = toInt(club["clubSubCategoryId"]);
-      final int regionId = toInt(club["clubRegion"]);
 
+    final List<Map<String, Object?>> mapped = dummyClubs.map((club) {
+      final int categoryId = club.clubCategoryId;
+      final int subCategoryId = club.clubSubCategoryId;
 
-      final String category = categoryNames[categoryId] ?? "기타";
       final String hobby = categoryId == 1
           ? indoorHobbies[subCategoryId] ?? "기타"
           : outdoorHobbies[subCategoryId] ?? "기타";
-      final String region = regionMap[regionId] ?? "기타";
 
       return {
-        ...club,
-        "id": club["clubId"],
+        "vo": club, // ClubVo 객체 자체
+        "id": club.clubId,
         "category": hobby,
-        "region": region,
-        "name": club["clubName"],
-        "description": club["clubDesc"],
-        "leader": club["clubUserId"],
-        "createdAt": club["clubRegisterDate"],
-        "thumbnailUrl": club["clubThumbnailUrl"],
-        "memberCount": club["clubMemberCount"],
-        "maxMemberCount": club["clubMaxMemberCount"],
+        "name": club.clubName,
+        "description": club.clubDesc,
+        "leader": club.clubUserId,
+        "createdAt": club.clubRegisterDate,
+        "thumbnailUrl": club.clubThumbnail,
+        "memberCount": club.clubMemberNumber,
+        "maxMemberCount": club.clubMemberMax,
       };
     }).toList();
 
     setState(() {
-      clubData = List<Map<String, Object?>>.from(mapped);
+      clubData = mapped;
       isLoading = false;
     });
+
+
 
   }
 
@@ -560,7 +570,7 @@ class _ClubPageState extends State<_ClubPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ClubDetailPage(clubData: club),
+                        builder: (_) => ClubDetailPage(clubVo: club["vo"] as ClubVo),
                       ),
                     );
                   },

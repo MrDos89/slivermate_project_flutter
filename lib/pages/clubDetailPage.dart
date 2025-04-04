@@ -863,14 +863,19 @@ Widget _buildScheduleSection({
                     ),
                   ),
               ),
-            if (_selectedDay == null || scheduleMap[_selectedDay] == null)
+            if (_selectedDay == null)
+              Column(
+                children: const [
+                  Text("날짜를 선택해 주세요"),
+                ],
+              )
+            else if (scheduleMap[_selectedDay] == null)
               Column(
                 children: [
                   const Text("해당 날짜에 일정이 없습니다."),
                   if (clubLeaderId == currentUserId)
                     ElevatedButton(
                       onPressed: () {
-                        // TODO: 추후 일정 추가 모달 or 페이지로 이동
                         showDialog(
                           context: context,
                           builder: (context) {
@@ -890,7 +895,7 @@ Widget _buildScheduleSection({
                       child: const Text("일정 추가하기"),
                     ),
                 ],
-              ),
+              )
           ],
         ),
       );
