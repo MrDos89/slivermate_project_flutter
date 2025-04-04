@@ -119,7 +119,7 @@ class _PaymentPageState extends State<PaymentPage> {
                   if (_selectedPaymentMethod == 1) ...[
                     const SizedBox(height: 5),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
                       decoration: BoxDecoration(
                         color: Colors.white,
                         border: Border.all(color: Colors.grey),
@@ -135,7 +135,7 @@ class _PaymentPageState extends State<PaymentPage> {
                           children: [
                             Text(
                               _selectedCardOrBank ?? "[필수] 카드사를 선택해주세요",
-                              style: TextStyle(fontSize: 20),
+                              style: TextStyle(fontSize: 16),
                             ),
                             const Spacer(),
                             Icon(Icons.arrow_drop_down),
