@@ -11,6 +11,7 @@ import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:slivermate_project_flutter/vo/announceVo.dart';
 import 'package:slivermate_project_flutter/pages/announcementListPage.dart';
 import 'package:slivermate_project_flutter/vo/clubVo.dart';
+import 'package:slivermate_project_flutter/pages/addMeetingPage.dart';
 
 final Map<int, List<AnnounceVo>> dummyClubSchedules = {
   1: [
@@ -876,23 +877,14 @@ Widget _buildScheduleSection({
                   if (clubLeaderId == currentUserId)
                     ElevatedButton(
                       onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text("일정 추가"),
-                              content: Text("선택한 날짜: $_selectedDay\n추후 일정 추가 폼 연결 예정"),
-                              actions: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text("닫기"),
-                                )
-                              ],
-                            );
-                          },
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => AddMeetingPage(selectedDate: _selectedDay!),
+                          ),
                         );
                       },
-                      child: const Text("일정 추가하기"),
+                      child: const Text('일정 추가하기'),
                     ),
                 ],
               )
