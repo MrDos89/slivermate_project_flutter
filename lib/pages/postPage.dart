@@ -46,7 +46,7 @@ List<PostVo> dummyPostList = [
     postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다. 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
     countLikes: 2,
     countComment: 3,
-    postImages: [""],
+    postImages: [],
     registerDate: DateTime.now(),
     clubId: 0,
     comments: [
@@ -79,7 +79,10 @@ List<PostVo> dummyPostList = [
     postNote: "당구 좋아하시는 분 함께 쳐요!테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
     countLikes: 1,
     countComment: 1,
-    postImages: ["https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg"],
+    postImages: ["https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg"],
     registerDate: DateTime(2025, 3, 28, 14, 32),
     clubId: 0,
     comments: [
