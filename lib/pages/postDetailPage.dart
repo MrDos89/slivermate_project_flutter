@@ -110,13 +110,13 @@ class _PostDetailPageState extends State<PostDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (post.postImage != null && post.postImage!.isNotEmpty)
+              if (post.postImages != null && post.postImages!.isNotEmpty)
                 Hero(
-                  tag: post.postImage ?? post.postNote,
+                  tag: post.postImages ?? post.postNote,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.network(
-                      post.postImage!,
+                      post.postImages!.first,
                       width: double.infinity,
                       height: 250,
                       fit: BoxFit.cover,

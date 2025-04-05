@@ -125,7 +125,7 @@ const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
 // void _handleDecline(Map<String, dynamic> schedule) {
 //   schedule["attendingUsers"]?.remove(currentUser);
 // }
-const int currentUserId = 101;
+const int currentUserId = 101; // 임시 모임장
 
 class ClubDetailPage extends StatefulWidget {
   final ClubVo clubVo;
@@ -301,7 +301,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       case 2:
         final clubId = widget.clubVo.clubId;
         final imagePosts = dummyPostList.where((p) =>
-        p.clubId == clubId && p.postImage != null && p.postImage!.isNotEmpty
+        p.clubId == clubId && p.postImages != null && p.postImages!.isNotEmpty
         ).toList();
 
         if (imagePosts.isEmpty) {
@@ -353,7 +353,12 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(post.postImage!, fit: BoxFit.cover),
+                  child: Image.network(
+                    post.postImages!.first,
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               );
             },

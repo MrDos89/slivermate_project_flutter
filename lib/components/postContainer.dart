@@ -130,10 +130,15 @@ Widget postContainer(
                         ),
                       ],
                     ),
-                    if (post.postImage != null && post.postImage!.isNotEmpty)
+                    if (post.postImages != null && post.postImages!.isNotEmpty)
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(post.postImage!, height: 180, width: double.infinity, fit: BoxFit.cover),
+                        child: Image.network(
+                          post.postImages!.first,
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     const SizedBox(height: 8),
                     ReadMoreText(
