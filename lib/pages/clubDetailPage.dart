@@ -696,6 +696,23 @@ Widget _buildScheduleSection({
                             ),
                           ],
                         ),
+                        if (clubLeaderId == currentUserId)
+                          const SizedBox(width: 10),
+                        if (clubLeaderId == currentUserId)
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AddMeetingPage(
+                                    selectedDate: selectedDay,
+                                    existingSchedule: event, // 수정할 일정 넘기기
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text("일정 수정하기"),
+                          ),
                         const SizedBox(height: 12),
                       ],
                     );
