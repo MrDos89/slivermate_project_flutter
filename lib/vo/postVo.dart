@@ -10,7 +10,7 @@ class PostVo {
   final String postNote;
   int countLikes;
   final int countComment;
-  final String? postImage;
+  final List<String>? postImages;
   final DateTime registerDate;
   final int clubId;
   final List<CommentVo> comments;
@@ -24,7 +24,7 @@ class PostVo {
     required this.postNote,
     required this.countLikes,
     required this.countComment,
-    this.postImage,
+    this.postImages,
     required this.registerDate,
     required this.clubId,
     required this.comments,

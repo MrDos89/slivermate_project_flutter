@@ -3,11 +3,13 @@ import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/addAnnounceForm.dart';
 import 'package:slivermate_project_flutter/components/addMeetingForm.dart';
+import 'package:slivermate_project_flutter/vo/announceVo.dart';
 
 class AddMeetingPage extends StatefulWidget {
   final DateTime selectedDate;
+  final AnnounceVo? existingSchedule;
 
-  const AddMeetingPage({super.key, required this.selectedDate});
+  const AddMeetingPage({super.key, required this.selectedDate, this.existingSchedule,});
 
   @override
   State<AddMeetingPage> createState() => _AddMeetingPageState();

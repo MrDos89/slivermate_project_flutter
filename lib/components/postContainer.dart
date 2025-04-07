@@ -3,7 +3,7 @@ import 'package:readmore/readmore.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
-import 'package:slivermate_project_flutter/vo/postVo.dart';
+
 
 // const String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
 
@@ -130,11 +130,19 @@ Widget postContainer(
                         ),
                       ],
                     ),
-                    if (post.postImage != null && post.postImage!.isNotEmpty)
+                    if (hasValidImage(post)) ...[
+                      const SizedBox(height: 12),
                       ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(post.postImage!, height: 180, width: double.infinity, fit: BoxFit.cover),
+                        child: Image.network(
+                          post.postImages!.first,
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => const SizedBox(), // 에러 안 뜨게
+                        ),
                       ),
+                    ],
                     const SizedBox(height: 8),
                     ReadMoreText(
                       post.postNote,
@@ -159,12 +167,12 @@ Widget postContainer(
                         const SizedBox(width: 4),
                         Text("${post.comments.length}"),
 
-                        const Spacer(), // 👈 왼쪽 요소들 다 밀어주고
+                        const Spacer(), // 왼쪽 요소들 다 밀기
 
                         Text(
                           getTimeAgo(post.registerDate),
                           style: const TextStyle(
-                            color: Colors.grey,       // ✅ 회색
+                            color: Colors.grey,
                             fontSize: 12,
                           ),
                         ),
@@ -180,4 +188,12 @@ Widget postContainer(
       ),
     ),
   );
+}
+
+bool hasValidImage(PostVo post) {
+  final images = post.postImages;
+  return images != null &&
+      images.isNotEmpty &&
+      images.first.trim().isNotEmpty &&
+      (images.first.startsWith("http://") || images.first.startsWith("https://"));
 }

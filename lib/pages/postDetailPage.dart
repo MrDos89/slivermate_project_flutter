@@ -101,6 +101,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final postUserThumbnail = post.userThumbnail.trim().isEmpty
         ? defaultUserThumbnail
         : post.userThumbnail;
+    final validImages = post.postImages
+        ?.where((img) => img.trim().isNotEmpty && (img.startsWith("http://") || img.startsWith("https://")))
+        .toList();
 
     return MainLayout(
       child: Scaffold(
@@ -110,19 +113,27 @@ class _PostDetailPageState extends State<PostDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              if (post.postImage != null && post.postImage!.isNotEmpty)
-                Hero(
-                  tag: post.postImage ?? post.postNote,
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.network(
-                      post.postImage!,
-                      width: double.infinity,
-                      height: 250,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+
+              if (validImages != null && validImages.isNotEmpty) ...[
+                const SizedBox(height: 12),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: validImages.map((imageUrl) {
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 12),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8),
+                        child: Image.network(
+                          imageUrl,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) => const SizedBox(),
+                        ),
+                      ),
+                    );
+                  }).toList(),
                 ),
+              ],
               const SizedBox(height: 16),
               Row(
                 children: [

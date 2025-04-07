@@ -125,7 +125,7 @@ const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
 // void _handleDecline(Map<String, dynamic> schedule) {
 //   schedule["attendingUsers"]?.remove(currentUser);
 // }
-const int currentUserId = 101;
+const int currentUserId = 101; // 임시 모임장
 
 class ClubDetailPage extends StatefulWidget {
   final ClubVo clubVo;
@@ -301,7 +301,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       case 2:
         final clubId = widget.clubVo.clubId;
         final imagePosts = dummyPostList.where((p) =>
-        p.clubId == clubId && p.postImage != null && p.postImage!.isNotEmpty
+        p.clubId == clubId && p.postImages != null && p.postImages!.isNotEmpty
         ).toList();
 
         if (imagePosts.isEmpty) {
@@ -353,7 +353,12 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
                 },
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(8),
-                  child: Image.network(post.postImage!, fit: BoxFit.cover),
+                  child: Image.network(
+                    post.postImages!.first,
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               );
             },
@@ -569,6 +574,158 @@ Widget _buildScheduleSection({
 
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  bool _showSchedule = false;
+
+  void _showScheduleDialog({
+    required BuildContext context,
+    required DateTime selectedDay,
+    required List<AnnounceVo> events,
+    required List<AnnounceVo> schedules,
+    required Map<DateTime, List<AnnounceVo>> scheduleMap,
+    required VoidCallback rebuildParent,
+  }) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일 일정",
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+                ],
+              ),
+              content: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: events.map((event) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(event.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                        const SizedBox(height: 4),
+                        Text("${event.time} · ${event.location}"),
+                        const SizedBox(height: 4),
+                        Text("회비: ${event.meetingPrice}"),
+                        const SizedBox(height: 4),
+                        Text(event.description),
+                        const SizedBox(height: 10),
+                        Row(
+                          children: [
+                            const Icon(Icons.people, size: 16, color: Colors.grey),
+                            const SizedBox(width: 4),
+                            Text("참석 ${event.attendingCount}명", style: const TextStyle(fontSize: 12, color: Colors.grey)),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                setModalState(() {
+                                  final updated = AnnounceVo(
+                                    title: event.title,
+                                    date: event.date,
+                                    time: event.time,
+                                    location: event.location,
+                                    description: event.description,
+                                    meetingPrice: event.meetingPrice,
+                                    attendingCount: event.attendingCount + 1,
+                                    type: event.type,
+                                    updDate: event.updDate,
+                                  );
+                                  final index = schedules.indexOf(event);
+                                  if (index != -1) {
+                                    schedules[index] = updated;
+                                    final dateKey = DateTime.utc(selectedDay.year, selectedDay.month, selectedDay.day);
+                                    scheduleMap[dateKey] = schedules.where((e) => e.date == event.date).toList();
+                                  }
+                                  showDialog(
+                                    context: context,
+                                    builder: (_) => AlertDialog(
+                                      title: const Text("참석 확인"),
+                                      content: Text("회비는 '${event.meetingPrice}' 입니다.\n결제 페이지는 준비 중입니다."),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: const Text("확인"),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                });
+                                rebuildParent();
+                              },
+                              style: ElevatedButton.styleFrom(minimumSize: const Size(100, 40)),
+                              child: const Text("참석", style: TextStyle(fontSize: 12)),
+                            ),
+                            const SizedBox(width: 30),
+                            OutlinedButton(
+                              onPressed: () {
+                                setModalState(() {
+                                  final updated = AnnounceVo(
+                                    title: event.title,
+                                    date: event.date,
+                                    time: event.time,
+                                    location: event.location,
+                                    description: event.description,
+                                    meetingPrice: event.meetingPrice,
+                                    attendingCount: (event.attendingCount > 0) ? event.attendingCount - 1 : 0,
+                                    type: event.type,
+                                    updDate: event.updDate,
+                                  );
+                                  final index = schedules.indexOf(event);
+                                  if (index != -1) {
+                                    schedules[index] = updated;
+                                    final dateKey = DateTime.utc(selectedDay.year, selectedDay.month, selectedDay.day);
+                                    scheduleMap[dateKey] = schedules.where((e) => e.date == event.date).toList();
+                                  }
+                                });
+                                rebuildParent();
+                              },
+                              style: OutlinedButton.styleFrom(minimumSize: const Size(100, 40)),
+                              child: const Text("불참", style: TextStyle(fontSize: 12)),
+                            ),
+                          ],
+                        ),
+                        if (clubLeaderId == currentUserId)
+                          const SizedBox(width: 10),
+                        if (clubLeaderId == currentUserId)
+                          TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (_) => AddMeetingPage(
+                                    selectedDate: selectedDay,
+                                    existingSchedule: event, // 수정할 일정 넘기기
+                                  ),
+                                ),
+                              );
+                            },
+                            child: const Text("일정 수정하기"),
+                          ),
+                        const SizedBox(height: 12),
+                      ],
+                    );
+                  }).toList(),
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
 
   return StatefulBuilder(
     builder: (context, setState) {
@@ -620,176 +777,25 @@ Widget _buildScheduleSection({
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
+                  _showSchedule = false;
                 });
               },
               onDayLongPressed: (selectedDay, focusedDay) {
-                final dateKey = DateTime.utc(
-                    selectedDay.year, selectedDay.month, selectedDay.day);
-                final events = scheduleMap[dateKey]?.where((e) => e.isMeeting).toList() ?? [];
+                final dateKey = DateTime.utc(selectedDay.year, selectedDay.month, selectedDay.day);
+                final events = scheduleMap[dateKey] ?? [];
 
                 if (events.isNotEmpty) {
-                  showDialog(
+                  _showScheduleDialog(
                     context: context,
-                    builder: (context) {
-                      return StatefulBuilder(
-                        builder: (context, setModalState) {
-                          return AlertDialog(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            title: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  "${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일 일정",
-                                  style: const TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.close),
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ],
-                            ),
-                            content: SingleChildScrollView(
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                    ),
-                                    ...events.map<Widget>((event) {
-                                      // int attendingCount = event.attendingCount;
-
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            event.title,
-                                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                                          ),
-                                          const SizedBox(height: 4),
-
-                                          Text("${event.time} · ${event.location}"),
-                                          const SizedBox(height: 4),
-
-                                          Text("회비: ${event.meetingPrice}"),
-                                          const SizedBox(height: 4),
-
-                                          Text(event.description),
-                                          const SizedBox(height: 10),
-
-                                          // 참석 인원 표시
-                                          Row(
-                                            children: [
-                                              const Icon(Icons.people, size: 16, color: Colors.grey),
-                                              const SizedBox(width: 4),
-                                              Text(
-                                                "참석 ${event.attendingCount}명",
-                                                style: const TextStyle(fontSize: 12, color: Colors.grey),
-                                              ),
-                                            ],
-                                          ),
-                                          const SizedBox(height: 8),
-
-                                          // 버튼 나란히
-                                          Row(
-                                            children: [
-                                              ElevatedButton(
-                                                onPressed: () {
-                                                  setModalState(() {
-                                                    final updated = AnnounceVo(
-                                                      title: event.title,
-                                                      date: event.date,
-                                                      time: event.time,
-                                                      location: event.location,
-                                                      description: event.description,
-                                                      meetingPrice: event.meetingPrice,
-                                                      attendingCount: event.attendingCount + 1,
-                                                      type: event.type,
-                                                      updDate: event.updDate,
-                                                    );
-
-                                                    final index = schedules.indexOf(event);
-                                                    if (index != -1) {
-                                                      schedules[index] = updated;
-                                                      final dateKey = DateTime.utc(selectedDay.year, selectedDay.month, selectedDay.day);
-                                                      scheduleMap[dateKey] = schedules.where((e) => e.date == event.date).toList();
-                                                    }
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (_) => AlertDialog(
-                                                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                                        title: const Text("참석 확인"),
-                                                        content: Text("회비는 '${event.meetingPrice}' 입니다.\n결제 페이지는 준비 중입니다."),
-                                                        actions: [
-                                                          TextButton(
-                                                            onPressed: () => Navigator.pop(context),
-                                                            child: const Text("확인"),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  });
-
-                                                  // 외부 상태도 갱신
-                                                  (context as Element).markNeedsBuild();
-                                                },
-                                                style: ElevatedButton.styleFrom(minimumSize: const Size(100, 40)),
-                                                child: const Text("참석", style: TextStyle(fontSize: 12)),
-                                              ),
-                                              const SizedBox(width: 30),
-                                              OutlinedButton(
-                                                onPressed: () {
-                                                  setModalState(() {
-                                                    final updated = AnnounceVo(
-                                                      title: event.title,
-                                                      date: event.date,
-                                                      time: event.time,
-                                                      location: event.location,
-                                                      description: event.description,
-                                                      meetingPrice: event.meetingPrice,
-                                                      attendingCount: (event.attendingCount > 0) ? event.attendingCount - 1 : 0,
-                                                      type: event.type,
-                                                      updDate: event.updDate,
-                                                    );
-
-                                                    final index = schedules.indexOf(event);
-                                                    if (index != -1) {
-                                                      schedules[index] = updated;
-
-                                                      final dateKey = DateTime.utc(
-                                                        selectedDay.year,
-                                                        selectedDay.month,
-                                                        selectedDay.day,
-                                                      );
-                                                      scheduleMap[dateKey] = schedules
-                                                          .where((e) => e.date == event.date)
-                                                          .toList();
-                                                    }
-                                                  });
-                                                },
-                                                style: OutlinedButton.styleFrom(minimumSize: const Size(100, 40)),
-                                                child: const Text("불참", style: TextStyle(fontSize: 12)),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      );
-                                    }).toList(),
-                                  ],
-                                ),
-                              ),
-                          );
-                        },
-                      );
-                    },
+                    selectedDay: selectedDay,
+                    events: events,
+                    schedules: schedules,
+                    scheduleMap: scheduleMap,
+                    rebuildParent: () => (context as Element).markNeedsBuild(),
                   );
                 }
               },
+
               calendarFormat: CalendarFormat.month,
               onFormatChanged: (_) {},
               headerStyle: const HeaderStyle(
@@ -847,32 +853,59 @@ Widget _buildScheduleSection({
             ),
             const SizedBox(height: 12),
             if (_selectedDay != null && scheduleMap[_selectedDay] != null)
-              ...scheduleMap[_selectedDay]!.map((schedule) =>
-                  SizedBox(
-                    width: double.infinity,
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(schedule.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 4),
-                            Text("${schedule.date} / ${schedule.time}"),
-                            Text("장소: ${schedule.location}"),
-                            const SizedBox(height: 6),
-                            Text(schedule.description),
-                            Text("회비: ${schedule.meetingPrice}"),
-                          ],
+              Column(
+                children: [
+                  if (!_showSchedule)
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _showSchedule = true;
+                        });
+                      },
+                      child: const Text("일정보기"),
+                    )
+                  else
+                    ...scheduleMap[_selectedDay]!.map((schedule) {
+                      final dateKey = DateTime.utc(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
+                      final events = scheduleMap[dateKey] ?? [];
+
+                      return GestureDetector(
+                        onTap: () {
+                          _showScheduleDialog(
+                            context: context,
+                            selectedDay: _selectedDay!,
+                            events: events,
+                            schedules: schedules,
+                            scheduleMap: scheduleMap,
+                            rebuildParent: () => (context as Element).markNeedsBuild(),
+                          );
+                        },
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Card(
+                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(schedule.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 4),
+                                  Text("${schedule.date} / ${schedule.time}"),
+                                  Text("장소: ${schedule.location}"),
+                                  const SizedBox(height: 6),
+                                  Text(schedule.description),
+                                  Text("회비: ${schedule.meetingPrice}"),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
+                      );
+                    }),
+                ],
               ),
             if (_selectedDay == null)
               Column(

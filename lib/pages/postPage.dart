@@ -17,7 +17,7 @@ PostVo dummyPost = PostVo(
     postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
     countLikes: 0,
     countComment: 0,
-    postImage:"https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
     registerDate: DateTime.now(),
     clubId: 0,
     comments: [  // 댓글 추가!
@@ -46,7 +46,7 @@ List<PostVo> dummyPostList = [
     postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다. 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
     countLikes: 2,
     countComment: 3,
-    postImage: "",
+    postImages: [],
     registerDate: DateTime.now(),
     clubId: 0,
     comments: [
@@ -79,7 +79,10 @@ List<PostVo> dummyPostList = [
     postNote: "당구 좋아하시는 분 함께 쳐요!테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
     countLikes: 1,
     countComment: 1,
-    postImage: "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+    postImages: ["https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
+                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg"],
     registerDate: DateTime(2025, 3, 28, 14, 32),
     clubId: 0,
     comments: [
@@ -100,7 +103,7 @@ List<PostVo> dummyPostList = [
     postNote: "독서 모임 할 사람!",
     countLikes: 3,
     countComment: 2,
-    postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
     registerDate: DateTime(2025, 3, 28, 14, 30),
     clubId: 0,
     comments: [
@@ -127,7 +130,7 @@ List<PostVo> dummyPostList = [
     postNote: "그림 그리기 좋아하시는 분들 계신가요?",
     countLikes: 0,
     countComment: 0,
-    postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
     registerDate: DateTime(2024, 11, 25, 14, 30),
     clubId: 0,
     comments: [], // 댓글 없음
@@ -141,7 +144,7 @@ List<PostVo> dummyPostList = [
     postNote: "오늘 영화 볼 사람?",
     countLikes: 1,
     countComment: 1,
-    postImage: "https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp",
+    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
     registerDate: DateTime(2025, 3, 25, 14, 30),
     clubId: 0,
     comments: [
@@ -162,7 +165,7 @@ List<PostVo> dummyPostList = [
     postNote: "자전거 라이딩 같이해요~ 주말에 한강에서 모여요!",
     countLikes: 4,
     countComment: 2,
-    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
     registerDate: DateTime.now().subtract(Duration(days: 2)),
     clubId: 0,
     comments: [
@@ -189,7 +192,7 @@ List<PostVo> dummyPostList = [
     postNote: "쿠킹 클래스 회원 모집합니다. 이번엔 이탈리안 요리!",
     countLikes: 5,
     countComment: 1,
-    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
     registerDate: DateTime.now().subtract(Duration(days: 5)),
     clubId: 0,
     comments: [
@@ -210,7 +213,7 @@ List<PostVo> dummyPostList = [
     postNote: "캠핑 가고 싶은 사람들 모여요!",
     countLikes: 10,
     countComment: 4,
-    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
     registerDate: DateTime.now().subtract(Duration(days: 10)),
     clubId: 0,
     comments: [
@@ -249,7 +252,7 @@ List<PostVo> dummyPostList = [
     postNote: "등산 동호회에서 이번 주 토요일 산행갑니다.",
     countLikes: 7,
     countComment: 2,
-    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
     registerDate: DateTime.now().subtract(Duration(days: 3)),
     clubId: 0,
     comments: [
@@ -276,7 +279,7 @@ List<PostVo> dummyPostList = [
     postNote: "통기타 초보 모임! 같이 배워봐요.",
     countLikes: 3,
     countComment: 3,
-    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
     registerDate: DateTime.now().subtract(Duration(days: 7)),
     clubId: 0,
     comments: [
@@ -309,7 +312,7 @@ List<PostVo> dummyPostList = [
     postNote: "요즘 날씨 너무 좋아요~ 산책하면서 봄바람 느끼는 중 🌸",
     countLikes: 5,
     countComment: 2,
-    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
     registerDate: DateTime.now().subtract(Duration(hours: 5)),
     clubId: 0,
     comments: [
@@ -336,7 +339,7 @@ List<PostVo> dummyPostList = [
     postNote: "집에서 커피 내려 마시면서 좋아하는 책 읽는 중입니다 ☕📖",
     countLikes: 3,
     countComment: 1,
-    postImage: "https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg",
+    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
     registerDate: DateTime.now().subtract(Duration(days: 1, hours: 2)),
     clubId: 0,
     comments: [
@@ -351,7 +354,7 @@ List<PostVo> dummyPostList = [
   PostVo(
     userNickname: "라이언",
     postNote: "이번 주 등산 어때요?",
-    postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+    postImages: ["https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg"],
     countLikes: 3,
     countComment: 2,
     registerDate: DateTime.now().subtract(Duration(hours: 5)),
@@ -365,7 +368,7 @@ List<PostVo> dummyPostList = [
   PostVo(
     userNickname: "라이언",
     postNote: "이번 주 등산 어때요?",
-    postImage: "https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg",
+    postImages: ["https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg"],
     countLikes: 3,
     countComment: 2,
     registerDate: DateTime.now().subtract(Duration(hours: 5)),
