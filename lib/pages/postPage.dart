@@ -332,12 +332,26 @@ class _PostPageState extends State<PostPage> {
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            // 버튼 클릭 시 NewPostPage로 이동
-            Navigator.push(
+          onPressed: () async {
+            final result = await Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => NewPostPage()),
+              MaterialPageRoute(builder: (_) => const NewPostPage()),
             );
+
+            // ✅ 글 작성 후 돌아왔을 때 새로고침
+            if (result == true) {
+              debugPrint("새 글 작성됨 → 자동 새로고침 시작");
+              await _refreshPostList();
+
+              // ✅ 리스트 가장 위로 스크롤
+              if (mounted) {
+                Scrollable.ensureVisible(
+                  context,
+                  duration: const Duration(milliseconds: 300),
+                  alignment: 0.0,
+                );
+              }
+            }
           },
           backgroundColor: Colors.green,
           shape: const CircleBorder(),
@@ -431,7 +445,7 @@ class _LikeHeartState extends State<LikeHeart>
 
 String getTimeAgo(DateTime date) {
   final now = DateTime.now();
-  final diff = now.difference(date);
+  final diff = now.difference(date.toLocal());
 
   final minutes = diff.inMinutes;
   final hours = diff.inHours;

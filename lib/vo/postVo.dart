@@ -54,7 +54,9 @@ class PostVo {
       postCategoryId: json['post_category_id'] ?? 0,
       postSubCategoryId: json['post_sub_category_id'] ?? 0,
       postNote: json['post_note'] ?? "",
-      postImages: json['post_images'] ?? [],
+      postImages: (json['post_images'] != null)
+        ? List<String>.from(json['post_images'])
+        : [],
       postLikeCount: json['post_like_count'] ?? 0,
       postCommentCount: json['post_comment_count'] ?? 0,
       registerDate: DateTime.parse(json['register_date']),
@@ -83,11 +85,11 @@ class PostVo {
       'post_comment_count': postCommentCount,
       'is_hidden': isHidden,
       'post_report_count': postReportCount,
-      'register_date': registerDate,
+      'register_date': registerDate.toIso8601String(),
       'comments': comments,
       'nickname': userNickname,
       'user_thumbnail': userThumbnail,
-      'upd_date': updDate,
+      'upd_date': updDate.toIso8601String(),
     };
   }
 }

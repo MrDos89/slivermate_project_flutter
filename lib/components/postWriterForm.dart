@@ -2,6 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
+import 'package:dio/dio.dart';
+import 'package:slivermate_project_flutter/vo/postVo.dart';
+
 
 class PostWriterForm extends StatefulWidget {
   final int? clubId;
@@ -52,6 +55,7 @@ class _PostWriterFormState extends State<PostWriterForm> {
     if (_selectedImages.length >= 4) return;
     final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
     if (image != null) {
+      debugPrint("📸 원본 이미지 경로: ${image.path}");
       final bytes = await image.readAsBytes();
       final originalImage = img.decodeImage(bytes);
       if (originalImage != null) {
@@ -59,30 +63,86 @@ class _PostWriterFormState extends State<PostWriterForm> {
         final tempDir = Directory.systemTemp;
         final resizedFile = File('${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
         await resizedFile.writeAsBytes(img.encodeJpg(resizedImage));
+
+        debugPrint("📏 리사이즈된 이미지 경로: ${resizedFile.path}");
         setState(() {
           _selectedImages.add(XFile(resizedFile.path));
         });
+      } else {
+        debugPrint("⚠️ 이미지 디코딩 실패!");
       }
+    } else {
+      debugPrint("❌ 이미지 선택 안됨");
     }
   }
 
-  void _submitPost() {
+  Future<bool> uploadPost(PostVo postData) async {
+    try {
+      final String apiUrl = 'http://54.180.127.164:18090/api/post';
+      final dio = Dio();
+
+      final response = await dio.post(
+        apiUrl,
+        data: postData.toJson(),
+        options: Options(headers: {'Content-Type': 'application/json'}),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint('게시글 업로드 성공: ${response.data}');
+        return true; // ⬅️ 성공
+      } else {
+        debugPrint('서버 응답 에러: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      debugPrint('업로드 중 오류 발생: $e');
+      return false;
+    }
+  }
+
+
+  Future<void> _submitPost() async {
     if (_selectedSubCategoryIds.isNotEmpty && _textController.text.trim().isNotEmpty) {
       final selectedIdsForServer = _selectedSubCategoryIds.map((id) => id >= 100 ? id - 100 : id).toList();
       final content = _textController.text.trim();
       final imagePaths = _selectedImages.map((e) => e.path).toList();
+      debugPrint("🖼️ 서버에 전송할 이미지 경로 리스트: $imagePaths");
 
-      print('Club ID: ${widget.clubId}');
-      print('Selected categories: $selectedIdsForServer');
-      print('Content: $content');
-      print('Images: $imagePaths');
+      final post = PostVo(
+        postId: 0,
+        regionId: 1,
+        postUserId: 1,
+        clubId: widget.clubId ?? 0,
+        postCategoryId: 2,
+        postSubCategoryId: selectedIdsForServer.first,
+        postNote: content,
+        postImages: imagePaths,
+        postLikeCount: 0,
+        postCommentCount: 0,
+        isHidden: false,
+        postReportCount: 0,
+        registerDate: DateTime.now(),
+        comments: [],
+        userNickname: "",
+        userThumbnail: "",
+        updDate: DateTime.now(),
+      );
 
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("게시글이 업로드되었습니다.")));
-      widget.onPostUploaded?.call();
+      final result = await uploadPost(post);
+
+      if (result == true) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("게시글이 업로드되었습니다.")),
+        );
+        widget.onPostUploaded?.call();
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("모든 항목을 입력해주세요.")));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("모든 항목을 입력해주세요.")),
+      );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

@@ -297,7 +297,7 @@ class NewPostPage extends StatelessWidget {
           child: PostWriterForm(
             clubId: null,
             onPostUploaded: () {
-              Navigator.pushReplacementNamed(context, '/post');
+              Navigator.pop(context, true);
             },
           ),
         ),
