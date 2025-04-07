@@ -574,6 +574,7 @@ Widget _buildScheduleSection({
 
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
+  bool _showSchedule = false;
 
   void _showScheduleDialog({
     required BuildContext context,
@@ -776,6 +777,7 @@ Widget _buildScheduleSection({
                 setState(() {
                   _selectedDay = selectedDay;
                   _focusedDay = focusedDay;
+                  _showSchedule = false;
                 });
               },
               onDayLongPressed: (selectedDay, focusedDay) {
@@ -851,46 +853,60 @@ Widget _buildScheduleSection({
             ),
             const SizedBox(height: 12),
             if (_selectedDay != null && scheduleMap[_selectedDay] != null)
-              ...scheduleMap[_selectedDay]!.map((schedule) {
-                final dateKey = DateTime.utc(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
-                final events = scheduleMap[dateKey] ?? [];
+              Column(
+                children: [
+                  if (!_showSchedule)
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          _showSchedule = true;
+                        });
+                      },
+                      child: const Text("일정보기"),
+                    )
+                  else
+                    ...scheduleMap[_selectedDay]!.map((schedule) {
+                      final dateKey = DateTime.utc(_selectedDay!.year, _selectedDay!.month, _selectedDay!.day);
+                      final events = scheduleMap[dateKey] ?? [];
 
-                return GestureDetector(
-                  onTap: () {
-                    _showScheduleDialog(
-                      context: context,
-                      selectedDay: _selectedDay!,
-                      events: events,
-                      schedules: schedules,
-                      scheduleMap: scheduleMap,
-                      rebuildParent: () => (context as Element).markNeedsBuild(),
-                    );
-                  },
-                  child: SizedBox(
-                    width: double.infinity,
-                    child: Card(
-                      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                      elevation: 2,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(schedule.title, style: const TextStyle(fontWeight: FontWeight.bold)),
-                            const SizedBox(height: 4),
-                            Text("${schedule.date} / ${schedule.time}"),
-                            Text("장소: ${schedule.location}"),
-                            const SizedBox(height: 6),
-                            Text(schedule.description),
-                            Text("회비: ${schedule.meetingPrice}"),
-                          ],
+                      return GestureDetector(
+                        onTap: () {
+                          _showScheduleDialog(
+                            context: context,
+                            selectedDay: _selectedDay!,
+                            events: events,
+                            schedules: schedules,
+                            scheduleMap: scheduleMap,
+                            rebuildParent: () => (context as Element).markNeedsBuild(),
+                          );
+                        },
+                        child: SizedBox(
+                          width: double.infinity,
+                          child: Card(
+                            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(schedule.title, style: const TextStyle(fontWeight: FontWeight.bold)),
+                                  const SizedBox(height: 4),
+                                  Text("${schedule.date} / ${schedule.time}"),
+                                  Text("장소: ${schedule.location}"),
+                                  const SizedBox(height: 6),
+                                  Text(schedule.description),
+                                  Text("회비: ${schedule.meetingPrice}"),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                );
-              }),
+                      );
+                    }),
+                ],
+              ),
             if (_selectedDay == null)
               Column(
                 children: const [
