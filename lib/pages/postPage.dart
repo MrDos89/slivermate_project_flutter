@@ -7,382 +7,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:slivermate_project_flutter/components/postContainer.dart';
 
-
-PostVo dummyPost = PostVo(
-    userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
-    userNickname: "라이언",
-    regionId: 1,
-    categoryNames: 1,
-    subCategory: 8,
-    postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다.",
-    countLikes: 0,
-    countComment: 0,
-    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
-    registerDate: DateTime.now(),
-    clubId: 0,
-    comments: [  // 댓글 추가!
-      CommentVo(
-        userThumbnail: "https://example.com/user1.jpg",
-        userNickname: "철수",
-        commentText: "저 참여할게요!",
-        commentDate: DateTime.now(),
-      ),
-      CommentVo(
-        userThumbnail: "https://example.com/user2.jpg",
-        userNickname: "영희",
-        commentText: "재밌겠어요!",
-        commentDate: DateTime.now().subtract(Duration(minutes: 30)),
-      ),
-    ],
-);
-
-List<PostVo> dummyPostList = [
-  PostVo(
-    userThumbnail: "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
-    userNickname: "라이언",
-    regionId: 1,
-    categoryNames: 1,
-    subCategory: 8,
-    postNote: "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다. 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
-    countLikes: 2,
-    countComment: 3,
-    postImages: [],
-    registerDate: DateTime.now(),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "철수",
-        commentText: "저도 참여할 수 있을까요?",
-        commentDate: DateTime.now().subtract(Duration(minutes: 15)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "영희",
-        commentText: "실력은 초보지만 같이해요!",
-        commentDate: DateTime.now().subtract(Duration(minutes: 30)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "민수",
-        commentText: "몇 시에 모이나요?",
-        commentDate: DateTime.now().subtract(Duration(hours: 1)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
-    userNickname: "라이언",
-    regionId: 1,
-    categoryNames: 1,
-    subCategory: 8,
-    postNote: "당구 좋아하시는 분 함께 쳐요!테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
-    countLikes: 1,
-    countComment: 1,
-    postImages: ["https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
-                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
-                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg",
-                 "https://static.cdn.kmong.com/gigs/2syJC1722251676.jpg"],
-    registerDate: DateTime(2025, 3, 28, 14, 32),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "현수",
-        commentText: "장소가 어디인가요?",
-        commentDate: DateTime.now().subtract(Duration(hours: 2)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
-    userNickname: "라이언",
-    regionId: 1,
-    categoryNames: 1,
-    subCategory: 8,
-    postNote: "독서 모임 할 사람!",
-    countLikes: 3,
-    countComment: 2,
-    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
-    registerDate: DateTime(2025, 3, 28, 14, 30),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "지수",
-        commentText: "책은 정해졌나요?",
-        commentDate: DateTime.now().subtract(Duration(hours: 4)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "수진",
-        commentText: "어떤 장르인지 궁금해요!",
-        commentDate: DateTime.now().subtract(Duration(hours: 3, minutes: 30)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
-    userNickname: "라이언",
-    regionId: 1,
-    categoryNames: 1,
-    subCategory: 8,
-    postNote: "그림 그리기 좋아하시는 분들 계신가요?",
-    countLikes: 0,
-    countComment: 0,
-    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
-    registerDate: DateTime(2024, 11, 25, 14, 30),
-    clubId: 0,
-    comments: [], // 댓글 없음
-  ),
-  PostVo(
-    userThumbnail: "https://mblogthumb-phinf.pstatic.net/20160320_155/rabbitcat_14584632589491c2m0_JPEG/%BA%F1%BC%F5%C4%B3%B8%AF%C5%CD.jpg?type=w800",
-    userNickname: "라이언",
-    regionId: 1,
-    categoryNames: 1,
-    subCategory: 8,
-    postNote: "오늘 영화 볼 사람?",
-    countLikes: 1,
-    countComment: 1,
-    postImages: ["https://flexible.img.hani.co.kr/flexible/normal/960/960/imgdb/resize/2019/0121/00501111_20190121.webp"],
-    registerDate: DateTime(2025, 3, 25, 14, 30),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "도윤",
-        commentText: "어떤 영화인가요?",
-        commentDate: DateTime.now().subtract(Duration(days: 1, hours: 1)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "",
-    userNickname: "민지",
-    regionId: 2,
-    categoryNames: 2,
-    subCategory: 2,
-    postNote: "자전거 라이딩 같이해요~ 주말에 한강에서 모여요!",
-    countLikes: 4,
-    countComment: 2,
-    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
-    registerDate: DateTime.now().subtract(Duration(days: 2)),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "태호",
-        commentText: "좋아요! 몇 시에 볼까요?",
-        commentDate: DateTime.now().subtract(Duration(days: 2, hours: 3)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "지연",
-        commentText: "참여 가능한가요?",
-        commentDate: DateTime.now().subtract(Duration(days: 2, hours: 2, minutes: 20)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "https://item.kakaocdn.net/do/bef59207f5155a4eddd632c9a833e80d7154249a3890514a43687a85e6b6cc82",
-    userNickname: "영민",
-    regionId: 3,
-    categoryNames: 1,
-    subCategory: 6,
-    postNote: "쿠킹 클래스 회원 모집합니다. 이번엔 이탈리안 요리!",
-    countLikes: 5,
-    countComment: 1,
-    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
-    registerDate: DateTime.now().subtract(Duration(days: 5)),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "지혜",
-        commentText: "재료 준비물이 있나요?",
-        commentDate: DateTime.now().subtract(Duration(days: 5, hours: 5)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "",
-    userNickname: "하늘",
-    regionId: 4,
-    categoryNames: 2,
-    subCategory: 3,
-    postNote: "캠핑 가고 싶은 사람들 모여요!",
-    countLikes: 10,
-    countComment: 4,
-    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
-    registerDate: DateTime.now().subtract(Duration(days: 10)),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "소연",
-        commentText: "장소는 정해졌나요?",
-        commentDate: DateTime.now().subtract(Duration(days: 10, hours: 4)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "우진",
-        commentText: "텐트랑 장비는 각자 준비인가요?",
-        commentDate: DateTime.now().subtract(Duration(days: 10, hours: 3)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "민혁",
-        commentText: "불멍하고 싶네요!",
-        commentDate: DateTime.now().subtract(Duration(days: 10, hours: 2, minutes: 15)),
-      ),
-      CommentVo(
-        userThumbnail: "https://item.kakaocdn.net/do/bef59207f5155a4eddd632c9a833e80d7154249a3890514a43687a85e6b6cc82",
-        userNickname: "승아",
-        commentText: "다음엔 꼭 갈게요~",
-        commentDate: DateTime.now().subtract(Duration(days: 9)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "",
-    userNickname: "예린",
-    regionId: 5,
-    categoryNames: 2,
-    subCategory: 1,
-    postNote: "등산 동호회에서 이번 주 토요일 산행갑니다.",
-    countLikes: 7,
-    countComment: 2,
-    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
-    registerDate: DateTime.now().subtract(Duration(days: 3)),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "수아",
-        commentText: "초보도 갈 수 있나요?",
-        commentDate: DateTime.now().subtract(Duration(days: 3, hours: 1)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "건우",
-        commentText: "저도 신청할게요!",
-        commentDate: DateTime.now().subtract(Duration(days: 2, hours: 22)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "",
-    userNickname: "준서",
-    regionId: 6,
-    categoryNames: 1,
-    subCategory: 7,
-    postNote: "통기타 초보 모임! 같이 배워봐요.",
-    countLikes: 3,
-    countComment: 3,
-    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
-    registerDate: DateTime.now().subtract(Duration(days: 7)),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "지훈",
-        commentText: "기타가 없는데 참여 가능할까요?",
-        commentDate: DateTime.now().subtract(Duration(days: 7, hours: 4)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "하영",
-        commentText: "장소는 어디인가요?",
-        commentDate: DateTime.now().subtract(Duration(days: 7, hours: 2, minutes: 45)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "세훈",
-        commentText: "악보는 미리 받아볼 수 있나요?",
-        commentDate: DateTime.now().subtract(Duration(days: 6, hours: 20)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "",
-    userNickname: "하람",
-    regionId: 1, // 서울특별시
-    categoryNames: 1, // 실내
-    subCategory: 0, // 일상
-    postNote: "요즘 날씨 너무 좋아요~ 산책하면서 봄바람 느끼는 중 🌸",
-    countLikes: 5,
-    countComment: 2,
-    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
-    registerDate: DateTime.now().subtract(Duration(hours: 5)),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "주연",
-        commentText: "와 사진 너무 예뻐요!",
-        commentDate: DateTime.now().subtract(Duration(hours: 4, minutes: 30)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "진우",
-        commentText: "산책 코스 어디에요?",
-        commentDate: DateTime.now().subtract(Duration(hours: 3, minutes: 10)),
-      ),
-    ],
-  ),
-  PostVo(
-    userThumbnail: "",
-    userNickname: "다영",
-    regionId: 3, // 대전광역시
-    categoryNames: 1, // 실내
-    subCategory: 0, // 일상
-    postNote: "집에서 커피 내려 마시면서 좋아하는 책 읽는 중입니다 ☕📖",
-    countLikes: 3,
-    countComment: 1,
-    postImages: ["https://previews.123rf.com/images/breakingdots/breakingdots2304/breakingdots230400781/202938341-%EA%B3%A0%EC%96%91%EC%9D%B4-%EA%B7%80%EC%97%AC%EC%9A%B4-%EC%BA%90%EB%A6%AD%ED%84%B0-%EB%A7%8C%ED%99%94-%EB%B2%A1%ED%84%B0-%EC%9D%BC%EB%9F%AC%EC%8A%A4%ED%8A%B8-%EB%A0%88%EC%9D%B4%EC%85%98.jpg"],
-    registerDate: DateTime.now().subtract(Duration(days: 1, hours: 2)),
-    clubId: 0,
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "성우",
-        commentText: "힐링 그 자체네요!",
-        commentDate: DateTime.now().subtract(Duration(days: 1, hours: 1, minutes: 20)),
-      ),
-    ],
-  ),
-  PostVo(
-    userNickname: "라이언",
-    postNote: "이번 주 등산 어때요?",
-    postImages: ["https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg"],
-    countLikes: 3,
-    countComment: 2,
-    registerDate: DateTime.now().subtract(Duration(hours: 5)),
-    comments: [],
-    userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
-    regionId: 1,
-    categoryNames: 2,
-    subCategory: 1,
-    clubId: 1,
-  ),
-  PostVo(
-    userNickname: "라이언",
-    postNote: "이번 주 등산 어때요?",
-    postImages: ["https://allways.kg-mobility.com/wp-content/uploads/2020/04/0429_%EB%93%B1%EC%82%B0_%EC%8D%B8%EB%84%A4%EC%9D%BC.jpg"],
-    countLikes: 3,
-    countComment: 2,
-    registerDate: DateTime.now().subtract(Duration(hours: 5)),
-    comments: [],
-    userThumbnail: "https://i.namu.wiki/i/vDDaVK4wm1-vPZgAOI65rbhLhr1vPCzBgoRKSS7mEFx4IH2vtHvvMN41Umw-taptksIW_WqnjwOdcGbAMpAmrQ.webp",
-    regionId: 1,
-    categoryNames: 2,
-    subCategory: 1,
-    clubId: 1,
-  ),
-];
-
 //  카테고리 ID를 문자열로 변환
-const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
+const Map<int, String> postCategoryId = {1: "실내", 2: "실외"};
 
 //  취미 ID를 문자열로 변환 (카테고리별로 따로 저장)
 const Map<int, String> indoorHobbies = {
@@ -435,7 +61,7 @@ Map<int, String> regionMap = {
 class PostPage extends StatefulWidget {
   final PostVo? dummyPost;
 
-  const PostPage({super.key, required this.dummyPost});
+  const PostPage({super.key, this.dummyPost});
 
   @override
   State<PostPage> createState() => _PostPageState();
@@ -443,13 +69,29 @@ class PostPage extends StatefulWidget {
 
 class _PostPageState extends State<PostPage> {
   int? _selectedRegionId; // 지역
-  Set<int> _selectedSubCategoryIds = {};
+  Set<int> _selectedpostSubCategoryIdIds = {};
+  late List<PostVo> postList = [];
 
-  Future<void> _refreshDummyPostList() async {
+  @override
+  void initState() {
+    super.initState();
+
+    _refreshPostList();
+  }
+
+  Future<void> _refreshPostList() async {
+    final fetchPostList = await PostService.fetchPostData();
+
+    debugPrint(fetchPostList.toString());
     await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌 나게 딜레이
-    setState(() {
-      dummyPostList = List.from(dummyPostList); // 새 객체로 복사
-    });
+
+    if (fetchPostList.isNotEmpty) {
+      setState(() {
+        postList = fetchPostList; // 데이터가 정상적으로 오면 저장
+      });
+    } else {
+      debugPrint("포스트 리스트를 가져오지 못했습니다.");
+    }
   }
 
   void _showCommentModal(BuildContext context, PostVo post) {
@@ -465,50 +107,56 @@ class _PostPageState extends State<PostPage> {
         return StatefulBuilder(
           builder: (context, setModalState) {
             return Padding(
-              padding: MediaQuery
-                  .of(context)
-                  .viewInsets,
+              padding: MediaQuery.of(context).viewInsets,
               child: Container(
                 padding: const EdgeInsets.all(16),
                 height: 400,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text('댓글', style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Text(
+                      '댓글',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const Divider(),
 
                     Expanded(
-                      child: post.comments.isEmpty
-                          ? const Center(child: Text("아직 등록된 댓글이 없습니다."))
-                          : ListView.builder(
-                        itemCount: post.comments.length,
-                        itemBuilder: (context, index) {
-                          final comment = post.comments[index];
-                          return ListTile(
-                            leading: CircleAvatar(
-                              radius: 16,
-                              backgroundImage: NetworkImage(
-                                comment.userThumbnail
-                                    .trim()
-                                    .isEmpty ? defaultUserThumbnail : comment
-                                    .userThumbnail,
-                              )
-                              ,
-                            ),
-                            title: Text(comment.userNickname,
-                                style: const TextStyle(
-                                    fontWeight: FontWeight.bold)),
-                            subtitle: Text(comment.commentText),
-                            trailing: Text(
-                              "${comment.commentDate.hour}:${comment.commentDate
-                                  .minute.toString().padLeft(2, '0')}",
-                              style: const TextStyle(
-                                  fontSize: 12, color: Colors.grey),
-                            ),
-                          );
-                        },
-                      ),
+                      child:
+                          post.comments.isEmpty
+                              ? const Center(child: Text("아직 등록된 댓글이 없습니다."))
+                              : ListView.builder(
+                                itemCount: post.comments.length,
+                                itemBuilder: (context, index) {
+                                  final comment = post.comments[index];
+                                  return ListTile(
+                                    leading: CircleAvatar(
+                                      radius: 16,
+                                      backgroundImage: NetworkImage(
+                                        comment.userThumbnail.trim().isEmpty
+                                            ? defaultUserThumbnail
+                                            : comment.userThumbnail,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      comment.userNickname,
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    subtitle: Text(comment.commentText),
+                                    trailing: Text(
+                                      "${comment.commentDate.hour}:${comment.commentDate.minute.toString().padLeft(2, '0')}",
+                                      style: const TextStyle(
+                                        fontSize: 12,
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
                     ),
 
                     // 댓글 입력 필드
@@ -519,16 +167,16 @@ class _PostPageState extends State<PostPage> {
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.send),
                           onPressed: () {
-                            if (commentController.text
-                                .trim()
-                                .isNotEmpty) {
+                            if (commentController.text.trim().isNotEmpty) {
                               setModalState(() {
-                                post.comments.add(CommentVo(
-                                  userThumbnail: "", // 현재 사용자 프로필 이미지
-                                  userNickname: "현재 사용자", // 현재 사용자 닉네임
-                                  commentText: commentController.text.trim(),
-                                  commentDate: DateTime.now(),
-                                ));
+                                post.comments.add(
+                                  CommentVo(
+                                    userThumbnail: "", // 현재 사용자 프로필 이미지
+                                    userNickname: "현재 사용자", // 현재 사용자 닉네임
+                                    commentText: commentController.text.trim(),
+                                    commentDate: DateTime.now(),
+                                  ),
+                                );
                                 commentController.clear();
                               });
 
@@ -537,7 +185,7 @@ class _PostPageState extends State<PostPage> {
                           },
                         ),
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -550,17 +198,19 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<PostVo> filteredList =
+        postList.where((post) {
+          // bool isClubPost = post.clubId != 0;
 
-    List<PostVo> filteredList = dummyPostList.where((post) {
-      // bool isClubPost = post.clubId != 0;
+          bool regionMatch =
+              _selectedRegionId == null || post.regionId == _selectedRegionId;
 
-      bool regionMatch = _selectedRegionId == null || post.regionId == _selectedRegionId;
+          bool postSubCategoryIdMatch =
+              _selectedpostSubCategoryIdIds.isEmpty ||
+              _selectedpostSubCategoryIdIds.contains(post.postSubCategoryId);
 
-      bool subCategoryMatch = _selectedSubCategoryIds.isEmpty ||
-          _selectedSubCategoryIds.contains(post.subCategory);
-
-      return regionMatch && subCategoryMatch;
-    }).toList();
+          return regionMatch && postSubCategoryIdMatch;
+        }).toList();
 
     return MainLayout(
       child: Scaffold(
@@ -577,7 +227,10 @@ class _PostPageState extends State<PostPage> {
               children: [
                 // 지역 드롭다운
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: RegionDropdown(
                     value: _selectedRegionId,
                     onChanged: (value) {
@@ -585,21 +238,25 @@ class _PostPageState extends State<PostPage> {
                         _selectedRegionId = value; // null 허용됨
                       });
                     },
-                  )
+                  ),
                 ),
                 // const SizedBox(height: ),
 
                 // 카테고리 선택 (Chip 형태)
                 Padding(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
                   child: Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const Text(
                         '카테고리',
                         style: TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
@@ -608,37 +265,48 @@ class _PostPageState extends State<PostPage> {
                           child: SingleChildScrollView(
                             scrollDirection: Axis.horizontal, // 가로 슬라이드 활성화
                             child: Row(
-                              children: {
-                                ...indoorHobbies.entries,
-                                ...outdoorHobbies.entries,
-                              }.map((e) {
-                                final bool isSelected = _selectedSubCategoryIds
-                                    .contains(e.key);
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: FilterChip(
-                                    label: Text(e.value),
-                                    selected: isSelected,
-                                    onSelected: (selected) {
-                                      setState(() {
-                                        if (e.key == -1) {
-                                          // '전체' 선택 시 모든 선택 초기화
-                                          if (selected) {
-                                            _selectedSubCategoryIds.clear();
-                                          }
-                                        } else {
-                                          if (selected) {
-                                            _selectedSubCategoryIds.add(e.key);
-                                            _selectedSubCategoryIds.remove(-1); // 다른 항목 선택 시 '전체' 제거
-                                          } else {
-                                            _selectedSubCategoryIds.remove(e.key);
-                                          }
-                                        }
-                                      });
-                                    },
-                                  ),
-                                );
-                              }).toList(),
+                              children:
+                                  {
+                                    ...indoorHobbies.entries,
+                                    ...outdoorHobbies.entries,
+                                  }.map((e) {
+                                    final bool isSelected =
+                                        _selectedpostSubCategoryIdIds.contains(
+                                          e.key,
+                                        );
+                                    return Padding(
+                                      padding: const EdgeInsets.only(
+                                        right: 8.0,
+                                      ),
+                                      child: FilterChip(
+                                        label: Text(e.value),
+                                        selected: isSelected,
+                                        onSelected: (selected) {
+                                          setState(() {
+                                            if (e.key == -1) {
+                                              // '전체' 선택 시 모든 선택 초기화
+                                              if (selected) {
+                                                _selectedpostSubCategoryIdIds
+                                                    .clear();
+                                              }
+                                            } else {
+                                              if (selected) {
+                                                _selectedpostSubCategoryIdIds
+                                                    .add(e.key);
+                                                _selectedpostSubCategoryIdIds
+                                                    .remove(
+                                                      -1,
+                                                    ); // 다른 항목 선택 시 '전체' 제거
+                                              } else {
+                                                _selectedpostSubCategoryIdIds
+                                                    .remove(e.key);
+                                              }
+                                            }
+                                          });
+                                        },
+                                      ),
+                                    );
+                                  }).toList(),
                             ),
                           ),
                         ),
@@ -646,20 +314,19 @@ class _PostPageState extends State<PostPage> {
                     ],
                   ),
                 ),
-              SizedBox(
-                child: postContainer(
-                  context,
-                  postList: filteredList,
-                  onRefresh: _refreshDummyPostList,
-                  onLikeTap: (post) {
-                    setState(() {
-                      post.countLikes += 1;
-                    });
-                  },
-                  onCommentTap: _showCommentModal,
+                SizedBox(
+                  child: postContainer(
+                    context,
+                    postList: filteredList,
+                    onRefresh: _refreshPostList,
+                    onLikeTap: (post) {
+                      setState(() {
+                        post.postLikeCount += 1;
+                      });
+                    },
+                    onCommentTap: _showCommentModal,
+                  ),
                 ),
-              )
-
               ],
             ),
           ),
@@ -679,212 +346,11 @@ class _PostPageState extends State<PostPage> {
       ),
     );
   }
-
-  // Widget postContainer(BuildContext context, {required List<PostVo> postList, required Future<void> Function() onRefresh, bool isClubPage = false}) {
-  //   // 동아리 게시물인지 여부를 확인
-  //   if (postList.isEmpty) {
-  //     return SizedBox(
-  //       height: MediaQuery.of(context).size.height * 0.7,
-  //       child: Container(
-  //         decoration: BoxDecoration(
-  //           color: Colors.grey.shade100,
-  //           borderRadius: BorderRadius.circular(12),
-  //         ),
-  //         alignment: Alignment.center,
-  //         child: Column(
-  //           mainAxisSize: MainAxisSize.min,
-  //           children: [
-  //             const Icon(Icons.inbox, size: 60, color: Colors.grey),
-  //             const SizedBox(height: 12),
-  //             Text(
-  //               "해당되는 피드가 없습니다.",
-  //               style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-  //             ),
-  //             const SizedBox(height: 6),
-  //             Text(
-  //               "첫 번째 피드를 남겨주세요.",
-  //               style: TextStyle(fontSize: 14, color: Colors.grey),
-  //             ),
-  //           ],
-  //         ),
-  //       ),
-  //     );
-  //   }
-  //
-  //   // 동아리 피드를 필터링
-  //   final filteredList = isClubPage
-  //       ? postList.where((post) => post.clubId != 0).toList() // 동아리 게시물만
-  //       : postList.where((post) => post.clubId == 0).toList(); // 동아리 아닌 게시물만
-  //
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       SizedBox(
-  //         height: MediaQuery.of(context).size.height * 0.71,
-  //         child: RefreshIndicator(
-  //           onRefresh: onRefresh,
-  //           child: ListView(
-  //             physics: const AlwaysScrollableScrollPhysics(),
-  //             children: [
-  //               const SizedBox(height: 40),
-  //               ...filteredList.map((dummyPost) {
-  //                 return GestureDetector(
-  //                   onTap: () {
-  //                     Navigator.push(
-  //                       context,
-  //                       MaterialPageRoute(
-  //                         builder: (_) => PostDetailPage(Post: dummyPost),
-  //                       ),
-  //                     );
-  //                   },
-  //                   child: SizedBox(
-  //                     width: double.infinity,
-  //                     child: Card(
-  //                       margin: const EdgeInsets.symmetric(vertical: 8),
-  //                       shape: RoundedRectangleBorder(
-  //                         borderRadius: BorderRadius.circular(12),
-  //                       ),
-  //                       elevation: 2,
-  //                       child: Padding(
-  //                         padding: const EdgeInsets.all(16),
-  //                         child: Column(
-  //                           crossAxisAlignment: CrossAxisAlignment.start,
-  //                           children: [
-  //                             Row(
-  //                               crossAxisAlignment: CrossAxisAlignment.start,
-  //                               children: [
-  //                                 CircleAvatar(
-  //                                   radius: 16,
-  //                                   backgroundImage: NetworkImage(
-  //                                     dummyPost.userThumbnail.trim().isEmpty
-  //                                         ? defaultUserThumbnail
-  //                                         : dummyPost.userThumbnail,
-  //                                   ),
-  //                                 ),
-  //                                 const SizedBox(width: 12),
-  //                                 Column(
-  //                                   crossAxisAlignment: CrossAxisAlignment.start,
-  //                                   children: [
-  //                                     Text(
-  //                                       dummyPost.userNickname,
-  //                                       style: const TextStyle(
-  //                                         fontSize: 16,
-  //                                         fontWeight: FontWeight.bold,
-  //                                       ),
-  //                                     ),
-  //                                     const SizedBox(height: 4),
-  //                                     Text(
-  //                                       "${regionMap[dummyPost.regionId]!} · ${dummyPost.categoryNames == 1 ? indoorHobbies[dummyPost.subCategory] : outdoorHobbies[dummyPost.subCategory]}",
-  //                                       style: const TextStyle(color: Colors.grey),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                             if (dummyPost.postImage != null &&
-  //                                 dummyPost.postImage!.isNotEmpty)
-  //                               ClipRRect(
-  //                                 borderRadius: BorderRadius.circular(12),
-  //                                 child: Image.network(
-  //                                   dummyPost.postImage!,
-  //                                   fit: BoxFit.cover,
-  //                                   width: double.infinity,
-  //                                   height: 180,
-  //                                   loadingBuilder: (context, child, loadingProgress) {
-  //                                     if (loadingProgress == null) return child;
-  //                                     return Container(
-  //                                       alignment: Alignment.center,
-  //                                       height: 180,
-  //                                       child: const CircularProgressIndicator(),
-  //                                     );
-  //                                   },
-  //                                   errorBuilder: (context, error, stackTrace) {
-  //                                     return Container(
-  //                                       alignment: Alignment.center,
-  //                                       height: 180,
-  //                                       color: Colors.grey[300],
-  //                                       child: const Icon(Icons.broken_image, color: Colors.grey),
-  //                                     );
-  //                                   },
-  //                                 ),
-  //                               ),
-  //                             const SizedBox(height: 8),
-  //                             ReadMoreText(
-  //                               dummyPost.postNote,
-  //                               trimLines: 2,
-  //                               trimMode: TrimMode.Line,
-  //                               trimCollapsedText: ' ...더보기',
-  //                               trimExpandedText: ' 접기',
-  //                               style: const TextStyle(fontSize: 16),
-  //                               moreStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-  //                               lessStyle: const TextStyle(fontSize: 14, color: Colors.grey),
-  //                             ),
-  //                             const SizedBox(height: 8),
-  //                             Row(
-  //                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  //                               children: [
-  //                                 Row(
-  //                                   children: [
-  //                                     LikeHeart(initialLikes: dummyPost.countLikes),
-  //                                     const SizedBox(width: 16),
-  //                                     GestureDetector(
-  //                                       onTap: () => _showCommentModal(context, dummyPost),
-  //                                       child: Row(
-  //                                         children: [
-  //                                           const Icon(Icons.comment_outlined,
-  //                                               size: 18, color: Colors.grey),
-  //                                           const SizedBox(width: 4),
-  //                                           Text('${dummyPost.comments.length}'),
-  //                                         ],
-  //                                       ),
-  //                                     ),
-  //                                   ],
-  //                                 ),
-  //                                 Text(
-  //                                   getTimeAgo(dummyPost.registerDate),
-  //                                   style: const TextStyle(fontSize: 12, color: Colors.grey),
-  //                                 ),
-  //                               ],
-  //                             ),
-  //                           ],
-  //                         ),
-  //                       ),
-  //                     ),
-  //                   ),
-  //                 );
-  //               }).toList(),
-  //             ],
-  //           ),
-  //         ),
-  //       )
-  //     ],
-  //   );
-  // }
-
 }
 
-
-// "준비중" 팝업 다이얼로그 함수
-// void _showComingSoonDialog(BuildContext context) {
-//   showDialog(
-//     context: context,
-//     builder:
-//         (context) => AlertDialog(
-//           title: const Text("준비중"),
-//           content: const Text("해당 기능은 아직 준비중입니다."),
-//           actions: [
-//             TextButton(
-//               onPressed: () => Navigator.pop(context),
-//               child: const Text("확인"),
-//             ),
-//           ],
-//         ),
-//   );
-// }
-
 class LikeHeart extends StatefulWidget {
-  final int initialLikes;        // 총 좋아요 수
-  final bool initiallyLiked;     // 내가 눌렀는지 여부
+  final int initialLikes; // 총 좋아요 수
+  final bool initiallyLiked; // 내가 눌렀는지 여부
 
   const LikeHeart({
     super.key,
@@ -896,7 +362,8 @@ class LikeHeart extends StatefulWidget {
   State<LikeHeart> createState() => _LikeHeartState();
 }
 
-class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMixin {
+class _LikeHeartState extends State<LikeHeart>
+    with SingleTickerProviderStateMixin {
   late int _likes;
   late bool _isLiked;
   late AnimationController _controller;
@@ -913,9 +380,10 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
       duration: const Duration(milliseconds: 200),
     );
 
-    _scaleAnimation = Tween<double>(begin: 1.0, end: 1.4).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 1.0,
+      end: 1.4,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
   }
 
   @override
@@ -978,13 +446,14 @@ String getTimeAgo(DateTime date) {
   return '$years년 전';
 }
 
-final postUserThumbnail = (dummyPost.userThumbnail.trim().isEmpty)
-    ? defaultUserThumbnail
-    : dummyPost.userThumbnail;
-
+// final postUserThumbnail =
+//     (dummyPostList[0].userThumbnail.trim().isEmpty)
+//         ? defaultUserThumbnail
+//         : dummyPostList[0].userThumbnail;
 
 // 유저 썸네일 기본 이미지, 설정 안했을 경우 나올 이미지 설정
-const String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
+const String defaultUserThumbnail =
+    "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
 
 // 지역 선택 위젯
 class RegionDropdown extends StatelessWidget {
@@ -1003,7 +472,10 @@ class RegionDropdown extends StatelessWidget {
       isExpanded: true,
       value: value,
       decoration: InputDecoration(
-        contentPadding: const EdgeInsets.symmetric(vertical: 12, horizontal: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          vertical: 12,
+          horizontal: 10,
+        ),
         labelText: '지역 선택',
         border: OutlineInputBorder(borderRadius: BorderRadius.circular(6)),
       ),
@@ -1013,7 +485,7 @@ class RegionDropdown extends StatelessWidget {
           child: Text("전체 지역"),
         ),
         ...regionMap.entries.map(
-              (entry) => DropdownMenuItem<int?>(
+          (entry) => DropdownMenuItem<int?>(
             value: entry.key,
             child: Text(entry.value),
           ),

@@ -5,8 +5,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class ChatTestPage extends StatelessWidget {
   const ChatTestPage({super.key});
@@ -41,10 +41,12 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   static String ec2Port = dotenv.get("EC2_PORT");
 
   static final Dio dio = Dio();
-  static String signUpUrl = "http://$ec2IpAddress:$ec2Port/api/user";
+  // static String signUpUrl = "http://$ec2IpAddress:$ec2Port/api/user";
+  static String sessionCheckUrl =
+      "http://$ec2IpAddress:$ec2Port/api/user/session";
 
   bool isLoggedIn = false;
-  Map<String, dynamic>? user;
+  UserVo? user;
 
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
@@ -99,27 +101,17 @@ class _ChatTestPageState extends State<_ChatTestPage> {
 
   Future<void> checkLoginStatus() async {
     try {
-      final response = await http.get(
-        Uri.parse('http://localhost:18090/api/gogumauser/session'),
-        headers: {'Content-Type': 'application/json'},
-      );
+      final response = await dio.get(sessionCheckUrl);
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          isLoggedIn = true;
-          user = data;
-        });
+        print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
+
+        user = UserVo.fromJson(response.data);
       } else {
-        setState(() {
-          isLoggedIn = false;
-        });
+        print("로그인되지 않음.");
       }
     } catch (error) {
       print('로그인 상태 확인 중 오류 발생: $error');
-      setState(() {
-        isLoggedIn = false;
-      });
     }
   }
 

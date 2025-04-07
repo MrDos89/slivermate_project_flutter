@@ -34,16 +34,16 @@ const Map<int, String> outdoorHobbies = {
 };
 
 Map<int, String> regionMap = {
-  1 : "서울특별시",
-  2 : "인천광역시",
-  3 : "대전광역시",
-  4 : "대구광역시",
-  5 : "울산광역시",
-  6 : "부산광역시",
-  7 : "광주광역시",
-  8 : "세종특별자치시",
-  9 : "제주도",
-  10 : "울릉도"
+  1: "서울특별시",
+  2: "인천광역시",
+  3: "대전광역시",
+  4: "대구광역시",
+  5: "울산광역시",
+  6: "부산광역시",
+  7: "광주광역시",
+  8: "세종특별자치시",
+  9: "제주도",
+  10: "울릉도",
 };
 
 class PostDetailPage extends StatefulWidget {
@@ -64,7 +64,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   void initState() {
     super.initState();
-    likeCount = widget.Post.countLikes;
+    likeCount = widget.Post.postLikeCount;
   }
 
   void _toggleLike() {
@@ -82,12 +82,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
     final text = _commentController.text.trim();
     if (text.isNotEmpty) {
       setState(() {
-        widget.Post.comments.add(CommentVo(
-          userThumbnail: "", // 기본 이미지로 처리
-          userNickname: "현재 사용자",
-          commentText: text,
-          commentDate: DateTime.now(),
-        ));
+        widget.Post.comments.add(
+          CommentVo(
+            userThumbnail: "", // 기본 이미지로 처리
+            userNickname: "현재 사용자",
+            commentText: text,
+            commentDate: DateTime.now(),
+          ),
+        );
         _commentController.clear();
       });
     }
@@ -98,12 +100,18 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     final post = widget.Post;
-    final postUserThumbnail = post.userThumbnail.trim().isEmpty
-        ? defaultUserThumbnail
-        : post.userThumbnail;
-    final validImages = post.postImages
-        ?.where((img) => img.trim().isNotEmpty && (img.startsWith("http://") || img.startsWith("https://")))
-        .toList();
+    final postUserThumbnail =
+        post.userThumbnail.trim().isEmpty
+            ? defaultUserThumbnail
+            : post.userThumbnail;
+    final validImages =
+        post.postImages
+            ?.where(
+              (img) =>
+                  img.trim().isNotEmpty &&
+                  (img.startsWith("http://") || img.startsWith("https://")),
+            )
+            .toList();
 
     return MainLayout(
       child: Scaffold(
@@ -113,25 +121,27 @@ class _PostDetailPageState extends State<PostDetailPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
               if (validImages != null && validImages.isNotEmpty) ...[
                 const SizedBox(height: 12),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: validImages.map((imageUrl) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          imageUrl,
-                          width: double.infinity,
-                          fit: BoxFit.cover,
-                          errorBuilder: (context, error, stackTrace) => const SizedBox(),
-                        ),
-                      ),
-                    );
-                  }).toList(),
+                  children:
+                      validImages.map((imageUrl) {
+                        return Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.network(
+                              imageUrl,
+                              width: double.infinity,
+                              fit: BoxFit.cover,
+                              errorBuilder:
+                                  (context, error, stackTrace) =>
+                                      const SizedBox(),
+                            ),
+                          ),
+                        );
+                      }).toList(),
                 ),
               ],
               const SizedBox(height: 16),
@@ -145,20 +155,23 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(post.userNickname, style: const TextStyle(fontWeight: FontWeight.bold)),
+                      Text(
+                        post.userNickname,
+                        style: const TextStyle(fontWeight: FontWeight.bold),
+                      ),
                       Text(
                         "지역: ${regionMap[post.regionId]}",
-                        style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.grey,
+                        ),
                       ),
                     ],
                   ),
                 ],
               ),
               const SizedBox(height: 16),
-              Text(
-                post.postNote,
-                style: const TextStyle(fontSize: 16),
-              ),
+              Text(post.postNote, style: const TextStyle(fontSize: 16)),
               const SizedBox(height: 16),
               Row(
                 children: [
@@ -166,49 +179,70 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     onTap: _toggleLike,
                     child: Row(
                       children: [
-                        Icon(isLiked ? Icons.favorite : Icons.favorite_border,
-                            color: isLiked ? Colors.red : Colors.grey),
+                        Icon(
+                          isLiked ? Icons.favorite : Icons.favorite_border,
+                          color: isLiked ? Colors.red : Colors.grey,
+                        ),
                         const SizedBox(width: 4),
                         Text('$likeCount'),
                       ],
                     ),
                   ),
                   const SizedBox(width: 16),
-                  const Icon(Icons.comment_outlined, color: Colors.grey, size: 18),
+                  const Icon(
+                    Icons.comment_outlined,
+                    color: Colors.grey,
+                    size: 18,
+                  ),
                   const SizedBox(width: 4),
                   Text('${post.comments.length}'),
                 ],
               ),
               const SizedBox(height: 24),
-              const Text("댓글", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+              const Text(
+                "댓글",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
               const SizedBox(height: 8),
               post.comments.isEmpty
-                  ? const Center(child: Text("아직 댓글이 없습니다", style: TextStyle(color: Colors.grey)))
+                  ? const Center(
+                    child: Text(
+                      "아직 댓글이 없습니다",
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  )
                   : ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: post.comments.length,
-                itemBuilder: (context, index) {
-                  final comment = post.comments[index];
-                  final profileImage = comment.userThumbnail.trim().isEmpty
-                      ? defaultUserThumbnail
-                      : comment.userThumbnail;
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: post.comments.length,
+                    itemBuilder: (context, index) {
+                      final comment = post.comments[index];
+                      final profileImage =
+                          comment.userThumbnail.trim().isEmpty
+                              ? defaultUserThumbnail
+                              : comment.userThumbnail;
 
-                  return ListTile(
-                    contentPadding: EdgeInsets.zero,
-                    leading: CircleAvatar(
-                      radius: 16,
-                      backgroundImage: NetworkImage(profileImage),
-                    ),
-                    title: Text(comment.userNickname, style: const TextStyle(fontWeight: FontWeight.bold)),
-                    subtitle: Text(comment.commentText),
-                    trailing: Text(
-                      "${comment.commentDate.hour}:${comment.commentDate.minute.toString().padLeft(2, '0')}",
-                      style: const TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  );
-                },
-              ),
+                      return ListTile(
+                        contentPadding: EdgeInsets.zero,
+                        leading: CircleAvatar(
+                          radius: 16,
+                          backgroundImage: NetworkImage(profileImage),
+                        ),
+                        title: Text(
+                          comment.userNickname,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Text(comment.commentText),
+                        trailing: Text(
+                          "${comment.commentDate.hour}:${comment.commentDate.minute.toString().padLeft(2, '0')}",
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: Colors.grey,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
               const SizedBox(height: 80), // 댓글 입력창과 겹치지 않도록 여백 확보
             ],
           ),
@@ -227,9 +261,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
             ),
           ),
         ),
-
       ),
     );
   }
 }
-
