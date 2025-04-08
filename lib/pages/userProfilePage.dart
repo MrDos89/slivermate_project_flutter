@@ -26,7 +26,7 @@ class UserProfilePage extends StatelessWidget {
 }
 
 class _UserProfilePage extends StatefulWidget {
-  List<UserVo>? userList;
+  // List<UserVo>? userList;
 
   _UserProfilePage({super.key});
 
@@ -36,9 +36,11 @@ class _UserProfilePage extends StatefulWidget {
 
 class _UserProfilePageState extends State<_UserProfilePage> {
   // late List<UserVo> _accounts;
-  late List<UserVo> userList = [];
+  // late List<UserVo> userList = [];
   late PersistCookieJar cookieJar;
   bool isLoading = true;
+  UserVo? currentUser; //  로그인한 유저 정보를 저장할 변수
+  // UserVo? _currentUser;
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
@@ -50,9 +52,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   void initState() {
     super.initState();
     // _accounts = widget.userList;
-
     _initDioAndCheckLogin();
-    _fetchUserData();
   }
 
   Future<void> _initDioAndCheckLogin() async {
@@ -65,32 +65,40 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
   }
 
-  Future<void> _fetchUserData() async {
-    final fetchUserList = await UserService.fetchUserData();
-
-    debugPrint(fetchUserList.toString());
-    await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌 나게 딜레이
-
-    if (fetchUserList.isNotEmpty) {
-      setState(() {
-        userList = fetchUserList; // 데이터가 정상적으로 오면 저장
-      });
-    } else {
-      debugPrint("유저 정보를 가져오지 못했습니다.");
-    }
-  }
+  // Future<void> _fetchUserData() async {
+  //   final fetchUserList = await UserService.fetchUserData();
+  //
+  //   debugPrint(fetchUserList.toString());
+  //   await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌 나게 딜레이
+  //
+  //   if (fetchUserList.isNotEmpty) {
+  //     setState(() {
+  //       userList = fetchUserList; // 데이터가 정상적으로 오면 저장
+  //     });
+  //   } else {
+  //     debugPrint("유저 정보를 가져오지 못했습니다.");
+  //   }
+  // }
 
   Future<void> checkLoginStatus() async {
     try {
       final response = await dio.get(sessionCheckUrl);
 
       if (response.statusCode == 200) {
-        print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
+        // print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
+        final user = UserVo.fromJson(response.data);
+        setState(() {
+          currentUser = user; //  로그인된 유저 정보를 저장
+          isLoading = false;
+        });
+        debugPrint("로그인 유지됨 - 사용자: ${user.nickname}");
       } else {
-        print("로그인되지 않음.");
+        debugPrint("로그인되지 않음.");
+        setState(() => isLoading = false);
       }
     } catch (error) {
-      print('로그인 상태 확인 중 오류 발생: $error');
+      debugPrint('로그인 상태 확인 중 오류 발생: $error');
+      setState(() => isLoading = false);
     }
   }
 
@@ -114,7 +122,11 @@ class _UserProfilePageState extends State<_UserProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    final placeholder = const Placeholder();
+    if (isLoading) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      ); //  로딩 중이면 프로그래스 인디케이터 표시
+    }
 
     return SingleChildScrollView(
       child: Column(
@@ -124,23 +136,25 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
-              // 양 끝 정렬 (썸네일+닉네임, 로그아웃)
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // 왼쪽: 썸네일 + 닉네임
                 Row(
                   children: [
-                    // 썸네일 (프로필 이미지) - 실제 url 대신 Placeholder
+                    // 썸네일 (프로필 이미지)
                     CircleAvatar(
                       radius: 24,
                       backgroundColor: Colors.grey,
-                      // backgroundImage: NetworkImage('프로필 URL'),
+                      backgroundImage:
+                          currentUser?.thumbnail != null
+                              ? NetworkImage(currentUser!.thumbnail!)
+                              : null,
                     ),
                     const SizedBox(width: 8),
                     // 닉네임
-                    const Text(
-                      "홍길동",
-                      style: TextStyle(
+                    Text(
+                      currentUser?.nickname ?? '홍길동',
+                      style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
                       ),
@@ -174,7 +188,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(8),
                 boxShadow: [
-                  // 살짝 그림자
                   BoxShadow(
                     color: Colors.black.withOpacity(0.05),
                     offset: const Offset(0, 2),
@@ -200,7 +213,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                       ],
                     ),
                   ),
-                  // 세로 구분선
                   Container(width: 1, height: 40, color: Colors.grey[300]),
                   // 구독기간
                   Expanded(
@@ -221,7 +233,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                       ],
                     ),
                   ),
-                  // 세로 구분선
                   Container(width: 1, height: 40, color: Colors.grey[300]),
                   // 가입된 동아리
                   Expanded(
@@ -253,7 +264,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
               crossAxisCount: 4,
               mainAxisSpacing: 16,
               crossAxisSpacing: 16,
-              // GridView의 스크롤 비활성화 -> 부모 SingleChildScrollView와 충돌 방지
               physics: const NeverScrollableScrollPhysics(),
               shrinkWrap: true,
               children: [
@@ -283,7 +293,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           color: Colors.white,
           borderRadius: BorderRadius.circular(8),
           boxShadow: [
-            // 살짝 그림자
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
               offset: const Offset(0, 2),
