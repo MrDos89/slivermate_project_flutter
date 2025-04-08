@@ -377,8 +377,8 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
           ),
         );
       case 2:
-        final clubId = widget.clubVo.clubId;
-        final imagePosts = [];
+        // final clubId = widget.clubVo.clubId;
+        final imagePosts = clubPosts.where((p) => p.postImages!.isNotEmpty).toList();
 
         if (imagePosts.isEmpty) {
           return SizedBox(
