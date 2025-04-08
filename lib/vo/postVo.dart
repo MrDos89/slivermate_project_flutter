@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:slivermate_project_flutter/vo/commentVo.dart';
-import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class PostVo {
@@ -46,6 +45,10 @@ class PostVo {
 
   //  JSON → LessonVO 변환
   factory PostVo.fromJson(Map<String, dynamic> json) {
+    debugPrint('📦 서버에서 받은 register_date: ${json['register_date']}');
+    final parsedRegisterDate = DateTime.parse(json['register_date']).toUtc();  // UTC 기준으로 파싱
+    debugPrint('🕓 최종 파싱된 registerDate (UTC): $parsedRegisterDate');  // UTC로 확인
+
     return PostVo(
       postId: json['post_id'] ?? 0,
       regionId: json['region_id'] ?? 0,
@@ -54,12 +57,10 @@ class PostVo {
       postCategoryId: json['post_category_id'] ?? 0,
       postSubCategoryId: json['post_sub_category_id'] ?? 0,
       postNote: json['post_note'] ?? "",
-      postImages: (json['post_images'] != null)
-        ? List<String>.from(json['post_images'])
-        : [],
+      postImages: (json['post_images'] != null) ? List<String>.from(json['post_images']) : [],
       postLikeCount: json['post_like_count'] ?? 0,
       postCommentCount: json['post_comment_count'] ?? 0,
-      registerDate: DateTime.parse(json['register_date']).toLocal(),
+      registerDate: parsedRegisterDate.toLocal(),
       comments: json['comments'] ?? [],
       isHidden: json['is_hidden'] ?? false,
       postReportCount: json['post_report_count'] ?? 0,
@@ -70,10 +71,11 @@ class PostVo {
     );
   }
 
+
   //  postVo → JSON 변환
   Map<String, dynamic> toJson() {
     return {
-      'post_id': postId,
+      // 'post_id': postId,
       'region_id': regionId,
       'post_user_id': postUserId,
       'club_id': clubId,
@@ -89,7 +91,7 @@ class PostVo {
       'comments': comments,
       'nickname': userNickname,
       'user_thumbnail': userThumbnail,
-      'upd_date': updDate.toIso8601String(),
+      // 'upd_date': updDate.toIso8601String(),
     };
   }
 }

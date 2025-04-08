@@ -12,6 +12,7 @@ import 'package:slivermate_project_flutter/vo/announceVo.dart';
 import 'package:slivermate_project_flutter/pages/announcementListPage.dart';
 import 'package:slivermate_project_flutter/vo/clubVo.dart';
 import 'package:slivermate_project_flutter/pages/addMeetingPage.dart';
+import 'package:dio/dio.dart';
 
 final Map<int, List<AnnounceVo>> dummyClubSchedules = {
   1: [
@@ -171,6 +172,7 @@ const int currentUserId = 101; // 임시 모임장
 
 class ClubDetailPage extends StatefulWidget {
   final ClubVo clubVo;
+  // final List<PostVo> postList;
   const ClubDetailPage({super.key, required this.clubVo});
 
   @override
@@ -179,7 +181,35 @@ class ClubDetailPage extends StatefulWidget {
 
 class _ClubDetailPageState extends State<ClubDetailPage> {
   List<PostVo> clubPosts = [];
+  bool _isLoading = true;
   bool _isJoined = false;
+  int _selectedTabIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchClubPosts(); // ✅ 페이지 진입 시 게시글 불러오기
+  }
+
+  Future<void> fetchClubPosts() async {
+    setState(() => _isLoading = true);
+
+    try {
+      final allPosts = await PostService.fetchPostData();
+
+      final filtered = allPosts
+          .where((post) => post.clubId == widget.clubVo.clubId)
+          .toList();
+
+      setState(() {
+        clubPosts = filtered;
+        _isLoading = false;
+      });
+    } catch (e) {
+      debugPrint('🚨 게시글 로딩 실패: $e');
+      setState(() => _isLoading = false);
+    }
+  }
 
   Future<void> _refreshClubPosts() async {
     await Future.delayed(const Duration(seconds: 1));
@@ -187,8 +217,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       // 클럽 관련 피드 새로 고침 로직
     });
   }
-
-  int _selectedTabIndex = 0;
 
   // [yj] 댓글 모달
   void _showCommentModal(BuildContext context, PostVo post) {
@@ -293,6 +321,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
     );
   }
 
+
   Widget _buildTabButton(String title, int index) {
     final isSelected = _selectedTabIndex == index;
 
@@ -328,9 +357,9 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       case 0:
         return _buildIntroSection();
       case 1:
-        final clubId = widget.clubVo.clubId;
-        final clubPosts =
-            dummyPostList.where((p) => p.clubId == clubId).toList();
+        // final clubId = widget.clubVo.clubId;
+        // final clubPosts =
+        // widget.postList.where((p) => p.clubId == clubId).toList();
 
         return SizedBox(
           height: 400,
@@ -350,14 +379,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       case 2:
         final clubId = widget.clubVo.clubId;
         final imagePosts = [];
-        // dummyPostList
-        //     .where(
-        //       (p) =>
-        //           p.clubId == clubId &&
-        //           p.postImages != null &&
-        //           p.postImages!.isNotEmpty,
-        //     )
-        //     .toList();
 
         if (imagePosts.isEmpty) {
           return SizedBox(
@@ -431,13 +452,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       default:
         return const SizedBox.shrink();
     }
-  }
-
-  List<PostVo> filteredPostListForClub() {
-    // clubId를 기준으로 피드를 필터링
-    return dummyPostList
-        .where((post) => post.clubId == widget.clubVo.clubId)
-        .toList();
   }
 
   Widget _buildIntroSection() {
@@ -1089,3 +1103,5 @@ Widget _buildScheduleSection({required int clubId, required int clubLeaderId}) {
     },
   );
 }
+
+

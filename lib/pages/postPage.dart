@@ -447,6 +447,10 @@ String getTimeAgo(DateTime date) {
   final now = DateTime.now();
   final diff = now.difference(date);
 
+  debugPrint("🕓 현재 시간: $now");
+  debugPrint("🕒 등록 시간: $date");
+  debugPrint("⏱️ 차이: ${diff.inMinutes}분");
+
   final minutes = diff.inMinutes;
   final hours = diff.inHours;
   final days = diff.inDays;
