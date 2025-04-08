@@ -7,6 +7,7 @@ import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio/dio.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/vo/messageVo.dart';
 
 class ChatTestPage extends StatelessWidget {
   const ChatTestPage({super.key});
@@ -41,7 +42,6 @@ class _ChatTestPageState extends State<_ChatTestPage> {
   static String ec2Port = dotenv.get("EC2_PORT");
 
   static final Dio dio = Dio();
-  // static String signUpUrl = "http://$ec2IpAddress:$ec2Port/api/user";
   static String sessionCheckUrl =
       "http://$ec2IpAddress:$ec2Port/api/user/session";
 
@@ -50,7 +50,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
 
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
-  final List<Map<String, dynamic>> _messages = [];
+  final List<MessageVo> _messages = [];
   Timer? _guestMessageTimer;
 
   @override
@@ -58,27 +58,41 @@ class _ChatTestPageState extends State<_ChatTestPage> {
     super.initState();
     String slivermateChat = dotenv.get("SLIVERMATECHAT");
 
-    _channel = WebSocketChannel.connect(
-      Uri.parse(
-        "wss://$slivermateChat.execute-api.ap-northeast-2.amazonaws.com/production/",
-      ),
-    );
+    final channelId = '1-8-10';
+
+    final wsUrl =
+        "wss://$slivermateChat.execute-api.ap-northeast-2.amazonaws.com/production/?channel=$channelId";
+
+    _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
+
+    // _channel.sink.add(
+    //   json.encode({'action': 'subscribe', 'channel': channelId}),
+    // );
+
+    // _channel = WebSocketChannel.connect(
+    //   Uri.parse(
+    //     "wss://$slivermateChat.execute-api.ap-northeast-2.amazonaws.com/production/",
+    //   ),
+    // );
 
     _channel.stream.listen((message) {
       try {
-        // 서버에서 받은 메시지를 JSON으로 변환
         var decodedMessage = json.decode(message);
 
-        // 서버에서 받은 메시지를 제대로 처리할 수 있도록 수정
         String receivedMessage = decodedMessage['message'] ?? 'No message';
+        String nickname = decodedMessage['nickname'] ?? 'No nickname';
+        String thumbnail = decodedMessage['thumbnail'] ?? 'No thumbnail';
 
-        // UI에 메시지 추가
         setState(() {
-          _messages.add({
-            'sender': 'guest',
-            'message': receivedMessage, // 메시지 내용만 추가
-            'time': DateTime.now(),
-          });
+          _messages.add(
+            MessageVo(
+              sender: 'guest',
+              nickname: nickname,
+              thumbnail: thumbnail,
+              message: receivedMessage,
+              updDate: DateTime.now(),
+            ),
+          );
         });
       } catch (e) {
         print('Error decoding message: $e');
@@ -117,18 +131,30 @@ class _ChatTestPageState extends State<_ChatTestPage> {
 
   void _sendMessage() {
     if (_controller.text.isNotEmpty) {
+      final messageText = _controller.text;
       final message = json.encode({
-        'action': 'sendmessage',
-        'message': _controller.text,
+        'action': 'sendmessage', // 이건 그대로 두고
+        'channelId': '1-8-10',
+        'message': messageText,
+        'nickname': user?.nickname ?? '익명',
+        'thumbnail': user?.thumbnail ?? '',
+        // 'upd_date': DateTime.now().toIso8601String(),
       });
+
       _channel.sink.add(message);
+
       setState(() {
-        _messages.add({
-          'sender': 'me',
-          'message': _controller.text,
-          'time': DateTime.now(),
-        });
+        _messages.add(
+          MessageVo(
+            sender: 'me',
+            nickname: user?.nickname ?? '나',
+            thumbnail: user?.thumbnail ?? '',
+            message: messageText,
+            updDate: DateTime.now(),
+          ),
+        );
       });
+
       _controller.clear();
     }
   }
@@ -153,8 +179,8 @@ class _ChatTestPageState extends State<_ChatTestPage> {
               itemCount: _messages.length,
               itemBuilder: (context, index) {
                 final message = _messages[index];
-                final isMe = message['sender'] == 'me';
-                final DateTime messageTime = message['time'];
+                final isMe = message.sender == 'me';
+                final messageTime = message.updDate;
                 final timeString =
                     "${messageTime.hour.toString().padLeft(2, '0')}:${messageTime.minute.toString().padLeft(2, '0')}";
 
@@ -162,18 +188,17 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                 if (index == 0) {
                   showDateHeader = true;
                 } else {
-                  final prevTime = _messages[index - 1]['time'] as DateTime;
+                  final prevTime = _messages[index - 1].updDate;
                   showDateHeader =
                       messageTime.day != prevTime.day ||
                       messageTime.month != prevTime.month ||
                       messageTime.year != prevTime.year;
                 }
 
-                final senderName = isMe ? "파릇" : "게스트";
-                final senderImage =
-                    isMe
-                        ? const AssetImage('lib/images/뜨개질.jpg')
-                        : const AssetImage('lib/images/rion.jpg');
+                final senderName = isMe ? "파릇" : message.nickname;
+                final senderImage = NetworkImage(
+                  message.thumbnail,
+                ); // 또는 NetworkImage(message.thumbnail) 로 변경 가능
 
                 return Column(
                   crossAxisAlignment:
@@ -279,7 +304,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
                                       ),
                                     ),
                                     child: Text(
-                                      message['message'] ?? '',
+                                      message.message ?? '',
                                       style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
