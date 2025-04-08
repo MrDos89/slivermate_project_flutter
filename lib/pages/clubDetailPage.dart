@@ -212,10 +212,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   }
 
   Future<void> _refreshClubPosts() async {
-    await Future.delayed(const Duration(seconds: 1));
-    setState(() {
-      // 클럽 관련 피드 새로 고침 로직
-    });
+    await fetchClubPosts(); // 게시글 다시 불러오기
   }
 
   // [yj] 댓글 모달
