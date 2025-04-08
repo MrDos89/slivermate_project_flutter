@@ -102,6 +102,23 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     }
   }
 
+  // 로그아웃 처리: 쿠키와 세션 초기화
+  Future<void> logout() async {
+    // 로그아웃 시 쿠키 초기화 (세션 삭제)
+    await cookieJar.deleteAll(); // 모든 쿠키 삭제
+
+    // 로그아웃 후 UI 갱신
+    setState(() {
+      currentUser = null; // 로그인된 사용자 정보 초기화
+      isLoading = true; // 로딩 상태로 전환
+    });
+
+    debugPrint("로그아웃 처리 완료");
+
+    // 로그아웃 후 로그인 화면으로 이동
+    Navigator.pushReplacementNamed(context, '/loginPage'); // 로그인 화면으로 이동
+  }
+
   // "준비중" 다이얼로그 함수 (기존 코드)
   void _showComingSoonDialog(BuildContext context) {
     showDialog(
@@ -163,7 +180,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                 ),
                 // 오른쪽: 로그아웃 버튼
                 TextButton(
-                  onPressed: () => _showComingSoonDialog(context),
+                  onPressed: logout, //  로그아웃 버튼 누르면 로그아웃 처리
                   child: const Text(
                     "로그아웃",
                     style: TextStyle(
