@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:image/image.dart' as img;
 import 'package:dio/dio.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
-
+import 'package:slivermate_project_flutter/components/uploadPostImage.dart';
 
 class PostWriterForm extends StatefulWidget {
   final int? clubId;
@@ -100,13 +100,17 @@ class _PostWriterFormState extends State<PostWriterForm> {
     }
   }
 
-
   Future<void> _submitPost() async {
     if (_selectedSubCategoryIds.isNotEmpty && _textController.text.trim().isNotEmpty) {
       final selectedIdsForServer = _selectedSubCategoryIds.map((id) => id >= 100 ? id - 100 : id).toList();
       final content = _textController.text.trim();
-      final imagePaths = _selectedImages.map((e) => e.path).toList();
-      debugPrint("🖼️ 서버에 전송할 이미지 경로 리스트: $imagePaths");
+      List<String> uploadedUrls = [];
+      for (final image in _selectedImages) {
+        final url = await uploadToS3(File(image.path));
+        if (url != null) uploadedUrls.add(url);
+      }
+
+      debugPrint("🖼️ 서버에 전송할 이미지 경로 리스트: $uploadedUrls");
 
       final post = PostVo(
         postId: 0,
@@ -116,7 +120,7 @@ class _PostWriterFormState extends State<PostWriterForm> {
         postCategoryId: 2,
         postSubCategoryId: selectedIdsForServer.first,
         postNote: content,
-        postImages: imagePaths,
+        postImages: uploadedUrls,
         postLikeCount: 0,
         postCommentCount: 0,
         isHidden: false,

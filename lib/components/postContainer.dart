@@ -91,120 +91,141 @@ Widget postContainer(
   }
 
   return SizedBox(
-    height: MediaQuery.of(context).size.height * 0.71,
     child: RefreshIndicator(
       onRefresh: onRefresh,
-      child: ListView(
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: ListView(
+        padding: const EdgeInsets.only(bottom: 32),
         children:
-            filteredList.map((post) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PostDetailPage(Post: post),
-                    ),
-                  );
-                },
-                child: Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+        filteredList.map((post) {
+          return GestureDetector(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => PostDetailPage(Post: post),
+                ),
+              );
+            },
+            child: Card(
+              margin: const EdgeInsets.symmetric(vertical: 8),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 16,
-                              backgroundImage: NetworkImage(
-                                post.userThumbnail.trim().isEmpty
-                                    ? defaultUserThumbnail
-                                    : post.userThumbnail,
-                              ),
-                            ),
-                            const SizedBox(width: 12),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  post.userNickname,
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  "${regionMap[post.regionId]} · ${post.postCategoryId == 1 ? indoorHobbies[post.postSubCategoryId] : outdoorHobbies[post.postSubCategoryId]}",
-                                  style: const TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        if (hasValidImage(post)) ...[
-                          const SizedBox(height: 12),
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(12),
-                            child: Image.network(
-                              post.postImages!.first,
-                              width: double.infinity,
-                              height: 250,
-                              fit: BoxFit.cover,
-                              errorBuilder:
-                                  (context, error, stackTrace) =>
-                                      const SizedBox(), // 에러 안 뜨게
-                            ),
+                        CircleAvatar(
+                          radius: 16,
+                          backgroundImage: NetworkImage(
+                            post.userThumbnail.trim().isEmpty
+                                ? defaultUserThumbnail
+                                : post.userThumbnail,
                           ),
-                        ],
-                        const SizedBox(height: 8),
-                        ReadMoreText(
-                          post.postNote,
-                          trimLines: 2,
-                          trimMode: TrimMode.Line,
-                          trimCollapsedText: ' ...더보기',
-                          trimExpandedText: ' 접기',
-                          style: const TextStyle(fontSize: 16),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
+                        const SizedBox(width: 12),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            LikeHeart(
-                              initialLikes: post.postLikeCount,
-                              initiallyLiked: false,
-                            ),
-                            const SizedBox(width: 16),
-                            GestureDetector(
-                              onTap: () => onCommentTap(context, post),
-                              child: const Icon(
-                                Icons.comment_outlined,
-                                color: Colors.grey,
-                                size: 20,
-                              ),
-                            ),
-                            const SizedBox(width: 4),
-                            Text("${post.comments.length}"),
-
-                            const Spacer(), // 왼쪽 요소들 다 밀기
-
                             Text(
-                              getTimeAgo(post.registerDate),
+                              post.userNickname,
                               style: const TextStyle(
-                                color: Colors.grey,
-                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
+                            ),
+                            Text(
+                              "${regionMap[post.regionId]} · ${post.postCategoryId == 1 ? indoorHobbies[post.postSubCategoryId] : outdoorHobbies[post.postSubCategoryId]}",
+                              style: const TextStyle(color: Colors.grey),
                             ),
                           ],
                         ),
                       ],
                     ),
-                  ),
+                    if (hasValidImage(post)) ...[
+                      const SizedBox(height: 12),
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                          post.postImages!.first,
+                          width: double.infinity,
+                          height: 250,
+                          fit: BoxFit.cover,
+                          loadingBuilder: (context, child, progress) {
+                            if (progress == null) return child;
+                            return Container(
+                              width: double.infinity,
+                              height: 250,
+                              color: Colors.grey[200],
+                              child: const Center(child: CircularProgressIndicator()),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            debugPrint("❌ 이미지 로딩 실패: $error");
+                            return Container(
+                              width: double.infinity,
+                              height: 250,
+                              color: Colors.grey[300],
+                              child: const Center(
+                                child: Icon(Icons.broken_image, color: Colors.red),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    ],
+                    const SizedBox(height: 8),
+                    ReadMoreText(
+                      post.postNote,
+                      trimLines: 2,
+                      trimMode: TrimMode.Line,
+                      trimCollapsedText: ' ...더보기',
+                      trimExpandedText: ' 접기',
+                      style: const TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        LikeHeart(
+                          initialLikes: post.postLikeCount,
+                          initiallyLiked: false,
+                        ),
+                        const SizedBox(width: 16),
+                        GestureDetector(
+                          onTap: () => onCommentTap(context, post),
+                          child: const Icon(
+                            Icons.comment_outlined,
+                            color: Colors.grey,
+                            size: 20,
+                          ),
+                        ),
+                        const SizedBox(width: 4),
+                        Text("${post.comments.length}"),
+
+                        const Spacer(), // 왼쪽 요소들 다 밀기
+
+                        Text(
+                          getTimeAgo(post.registerDate),
+                          style: const TextStyle(
+                            color: Colors.grey,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-              );
-            }).toList(),
+              ),
+            ),
+          );
+        }).toList(),
       ),
+      )
+
     ),
   );
 }

@@ -59,11 +59,11 @@ class PostVo {
         : [],
       postLikeCount: json['post_like_count'] ?? 0,
       postCommentCount: json['post_comment_count'] ?? 0,
-      registerDate: DateTime.parse(json['register_date']),
+      registerDate: DateTime.parse(json['register_date']).toLocal(),
       comments: json['comments'] ?? [],
       isHidden: json['is_hidden'] ?? false,
       postReportCount: json['post_report_count'] ?? 0,
-      updDate: DateTime.parse(json['upd_date']),
+      updDate: DateTime.parse(json['upd_date']).toLocal(),
 
       userNickname: json['nickname'] ?? "",
       userThumbnail: json['user_thumbnail'] ?? "",
