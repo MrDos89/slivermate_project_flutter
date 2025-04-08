@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:dio/dio.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:path_provider/path_provider.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
@@ -13,41 +19,99 @@ class UserProfilePage extends StatelessWidget {
           preferredSize: const Size.fromHeight(70),
           child: HeaderPage(pageTitle: "마이 페이지"),
         ),
-        body: Container(
-          color: Colors.grey[100],
-          child: const _UserProfilePage(),
-        ),
+        body: Container(color: Colors.grey[100], child: _UserProfilePage()),
       ),
     );
   }
 }
 
 class _UserProfilePage extends StatefulWidget {
-  const _UserProfilePage({super.key});
+  List<UserVo>? userList;
+
+  _UserProfilePage({super.key});
 
   @override
   State<_UserProfilePage> createState() => _UserProfilePageState();
 }
 
-// "준비중" 다이얼로그 함수 (기존 코드)
-void _showComingSoonDialog(BuildContext context) {
-  showDialog(
-    context: context,
-    builder:
-        (context) => AlertDialog(
-          title: const Text("준비중"),
-          content: const Text("해당 기능은 아직 준비중입니다."),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("확인"),
-            ),
-          ],
-        ),
-  );
-}
-
 class _UserProfilePageState extends State<_UserProfilePage> {
+  // late List<UserVo> _accounts;
+  late List<UserVo> userList = [];
+  late PersistCookieJar cookieJar;
+  bool isLoading = true;
+
+  static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
+  static String ec2Port = dotenv.get("EC2_PORT");
+  static final Dio dio = Dio();
+  static String sessionCheckUrl =
+      "http://$ec2IpAddress:$ec2Port/api/user/session";
+
+  @override
+  void initState() {
+    super.initState();
+    // _accounts = widget.userList;
+
+    _initDioAndCheckLogin();
+    _fetchUserData();
+  }
+
+  Future<void> _initDioAndCheckLogin() async {
+    final appDocDir = await getApplicationDocumentsDirectory();
+    cookieJar = PersistCookieJar(
+      storage: FileStorage("${appDocDir.path}/.cookies/"),
+    );
+    dio.interceptors.add(CookieManager(cookieJar));
+
+    await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
+  }
+
+  Future<void> _fetchUserData() async {
+    final fetchUserList = await UserService.fetchUserData();
+
+    debugPrint(fetchUserList.toString());
+    await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌 나게 딜레이
+
+    if (fetchUserList.isNotEmpty) {
+      setState(() {
+        userList = fetchUserList; // 데이터가 정상적으로 오면 저장
+      });
+    } else {
+      debugPrint("유저 정보를 가져오지 못했습니다.");
+    }
+  }
+
+  Future<void> checkLoginStatus() async {
+    try {
+      final response = await dio.get(sessionCheckUrl);
+
+      if (response.statusCode == 200) {
+        print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
+      } else {
+        print("로그인되지 않음.");
+      }
+    } catch (error) {
+      print('로그인 상태 확인 중 오류 발생: $error');
+    }
+  }
+
+  // "준비중" 다이얼로그 함수 (기존 코드)
+  void _showComingSoonDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            title: const Text("준비중"),
+            content: const Text("해당 기능은 아직 준비중입니다."),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("확인"),
+              ),
+            ],
+          ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final placeholder = const Placeholder();

@@ -56,11 +56,11 @@ void _completeSignup(BuildContext context, List<UserVo> userList) {
     email: baseUser.email,
     thumbnail: "",
     regionId: baseUser.regionId,
-    recommendUid: baseUser.recommendUid,
-    registerDate: DateTime.now().toIso8601String(),
+    // recommendUid: baseUser.recommendUid,
+    registerDate: DateTime.now(),
     isDeleted: false,
     isAdmin: false,
-    updDate: DateTime.now().toIso8601String(),
+    updDate: DateTime.now(),
     groupId: baseUser.groupId,
     userType: 2, // 새 역할만 바뀜
   );

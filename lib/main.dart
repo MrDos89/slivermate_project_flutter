@@ -50,11 +50,11 @@ class MyApp extends StatelessWidget {
       email: "user1@naver.com",
       thumbnail: "",
       regionId: 1, // guId → regionId로 변경
-      recommendUid: null,
-      registerDate: "2025-03-18T10:00:00.000+00:00",
+      // recommendUid: null,
+      registerDate: DateTime.now(),
       isDeleted: false,
       isAdmin: false,
-      updDate: "2025-03-18T10:00:00.000+00:00",
+      updDate: DateTime.now(),
       groupId: 1,
       userType: 1,
     );
