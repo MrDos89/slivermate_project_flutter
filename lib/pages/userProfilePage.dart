@@ -40,7 +40,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   late PersistCookieJar cookieJar;
   bool isLoading = true;
   UserVo? currentUser; //  로그인한 유저 정보를 저장할 변수
-  // UserVo? _currentUser;
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
@@ -80,15 +79,15 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   //   }
   // }
 
+  // 로그인 후 사용자 정보 가져오기
   Future<void> checkLoginStatus() async {
     try {
       final response = await dio.get(sessionCheckUrl);
 
       if (response.statusCode == 200) {
-        // print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
         final user = UserVo.fromJson(response.data);
         setState(() {
-          currentUser = user; //  로그인된 유저 정보를 저장
+          currentUser = user; // 로그인된 유저 정보를 저장
           isLoading = false;
         });
         debugPrint("로그인 유지됨 - 사용자: ${user.nickname}");
@@ -104,19 +103,23 @@ class _UserProfilePageState extends State<_UserProfilePage> {
 
   // 로그아웃 처리: 쿠키와 세션 초기화
   Future<void> logout() async {
-    // 로그아웃 시 쿠키 초기화 (세션 삭제)
-    await cookieJar.deleteAll(); // 모든 쿠키 삭제
+    try {
+      // 로그아웃 시 세션 및 쿠키 초기화
+      await cookieJar.deleteAll(); // 모든 쿠키 삭제
 
-    // 로그아웃 후 UI 갱신
-    setState(() {
-      currentUser = null; // 로그인된 사용자 정보 초기화
-      isLoading = true; // 로딩 상태로 전환
-    });
+      // 로그아웃 후 `currentUser`를 null로 설정하여 UI 갱신
+      setState(() {
+        currentUser = null; // 로그인된 사용자 정보 초기화
+        isLoading = true; // 로딩 상태로 전환
+      });
 
-    debugPrint("로그아웃 처리 완료");
+      debugPrint("로그아웃 처리 완료");
 
-    // 로그아웃 후 로그인 화면으로 이동
-    Navigator.pushReplacementNamed(context, '/loginPage'); // 로그인 화면으로 이동
+      // 로그아웃 후 로그인 화면으로 이동
+      Navigator.pushReplacementNamed(context, '/loginPage'); // 로그인 화면으로 이동
+    } catch (e) {
+      debugPrint("로그아웃 중 오류 발생: $e");
+    }
   }
 
   // "준비중" 다이얼로그 함수 (기존 코드)
