@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> _login() async {
+    debugPrint("로그인 시도 중..."); //  (준일) 로그추가
     setState(() {
       isLoading = true;
       errorText = null;
@@ -66,6 +67,7 @@ class _LoginPageState extends State<LoginPage> {
     }
 
     try {
+      debugPrint("로그인 요청 URL: $loginUrl"); // (준일) 로그추가
       final response = await dio.post(
         loginUrl,
         data: {"user_id": userId, "password": password},
@@ -74,9 +76,16 @@ class _LoginPageState extends State<LoginPage> {
           validateStatus: (status) => status! < 500,
         ),
       );
+      // 준일 로그 추가
+      debugPrint("로그인 응답 상태 코드: ${response.statusCode}");
+      debugPrint("로그인 응답 데이터: ${response.data}");
 
       if (response.statusCode == 200) {
         final userData = UserVo.fromJson(response.data);
+        // 준일 로그 추가
+        debugPrint(
+          "로그인 성공 - 사용자: ${userData.userName}, 그룹 ID: ${userData.groupId}",
+        );
         await loadUserGroupByGroupId(userData.groupId);
 
         // 로그인 성공: 세션 쿠키 자동 저장됨
@@ -84,6 +93,7 @@ class _LoginPageState extends State<LoginPage> {
           isLoading = false;
         });
       } else {
+        debugPrint("로그인 실패 - 잘못된 자격 정보"); //  준일 로그추가
         setState(() {
           isLoading = false;
           errorText = "아이디 또는 비밀번호가 잘못되었습니다.";
@@ -100,19 +110,27 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> loadUserGroupByGroupId(int groupId) async {
     try {
+      debugPrint("유저 그룹 조회 시작 - 그룹 ID: $groupId"); //  준일 로그추가
       final response = await dio.get('$userGroupUrl/$groupId');
+
+      //  준일 로그추가
+      debugPrint("유저 그룹 응답 상태: ${response.statusCode}");
+      debugPrint("유저 그룹 응답 데이터: ${response.data}");
 
       if (response.statusCode == 200) {
         final responseData = response.data;
 
         if (responseData is List) {
-          // 🚀 responseData가 List라면, UserVo 리스트로 변환
+          //  responseData가 List라면, UserVo 리스트로 변환
           final List<UserVo> userList =
               responseData
                   .map((e) => UserVo.fromJson(e as Map<String, dynamic>))
                   .toList();
+          debugPrint("유저 그룹 파싱 완료 - ${userList.length}명"); //  준일로그추가
           Navigator.pushNamed(context, '/selectAccount', arguments: userList);
+          // Navigator.pushNamed(context, '/selectAccountPage', arguments: userList,);
         } else {
+          debugPrint("서버 응답이 리스트가 아님"); //  준일 로그추가
           setState(() {
             isLoading = false;
             errorText = "서버 응답이 예상과 다릅니다. 관리자에게 문의하세요.";
@@ -129,6 +147,7 @@ class _LoginPageState extends State<LoginPage> {
       final response = await dio.get(sessionCheckUrl);
 
       if (response.statusCode == 200) {
+        final user = UserVo.fromJson(response.data); // 준일 추가
         print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
       } else {
         print("로그인되지 않음.");

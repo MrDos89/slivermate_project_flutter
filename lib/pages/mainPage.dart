@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:slivermate_project_flutter/vo/categoryVo.dart';
+// import 'package:slivermate_project_flutter/vo/categoryVo.dart';
 import 'package:video_player/video_player.dart';
-import 'package:slivermate_project_flutter/pages/categoryPage.dart'; // 카테고리 페이지 임포트
+// import 'package:slivermate_project_flutter/pages/categoryPage.dart'; // 카테고리 페이지 임포트
 import 'package:slivermate_project_flutter/widgets/LoadingOverlay.dart';
-
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'dart:async';
 
 class MainPage extends StatefulWidget {
   final UserVo? dummyUser;
-  final CategoryVo? categoryVo;
+  // final UserVo? userVo;
+  // final CategoryVo? categoryVo;
   const MainPage({
     super.key,
     required this.dummyUser,
-    required this.categoryVo,
+    // required this.userVo,
+    // required this.categoryVo,
   });
 
   @override
@@ -37,6 +38,7 @@ class _MainPageState extends State<MainPage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print(
         "[MainPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+        // "[MainPage] userVo 확인: \${widget.userVo?.userName}, \${widget.userVo?.email}",
       );
     });
   }
@@ -68,11 +70,32 @@ class _MainPageState extends State<MainPage> {
           });
   }
 
-  ///  배경 클릭 시 카테고리로 부드럽게 이동
+  //  클릭 시 로그인 여부에 따라 다른 페이지로 이동
   void _onBackgroundTap() {
     if (!isDebugMode) {
       _controller.dispose(); //  비디오 컨트롤러 해제
     }
+    print('[DEBUG] 터치됨');
+    print('[DEBUG] 현재 로그인 상태: ${widget.dummyUser == null ? '로그인 안됨' : '로그인됨'}');
+
+    if (widget.dummyUser == null) {
+      print('[DEBUG] /loginPage 페이지로 이동');
+      Navigator.of(context).pushNamed('/loginPage');
+    } else {
+      print(
+        '[DEBUG] /selectAccountPage 페이지로 이동 - 전달 데이터: \${widget.dummyUser!.userName}',
+      );
+      Navigator.of(
+        context,
+      ).pushNamed('/selectAccountPage', arguments: [widget.dummyUser!]);
+    }
+
+    // if (widget.userVo == null) {
+    //   Navigator.of(context).pushNamed('/login');
+    // } else {
+    //   Navigator.of(context).pushNamed('/signUpPage2', arguments: widget.userVo);
+    // }
+
     _navigateToCategory(); //  부드러운 페이드 인/아웃 효과 적용
   }
 
@@ -83,31 +106,31 @@ class _MainPageState extends State<MainPage> {
 
     await Future.delayed(Duration(milliseconds: 500));
 
-    if (mounted) {
-      await Navigator.of(context).push(
-        PageRouteBuilder(
-          pageBuilder:
-              (context, animation, secondaryAnimation) => CategoryPage(
-                dummyUser: widget.dummyUser, //  UserVo는 그대로 전달
-              ),
-          settings: RouteSettings(
-            arguments: {
-              "categoryVo": widget.categoryVo, //  CategoryVo를 arguments로 전달
-            },
-          ),
-          transitionsBuilder: (context, animation, secondaryAnimation, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-          transitionDuration: Duration(milliseconds: 500),
-        ),
-      );
-
-      if (mounted) {
-        setState(() {
-          isLoading = false; //  로딩 종료
-        });
-      }
-    }
+    // if (mounted) {
+    //   await Navigator.of(context).push(
+    //     PageRouteBuilder(
+    //       pageBuilder:
+    //           (context, animation, secondaryAnimation) => CategoryPage(
+    //             dummyUser: widget.dummyUser, //  UserVo는 그대로 전달
+    //           ),
+    //       settings: RouteSettings(
+    //         arguments: {
+    //           "categoryVo": widget.categoryVo, //  CategoryVo를 arguments로 전달
+    //         },
+    //       ),
+    //       transitionsBuilder: (context, animation, secondaryAnimation, child) {
+    //         return FadeTransition(opacity: animation, child: child);
+    //       },
+    //       transitionDuration: Duration(milliseconds: 500),
+    //     ),
+    //   );
+    //
+    //   if (mounted) {
+    //     setState(() {
+    //       isLoading = false; //  로딩 종료
+    //     });
+    //   }
+    // }
   }
 
   @override
@@ -120,7 +143,6 @@ class _MainPageState extends State<MainPage> {
 
   // 회원가입 버튼 클릭 시 동작
   void _onSignUpPressed() {
-    //  회원가입 관련 코드 추가
     print('회원가입 버튼 클릭됨');
   }
 
@@ -130,7 +152,7 @@ class _MainPageState extends State<MainPage> {
       isLoading: isLoading, //  로딩 중일 때 오버레이 표시
       child: Scaffold(
         body: GestureDetector(
-          onTap: _onBackgroundTap, //  배경 클릭하면 카테고리로 이동
+          onTap: _onBackgroundTap, //
           child: Stack(
             children: [
               /// 🎥 배경 영상 or 디버그 모드 이미지

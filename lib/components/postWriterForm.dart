@@ -61,7 +61,9 @@ class _PostWriterFormState extends State<PostWriterForm> {
       if (originalImage != null) {
         final resizedImage = img.copyResize(originalImage, width: 500);
         final tempDir = Directory.systemTemp;
-        final resizedFile = File('${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg');
+        final resizedFile = File(
+          '${tempDir.path}/${DateTime.now().millisecondsSinceEpoch}.jpg',
+        );
         await resizedFile.writeAsBytes(img.encodeJpg(resizedImage));
 
         debugPrint("📏 리사이즈된 이미지 경로: ${resizedFile.path}");
@@ -78,7 +80,8 @@ class _PostWriterFormState extends State<PostWriterForm> {
 
   Future<bool> uploadPost(PostVo postData) async {
     try {
-      final String apiUrl = 'http://54.180.127.164:18090/api/post';
+      // final String apiUrl = 'http://54.180.127.164:18090/api/post';
+      final String apiUrl = 'http://3.39.240.55:18090/api/post'; // api 주소 변경
       final dio = Dio();
 
       final response = await dio.post(
@@ -101,8 +104,12 @@ class _PostWriterFormState extends State<PostWriterForm> {
   }
 
   Future<void> _submitPost() async {
-    if (_selectedSubCategoryIds.isNotEmpty && _textController.text.trim().isNotEmpty) {
-      final selectedIdsForServer = _selectedSubCategoryIds.map((id) => id >= 100 ? id - 100 : id).toList();
+    if (_selectedSubCategoryIds.isNotEmpty &&
+        _textController.text.trim().isNotEmpty) {
+      final selectedIdsForServer =
+          _selectedSubCategoryIds
+              .map((id) => id >= 100 ? id - 100 : id)
+              .toList();
       final content = _textController.text.trim();
       List<String> uploadedUrls = [];
       for (final image in _selectedImages) {
@@ -135,18 +142,17 @@ class _PostWriterFormState extends State<PostWriterForm> {
       final result = await uploadPost(post);
 
       if (result == true) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("게시글이 업로드되었습니다.")),
-        );
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text("게시글이 업로드되었습니다.")));
         widget.onPostUploaded?.call();
       }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("모든 항목을 입력해주세요.")),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text("모든 항목을 입력해주세요.")));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -154,33 +160,52 @@ class _PostWriterFormState extends State<PostWriterForm> {
       padding: const EdgeInsets.fromLTRB(16, 0, 16, 100),
       children: [
         const SizedBox(height: 16),
-        const Text('카테고리 (최대 3개 선택)', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+        const Text(
+          '카테고리 (최대 3개 선택)',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         CategoryChipSelector(
           categories: mergedHobbies,
           selectedIds: _selectedSubCategoryIds,
-          onChanged: (newSet) => setState(() => _selectedSubCategoryIds = newSet),
+          onChanged:
+              (newSet) => setState(() => _selectedSubCategoryIds = newSet),
         ),
         const SizedBox(height: 24),
-        const Text('이미지 업로드 (최대 4장)', style: TextStyle(fontWeight: FontWeight.bold)),
+        const Text(
+          '이미지 업로드 (최대 4장)',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         const SizedBox(height: 8),
         Wrap(
           spacing: 8,
           runSpacing: 8,
           children: [
-            ..._selectedImages.map((image) => Stack(
-              children: [
-                Image.file(File(image.path), width: 80, height: 80, fit: BoxFit.cover),
-                Positioned(
-                  right: 0,
-                  top: 0,
-                  child: GestureDetector(
-                    onTap: () => setState(() => _selectedImages.remove(image)),
-                    child: const Icon(Icons.close, size: 20, color: Colors.red),
+            ..._selectedImages.map(
+              (image) => Stack(
+                children: [
+                  Image.file(
+                    File(image.path),
+                    width: 80,
+                    height: 80,
+                    fit: BoxFit.cover,
                   ),
-                ),
-              ],
-            )),
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    child: GestureDetector(
+                      onTap:
+                          () => setState(() => _selectedImages.remove(image)),
+                      child: const Icon(
+                        Icons.close,
+                        size: 20,
+                        color: Colors.red,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             if (_selectedImages.length < 4)
               GestureDetector(
                 onTap: _pickImage,
@@ -208,7 +233,9 @@ class _PostWriterFormState extends State<PostWriterForm> {
           style: ElevatedButton.styleFrom(
             backgroundColor: Colors.green,
             padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           child: const Text("게시하기", style: TextStyle(fontSize: 16)),
         ),
@@ -234,29 +261,30 @@ class CategoryChipSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      children: categories.map((hobby) {
-        final id = hobby['id'];
-        final name = hobby['name'];
-        final isSelected = selectedIds.contains(id);
+      children:
+          categories.map((hobby) {
+            final id = hobby['id'];
+            final name = hobby['name'];
+            final isSelected = selectedIds.contains(id);
 
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          child: FilterChip(
-            showCheckmark: false,
-            label: Text('#$name'),
-            selected: isSelected,
-            onSelected: (selected) {
-              final newSet = Set<int>.from(selectedIds);
-              if (selected) {
-                if (newSet.length < maxSelection) newSet.add(id);
-              } else {
-                newSet.remove(id);
-              }
-              onChanged(newSet);
-            },
-          ),
-        );
-      }).toList(),
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+              child: FilterChip(
+                showCheckmark: false,
+                label: Text('#$name'),
+                selected: isSelected,
+                onSelected: (selected) {
+                  final newSet = Set<int>.from(selectedIds);
+                  if (selected) {
+                    if (newSet.length < maxSelection) newSet.add(id);
+                  } else {
+                    newSet.remove(id);
+                  }
+                  onChanged(newSet);
+                },
+              ),
+            );
+          }).toList(),
     );
   }
 }

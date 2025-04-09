@@ -10,11 +10,10 @@ class PaymentPage extends StatefulWidget {
 }
 
 class _PaymentPageState extends State<PaymentPage> {
-  int? _selectedPaymentMethod = 0; // 결제 수단의 기본 선택값
-  String? _selectedCardOrBank = null; // 카드사 및 은행 선택값
-  bool _showList = false; // 카드사 및 은행 목록 표시 여부
+  int? _selectedPaymentMethod = 0;
+  String? _selectedCardOrBank = null;
+  bool _showList = false;
 
-  // 카드사 목록
   final List<String> cardList = [
     '비씨카드',
     '하나카드',
@@ -29,7 +28,6 @@ class _PaymentPageState extends State<PaymentPage> {
     '기업BC카드',
   ];
 
-  // 은행 목록
   final List<String> bankList = [
     '국민은행',
     '신한은행',
@@ -59,7 +57,6 @@ class _PaymentPageState extends State<PaymentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 파릇 정보
               Text(
                 "파릇 정보",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -69,7 +66,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 children: [
                   CircleAvatar(
                     radius: 30,
-                    backgroundImage: AssetImage('lib/images/당구.jpg'), // 썸네일 이미지
+                    backgroundImage: AssetImage('lib/images/당구.jpg'),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
@@ -84,8 +81,7 @@ class _PaymentPageState extends State<PaymentPage> {
                 ],
               ),
               const SizedBox(height: 10),
-              Divider(), // 구분선 추가
-              // 일정 정보
+              Divider(),
               const SizedBox(height: 10),
               Text(
                 "일정 정보",
@@ -94,8 +90,7 @@ class _PaymentPageState extends State<PaymentPage> {
               const SizedBox(height: 8),
               Text("4월 05일 (토) 오후 3:00", style: TextStyle(fontSize: 14)),
               const SizedBox(height: 10),
-              Divider(), // 구분선 추가
-              // 결제 수단
+              Divider(),
               const SizedBox(height: 10),
               Text(
                 "결제수단",
@@ -112,17 +107,18 @@ class _PaymentPageState extends State<PaymentPage> {
                       setState(() {
                         _selectedPaymentMethod = value;
                         _selectedCardOrBank = null;
-                        _showList = false; // Reset the dropdown
+                        _showList = false;
                       });
                     },
                   ),
                   if (_selectedPaymentMethod == 1) ...[
                     const SizedBox(height: 5),
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                      height: 48,
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        border: Border.all(color: Colors.grey),
+                        border: Border.all(color: Colors.black12, width: 1.5),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: GestureDetector(
@@ -135,7 +131,13 @@ class _PaymentPageState extends State<PaymentPage> {
                           children: [
                             Text(
                               _selectedCardOrBank ?? "[필수] 카드사를 선택해주세요",
-                              style: TextStyle(fontSize: 16),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color:
+                                    _selectedCardOrBank == null
+                                        ? Colors.black.withOpacity(0.4)
+                                        : Colors.black,
+                              ),
                             ),
                             const Spacer(),
                             Icon(Icons.arrow_drop_down),
@@ -143,92 +145,90 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                       ),
                     ),
-                    if (_showList) ...[
-                      ...cardList.map((card) {
-                        return ListTile(
-                          title: Text(card),
-                          onTap: () {
-                            setState(() {
-                              _selectedCardOrBank = card;
-                              _showList =
-                                  false; // Hide the list after selection
-                            });
-                          },
-                        );
-                      }).toList(),
-                      Divider(),
-                      ...bankList.map((bank) {
-                        return ListTile(
-                          title: Text(bank),
-                          onTap: () {
-                            setState(() {
-                              _selectedCardOrBank = bank;
-                              _showList =
-                                  false; // Hide the list after selection
-                            });
-                          },
-                        );
-                      }).toList(),
-                    ],
+                    if (_showList)
+                      Container(
+                        margin: const EdgeInsets.only(top: 10),
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(color: Colors.black26, width: 1.5),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Column(
+                          children: [
+                            ...cardList.map(
+                              (card) => ListTile(
+                                title: Text(card),
+                                onTap: () {
+                                  setState(() {
+                                    _selectedCardOrBank = card;
+                                    _showList = false;
+                                  });
+                                },
+                              ),
+                            ),
+                            ...bankList.map(
+                              (bank) => ListTile(
+                                title: Text(bank),
+                                onTap: () {
+                                  setState(() {
+                                    _selectedCardOrBank = bank;
+                                    _showList = false;
+                                  });
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                   ],
                   Divider(),
                   RadioListTile<int>(
                     title: const Text("카카오페이"),
                     value: 2,
                     groupValue: _selectedPaymentMethod,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedPaymentMethod = value;
-                      });
-                    },
+                    onChanged:
+                        (value) =>
+                            setState(() => _selectedPaymentMethod = value),
                   ),
                   Divider(),
                   RadioListTile<int>(
                     title: const Text("네이버페이"),
                     value: 3,
                     groupValue: _selectedPaymentMethod,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedPaymentMethod = value;
-                      });
-                    },
+                    onChanged:
+                        (value) =>
+                            setState(() => _selectedPaymentMethod = value),
                   ),
                   Divider(),
                   RadioListTile<int>(
                     title: const Text("토스페이"),
                     value: 4,
                     groupValue: _selectedPaymentMethod,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedPaymentMethod = value;
-                      });
-                    },
+                    onChanged:
+                        (value) =>
+                            setState(() => _selectedPaymentMethod = value),
                   ),
                   Divider(),
                   RadioListTile<int>(
                     title: const Text("애플페이"),
                     value: 5,
                     groupValue: _selectedPaymentMethod,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedPaymentMethod = value;
-                      });
-                    },
+                    onChanged:
+                        (value) =>
+                            setState(() => _selectedPaymentMethod = value),
                   ),
                   Divider(),
                   RadioListTile<int>(
                     title: const Text("휴대폰 결제"),
                     value: 6,
                     groupValue: _selectedPaymentMethod,
-                    onChanged: (value) {
-                      setState(() {
-                        _selectedPaymentMethod = value;
-                      });
-                    },
+                    onChanged:
+                        (value) =>
+                            setState(() => _selectedPaymentMethod = value),
                   ),
                 ],
               ),
-              // 결제금액, 프립금액, 수수료 표시
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,14 +254,11 @@ class _PaymentPageState extends State<PaymentPage> {
                 ],
               ),
               const SizedBox(height: 20),
-              // 결제하기 버튼
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      // 결제하기 버튼 클릭 시 처리 로직
-                    },
+                    onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20,
@@ -281,11 +278,8 @@ class _PaymentPageState extends State<PaymentPage> {
                       ),
                     ),
                   ),
-                  // 취소하기 버튼
                   GestureDetector(
-                    onTap: () {
-                      // 취소하기 버튼 클릭 시 처리 로직
-                    },
+                    onTap: () {},
                     child: Container(
                       padding: const EdgeInsets.symmetric(
                         vertical: 20,

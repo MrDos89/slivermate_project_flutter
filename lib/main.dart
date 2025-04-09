@@ -33,8 +33,10 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  final CategoryVo? categoryVo;
-  const MyApp({super.key, this.categoryVo});
+  // final CategoryVo? categoryVo;
+  // final UserVo? userVo;
+  // const MyApp({super.key, this.categoryVo});
+  const MyApp({super.key});
 
   // This widget is the root of your application.
   @override
@@ -91,20 +93,31 @@ class MyApp extends StatelessWidget {
                 NotificationPage(dummyUser: dummyUser, isEditing: false),
         "/config": (context) => ConfigPage(),
         "/userprofile": (context) => UserProfilePage(),
-        "/main":
-            (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
+        // "/main":
+        //     (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
+        "/main": (context) => MainPage(dummyUser: dummyUser),
         "/chat": (context) => ChatPage(),
         // "/post": (context) => PostPage(dummyPost: dummyPost),
         "/post": (context) => PostPage(),
         "/category": (context) => CategoryPage(dummyUser: dummyUser),
         "/club": (context) => ClubPage(),
         "/loginPage": (context) => LoginPage(),
+        // "/loginPage": (context) {
+        //   final args =
+        //       ModalRoute.of(context)!.settings.arguments as List<UserVo>;
+        //   return SelectAccountPage(userList: args);
+        // },
         "/signUpPage": (context) => SignUpPage(),
         "/selectAccount": (context) {
           final args =
               ModalRoute.of(context)?.settings.arguments as List<UserVo>;
           return SelectAccountPage(userList: args);
         },
+        // "/selectAccountPage": (context) {
+        //   final args =
+        //       ModalRoute.of(context)!.settings.arguments as List<UserVo>;
+        //   return SelectAccountPage(userList: args);
+        // },
         "/signUpPage2": (context) {
           final args =
               ModalRoute.of(context)!.settings.arguments as List<UserVo>;

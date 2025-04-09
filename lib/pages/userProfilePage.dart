@@ -106,6 +106,8 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     try {
       // 로그아웃 시 세션 및 쿠키 초기화
       await cookieJar.deleteAll(); // 모든 쿠키 삭제
+      // dio.interceptors.clear(); //  기존 interceptor 전부 제거
+      // dio.options.headers.clear(); //  Authorization 등 헤더도 제거
 
       // 로그아웃 후 `currentUser`를 null로 설정하여 UI 갱신
       setState(() {
@@ -115,8 +117,12 @@ class _UserProfilePageState extends State<_UserProfilePage> {
 
       debugPrint("로그아웃 처리 완료");
 
-      // 로그아웃 후 로그인 화면으로 이동
-      Navigator.pushReplacementNamed(context, '/loginPage'); // 로그인 화면으로 이동
+      // 로그인 페이지로 이동 및 스택 초기화
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/loginPage',
+        (route) => false,
+      );
     } catch (e) {
       debugPrint("로그아웃 중 오류 발생: $e");
     }
