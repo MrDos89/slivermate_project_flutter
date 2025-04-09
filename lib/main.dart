@@ -24,6 +24,7 @@ import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:slivermate_project_flutter/pages/clubDetailPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:slivermate_project_flutter/pages/paymentPage.dart';
+import 'package:slivermate_project_flutter/pages/mainPage.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -90,6 +91,8 @@ class MyApp extends StatelessWidget {
                 NotificationPage(dummyUser: dummyUser, isEditing: false),
         "/config": (context) => ConfigPage(),
         "/userprofile": (context) => UserProfilePage(),
+        "/main":
+            (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
         "/chat": (context) => ChatPage(),
         // "/post": (context) => PostPage(dummyPost: dummyPost),
         "/post": (context) => PostPage(),

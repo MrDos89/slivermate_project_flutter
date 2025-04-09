@@ -118,6 +118,12 @@ class _MainPageState extends State<MainPage> {
     super.dispose();
   }
 
+  // 회원가입 버튼 클릭 시 동작
+  void _onSignUpPressed() {
+    //  회원가입 관련 코드 추가
+    print('회원가입 버튼 클릭됨');
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoadingOverlay(
@@ -291,6 +297,29 @@ class _MainPageState extends State<MainPage> {
                             ],
                           ),
                         ),
+                      ),
+                      //  회원가입 버튼 추카
+                      const SizedBox(height: 300),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          //  회원가입 버튼
+                          TextButton(
+                            onPressed: _onSignUpPressed,
+                            style: TextButton.styleFrom(
+                              side: BorderSide.none, // 테두리 제거
+                              backgroundColor: Colors.transparent,
+                            ),
+                            child: const Text(
+                              "회원가입",
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Color(0xFF7DBF66),
+                                fontSize: 30,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
