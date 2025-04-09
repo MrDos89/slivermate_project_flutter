@@ -314,8 +314,15 @@ class _MainPageState extends State<MainPage> {
                               "회원가입",
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color: Color(0xFF7DBF66),
+                                color: Colors.lightGreen,
                                 fontSize: 30,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(2, 2),
+                                    blurRadius: 7,
+                                    color: Colors.black54,
+                                  ),
+                                ],
                               ),
                             ),
                           ),
