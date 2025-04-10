@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:slivermate_project_flutter/vo/clubVo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -9,11 +11,8 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:slivermate_project_flutter/components/userInfoPage.dart';
 import 'package:slivermate_project_flutter/components/lessonPage.dart';
-import 'package:slivermate_project_flutter/vo/lessonVo.dart';
+import 'package:slivermate_project_flutter/components/classPage.dart';
 
-// -----------------------------------
-// 마이페이지 메인 화면 (UserProfilePage)
-// -----------------------------------
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
 
@@ -217,6 +216,29 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           MaterialPageRoute(
             builder: (context) => LessonPage(lesson: dummyLesson),
           ),
+        );
+      },
+      "모임": () {
+        // 더미 ClubVo 데이터 생성
+        final dummyClub = ClubVo(
+          clubId: 1,
+          clubName: "더미 모임",
+          clubUserId: 1,
+          clubCategoryId: 1,
+          clubSubCategoryId: 1,
+          clubThumbnail: "",
+          clubMovie: "",
+          clubDesc: "이 모임은 테스트 모임입니다.",
+          clubMemberNumber: 5,
+          clubMemberMax: 10,
+          clubReportCnt: 0,
+          clubRegisterDate: DateTime.now(),
+          isDeleted: false,
+          updDate: DateTime.now(),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ClassPage(club: dummyClub)),
         );
       },
       // 다른 버튼의 동작도 필요하다면 여기에 추가할 수 있습니다.

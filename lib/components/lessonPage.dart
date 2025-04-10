@@ -13,7 +13,7 @@ class LessonPage extends StatelessWidget {
       child: Scaffold(
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
-          child: HeaderPage(pageTitle: "강의"),
+          child: HeaderPage(pageTitle: "내 강의"),
         ),
         body: Container(
           color: Colors.grey[100],

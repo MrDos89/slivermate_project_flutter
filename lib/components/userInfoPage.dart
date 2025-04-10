@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
-import 'package:slivermate_project_flutter/components/headerPage.dart';
 
 class UserInfoPage extends StatelessWidget {
   final UserVo? currentUser;
@@ -30,7 +29,6 @@ class UserInfoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MainLayout(
       child: Scaffold(
-        // 헤더: HeaderPage 위젯 사용 (타이틀: 회원정보)
         appBar: PreferredSize(
           preferredSize: const Size.fromHeight(70),
           child: HeaderPage(pageTitle: "회원정보"),
