@@ -138,6 +138,7 @@ class _PostWriterFormState extends State<PostWriterForm> {
         userNickname: "",
         userThumbnail: "",
         updDate: DateTime.now(),
+        likedByMe: false,
       );
 
       final result = await uploadPost(post);

@@ -3,6 +3,7 @@ import 'package:readmore/readmore.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
+import 'package:slivermate_project_flutter/components/likeHeart.dart';
 
 // const String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
 
@@ -59,6 +60,7 @@ Widget postContainer(
   required Future<void> Function() onRefresh,
   required void Function(PostVo post) onLikeTap,
   required void Function(BuildContext context, PostVo post) onCommentTap,
+  required int currentUserId,
   bool isClubPage = false,
 }) {
   final filteredList =
@@ -191,8 +193,10 @@ Widget postContainer(
                     Row(
                       children: [
                         LikeHeart(
+                          postId: post.postId,
+                          userId: currentUserId, // 로그인 유저 ID
                           initialLikes: post.postLikeCount,
-                          initiallyLiked: false,
+                          initiallyLiked: post.likedByMe, // 서버에서 받아온 좋아요 여부
                         ),
                         const SizedBox(width: 16),
                         GestureDetector(

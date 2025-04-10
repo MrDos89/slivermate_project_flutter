@@ -22,6 +22,7 @@ class PostVo {
   final String userNickname;
   final String userThumbnail;
   final DateTime updDate;
+  final bool likedByMe;
 
   PostVo({
     required this.postId,
@@ -41,6 +42,7 @@ class PostVo {
     required this.userNickname,
     required this.userThumbnail,
     required this.updDate,
+    required this.likedByMe,
   });
 
   //  JSON → LessonVO 변환
@@ -68,6 +70,7 @@ class PostVo {
 
       userNickname: json['nickname'] ?? "",
       userThumbnail: json['user_thumbnail'] ?? "",
+      likedByMe: json['liked_by_me'] ?? false,
     );
   }
 

@@ -6,6 +6,7 @@ import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:slivermate_project_flutter/components/postContainer.dart';
+import 'package:dio/dio.dart';
 
 //  카테고리 ID를 문자열로 변환
 const Map<int, String> postCategoryId = {1: "실내", 2: "실외"};
@@ -325,6 +326,7 @@ class _PostPageState extends State<PostPage> {
                       });
                     },
                     onCommentTap: _showCommentModal,
+                    currentUserId: 1,
                   ),
                 ),
               ],
@@ -361,87 +363,6 @@ class _PostPageState extends State<PostPage> {
     );
   }
 }
-
-class LikeHeart extends StatefulWidget {
-  final int initialLikes; // 총 좋아요 수
-  final bool initiallyLiked; // 내가 눌렀는지 여부
-
-  const LikeHeart({
-    super.key,
-    required this.initialLikes,
-    this.initiallyLiked = false,
-  });
-
-  @override
-  State<LikeHeart> createState() => _LikeHeartState();
-}
-
-class _LikeHeartState extends State<LikeHeart>
-    with SingleTickerProviderStateMixin {
-  late int _likes;
-  late bool _isLiked;
-  late AnimationController _controller;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _likes = widget.initialLikes;
-    _isLiked = widget.initiallyLiked;
-
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 200),
-    );
-
-    _scaleAnimation = Tween<double>(
-      begin: 1.0,
-      end: 1.4,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _onTapLike() {
-    setState(() {
-      if (_isLiked) {
-        _likes--;
-      } else {
-        _likes++;
-        _controller.forward().then((_) => _controller.reverse());
-      }
-      _isLiked = !_isLiked;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: _onTapLike,
-      child: Row(
-        children: [
-          ScaleTransition(
-            scale: _scaleAnimation,
-            child: Icon(
-              _isLiked ? Icons.favorite : Icons.favorite_border,
-              color: _isLiked ? Colors.red : Colors.grey,
-              size: 20,
-            ),
-          ),
-          const SizedBox(width: 4),
-          Text('$_likes'),
-        ],
-      ),
-    );
-  }
-}
-
-// final TextEditingController _commentController = TextEditingController();
-// List<String> _comments = [];
 
 String getTimeAgo(DateTime date) {
   final now = DateTime.now();

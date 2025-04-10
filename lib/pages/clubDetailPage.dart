@@ -113,48 +113,48 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
 
 const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
 
-List<PostVo> dummyPostList = [
-  PostVo(
-    postId: 2,
-    postUserId: 1,
-    userThumbnail:
-        "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
-    userNickname: "라이언",
-    regionId: 1,
-    postCategoryId: 1,
-    postSubCategoryId: 8,
-    postNote:
-        "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다. 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
-    postLikeCount: 2,
-    postCommentCount: 3,
-    postImages: [],
-    registerDate: DateTime.now(),
-    clubId: 0,
-    postReportCount: 0,
-    isHidden: false,
-    updDate: DateTime.now(),
-    comments: [
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "철수",
-        commentText: "저도 참여할 수 있을까요?",
-        commentDate: DateTime.now().subtract(Duration(minutes: 15)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "영희",
-        commentText: "실력은 초보지만 같이해요!",
-        commentDate: DateTime.now().subtract(Duration(minutes: 30)),
-      ),
-      CommentVo(
-        userThumbnail: "",
-        userNickname: "민수",
-        commentText: "몇 시에 모이나요?",
-        commentDate: DateTime.now().subtract(Duration(hours: 1)),
-      ),
-    ],
-  ),
-];
+// List<PostVo> dummyPostList = [
+//   PostVo(
+//     postId: 2,
+//     postUserId: 1,
+//     userThumbnail:
+//         "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
+//     userNickname: "라이언",
+//     regionId: 1,
+//     postCategoryId: 1,
+//     postSubCategoryId: 8,
+//     postNote:
+//         "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다. 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
+//     postLikeCount: 2,
+//     postCommentCount: 3,
+//     postImages: [],
+//     registerDate: DateTime.now(),
+//     clubId: 0,
+//     postReportCount: 0,
+//     isHidden: false,
+//     updDate: DateTime.now(),
+//     comments: [
+//       CommentVo(
+//         userThumbnail: "",
+//         userNickname: "철수",
+//         commentText: "저도 참여할 수 있을까요?",
+//         commentDate: DateTime.now().subtract(Duration(minutes: 15)),
+//       ),
+//       CommentVo(
+//         userThumbnail: "",
+//         userNickname: "영희",
+//         commentText: "실력은 초보지만 같이해요!",
+//         commentDate: DateTime.now().subtract(Duration(minutes: 30)),
+//       ),
+//       CommentVo(
+//         userThumbnail: "",
+//         userNickname: "민수",
+//         commentText: "몇 시에 모이나요?",
+//         commentDate: DateTime.now().subtract(Duration(hours: 1)),
+//       ),
+//     ],
+//   ),
+// ];
 
 // void _handleAttend(Map<String, dynamic> schedule) {
 //   if (!schedule.containsKey("attendingUsers")) {
@@ -370,6 +370,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
               });
             },
             onCommentTap: _showCommentModal,
+            currentUserId: 1,
             isClubPage: true,
           ),
         );
