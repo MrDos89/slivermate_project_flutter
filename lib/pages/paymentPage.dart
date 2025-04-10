@@ -182,7 +182,7 @@ class _PaymentPageState extends State<PaymentPage> {
                         ),
                       ),
                   ],
-                  Divider(),
+                  const SizedBox(height: 10),
                   RadioListTile<int>(
                     title: const Text("카카오페이"),
                     value: 2,

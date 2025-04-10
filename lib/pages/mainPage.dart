@@ -144,6 +144,7 @@ class _MainPageState extends State<MainPage> {
   // 회원가입 버튼 클릭 시 동작
   void _onSignUpPressed() {
     print('회원가입 버튼 클릭됨');
+    Navigator.of(context).pushNamed('/signUpPage');
   }
 
   @override

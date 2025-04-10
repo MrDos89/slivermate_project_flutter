@@ -81,7 +81,8 @@ class _PostWriterFormState extends State<PostWriterForm> {
   Future<bool> uploadPost(PostVo postData) async {
     try {
       // final String apiUrl = 'http://54.180.127.164:18090/api/post';
-      final String apiUrl = 'http://3.39.240.55:18090/api/post'; // api 주소 변경
+      // final String apiUrl = 'http://3.39.240.55:18090/api/post'; // api 주소 변경
+      final String apiUrl = 'http://52.78.136.1:18090/api/post'; //  api 주소 변경
       final dio = Dio();
 
       final response = await dio.post(
