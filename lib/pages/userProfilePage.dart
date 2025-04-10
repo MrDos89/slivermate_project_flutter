@@ -15,8 +15,9 @@ import 'package:path_provider/path_provider.dart';
 import 'package:slivermate_project_flutter/components/userInfoPage.dart';
 import 'package:slivermate_project_flutter/components/lessonPage.dart';
 import 'package:slivermate_project_flutter/components/classPage.dart';
-import 'package:slivermate_project_flutter/components/reportPage.dart';
+// import 'package:slivermate_project_flutter/components/reportPage.dart'; // 문의 모달 대신 CallStaffPage 사용
 import 'package:slivermate_project_flutter/components/myPostPage.dart';
+import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
@@ -29,15 +30,16 @@ class UserProfilePage extends StatelessWidget {
           preferredSize: const Size.fromHeight(70),
           child: HeaderPage(pageTitle: "마이 페이지"),
         ),
-        body: Container(color: Colors.grey[100], child: _UserProfilePage()),
+        body: Container(
+          color: Colors.grey[100],
+          child: const _UserProfilePage(),
+        ),
       ),
     );
   }
 }
 
 class _UserProfilePage extends StatefulWidget {
-  // List<UserVo>? userList;
-
   const _UserProfilePage({super.key});
 
   @override
@@ -45,8 +47,6 @@ class _UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<_UserProfilePage> {
-  // late List<UserVo> _accounts;
-  // late List<UserVo> userList = [];
   late PersistCookieJar cookieJar;
   bool isLoading = true;
   UserVo? currentUser; // 로그인한 유저 정보를 저장할 변수
@@ -60,71 +60,39 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   @override
   void initState() {
     super.initState();
-    // _accounts = widget.userList;
     // _initDioAndCheckLogin(); // 실제 서버 호출 부분은 주석 처리합니다.
 
     // 테스트 목적으로 더미 유저 데이터를 직접 설정 (추후 삭제)
     setState(() {
       currentUser = UserVo(
-        uid: 1, // 유저 회원번호
-        groupId: 1, // 그룹 아이디 (예시)
-        userType: 11, // 예시: 부모1 타입
-        userName: "홍길동", // 이름
-        nickname: "더미 사용자", // 닉네임
-        userId: "dummyUser123", // 유저 아이디
-        userPassword: "password", // 비밀번호 (테스트용)
-        pinPassword: "0000", // PIN 비밀번호
-        telNumber: "010-1234-5678", // 전화번호
-        email: "dummy@example.com", // 이메일
-        thumbnail: "", // 썸네일 주소 (빈 문자열이면 기본 이미지 등 처리)
-        regionId: 1, // 지역번호 (예시)
-        registerDate: DateTime.now(), // 가입일자
-        isDeleted: false, // 탈퇴 여부
-        isAdmin: false, // 관리자 여부
-        updDate: DateTime.now(), // 갱신 시간
+        uid: 1,
+        groupId: 1,
+        userType: 11,
+        userName: "홍길동",
+        nickname: "더미 사용자",
+        userId: "dummyUser123",
+        userPassword: "password",
+        pinPassword: "0000",
+        telNumber: "010-1234-5678",
+        email: "dummy@example.com",
+        thumbnail: "",
+        regionId: 1,
+        registerDate: DateTime.now(),
+        isDeleted: false,
+        isAdmin: false,
+        updDate: DateTime.now(),
       );
       isLoading = false;
     });
   }
 
-  // 테스트 목적으로 더미 유저 데이터를 직접 설정 (추후 삭제)
-
-  /*
-  Future<void> _initDioAndCheckLogin() async {
-    final appDocDir = await getApplicationDocumentsDirectory();
-    cookieJar = PersistCookieJar(
-      storage: FileStorage("${appDocDir.path}/.cookies/"),
-    );
-    dio.interceptors.add(CookieManager(cookieJar));
-
-    await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
-  }
-  */
-
-  // Future<void> _fetchUserData() async {
-  //   final fetchUserList = await UserService.fetchUserData();
-  //
-  //   debugPrint(fetchUserList.toString());
-  //   await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌 나게 딜레이
-  //
-  //   if (fetchUserList.isNotEmpty) {
-  //     setState(() {
-  //       userList = fetchUserList; // 데이터가 정상적으로 오면 저장
-  //     });
-  //   } else {
-  //     debugPrint("유저 정보를 가져오지 못했습니다.");
-  //   }
-  // }
-
-  // 로그인 후 사용자 정보 가져오기
   Future<void> checkLoginStatus() async {
     try {
       final response = await dio.get(sessionCheckUrl);
-
       if (response.statusCode == 200) {
         final user = UserVo.fromJson(response.data);
         setState(() {
-          currentUser = user; // 로그인된 유저 정보를 저장
+          currentUser = user;
           isLoading = false;
         });
         debugPrint("로그인 유지됨 - 사용자: ${user.nickname}");
@@ -138,23 +106,14 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     }
   }
 
-  // 로그아웃 처리: 쿠키와 세션 초기화
   Future<void> logout() async {
     try {
-      // 로그아웃 시 세션 및 쿠키 초기화
-      await cookieJar.deleteAll(); // 모든 쿠키 삭제
-      // dio.interceptors.clear(); // 기존 interceptor 전부 제거
-      // dio.options.headers.clear(); // Authorization 등 헤더도 제거
-
-      // 로그아웃 후 `currentUser`를 null로 설정하여 UI 갱신
+      await cookieJar.deleteAll();
       setState(() {
-        currentUser = null; // 로그인된 사용자 정보 초기화
-        isLoading = true; // 로딩 상태로 전환
+        currentUser = null;
+        isLoading = true;
       });
-
       debugPrint("로그아웃 처리 완료");
-
-      // 로그인 페이지로 이동 및 스택 초기화
       Navigator.pushNamedAndRemoveUntil(
         context,
         '/loginPage',
@@ -165,7 +124,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     }
   }
 
-  // "준비중" 다이얼로그 함수 (기존 코드)
   void _showComingSoonDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -183,7 +141,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     );
   }
 
-  // 맵을 사용하여 버튼 텍스트에 따른 동작을 처리하는 함수
+  // _handleMenuButtonTap 함수 (회원정보, 강의, 모임 등은 기존대로 처리)
   void _handleMenuButtonTap(String text, BuildContext context) {
     Map<String, VoidCallback> actions = {
       "회원정보": () {
@@ -195,7 +153,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
         );
       },
       "강의": () {
-        // 더미 LessonVo 데이터 생성
         final dummyLesson = LessonVo(
           lessonId: 1,
           userId: 1,
@@ -224,7 +181,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
         );
       },
       "모임": () {
-        // 더미 ClubVo 데이터 생성
         final dummyClub = ClubVo(
           clubId: 1,
           clubName: "더미 모임",
@@ -246,46 +202,34 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           MaterialPageRoute(builder: (context) => ClassPage(club: dummyClub)),
         );
       },
-      "문의": () {
-        // 더미 ReportVo 데이터 생성 (신고/문의 내역)
-        final dummyReport = ReportVo(
-          id: 1,
-          userId: 1,
-          lessonId: 1,
-          reportId: 2,
-          reportContent: "테스트 신고 내용입니다.",
-          isConfirmed: false,
-          updDate: DateTime.now(),
-        );
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ReportPage(report: dummyReport),
-          ),
-        );
-      },
-      "내 글보기": () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder:
-                (context) =>
-                    MyPostPage(myfeed: MyPostPage.generateDummyPosts()),
-          ),
-        );
-      },
-      // 다른 버튼의 동작도 필요하다면 여기에 추가할 수 있습니다.
+      // "문의"는 별도 처리해서 CallStaffPage 모달창 띄움.
     };
 
-    // 키가 있으면 해당 동작 실행, 없으면 "준비중" 다이얼로그 실행
     (actions[text] ?? () => _showComingSoonDialog(context))();
   }
 
-  // 버튼 하나를 빌드하는 함수
+  // _buildMenuButton 함수: "내 글보기"와 "문의"는 별도 처리
   Widget _buildMenuButton(String text) {
     return InkWell(
       onTap: () {
-        _handleMenuButtonTap(text, context);
+        if (text == "내 글보기") {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder:
+                  (context) =>
+                      MyPostPage(myfeed: MyPostPage.generateDummyPosts()),
+            ),
+          );
+        } else if (text == "문의") {
+          // 문의 버튼: CallStaffPage 모달창 띄움
+          showDialog(
+            context: context,
+            builder: (context) => CallStaffPage(dummyUser: currentUser),
+          );
+        } else {
+          _handleMenuButtonTap(text, context);
+        }
       },
       child: Container(
         alignment: Alignment.center,
@@ -315,9 +259,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      ); // 로딩 중이면 프로그래스 인디케이터 표시
+      return const Center(child: CircularProgressIndicator());
     }
 
     return SingleChildScrollView(
@@ -330,10 +272,8 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 왼쪽: 썸네일 + 닉네임
                 Row(
                   children: [
-                    // 썸네일 (프로필 이미지)
                     CircleAvatar(
                       radius: 24,
                       backgroundColor: Colors.grey,
@@ -344,7 +284,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                               : null,
                     ),
                     const SizedBox(width: 8),
-                    // 닉네임
                     Text(
                       currentUser?.nickname ?? '홍길동',
                       style: const TextStyle(
@@ -354,7 +293,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                     ),
                   ],
                 ),
-                // 오른쪽: 로그아웃 버튼
                 TextButton(
                   onPressed: logout,
                   child: const Text(
@@ -369,9 +307,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
               ],
             ),
           ),
-
           const SizedBox(height: 16),
-
           // (2) 구독상태, 구독기간, 가입된 동아리 - 박스 형태 (3칸)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -390,7 +326,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
               ),
               child: Row(
                 children: [
-                  // 구독상태
                   Expanded(
                     child: Column(
                       children: const [
@@ -407,7 +342,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                     ),
                   ),
                   Container(width: 1, height: 40, color: Colors.grey[300]),
-                  // 구독기간
                   Expanded(
                     child: Column(
                       children: const [
@@ -427,7 +361,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                     ),
                   ),
                   Container(width: 1, height: 40, color: Colors.grey[300]),
-                  // 가입된 동아리
                   Expanded(
                     child: Column(
                       children: const [
@@ -447,10 +380,8 @@ class _UserProfilePageState extends State<_UserProfilePage> {
               ),
             ),
           ),
-
           const SizedBox(height: 16),
-
-          // (3) 8개 버튼 (회원정보, 강의, 모임, 문의, 내 글보기, 내 호스트, 내 모임장, 오늘의 운세)
+          // (3) 8개 버튼 (회원정보, 강의, 모임, 문의, 내 글보기, 내 호스트, 내 모임장)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: GridView.count(
