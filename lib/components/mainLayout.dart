@@ -70,7 +70,16 @@ class MainLayout extends StatelessWidget {
         children: [
           IconButton(
             icon: const Icon(Icons.person, color: Color(0xFF229F3B), size: 30),
-            onPressed: _showComingSoonDialog,
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // 현재 스택에서 빠지고
+              }
+              Navigator.pushNamed(
+                context,
+                "/userprofile",
+                arguments: dummyUser, // 유저 정보도 같이 넘김
+              );
+            },
             tooltip: "마이페이지",
           ),
           IconButton(
@@ -79,7 +88,16 @@ class MainLayout extends StatelessWidget {
               color: Color(0xFF229F3B),
               size: 30,
             ),
-            onPressed: _showComingSoonDialog,
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // 현재 스택에서 빠지고
+              }
+              Navigator.pushNamed(
+                context,
+                "/chat",
+                arguments: dummyUser, // 유저 정보도 같이 넘김
+              );
+            },
             tooltip: "채팅",
           ),
           IconButton(
@@ -88,7 +106,16 @@ class MainLayout extends StatelessWidget {
               color: Color(0xFF229F3B),
               size: 30,
             ),
-            onPressed: _showComingSoonDialog,
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // 현재 스택에서 빠지고
+              }
+              Navigator.pushNamed(
+                context,
+                "/post",
+                arguments: dummyUser, // 유저 정보도 같이 넘김
+              );
+            },
             tooltip: "자유게시판",
           ),
           IconButton(
@@ -111,7 +138,16 @@ class MainLayout extends StatelessWidget {
           ),
           IconButton(
             icon: const Icon(Icons.groups, color: Color(0xFF229F3B), size: 30),
-            onPressed: _showComingSoonDialog,
+            onPressed: () {
+              if (Navigator.canPop(context)) {
+                Navigator.pop(context); // 현재 스택에서 빠지고
+              }
+              Navigator.pushNamed(
+                context,
+                "/club",
+                arguments: dummyUser, // 유저 정보도 같이 넘김
+              );
+            },
             tooltip: "모임페이지",
           ),
         ],
