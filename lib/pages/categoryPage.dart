@@ -12,8 +12,8 @@ import 'package:slivermate_project_flutter/vo/categoryVo.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 
 class CategoryPage extends StatefulWidget {
-  final UserVo? dummyUser;
-  const CategoryPage({super.key, required this.dummyUser});
+  final UserVo? userVo;
+  const CategoryPage({super.key, required this.userVo});
 
   @override
   _CategoryPageState createState() => _CategoryPageState();
@@ -160,7 +160,7 @@ class _CategoryPageState extends State<CategoryPage> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print(
-        "[CategoryPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+        "[CategoryPage] dummyUser 확인: ${widget.userVo?.userName}, ${widget.userVo?.email}",
       );
     });
   }
@@ -248,9 +248,9 @@ class _CategoryPageState extends State<CategoryPage> {
               (context) => IntroducePage(
                 lessonCategory: categoryId, //  실내 / 실외 분류
                 lessonSubCategory: subCategoryId, //  선택한 취미명
-                dummyUser: widget.dummyUser,
+                userVo: widget.userVo,
               ),
-          settings: RouteSettings(arguments: widget.dummyUser),
+          settings: RouteSettings(arguments: widget.userVo),
         ),
       );
 
@@ -269,7 +269,7 @@ class _CategoryPageState extends State<CategoryPage> {
       child: LectureLoadingOverlay(
         isLoading: isLoading,
         child: MainLayout(
-          dummyUser: widget.dummyUser,
+          userVo: widget.userVo,
           child: Column(
             children: [
               // AppBar + TabBar

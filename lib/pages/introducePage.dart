@@ -39,14 +39,14 @@ class IntroducePage extends StatefulWidget {
   LessonVo? lesson;
   int lessonCategory;
   int lessonSubCategory;
-  UserVo? dummyUser;
+  UserVo? userVo;
   bool hasPurchased = false;
 
   IntroducePage({
     super.key,
     required this.lessonCategory,
     required this.lessonSubCategory,
-    required this.dummyUser,
+    required this.userVo,
   }) {
     print(
       "IntroducePage 찍힌 카데고리 번호: (카테고리 ID: $lessonCategory, 취미 ID: $lessonSubCategory)",
@@ -70,7 +70,7 @@ class _IntroducePageState extends State<IntroducePage> {
     );
     fetchLessonData(); //  데이터 가져오기
     print(
-      " IntroducePage initState() 실행됨. dummyUser: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+      " IntroducePage initState() 실행됨. dummyUser: ${widget.userVo?.userName}, ${widget.userVo?.email}",
     );
   }
 
@@ -146,10 +146,10 @@ class _IntroducePageState extends State<IntroducePage> {
   @override
   Widget build(BuildContext context) {
     print(
-      "[IntroducePage]  dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+      "[IntroducePage]  dummyUser 값: ${widget.userVo?.userName}, ${widget.userVo?.email}",
     );
 
-    if (widget.dummyUser == null) {
+    if (widget.userVo == null) {
       return const Scaffold(
         body: Center(child: CircularProgressIndicator()), // 데이터 로딩 중 표시
       );
@@ -167,7 +167,7 @@ class _IntroducePageState extends State<IntroducePage> {
         return MainLayout(
           showPaymentButton: lesson != null,
           lesson: lesson,
-          dummyUser: widget.dummyUser,
+          userVo: widget.userVo,
           child: Scaffold(
             backgroundColor: const Color(0xFFD6FFDC).withAlpha(128),
             appBar: AppBar(

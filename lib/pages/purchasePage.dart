@@ -28,8 +28,8 @@ class _PaymentMethod {
 }
 
 class PurchasePage extends StatefulWidget {
-  final UserVo? dummyUser;
-  const PurchasePage({super.key, required this.dummyUser});
+  final UserVo? userVo;
+  const PurchasePage({super.key, required this.userVo});
 
   @override
   _PurchasePageState createState() => _PurchasePageState();
@@ -43,7 +43,7 @@ class _PurchasePageState extends State<PurchasePage> {
   void initState() {
     super.initState();
     print(
-      " [PurchasePage initState()] dummyUser 값: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
+      " [PurchasePage initState()] dummyUser 값: ${widget.userVo?.userName}, ${widget.userVo?.email}",
     );
     // fetchPurchaseData();
   }
@@ -121,7 +121,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => CreditCardModal(
-                dummyUser: widget.dummyUser!,
+                dummyUser: widget.userVo!,
                 lesson: lesson,
                 modelType: 1,
                 // totalPayment: totalPayment,
@@ -133,7 +133,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => PayModal(
-                dummyUser: widget.dummyUser!,
+                dummyUser: widget.userVo!,
                 lesson: lesson,
                 modelType: 2,
                 // totalPayment: totalPayment,
@@ -145,7 +145,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => EtcModal(
-                dummyUser: widget.dummyUser!,
+                dummyUser: widget.userVo!,
                 lesson: lesson,
                 modelType: 3,
                 // totalPayment: totalPayment,
@@ -156,7 +156,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => EtcModal(
-                dummyUser: widget.dummyUser!,
+                dummyUser: widget.userVo!,
                 lesson: lesson,
                 modelType: 4,
                 // totalPayment: totalPayment,
@@ -169,7 +169,7 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   Widget build(BuildContext context) {
     return MainLayout(
-      dummyUser: widget.dummyUser,
+      userVo: widget.userVo,
       child: Scaffold(
         appBar: AppBar(
           leading: null, //  뒤로가기 버튼 지우기

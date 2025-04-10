@@ -4,9 +4,9 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class NotificationPage extends StatefulWidget {
-  final UserVo? dummyUser;
+  final UserVo? userVo;
   final bool isEditing;
-  const NotificationPage({super.key, required this.dummyUser, required this.isEditing});
+  const NotificationPage({super.key, required this.userVo, required this.isEditing});
 
   @override
   State<NotificationPage> createState() => _NotificationPageState();
@@ -59,7 +59,7 @@ class _NotificationPageState extends State<NotificationPage> {
     //   " <청춘은바로지금> 동아리 정기 모임 날짜(8/20)까지 5일 남았습니다",
     // ];
     return MainLayout(
-      dummyUser: widget.dummyUser,
+      userVo: widget.userVo,
       child: Scaffold(
         appBar: HeaderPage(
           pageTitle: "알람 페이지",
