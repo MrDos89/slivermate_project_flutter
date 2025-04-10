@@ -7,7 +7,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:slivermate_project_flutter/components/userInfoPage.dart';
 
+// -----------------------------------
+// 마이페이지 메인 화면 (UserProfilePage)
+// -----------------------------------
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
 
@@ -28,7 +32,7 @@ class UserProfilePage extends StatelessWidget {
 class _UserProfilePage extends StatefulWidget {
   // List<UserVo>? userList;
 
-  _UserProfilePage({super.key});
+  const _UserProfilePage({super.key});
 
   @override
   State<_UserProfilePage> createState() => _UserProfilePageState();
@@ -39,7 +43,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   // late List<UserVo> userList = [];
   late PersistCookieJar cookieJar;
   bool isLoading = true;
-  UserVo? currentUser; //  로그인한 유저 정보를 저장할 변수
+  UserVo? currentUser; // 로그인한 유저 정보를 저장할 변수
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
@@ -51,9 +55,35 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   void initState() {
     super.initState();
     // _accounts = widget.userList;
-    _initDioAndCheckLogin();
+    // _initDioAndCheckLogin(); // 실제 서버 호출 부분은 주석 처리합니다.
+
+    // 테스트 목적으로 더미 유저 데이터를 직접 설정 (추후 삭제)
+    setState(() {
+      currentUser = UserVo(
+        uid: 1, // 유저 회원번호
+        groupId: 1, // 그룹 아이디 (예시)
+        userType: 11, // 예시: 부모1 타입
+        userName: "홍길동", // 이름
+        nickname: "더미 사용자", // 닉네임
+        userId: "dummyUser123", // 유저 아이디
+        userPassword: "password", // 비밀번호 (테스트용)
+        pinPassword: "0000", // PIN 비밀번호
+        telNumber: "010-1234-5678", // 전화번호
+        email: "dummy@example.com", // 이메일
+        thumbnail: "", // 썸네일 주소 (빈 문자열이면 기본 이미지 등 처리)
+        regionId: 1, // 지역번호 (예시)
+        registerDate: DateTime.now(), // 가입일자
+        isDeleted: false, // 탈퇴 여부
+        isAdmin: false, // 관리자 여부
+        updDate: DateTime.now(), // 갱신 시간
+      );
+      isLoading = false;
+    });
   }
 
+  // 테스트 목적으로 더미 유저 데이터를 직접 설정 (추후 삭제)
+
+  /*
   Future<void> _initDioAndCheckLogin() async {
     final appDocDir = await getApplicationDocumentsDirectory();
     cookieJar = PersistCookieJar(
@@ -63,6 +93,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
 
     await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
   }
+  */
 
   // Future<void> _fetchUserData() async {
   //   final fetchUserList = await UserService.fetchUserData();
@@ -106,8 +137,8 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     try {
       // 로그아웃 시 세션 및 쿠키 초기화
       await cookieJar.deleteAll(); // 모든 쿠키 삭제
-      // dio.interceptors.clear(); //  기존 interceptor 전부 제거
-      // dio.options.headers.clear(); //  Authorization 등 헤더도 제거
+      // dio.interceptors.clear(); // 기존 interceptor 전부 제거
+      // dio.options.headers.clear(); // Authorization 등 헤더도 제거
 
       // 로그아웃 후 `currentUser`를 null로 설정하여 UI 갱신
       setState(() {
@@ -146,12 +177,61 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     );
   }
 
+  // 맵을 사용하여 버튼 텍스트에 따른 동작을 처리하는 함수
+  void _handleMenuButtonTap(String text, BuildContext context) {
+    Map<String, VoidCallback> actions = {
+      "회원정보": () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => UserInfoPage(currentUser: currentUser),
+          ),
+        );
+      },
+      // 다른 버튼의 동작도 필요하다면 여기에 추가할 수 있습니다.
+    };
+
+    // 키가 있으면 해당 동작 실행, 없으면 "준비중" 다이얼로그 실행
+    (actions[text] ?? () => _showComingSoonDialog(context))();
+  }
+
+  // 버튼 하나를 빌드하는 함수
+  Widget _buildMenuButton(String text) {
+    return InkWell(
+      onTap: () {
+        _handleMenuButtonTap(text, context);
+      },
+      child: Container(
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              offset: const Offset(0, 2),
+              blurRadius: 4,
+            ),
+          ],
+        ),
+        child: Text(
+          text,
+          style: const TextStyle(
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+            color: Colors.black,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return const Center(
         child: CircularProgressIndicator(),
-      ); //  로딩 중이면 프로그래스 인디케이터 표시
+      ); // 로딩 중이면 프로그래스 인디케이터 표시
     }
 
     return SingleChildScrollView(
@@ -172,8 +252,9 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                       radius: 24,
                       backgroundColor: Colors.grey,
                       backgroundImage:
-                          currentUser?.thumbnail != null
-                              ? NetworkImage(currentUser!.thumbnail!)
+                          currentUser?.thumbnail != null &&
+                                  currentUser!.thumbnail.isNotEmpty
+                              ? NetworkImage(currentUser!.thumbnail)
                               : null,
                     ),
                     const SizedBox(width: 8),
@@ -189,7 +270,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                 ),
                 // 오른쪽: 로그아웃 버튼
                 TextButton(
-                  onPressed: logout, //  로그아웃 버튼 누르면 로그아웃 처리
+                  onPressed: logout,
                   child: const Text(
                     "로그아웃",
                     style: TextStyle(
@@ -305,35 +386,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             ),
           ),
         ],
-      ),
-    );
-  }
-
-  // 버튼 하나를 빌드하는 함수
-  Widget _buildMenuButton(String text) {
-    return InkWell(
-      onTap: () => _showComingSoonDialog(context),
-      child: Container(
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              offset: const Offset(0, 2),
-              blurRadius: 4,
-            ),
-          ],
-        ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w500,
-            color: Colors.black,
-          ),
-        ),
       ),
     );
   }
