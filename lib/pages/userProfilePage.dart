@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/vo/reportVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/clubVo.dart';
@@ -12,6 +13,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:slivermate_project_flutter/components/userInfoPage.dart';
 import 'package:slivermate_project_flutter/components/lessonPage.dart';
 import 'package:slivermate_project_flutter/components/classPage.dart';
+import 'package:slivermate_project_flutter/components/reportPage.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
@@ -239,6 +241,24 @@ class _UserProfilePageState extends State<_UserProfilePage> {
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => ClassPage(club: dummyClub)),
+        );
+      },
+      "문의": () {
+        // 더미 ReportVo 데이터 생성 (신고/문의 내역)
+        final dummyReport = ReportVo(
+          id: 1,
+          userId: 1,
+          lessonId: 1,
+          reportId: 2,
+          reportContent: "테스트 신고 내용입니다.",
+          isConfirmed: false,
+          updDate: DateTime.now(),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ReportPage(report: dummyReport),
+          ),
         );
       },
       // 다른 버튼의 동작도 필요하다면 여기에 추가할 수 있습니다.
