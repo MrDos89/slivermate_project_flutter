@@ -5,6 +5,8 @@ import 'package:slivermate_project_flutter/vo/reportVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/clubVo.dart';
+import 'package:slivermate_project_flutter/vo/postVo.dart';
+import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
@@ -14,6 +16,7 @@ import 'package:slivermate_project_flutter/components/userInfoPage.dart';
 import 'package:slivermate_project_flutter/components/lessonPage.dart';
 import 'package:slivermate_project_flutter/components/classPage.dart';
 import 'package:slivermate_project_flutter/components/reportPage.dart';
+import 'package:slivermate_project_flutter/components/myPostPage.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
@@ -196,7 +199,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
         final dummyLesson = LessonVo(
           lessonId: 1,
           userId: 1,
-          lessonName: "더미 강의",
+          lessonName: "누구나 쉽게 알려주는 일타강사 강의",
           lessonDesc: "이 강의는 테스트 강의입니다.",
           lessonCostDesc: "무료",
           lessonCategory: 1,
@@ -258,6 +261,16 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           context,
           MaterialPageRoute(
             builder: (context) => ReportPage(report: dummyReport),
+          ),
+        );
+      },
+      "내 글보기": () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) =>
+                    MyPostPage(myfeed: MyPostPage.generateDummyPosts()),
           ),
         );
       },
