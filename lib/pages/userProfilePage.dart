@@ -8,6 +8,8 @@ import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:slivermate_project_flutter/components/userInfoPage.dart';
+import 'package:slivermate_project_flutter/components/lessonPage.dart';
+import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 
 // -----------------------------------
 // 마이페이지 메인 화면 (UserProfilePage)
@@ -185,6 +187,35 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           context,
           MaterialPageRoute(
             builder: (context) => UserInfoPage(currentUser: currentUser),
+          ),
+        );
+      },
+      "강의": () {
+        // 더미 LessonVo 데이터 생성
+        final dummyLesson = LessonVo(
+          lessonId: 1,
+          userId: 1,
+          lessonName: "더미 강의",
+          lessonDesc: "이 강의는 테스트 강의입니다.",
+          lessonCostDesc: "무료",
+          lessonCategory: 1,
+          lessonSubCategory: 1,
+          lessonLecture: "dummyLecture.mp4",
+          lessonThumbnail: "",
+          lessonPrice: 0,
+          registerDate: DateTime.now().toString(),
+          isHidden: false,
+          updDate: DateTime.now().toString(),
+          userName: "홍길동",
+          userThumbnail: "",
+          lessonGroupId: 1,
+          likeCount: 10,
+          viewCount: 100,
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => LessonPage(lesson: dummyLesson),
           ),
         );
       },

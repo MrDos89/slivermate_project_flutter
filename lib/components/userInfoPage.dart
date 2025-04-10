@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/components/headerPage.dart';
 
 class UserInfoPage extends StatelessWidget {
   final UserVo? currentUser;
