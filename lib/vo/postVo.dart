@@ -72,7 +72,7 @@ class PostVo {
 
       userNickname: json['nickname'] ?? "",
       userThumbnail: json['user_thumbnail'] ?? "",
-      likedByMe: json['liked_by_me'] == 1,
+      likedByMe: json['liked_by_me'] == true,
     );
   }
 
