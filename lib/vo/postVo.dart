@@ -22,7 +22,7 @@ class PostVo {
   final String userNickname;
   final String userThumbnail;
   final DateTime updDate;
-  final bool likedByMe;
+  bool likedByMe;
 
   PostVo({
     required this.postId,

@@ -4,6 +4,7 @@ import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
+import 'package:dio/dio.dart';
 
 // const String defaultUserThumbnail = "https://yourdomain.com/default_profile.png"; // 기본 이미지 URL
 
@@ -65,18 +66,45 @@ class _PostDetailPageState extends State<PostDetailPage> {
   void initState() {
     super.initState();
     likeCount = widget.Post.postLikeCount;
+    isLiked = widget.Post.likedByMe;
   }
 
-  void _toggleLike() {
+  Future<void> _toggleLike() async {
+    final prevLiked = isLiked;
+    final prevLikes = likeCount;
+
     setState(() {
-      if (isLiked) {
-        likeCount--;
-      } else {
-        likeCount++;
-      }
       isLiked = !isLiked;
+      likeCount += isLiked ? 1 : -1;
+      widget.Post.likedByMe = isLiked; // PostVo도 동기화
+      widget.Post.postLikeCount = likeCount;
     });
+
+    try {
+      final dio = Dio();
+      final response = await dio.patch(
+        'http://43.201.50.194:18090/api/post/updateCount',
+        queryParameters: {
+          'post_id': widget.Post.postId,
+          'liked_by_me': isLiked,
+        },
+      );
+
+      if (response.statusCode != 200) {
+        throw Exception("서버 반영 실패");
+      }
+    } catch (e) {
+      // 롤백
+      setState(() {
+        isLiked = prevLiked;
+        likeCount = prevLikes;
+        widget.Post.likedByMe = prevLiked;
+        widget.Post.postLikeCount = prevLikes;
+      });
+      print("❌ 좋아요 토글 실패: $e");
+    }
   }
+
 
   void _addComment() {
     final text = _commentController.text.trim();

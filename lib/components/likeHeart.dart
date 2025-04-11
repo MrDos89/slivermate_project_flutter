@@ -55,29 +55,29 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.4).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOut),
     );
-
+    debugPrint("🧡 초기 하트 상태: postId ${widget.postId}, liked: $_isLiked");
     // 좋아요 상태 최신화 (선택적)
     // _fetchLikeStatus();
 
     if (widget.fetchInitialLikeStatus) {
-      // _fetchLikeStatus();
+      _fetchLikeStatus();
     }
   }
 
-  // Future<void> _fetchLikeStatus() async {
-  //   try {
-  //     final result = await LikeService.getLikeStatus(
-  //       postId: widget.postId,
-  //       userId: widget.userId,
-  //     );
-  //     setState(() {
-  //       _isLiked = result['isLiked'] == 1;
-  //       _likes = result['totalLikes'] ?? _likes;
-  //     });
-  //   } catch (e) {
-  //     print('❌ 초기 좋아요 상태 불러오기 실패: $e');
-  //   }
-  // }
+  Future<void> _fetchLikeStatus() async {
+    try {
+      final result = await LikeService.getLikeStatus(
+        postId: widget.postId,
+        userId: widget.userId,
+      );
+      setState(() {
+        _isLiked = result['isLiked'] == 1;
+        _likes = result['totalLikes'] ?? _likes;
+      });
+    } catch (e) {
+      print('❌ 초기 좋아요 상태 불러오기 실패: $e');
+    }
+  }
 
   Future<void> _onTapLike() async {
     final prevLiked = _isLiked;
@@ -91,18 +91,14 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
     try {
       final response = await dio.post(
         '/toggle',
-        queryParameters: {
+        data: {
           'post_id': widget.postId,
           'user_id': widget.userId,
         },
       );
 
       if (response.statusCode == 200) {
-        final result = response.data;
-        setState(() {
-          _isLiked = result['liked'] == true;
-          _likes = result['post_like_count'] ?? _likes;
-        });
+        // 서버에서는 단순 메시지 ("좋아요 완료")만 내려주므로 별도 파싱 불필요
 
         if (_isLiked) {
           _controller.forward().then((_) => _controller.reverse());

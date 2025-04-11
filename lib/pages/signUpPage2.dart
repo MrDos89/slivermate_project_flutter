@@ -104,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage2> {
   String telNumber = '';
   String email = '';
   int? regionId = 1;
-  int userType = 1;
+  int userType = 2;
 
   String? thumbnail;
 
@@ -131,22 +131,22 @@ class _SignUpPageState extends State<SignUpPage2> {
   }
 
   // [yj] 유저 타입1 최대 2개 제한 걸기
-  int getTotalParentCount() {
-    // userType 1(엄마), 2(아빠) 포함
-    return groupAccounts
-        .where((user) => user['userType'] == 1 || user['userType'] == 2)
-        .length;
-  }
+  // int getTotalParentCount() {
+  //   // userType 1(엄마), 2(아빠) 포함
+  //   return groupAccounts
+  //       .where((user) => user['userType'] == 1 || user['userType'] == 2)
+  //       .length;
+  // }
 
-  void _onUserTypeChanged(int? newType) {
-    if ((newType == 1 || newType == 2) && getTotalParentCount() >= 2) {
-      _showDialog('제한', '엄마/아빠 계정은 최대 2명까지만 등록할 수 있어요.');
-      return;
-    }
-    setState(() {
-      userType = newType ?? 1;
-    });
-  }
+  // void _onUserTypeChanged(int? newType) {
+  //   if ((newType == 1 || newType == 2) && getTotalParentCount() >= 2) {
+  //     _showDialog('제한', '엄마/아빠 계정은 최대 2명까지만 등록할 수 있어요.');
+  //     return;
+  //   }
+  //   setState(() {
+  //     userType = newType ?? 1;
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -353,12 +353,12 @@ class _SignUpPageState extends State<SignUpPage2> {
                       onChanged: (val) => setState(() => regionId = val),
                       onSaved: (val) => regionId = val ?? 0,
                     ),
-                    const SizedBox(height: 20),
-                    UserTypeDropdown(
-                      value: userType,
-                      onChanged: _onUserTypeChanged,
-                      onSaved: (val) => userType = val ?? 1,
-                    ),
+                    // const SizedBox(height: 20),
+                    // UserTypeDropdown(
+                    //   value: userType,
+                    //   onChanged: _onUserTypeChanged,
+                    //   onSaved: (val) => userType = val ?? 1,
+                    // ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       onPressed: () {
@@ -366,6 +366,7 @@ class _SignUpPageState extends State<SignUpPage2> {
                         if (_formKey.currentState?.validate() ?? false) {
                           // 검증 통과 시 입력값 저장
                           _formKey.currentState?.save();
+                          userType = 2;
 
                           // 디버깅 출력
                           debugPrint('회원가입 정보:');

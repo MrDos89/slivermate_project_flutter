@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 
 class LikeVo {
   final int likeId;
@@ -24,7 +25,6 @@ class LikeVo {
 
   Map<String, dynamic> toJson() {
     return {
-      'like_id': likeId,
       'post_id': postId,
       'user_id': userId,
       'upd_date': updDate?.toIso8601String(),
@@ -41,12 +41,12 @@ class LikeService {
     contentType: 'application/json',
   ));
 
-  /// ✅ 좋아요 토글 및 좋아요 수 반환
+  /// ✅ 좋아요 토글
   static Future<Map<String, dynamic>> toggleLike({required int postId, required int userId}) async {
     try {
       final response = await _dio.post(
         '/toggle',
-        queryParameters: {
+        data: {
           'post_id': postId,
           'user_id': userId,
         },
@@ -54,12 +54,13 @@ class LikeService {
 
       return Map<String, dynamic>.from(response.data);
     } catch (e) {
-      print('❌ toggleLike 에러: $e');
+      debugPrint('❌ toggleLike 에러: $e');
       rethrow;
     }
   }
 
-  /// ✅ 해당 유저가 좋아요 누른 게시물 ID 리스트 조회
+
+  /// ✅ 유저가 누른 postId 리스트 조회
   static Future<List<int>> getLikedPostIds(int userId) async {
     try {
       final response = await _dio.get(
@@ -75,6 +76,31 @@ class LikeService {
       return [];
     } catch (e) {
       print('❌ getLikedPostIds 에러: $e');
+      rethrow;
+    }
+  }
+
+  /// ✅ 좋아요 여부 + 총 좋아요 수 가져오기
+  static Future<Map<String, dynamic>> getLikeStatus({
+    required int postId,
+    required int userId,
+  }) async {
+    try {
+      final isLikedRes = await _dio.get('/is-liked', queryParameters: {
+        'post_id': postId,
+        'user_id': userId,
+      });
+
+      final countRes = await _dio.get('/count', queryParameters: {
+        'post_id': postId,
+      });
+
+      return {
+        'isLiked': isLikedRes.data == true ? 1 : 0,
+        'totalLikes': countRes.data ?? 0,
+      };
+    } catch (e) {
+      print('❌ getLikeStatus 에러: $e');
       rethrow;
     }
   }
