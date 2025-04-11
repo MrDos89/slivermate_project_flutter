@@ -57,33 +57,46 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   static String sessionCheckUrl =
       "http://$ec2IpAddress:$ec2Port/api/user/session";
 
+  //  로그아웃 API 엔드포인트 (실제 주소 필요에 따라 변경)
+  static String logoutUrl = "http://$ec2IpAddress:$ec2Port/api/user/logout";
+
   @override
   void initState() {
     super.initState();
-    // _initDioAndCheckLogin(); // 실제 서버 호출 부분은 주석 처리합니다.
+    _initDioAndCheckLogin(); // 실제 서버 호출 부분은 주석 처리합니다.
 
-    // 테스트 목적으로 더미 유저 데이터를 직접 설정 (추후 삭제)
-    setState(() {
-      currentUser = UserVo(
-        uid: 1,
-        groupId: 1,
-        userType: 11,
-        userName: "홍길동",
-        nickname: "더미 사용자",
-        userId: "dummyUser123",
-        userPassword: "password",
-        pinPassword: "0000",
-        telNumber: "010-1234-5678",
-        email: "dummy@example.com",
-        thumbnail: "",
-        regionId: 1,
-        registerDate: DateTime.now(),
-        isDeleted: false,
-        isAdmin: false,
-        updDate: DateTime.now(),
-      );
-      isLoading = false;
-    });
+    // // 테스트 목적으로 더미 유저 데이터를 직접 설정 (추후 삭제)
+    // setState(() {
+    //   currentUser = UserVo(
+    //     uid: 1,
+    //     groupId: 1,
+    //     userType: 11,
+    //     userName: "홍길동",
+    //     nickname: "더미 사용자",
+    //     userId: "dummyUser123",
+    //     userPassword: "password",
+    //     pinPassword: "0000",
+    //     telNumber: "010-1234-5678",
+    //     email: "dummy@example.com",
+    //     thumbnail: "",
+    //     regionId: 1,
+    //     registerDate: DateTime.now(),
+    //     isDeleted: false,
+    //     isAdmin: false,
+    //     updDate: DateTime.now(),
+    //   );
+    //   isLoading = false;
+    // });
+  }
+
+  Future<void> _initDioAndCheckLogin() async {
+    final appDocDir = await getApplicationDocumentsDirectory();
+    cookieJar = PersistCookieJar(
+      storage: FileStorage("${appDocDir.path}/.cookies/"),
+    );
+    dio.interceptors.add(CookieManager(cookieJar));
+
+    await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
   }
 
   Future<void> checkLoginStatus() async {
@@ -106,19 +119,27 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     }
   }
 
+  // 로그아웃 시 API 호출 및 쿠키 삭제 구현 (GET 방식)
   Future<void> logout() async {
     try {
-      await cookieJar.deleteAll();
-      setState(() {
-        currentUser = null;
-        isLoading = true;
-      });
-      debugPrint("로그아웃 처리 완료");
-      Navigator.pushNamedAndRemoveUntil(
-        context,
-        '/loginPage',
-        (route) => false,
-      );
+      // 로그아웃 API 호출 (GET 방식)
+      final response = await dio.get(logoutUrl);
+      if (response.statusCode == 200) {
+        debugPrint("로그아웃 API 호출 성공");
+        // 로그아웃 성공 시 쿠키 삭제 및 상태 업데이트
+        await cookieJar.deleteAll();
+        setState(() {
+          currentUser = null;
+          isLoading = true;
+        });
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          '/loginPage',
+          (route) => false,
+        );
+      } else {
+        debugPrint("로그아웃 API 호출 실패: ${response.statusCode}");
+      }
     } catch (e) {
       debugPrint("로그아웃 중 오류 발생: $e");
     }
