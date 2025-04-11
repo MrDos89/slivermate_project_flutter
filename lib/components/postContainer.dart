@@ -141,7 +141,9 @@ Widget postContainer(
                               ),
                             ),
                             Text(
-                              "${regionMap[post.regionId]} · ${post.postCategoryId == 1 ? indoorHobbies[post.postSubCategoryId] : outdoorHobbies[post.postSubCategoryId]}",
+                                "${regionMap[post.regionId]} · ${post.postCategoryId == 1
+                                    ? indoorHobbies[post.postSubCategoryId] ?? '일상'
+                                    : outdoorHobbies[post.postSubCategoryId] ?? '일상'}",
                               style: const TextStyle(color: Colors.grey),
                             ),
                           ],
