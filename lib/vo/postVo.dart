@@ -109,7 +109,7 @@ class PostService {
 
   static Future<List<PostVo>> fetchPostData(int userId) async {
     try {
-      final response = await dio.get(apiEndpoint, queryParameters: {'user_Id': userId});  // userId를 쿼리 파라미터로 전달
+      final response = await dio.get(apiEndpoint, queryParameters: {'user_id': userId});  // userId를 쿼리 파라미터로 전달
 
       debugPrint(' [API 응답 성공] 상태 코드: ${response.statusCode}');
       debugPrint(' [API 응답 데이터]: ${response.data}');
@@ -140,7 +140,7 @@ class PostService {
   }
   static Future<List<PostVo>> fetchPostsWithLikes(int userId) async {
     try {
-      final response = await dio.get('$apiEndpoint/with-like', queryParameters: {'user_Id': userId});
+      final response = await dio.get('$apiEndpoint/with-like', queryParameters: {'user_id': userId});
       if (response.statusCode == 200) {
         final List<PostVo> posts = (response.data as List)
             .map((e) => PostVo.fromJson(e as Map<String, dynamic>))

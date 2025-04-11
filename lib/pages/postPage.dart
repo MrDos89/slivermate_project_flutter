@@ -83,6 +83,9 @@ class _PostPageState extends State<PostPage> {
   }
 
   Future<void> _refreshPostList() async {
+    final currentUser = Provider.of<UserProvider>(context, listen: false).user;
+    debugPrint("현재 로그인 유저 UID: ${currentUser?.uid}, 닉네임: ${currentUser?.nickname}");
+
     final userVo = Provider.of<UserProvider>(context, listen: false).user;
 
     if (userVo == null) {

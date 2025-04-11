@@ -5,6 +5,8 @@ import 'package:image/image.dart' as img;
 import 'package:dio/dio.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
 import 'package:slivermate_project_flutter/components/uploadPostImage.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 class PostWriterForm extends StatefulWidget {
   final int? clubId;
@@ -120,11 +122,12 @@ class _PostWriterFormState extends State<PostWriterForm> {
       }
 
       debugPrint("🖼️ 서버에 전송할 이미지 경로 리스트: $uploadedUrls");
+      final currentUser = Provider.of<UserProvider>(context, listen: false).user;
 
       final post = PostVo(
         postId: 0,
         regionId: 1,
-        postUserId: 1,
+        postUserId: currentUser!.uid,
         clubId: widget.clubId ?? 0,
         postCategoryId: 2,
         postSubCategoryId: selectedIdsForServer.first,
@@ -136,8 +139,8 @@ class _PostWriterFormState extends State<PostWriterForm> {
         postReportCount: 0,
         registerDate: DateTime.now(),
         comments: [],
-        userNickname: "",
-        userThumbnail: "",
+        userNickname: currentUser.nickname,
+        userThumbnail: currentUser.thumbnail,
         updDate: DateTime.now(),
         likedByMe: false,
       );
