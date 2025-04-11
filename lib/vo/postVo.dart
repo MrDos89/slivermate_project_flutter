@@ -63,7 +63,9 @@ class PostVo {
       postLikeCount: json['post_like_count'] ?? 0,
       postCommentCount: json['post_comment_count'] ?? 0,
       registerDate: parsedRegisterDate.toLocal(),
-      comments: json['comments'] ?? [],
+      comments: (json['comments'] as List<dynamic>?)
+          ?.map((e) => CommentVo.fromJson(e))
+          .toList() ?? [],
       isHidden: json['is_hidden'] ?? false,
       postReportCount: json['post_report_count'] ?? 0,
       updDate: DateTime.parse(json['upd_date']).toLocal(),
