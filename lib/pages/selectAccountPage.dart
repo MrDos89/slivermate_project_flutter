@@ -6,6 +6,8 @@ import 'package:dio/dio.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 class SelectAccountPage extends StatefulWidget {
   final List<UserVo> userList;
@@ -68,7 +70,12 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
 
       if (response.statusCode == 200) {
         final userData = UserVo.fromJson(response.data);
-        Navigator.pushReplacementNamed(context, '/post', arguments: userData);
+
+        // 로그인 유저 Provider에 저장
+        Provider.of<UserProvider>(context, listen: false).setUser(userData);
+
+        //이후 페이지로 이동
+        Navigator.pushReplacementNamed(context, '/main');
       } else {
         debugPrint('로그인에 실패하였습니다.: ${response.statusCode} 에러 발생');
       }
@@ -76,6 +83,7 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
       debugPrint('유저 그룹 로그인 중 오류 발생: $error');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

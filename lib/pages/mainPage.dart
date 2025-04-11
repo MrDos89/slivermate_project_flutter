@@ -26,6 +26,7 @@ class _MainPageState extends State<MainPage> {
   bool isLoading = false; //  로딩 상태 변수 추가
   bool isDebugMode = true; //  디버그 모드 추가 (true: 이미지, false: 영상)
   bool isTextVisible = true; //  "터치해주세요" 애니메이션 상태 변수
+  bool _hasNavigated = false;
 
   @override
   void initState() {
@@ -34,6 +35,28 @@ class _MainPageState extends State<MainPage> {
       _initializeVideo();
     }
     _startTextAnimation(); //  "터치해주세요" 애니메이션 시작
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_hasNavigated) return;
+
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+    debugPrint('[DEBUG] 현재 로그인 상태: ${userVo == null ? '로그인 안됨' : '로그인됨'}');
+
+    Future.microtask(() {
+      if (userVo == null) {
+        debugPrint('[DEBUG] /loginPage 페이지로 이동');
+        Navigator.of(context).pushReplacementNamed('/loginPage');
+      } else {
+        debugPrint('[DEBUG] /selectAccount 페이지로 이동 - 전달 데이터: ${userVo.userName}');
+        Navigator.of(context).pushReplacementNamed('/selectAccount', arguments: [userVo]);
+      }
+    });
+
+    _hasNavigated = true;
   }
 
   ///  "터치해주세요" 텍스트 깜빡이는 애니메이션
@@ -142,16 +165,6 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     final userVo = Provider.of<UserProvider>(context).user;
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      debugPrint('[DEBUG] 현재 로그인 상태: ${userVo == null ? '로그인 안됨' : '로그인됨'}');
-
-      if (userVo == null) {
-        Navigator.of(context).pushNamed('/loginPage');
-      } else {
-        Navigator.of(context).pushNamed('/selectAccount', arguments: [userVo]);
-      }
-    });
 
     return LoadingOverlay(
       isLoading: isLoading, //  로딩 중일 때 오버레이 표시
