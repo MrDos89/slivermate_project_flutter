@@ -7,6 +7,8 @@ import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:slivermate_project_flutter/components/postContainer.dart';
 import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 //  카테고리 ID를 문자열로 변환
 const Map<int, String> postCategoryId = {1: "실내", 2: "실외"};
@@ -81,19 +83,27 @@ class _PostPageState extends State<PostPage> {
   }
 
   Future<void> _refreshPostList() async {
-    final fetchPostList = await PostService.fetchPostData();
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+
+    if (userVo == null) {
+      debugPrint("유저 정보가 없습니다. 포스트를 불러올 수 없습니다.");
+      return;
+    }
+
+    final fetchPostList = await PostService.fetchPostData(userVo.uid);
 
     debugPrint(fetchPostList.toString());
-    await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌 나게 딜레이
+    await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌
 
     if (fetchPostList.isNotEmpty) {
       setState(() {
-        postList = fetchPostList; // 데이터가 정상적으로 오면 저장
+        postList = fetchPostList;
       });
     } else {
       debugPrint("포스트 리스트를 가져오지 못했습니다.");
     }
   }
+
 
   void _showCommentModal(BuildContext context, PostVo post) {
     final TextEditingController commentController = TextEditingController();
@@ -199,6 +209,8 @@ class _PostPageState extends State<PostPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userVo = Provider.of<UserProvider>(context).user;
+
     List<PostVo> filteredList =
         postList.where((post) {
           // bool isClubPost = post.clubId != 0;
@@ -326,7 +338,7 @@ class _PostPageState extends State<PostPage> {
                       });
                     },
                     onCommentTap: _showCommentModal,
-                    currentUserId: 1,
+                    currentUserId: userVo?.uid ?? 0,
                   ),
                 ),
               ],

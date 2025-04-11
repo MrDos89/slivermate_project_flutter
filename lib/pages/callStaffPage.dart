@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/vo/reportVo.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 class CallStaffPage extends StatefulWidget {
-  final UserVo? dummyUser;
-  const CallStaffPage({super.key, required this.dummyUser});
+  const CallStaffPage({super.key});
 
   @override
   _CallStaffPageState createState() => _CallStaffPageState();
@@ -32,9 +33,11 @@ class _CallStaffPageState extends State<CallStaffPage> {
       isCalling = true;
     });
 
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+
     // 신고 데이터 생성
     ReportVo report = ReportVo(
-      userId: 1, // TODO: 실제 로그인한 유저 ID로 변경
+      userId: userVo!.uid,// TODO: 실제 로그인한 유저 ID로 변경
       lessonId: 100, // TODO: 신고 대상 ID로 변경
       reportId: selectedReasonId!,
       reportContent: _detailsController.text.trim(), // 신고 내용 추가

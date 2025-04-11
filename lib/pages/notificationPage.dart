@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 class NotificationPage extends StatefulWidget {
-  final UserVo? userVo;
   final bool isEditing;
-  const NotificationPage({super.key, required this.userVo, required this.isEditing});
+  const NotificationPage({super.key, required this.isEditing});
 
   @override
   State<NotificationPage> createState() => _NotificationPageState();
@@ -53,13 +54,19 @@ class _NotificationPageState extends State<NotificationPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userVo = Provider.of<UserProvider>(context).user;
+
+    if (userVo == null) {
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
     // List<String> notifications = [
     //   " 동산 동아리에 가입되었습니다",
     //   " 결제가 완료되었습니다",
     //   " <청춘은바로지금> 동아리 정기 모임 날짜(8/20)까지 5일 남았습니다",
     // ];
     return MainLayout(
-      userVo: widget.userVo,
       child: Scaffold(
         appBar: HeaderPage(
           pageTitle: "알람 페이지",

@@ -5,14 +5,14 @@ import 'package:video_player/video_player.dart';
 import 'package:slivermate_project_flutter/widgets/LoadingOverlay.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'dart:async';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 class MainPage extends StatefulWidget {
-  final UserVo? dummyUser;
   // final UserVo? userVo;
   // final CategoryVo? categoryVo;
   const MainPage({
     super.key,
-    required this.dummyUser,
     // required this.userVo,
     // required this.categoryVo,
   });
@@ -34,13 +34,6 @@ class _MainPageState extends State<MainPage> {
       _initializeVideo();
     }
     _startTextAnimation(); //  "터치해주세요" 애니메이션 시작
-
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      print(
-        "[MainPage] dummyUser 확인: ${widget.dummyUser?.userName}, ${widget.dummyUser?.email}",
-        // "[MainPage] userVo 확인: \${widget.userVo?.userName}, \${widget.userVo?.email}",
-      );
-    });
   }
 
   ///  "터치해주세요" 텍스트 깜빡이는 애니메이션
@@ -66,39 +59,38 @@ class _MainPageState extends State<MainPage> {
             }
           })
           .catchError((e) {
-            print("비디오 로드 오류: $e");
+        debugPrint("비디오 로드 오류: $e");
           });
   }
 
   //  클릭 시 로그인 여부에 따라 다른 페이지로 이동
   void _onBackgroundTap() {
     if (!isDebugMode) {
-      _controller.dispose(); //  비디오 컨트롤러 해제
+      _controller.dispose(); // 비디오 컨트롤러 해제
     }
-    print('[DEBUG] 터치됨');
-    print('[DEBUG] 현재 로그인 상태: ${widget.dummyUser == null ? '로그인 안됨' : '로그인됨'}');
 
-    if (widget.dummyUser == null) {
-      print('[DEBUG] /loginPage 페이지로 이동');
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+
+    debugPrint('[DEBUG] 터치됨');
+    debugPrint('[DEBUG] 현재 로그인 상태: ${userVo == null ? '로그인 안됨' : '로그인됨'}');
+
+    if (userVo == null) {
+      debugPrint('[DEBUG] /loginPage 페이지로 이동');
       Navigator.of(context).pushNamed('/loginPage');
     } else {
-      print(
-        '[DEBUG] /selectAccountPage 페이지로 이동 - 전달 데이터: \${widget.dummyUser!.userName}',
-      );
-      Navigator.of(
-        context,
-      ).pushNamed('/selectAccountPage', arguments: [widget.dummyUser!]);
+      debugPrint('[DEBUG] /selectAccount 페이지로 이동 - 전달 데이터: ${userVo.userName}');
+      Navigator.of(context).pushNamed('/selectAccount', arguments: [userVo]);
     }
 
-    // if (widget.userVo == null) {
+    _navigateToCategory(); // 부드러운 페이드 인/아웃 효과 적용
+  }
+
+
+  // if (widget.userVo == null) {
     //   Navigator.of(context).pushNamed('/login');
     // } else {
     //   Navigator.of(context).pushNamed('/signUpPage2', arguments: widget.userVo);
     // }
-
-    _navigateToCategory(); //  부드러운 페이드 인/아웃 효과 적용
-  }
-
   void _navigateToCategory() async {
     setState(() {
       isLoading = true; // ✅ 로딩 활성화
@@ -143,12 +135,24 @@ class _MainPageState extends State<MainPage> {
 
   // 회원가입 버튼 클릭 시 동작
   void _onSignUpPressed() {
-    print('회원가입 버튼 클릭됨');
+    debugPrint('회원가입 버튼 클릭됨');
     Navigator.of(context).pushNamed('/signUpPage');
   }
 
   @override
   Widget build(BuildContext context) {
+    final userVo = Provider.of<UserProvider>(context).user;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      debugPrint('[DEBUG] 현재 로그인 상태: ${userVo == null ? '로그인 안됨' : '로그인됨'}');
+
+      if (userVo == null) {
+        Navigator.of(context).pushNamed('/loginPage');
+      } else {
+        Navigator.of(context).pushNamed('/selectAccount', arguments: [userVo]);
+      }
+    });
+
     return LoadingOverlay(
       isLoading: isLoading, //  로딩 중일 때 오버레이 표시
       child: Scaffold(

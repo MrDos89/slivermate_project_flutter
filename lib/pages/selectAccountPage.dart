@@ -68,7 +68,7 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
 
       if (response.statusCode == 200) {
         final userData = UserVo.fromJson(response.data);
-        Navigator.pushNamed(context, '/config', arguments: userData);
+        Navigator.pushReplacementNamed(context, '/post', arguments: userData);
       } else {
         debugPrint('로그인에 실패하였습니다.: ${response.statusCode} 에러 발생');
       }

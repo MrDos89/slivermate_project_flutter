@@ -6,6 +6,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 //  카테고리 ID를 문자열로 변환
 const Map<int, String> categoryNames = {1: "실내", 2: "실외"};
@@ -39,16 +41,14 @@ class IntroducePage extends StatefulWidget {
   LessonVo? lesson;
   int lessonCategory;
   int lessonSubCategory;
-  UserVo? userVo;
   bool hasPurchased = false;
 
   IntroducePage({
     super.key,
     required this.lessonCategory,
     required this.lessonSubCategory,
-    required this.userVo,
   }) {
-    print(
+    debugPrint(
       "IntroducePage 찍힌 카데고리 번호: (카테고리 ID: $lessonCategory, 취미 ID: $lessonSubCategory)",
     );
   }
@@ -69,9 +69,6 @@ class _IntroducePageState extends State<IntroducePage> {
       flags: const YoutubePlayerFlags(autoPlay: false),
     );
     fetchLessonData(); //  데이터 가져오기
-    print(
-      " IntroducePage initState() 실행됨. dummyUser: ${widget.userVo?.userName}, ${widget.userVo?.email}",
-    );
   }
 
   // [yj] lessonCategory와 lessonSubCategory가 설정된 후 API 호출
@@ -81,7 +78,7 @@ class _IntroducePageState extends State<IntroducePage> {
       widget.lessonSubCategory = subCategory;
     });
 
-    print(
+    debugPrint(
       " [카테고리 업데이트] lessonCategory: ${widget.lessonCategory}, lessonSubCategory: ${widget.lessonSubCategory}",
     );
 
@@ -104,12 +101,12 @@ class _IntroducePageState extends State<IntroducePage> {
       );
 
       if (fetchedLesson == null) {
-        print(" 강의 데이터를 가져오지 못함.");
+        debugPrint(" 강의 데이터를 가져오지 못함.");
         return;
       }
 
-      print(" 불러온 강의 정보: ${fetchedLesson.lessonName}");
-      print(" 영상 URL: ${fetchedLesson.lessonLecture}");
+      debugPrint(" 불러온 강의 정보: ${fetchedLesson.lessonName}");
+      debugPrint(" 영상 URL: ${fetchedLesson.lessonLecture}");
 
       String videoUrl = fetchedLesson.lessonLecture;
 
@@ -117,13 +114,13 @@ class _IntroducePageState extends State<IntroducePage> {
         lesson = fetchedLesson;
         if (videoUrl.isNotEmpty) {
           initializeYoutubePlayer(videoUrl);
-          print(" 강의 영상 로드 완료");
+          debugPrint(" 강의 영상 로드 완료");
         } else {
-          print(" 영상 URL이 없습니다!");
+          debugPrint(" 영상 URL이 없습니다!");
         }
       });
     } catch (e) {
-      print(" API 호출 중 에러 발생: $e");
+      debugPrint(" API 호출 중 에러 발생: $e");
     }
   }
 
@@ -145,13 +142,12 @@ class _IntroducePageState extends State<IntroducePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(
-      "[IntroducePage]  dummyUser 값: ${widget.userVo?.userName}, ${widget.userVo?.email}",
-    );
 
-    if (widget.userVo == null) {
+    final userVo = Provider.of<UserProvider>(context).user;
+
+    if (userVo == null) {
       return const Scaffold(
-        body: Center(child: CircularProgressIndicator()), // 데이터 로딩 중 표시
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 
@@ -167,7 +163,6 @@ class _IntroducePageState extends State<IntroducePage> {
         return MainLayout(
           showPaymentButton: lesson != null,
           lesson: lesson,
-          userVo: widget.userVo,
           child: Scaffold(
             backgroundColor: const Color(0xFFD6FFDC).withAlpha(128),
             appBar: AppBar(

@@ -10,6 +10,8 @@ import 'package:lottie/lottie.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 /// 결제수단 타입
 enum _ModalType { card, pay, phone, qr }
@@ -28,8 +30,7 @@ class _PaymentMethod {
 }
 
 class PurchasePage extends StatefulWidget {
-  final UserVo? userVo;
-  const PurchasePage({super.key, required this.userVo});
+  const PurchasePage({super.key});
 
   @override
   _PurchasePageState createState() => _PurchasePageState();
@@ -42,9 +43,6 @@ class _PurchasePageState extends State<PurchasePage> {
   @override
   void initState() {
     super.initState();
-    print(
-      " [PurchasePage initState()] dummyUser 값: ${widget.userVo?.userName}, ${widget.userVo?.email}",
-    );
     // fetchPurchaseData();
   }
 
@@ -53,7 +51,7 @@ class _PurchasePageState extends State<PurchasePage> {
     super.didChangeDependencies();
     final args = ModalRoute.of(context)?.settings.arguments;
 
-    print("purchasePage didChangeDependencies의 args: ${args.toString()}");
+    debugPrint("purchasePage didChangeDependencies의 args: ${args.toString()}");
 
     if (args != null && args is Map) {
       final lessonArgs = args["lesson"];
@@ -115,13 +113,23 @@ class _PurchasePageState extends State<PurchasePage> {
 
   /// 결제수단 선택 시 모달 띄우기
   void _openModal(_ModalType type) {
+
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+
+    if (userVo == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("로그인이 필요합니다.")),
+      );
+      return;
+    }
+
     switch (type) {
       case _ModalType.card:
         showDialog(
           context: context,
           builder:
               (_) => CreditCardModal(
-                dummyUser: widget.userVo!,
+                userVo: userVo,
                 lesson: lesson,
                 modelType: 1,
                 // totalPayment: totalPayment,
@@ -133,7 +141,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => PayModal(
-                dummyUser: widget.userVo!,
+                userVo: userVo,
                 lesson: lesson,
                 modelType: 2,
                 // totalPayment: totalPayment,
@@ -145,7 +153,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => EtcModal(
-                dummyUser: widget.userVo!,
+                userVo: userVo,
                 lesson: lesson,
                 modelType: 3,
                 // totalPayment: totalPayment,
@@ -156,7 +164,7 @@ class _PurchasePageState extends State<PurchasePage> {
           context: context,
           builder:
               (_) => EtcModal(
-                dummyUser: widget.userVo!,
+                userVo: userVo,
                 lesson: lesson,
                 modelType: 4,
                 // totalPayment: totalPayment,
@@ -168,8 +176,9 @@ class _PurchasePageState extends State<PurchasePage> {
 
   @override
   Widget build(BuildContext context) {
+    final userVo = Provider.of<UserProvider>(context).user;
+
     return MainLayout(
-      userVo: widget.userVo,
       child: Scaffold(
         appBar: AppBar(
           leading: null, //  뒤로가기 버튼 지우기

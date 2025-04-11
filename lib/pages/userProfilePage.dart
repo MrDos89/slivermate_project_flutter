@@ -246,7 +246,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           // 문의 버튼: CallStaffPage 모달창 띄움
           showDialog(
             context: context,
-            builder: (context) => CallStaffPage(dummyUser: currentUser),
+            builder: (context) => CallStaffPage(),
           );
         } else {
           _handleMenuButtonTap(text, context);

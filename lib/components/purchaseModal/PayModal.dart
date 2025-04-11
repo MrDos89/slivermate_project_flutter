@@ -8,11 +8,11 @@ class PayModal extends StatefulWidget {
   final LessonVo lesson;
   final int modelType;
   // final int totalPayment;
-  final UserVo dummyUser;
+  final UserVo userVo;
 
   const PayModal({
     Key? key,
-    required this.dummyUser,
+    required this.userVo,
     required this.lesson,
     required this.modelType,
     // required this.totalPayment,
@@ -30,7 +30,7 @@ class _PayModalState extends State<PayModal> {
   PurchaseVo get purchaseTotal {
     return PurchaseVo(
       sku: 0,
-      uid: widget.dummyUser!.uid,
+      uid: widget.userVo.uid,
       lessonId: widget.lesson.lessonId,
       modelType: widget.modelType,
       clubId: 0,
@@ -67,7 +67,7 @@ class _PayModalState extends State<PayModal> {
         arguments: {
           "lessonCategory": widget.lesson.lessonCategory,
           "lessonSubCategory": widget.lesson.lessonSubCategory,
-          "dummyUser": widget.dummyUser,
+          "userVo": widget.userVo,
         },
       );
 

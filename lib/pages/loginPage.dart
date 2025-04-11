@@ -8,6 +8,8 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -127,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
                   .map((e) => UserVo.fromJson(e as Map<String, dynamic>))
                   .toList();
           debugPrint("유저 그룹 파싱 완료 - ${userList.length}명"); //  준일로그추가
-          Navigator.pushNamed(context, '/selectAccount', arguments: userList);
+          Navigator.pushReplacementNamed(context, '/selectAccount', arguments: userList);
           // Navigator.pushNamed(context, '/selectAccountPage', arguments: userList,);
         } else {
           debugPrint("서버 응답이 리스트가 아님"); //  준일 로그추가
@@ -148,12 +150,15 @@ class _LoginPageState extends State<LoginPage> {
 
       if (response.statusCode == 200) {
         final user = UserVo.fromJson(response.data); // 준일 추가
-        print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
+
+        Provider.of<UserProvider>(context, listen: false).setUser(user);
+
+        debugPrint("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
       } else {
-        print("로그인되지 않음.");
+        debugPrint("로그인되지 않음.");
       }
     } catch (error) {
-      print('로그인 상태 확인 중 오류 발생: $error');
+      debugPrint('로그인 상태 확인 중 오류 발생: $error');
     }
   }
 

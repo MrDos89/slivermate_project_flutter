@@ -5,14 +5,14 @@ import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class EtcModal extends StatefulWidget {
+  final UserVo userVo;
   final LessonVo lesson;
   final int modelType;
   // final int totalPayment;
-  final UserVo dummyUser;
 
   const EtcModal({
     Key? key,
-    required this.dummyUser,
+    required this.userVo,
     required this.lesson,
     required this.modelType,
     // required this.totalPayment,
@@ -30,7 +30,7 @@ class _EtcModalState extends State<EtcModal> {
   PurchaseVo get purchaseTotal {
     return PurchaseVo(
       sku: 0,
-      uid: widget.dummyUser!.uid,
+      uid: widget.userVo.uid,
       lessonId: widget.lesson.lessonId,
       modelType: widget.modelType,
       clubId: 0,
@@ -67,7 +67,7 @@ class _EtcModalState extends State<EtcModal> {
         arguments: {
           "lessonCategory": widget.lesson.lessonCategory,
           "lessonSubCategory": widget.lesson.lessonSubCategory,
-          "dummyUser": widget.dummyUser,
+          "userVo": widget.userVo,
         },
       );
 

@@ -32,69 +32,40 @@ class LikeVo {
   }
 }
 
-
-// Api연결
 class LikeService {
-  static final Dio _dio = Dio();
+  static final Dio _dio = Dio(BaseOptions(
+    baseUrl: 'http://43.201.50.194:18090/api/like',
+    connectTimeout: const Duration(seconds: 5),
+    receiveTimeout: const Duration(seconds: 5),
+    sendTimeout: const Duration(seconds: 5),
+    contentType: 'application/json',
+  ));
 
-  /// 좋아요 추가/삭제 (toggle)
-  static Future<bool> toggleLike({required int postId, required int userId}) async {
+  /// ✅ 좋아요 토글 및 좋아요 수 반환
+  static Future<Map<String, dynamic>> toggleLike({required int postId, required int userId}) async {
     try {
       final response = await _dio.post(
-        'http://3.39.240.55:18090/api/like',
+        '/toggle',
         queryParameters: {
-          'postId': postId,
-          'userId': userId,
+          'post_id': postId,
+          'user_id': userId,
         },
       );
-      return response.data == 'liked';
+
+      return Map<String, dynamic>.from(response.data);
     } catch (e) {
       print('❌ toggleLike 에러: $e');
       rethrow;
     }
   }
 
-  /// 좋아요 상태 조회
-  static Future<Map<String, dynamic>> getLikeStatus({required int postId, required int userId}) async {
-    try {
-      final response = await _dio.get(
-        'http://3.39.240.55:18090/api/like/status',
-        queryParameters: {
-          'postId': postId,
-          'userId': userId,
-        },
-      );
-      return Map<String, dynamic>.from(response.data);
-    } catch (e) {
-      print('❌ getLikeStatus 에러: $e');
-      rethrow;
-    }
-  }
-
-  /// 좋아요 여부 확인 (단건)
-  static Future<bool> isLiked({required int postId, required int userId}) async {
-    try {
-      final response = await _dio.get(
-        'http://3.39.240.55:18090/api/like/check',
-        queryParameters: {
-          'postId': postId,
-          'userId': userId,
-        },
-      );
-      return response.data == true;
-    } catch (e) {
-      print('❌ isLiked 에러: $e');
-      rethrow;
-    }
-  }
-
-  /// 해당 유저가 좋아요 누른 게시물 ID 리스트 조회
+  /// ✅ 해당 유저가 좋아요 누른 게시물 ID 리스트 조회
   static Future<List<int>> getLikedPostIds(int userId) async {
     try {
       final response = await _dio.get(
-        'http://3.39.240.55:18090/api/like/checkAll',
+        '/checkAll',
         queryParameters: {
-          'userId': userId,
+          'user_id': userId,
         },
       );
       final data = response.data;

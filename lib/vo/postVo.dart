@@ -94,6 +94,7 @@ class PostVo {
       'comments': comments,
       'nickname': userNickname,
       'user_thumbnail': userThumbnail,
+      'liked_by_me': likedByMe,
       // 'upd_date': updDate.toIso8601String(),
     };
   }
@@ -106,40 +107,69 @@ class PostService {
   static final String apiEndpoint = "http://$ec2IpAddress:$ec2Port/api/post";
   static final Dio dio = Dio();
 
-  static Future<List<PostVo>> fetchPostData() async {
+  static Future<List<PostVo>> fetchPostData(int userId) async {
     try {
-      final response = await dio.get(apiEndpoint);
+      final response = await dio.get(apiEndpoint, queryParameters: {'userId': userId});  // userId를 쿼리 파라미터로 전달
 
       debugPrint(' [API 응답 성공] 상태 코드: ${response.statusCode}');
       debugPrint(' [API 응답 데이터]: ${response.data}');
 
       if (response.statusCode == 200 && response.data != null) {
         if (response.data is List && response.data.isNotEmpty) {
-          if (response.data is List) {
-            final List<dynamic> rawList = response.data;
+          final List<dynamic> rawList = response.data;
 
-            final List<PostVo> postList =
-                rawList
-                    .map(
-                      (item) => PostVo.fromJson(item as Map<String, dynamic>),
-                    )
-                    .toList();
+          final List<PostVo> postList = rawList
+              .map(
+                (item) => PostVo.fromJson(item as Map<String, dynamic>),
+          )
+              .toList();
 
-            return postList;
-          } else {
-            debugPrint('⚠ [응답이 List가 아님]');
-            return [];
-          }
+          return postList;
         } else {
-          return Future.value([]);
+          debugPrint('⚠ [응답이 List가 아님]');
+          return [];
         }
       } else {
         debugPrint('⚠ [서버 응답 이상] 코드: ${response.statusCode}');
-        return Future.value([]);
+        return [];
       }
     } catch (e) {
       debugPrint(' [API 요청 실패] 오류 발생: $e');
-      return Future.value([]);
+      return [];
+    }
+  }
+  static Future<List<PostVo>> fetchPostsWithLikes(int userId) async {
+    try {
+      final response = await dio.get('$apiEndpoint/with-like', queryParameters: {'userId': userId});
+      if (response.statusCode == 200) {
+        final List<PostVo> posts = (response.data as List)
+            .map((e) => PostVo.fromJson(e as Map<String, dynamic>))
+            .toList();
+        return posts;
+      } else {
+        throw Exception('Failed to load posts with likes');
+      }
+    } catch (e) {
+      print('Error fetching posts with likes: $e');
+      rethrow;
+    }
+  }
+
+  // 좋아요 토글하기
+  static Future<bool> toggleLike({required int postId, required int userId}) async {
+    try {
+      final response = await dio.patch(
+        '/updateCount',
+        data: {'post_id': postId, 'user_id': userId},
+      );
+      if (response.statusCode == 200) {
+        return response.data['liked'] == true;
+      } else {
+        throw Exception('Failed to toggle like');
+      }
+    } catch (e) {
+      print('Error toggling like: $e');
+      rethrow;
     }
   }
 }

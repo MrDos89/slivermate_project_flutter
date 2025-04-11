@@ -25,11 +25,20 @@ import 'package:slivermate_project_flutter/pages/newPostPage.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 // import 'package:slivermate_project_flutter/pages/paymentPage.dart';
 // import 'package:slivermate_project_flutter/pages/mainPage.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -42,25 +51,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     //  더미 유저 데이터 (19번 유저)
-    final UserVo dummyUser = UserVo(
-      uid: 19,
-      userName: "user1",
-      nickname: "User",
-      userId: "user1",
-      userPassword: "user1",
-      pinPassword: "1234", //
-      telNumber: "010-0055-1122",
-      email: "user1@naver.com",
-      thumbnail: "",
-      regionId: 1, // guId → regionId로 변경
-      // recommendUid: null,
-      registerDate: DateTime.now(),
-      isDeleted: false,
-      isAdmin: false,
-      updDate: DateTime.now(),
-      groupId: 1,
-      userType: 1,
-    );
+    // final UserVo dummyUser = UserVo(
+    //   uid: 19,
+    //   userName: "user1",
+    //   nickname: "User",
+    //   userId: "user1",
+    //   userPassword: "user1",
+    //   pinPassword: "1234", //
+    //   telNumber: "010-0055-1122",
+    //   email: "user1@naver.com",
+    //   thumbnail: "",
+    //   regionId: 1, // guId → regionId로 변경
+    //   // recommendUid: null,
+    //   registerDate: DateTime.now(),
+    //   isDeleted: false,
+    //   isAdmin: false,
+    //   updDate: DateTime.now(),
+    //   groupId: 1,
+    //   userType: 1,
+    // );
 
     return MaterialApp(
       title: 'Slivermate Project', //@dhkim - 가제
@@ -76,7 +85,6 @@ class MyApp extends StatelessWidget {
                 (context) => IntroducePage(
                   lessonCategory: args["lessonCategory"],
                   lessonSubCategory: args["lessonSubCategory"],
-                  userVo: args["dummyUser"],
                 ),
           );
         }
@@ -86,19 +94,19 @@ class MyApp extends StatelessWidget {
         "/":
             // (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
             (context) => ConfigPage(),
-        "/purchase": (context) => PurchasePage(userVo: dummyUser),
-        "/call": (context) => CallStaffPage(dummyUser: dummyUser),
+        "/purchase": (context) => PurchasePage(),
+        "/call": (context) => CallStaffPage(),
         "/notifications":
-            (context) => NotificationPage(userVo: dummyUser, isEditing: false),
+            (context) => NotificationPage(isEditing: false),
         "/config": (context) => ConfigPage(),
         "/userprofile": (context) => UserProfilePage(),
         // "/main":
         //     (context) => MainPage(dummyUser: dummyUser, categoryVo: categoryVo),
-        "/main": (context) => MainPage(dummyUser: dummyUser),
+        "/main": (context) => MainPage(),
         "/chat": (context) => ChatPage(),
         // "/post": (context) => PostPage(dummyPost: dummyPost),
         "/post": (context) => PostPage(),
-        "/category": (context) => CategoryPage(userVo: dummyUser),
+        "/category": (context) => CategoryPage(),
         "/club": (context) => ClubPage(),
         "/loginPage": (context) => LoginPage(),
         // "/loginPage": (context) {

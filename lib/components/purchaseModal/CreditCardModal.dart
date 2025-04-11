@@ -5,14 +5,14 @@ import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class CreditCardModal extends StatefulWidget {
-  final UserVo dummyUser;
+  final UserVo userVo;
   final LessonVo lesson; // 상품 목록
   final int modelType; // 결제수단
   // final int totalPayment; // 총 결제금액
 
   const CreditCardModal({
     Key? key,
-    required this.dummyUser,
+    required this.userVo,
     required this.lesson,
     required this.modelType,
     // required this.totalPayment,
@@ -32,7 +32,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
   PurchaseVo get purchaseTotal {
     return PurchaseVo(
       sku: 0,
-      uid: widget.dummyUser!.uid,
+      uid: widget.userVo.uid,
       lessonId: widget.lesson.lessonId,
       modelType: widget.modelType,
       clubId: 0,
@@ -78,7 +78,7 @@ class _CreditCardModalState extends State<CreditCardModal> {
         arguments: {
           "lessonCategory": widget.lesson.lessonCategory,
           "lessonSubCategory": widget.lesson.lessonSubCategory,
-          "dummyUser": widget.dummyUser,
+          "userVo": widget.userVo,
         },
       );
     }

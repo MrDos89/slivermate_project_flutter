@@ -12,7 +12,8 @@ import 'package:slivermate_project_flutter/vo/announceVo.dart';
 import 'package:slivermate_project_flutter/pages/announcementListPage.dart';
 import 'package:slivermate_project_flutter/vo/clubVo.dart';
 import 'package:slivermate_project_flutter/pages/addMeetingPage.dart';
-import 'package:dio/dio.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 final Map<int, List<AnnounceVo>> dummyClubSchedules = {
   1: [
@@ -111,7 +112,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
   ],
 };
 
-const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
+// const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
 
 // List<PostVo> dummyPostList = [
 //   PostVo(
@@ -168,7 +169,7 @@ const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
 // void _handleDecline(Map<String, dynamic> schedule) {
 //   schedule["attendingUsers"]?.remove(currentUser);
 // }
-const int currentUserId = 101; // 임시 모임장
+// const int currentUserId = 101; // 임시 모임장
 
 class ClubDetailPage extends StatefulWidget {
   final ClubVo clubVo;
@@ -195,7 +196,10 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
     setState(() => _isLoading = true);
 
     try {
-      final allPosts = await PostService.fetchPostData();
+      final userVo = Provider.of<UserProvider>(context, listen: false).user;
+      final userId = userVo?.uid ?? 0;
+
+      final allPosts = await PostService.fetchPostData(userId);
 
       final filtered = allPosts
           .where((post) => post.clubId == widget.clubVo.clubId)
@@ -210,6 +214,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       setState(() => _isLoading = false);
     }
   }
+
 
   Future<void> _refreshClubPosts() async {
     await fetchClubPosts(); // 게시글 다시 불러오기
@@ -350,6 +355,9 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   }
 
   Widget _buildTabContent() {
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+    final currentUserId = userVo?.uid ?? 0;
+
     switch (_selectedTabIndex) {
       case 0:
         return _buildIntroSection();
@@ -446,6 +454,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         return _buildScheduleSection(
           clubId: widget.clubVo.clubId,
           clubLeaderId: widget.clubVo.clubUserId,
+          currentUserId: currentUserId,
         );
       default:
         return const SizedBox.shrink();
@@ -530,6 +539,9 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userVo = Provider.of<UserProvider>(context).user;
+    final currentUserId = userVo?.uid ?? 0;
+
     return Stack(
       children: [
         MainLayout(
@@ -618,7 +630,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 }
 
 // 일정 탭 위젯
-Widget _buildScheduleSection({required int clubId, required int clubLeaderId}) {
+Widget _buildScheduleSection({required int clubId, required int clubLeaderId, required int currentUserId}) {
   final schedules = dummyClubSchedules[clubId] ?? [];
   final List<AnnounceVo> announcements =
       schedules.where((s) => s.isAnnounce).toList();

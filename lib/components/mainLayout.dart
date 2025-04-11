@@ -1,64 +1,36 @@
 import 'package:flutter/material.dart';
-// import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
+import 'package:provider/provider.dart'; // 반드시 필요
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 
 class MainLayout extends StatelessWidget {
   final Widget child;
-  final bool showPaymentButton; // 결제 버튼 활성화 여부
+  final bool showPaymentButton;
   final LessonVo? lesson;
-  final UserVo? userVo;
 
   const MainLayout({
     super.key,
     required this.child,
     this.showPaymentButton = false,
     this.lesson,
-    this.userVo,
   });
 
   @override
   Widget build(BuildContext context) {
-    print(
-      "[MainLayout build()]  dummyUser 값: ${userVo?.userName}, ${userVo?.email}",
+    final userVo = Provider.of<UserProvider>(context).user;
+
+    debugPrint(
+      "[MainLayout build()] 로그인 유저: ${userVo?.userId}, ${userVo?.uid}",
     );
 
     return Scaffold(
-      body: child, // 페이지 본문
-      bottomNavigationBar: _buildFooter(context), // 공통 푸터 자동 포함
+      body: child,
+      bottomNavigationBar: _buildFooter(context),
     );
   }
 
-  // void _showStaffCallModal(BuildContext context) {
-  //   showDialog(
-  //     context: context,
-  //     barrierDismissible: false, //  바깥 클릭으로 닫히지 않도록 설정
-  //     builder: (BuildContext context) {
-  //       return CallStaffPage(dummyUser: dummyUser!);
-  //     },
-  //   );
-  // }
-
-  //  공통 푸터 위젯
   Widget _buildFooter(BuildContext context) {
-    // void _showComingSoonDialog() {
-    //   showDialog(
-    //     context: context,
-    //     builder: (BuildContext context) {
-    //       return AlertDialog(
-    //         title: const Text("준비중입니다"),
-    //         content: const Text("해당 기능은 현재 준비 중입니다."),
-    //         actions: [
-    //           TextButton(
-    //             onPressed: () => Navigator.of(context).pop(),
-    //             child: const Text("확인"),
-    //           ),
-    //         ],
-    //       );
-    //     },
-    //   );
-    // }
-
     return Container(
       height: 70,
       padding: const EdgeInsets.symmetric(vertical: 10),
@@ -66,90 +38,25 @@ class MainLayout extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          IconButton(
-            icon: const Icon(Icons.person, color: Color(0xFF229F3B), size: 30),
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context); // 현재 스택에서 빠지고
-              }
-              Navigator.pushNamed(
-                context,
-                "/userprofile",
-                arguments: userVo, // 유저 정보도 같이 넘김
-              );
-            },
-            tooltip: "마이페이지",
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.chat_bubble,
-              color: Color(0xFF229F3B),
-              size: 30,
-            ),
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context); // 현재 스택에서 빠지고
-              }
-              Navigator.pushNamed(
-                context,
-                "/chat",
-                arguments: userVo, // 유저 정보도 같이 넘김
-              );
-            },
-            tooltip: "채팅",
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.description,
-              color: Color(0xFF229F3B),
-              size: 30,
-            ),
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context); // 현재 스택에서 빠지고
-              }
-              Navigator.pushNamed(
-                context,
-                "/post",
-                arguments: userVo, // 유저 정보도 같이 넘김
-              );
-            },
-            tooltip: "자유게시판",
-          ),
-          IconButton(
-            icon: const Icon(
-              Icons.menu_book,
-              color: Color(0xFF229F3B),
-              size: 30,
-            ),
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context); // 현재 스택에서 빠지고
-              }
-              Navigator.pushNamed(
-                context,
-                "/category",
-                arguments: userVo, // 유저 정보도 같이 넘김
-              );
-            },
-            tooltip: "강의페이지",
-          ),
-          IconButton(
-            icon: const Icon(Icons.groups, color: Color(0xFF229F3B), size: 30),
-            onPressed: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context); // 현재 스택에서 빠지고
-              }
-              Navigator.pushNamed(
-                context,
-                "/club",
-                arguments: userVo, // 유저 정보도 같이 넘김
-              );
-            },
-            tooltip: "모임페이지",
-          ),
+          _buildIconButton(context, Icons.person, "마이페이지", "/userprofile"),
+          _buildIconButton(context, Icons.chat_bubble, "채팅", "/chat"),
+          _buildIconButton(context, Icons.description, "자유게시판", "/post"),
+          _buildIconButton(context, Icons.menu_book, "강의페이지", "/category"),
+          _buildIconButton(context, Icons.groups, "모임페이지", "/club"),
         ],
       ),
+    );
+  }
+
+  Widget _buildIconButton(
+      BuildContext context, IconData icon, String tooltip, String route) {
+    return IconButton(
+      icon: Icon(icon, color: Color(0xFF229F3B), size: 30),
+      onPressed: () {
+        if (Navigator.canPop(context)) Navigator.pop(context);
+        Navigator.pushNamed(context, route);
+      },
+      tooltip: tooltip,
     );
   }
 }

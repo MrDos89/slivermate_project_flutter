@@ -3,13 +3,16 @@ import 'package:slivermate_project_flutter/pages/purchasePage.dart';
 import 'package:slivermate_project_flutter/vo/lessonVo.dart';
 
 import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
 
 class CheckCardModal extends StatelessWidget {
+  final UserVo userVo;
   final LessonVo lesson;
   final PurchaseVo totalPurchases;
 
   const CheckCardModal({
     Key? key,
+    required this.userVo,
     required this.lesson,
     required this.totalPurchases,
   }) : super(key: key);
