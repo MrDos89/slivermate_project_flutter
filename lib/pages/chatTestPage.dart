@@ -47,6 +47,7 @@ class _ChatTestPageState extends State<_ChatTestPage> {
 
   bool isLoggedIn = false;
   UserVo? user;
+  final clubId = '10'; // 임시 코드
 
   final TextEditingController _controller = TextEditingController();
   late WebSocketChannel _channel;
@@ -58,10 +59,8 @@ class _ChatTestPageState extends State<_ChatTestPage> {
     super.initState();
     String slivermateChat = dotenv.get("SLIVERMATECHAT");
 
-    final channelId = '1-8-10';
-
     final wsUrl =
-        "wss://$slivermateChat.execute-api.ap-northeast-2.amazonaws.com/production/?channel=$channelId";
+        "wss://$slivermateChat.execute-api.ap-northeast-2.amazonaws.com/production/?channel=$clubId";
 
     _channel = WebSocketChannel.connect(Uri.parse(wsUrl));
 
@@ -74,6 +73,8 @@ class _ChatTestPageState extends State<_ChatTestPage> {
     //     "wss://$slivermateChat.execute-api.ap-northeast-2.amazonaws.com/production/",
     //   ),
     // );
+
+    checkLoginStatus();
 
     _channel.stream.listen((message) {
       try {
@@ -99,8 +100,6 @@ class _ChatTestPageState extends State<_ChatTestPage> {
       }
     });
 
-    checkLoginStatus();
-
     // 일정 간격으로 guest 메시지 자동 추가
     // _guestMessageTimer = Timer.periodic(const Duration(seconds: 60), (timer) {
     //   setState(() {
@@ -123,9 +122,11 @@ class _ChatTestPageState extends State<_ChatTestPage> {
         user = UserVo.fromJson(response.data);
       } else {
         print("로그인되지 않음.");
+        // Navigator.pushNamed(context, "/loginPage");
       }
     } catch (error) {
       print('로그인 상태 확인 중 오류 발생: $error');
+      // Navigator.pushNamed(context, "/loginPage");
     }
   }
 
