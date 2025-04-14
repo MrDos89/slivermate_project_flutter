@@ -4,12 +4,14 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:slivermate_project_flutter/vo/clubVo.dart';
 import 'package:slivermate_project_flutter/vo/userVo.dart';
 import 'package:slivermate_project_flutter/vo/announceVo.dart';
+import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:slivermate_project_flutter/pages/paymentPage.dart';
 
 class MeetingSchedulePage extends StatefulWidget {
   final UserVo currentUser;
@@ -27,6 +29,7 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
   List<UserVo> familyMembers = [];
   List<ClubVo> joinedClubs = [];
   Map<String, dynamic>? purchaseData;
+  List<AnnounceVo> allAnnouncements = [];
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
@@ -37,78 +40,11 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
   late String userGroupUrl;
   late String joinedClubsUrl;
   late String purchaseUrl;
+  late String announcementUrl;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
-
-  final Map<DateTime, List<AnnounceVo>> dummySchedules = {
-    DateTime(2025, 4, 10): [
-      AnnounceVo(
-        title: "4월 정기 등산",
-        date: "2025.04.10 (목)",
-        time: "오전 9시",
-        location: "북한산 입구",
-        description: "서울 등산 동호회 4월 정기 모임입니다.",
-        meetingPrice: "5,000원",
-        attendingCount: 12,
-        type: 2,
-        updDate: DateTime(2025, 4, 1),
-      ),
-    ],
-    DateTime(2025, 4, 14): [
-      AnnounceVo(
-        title: "스터디 모임",
-        date: "2025.04.14 (월)",
-        time: "오후 7시",
-        location: "강남역 3번 출구",
-        description: "Flutter 스터디 모임입니다.",
-        meetingPrice: "0원",
-        attendingCount: 8,
-        type: 1,
-        updDate: DateTime(2025, 4, 7),
-      ),
-    ],
-    DateTime(2025, 4, 18): [
-      AnnounceVo(
-        title: "영화 관람",
-        date: "2025.04.18 (금)",
-        time: "오후 2시",
-        location: "CGV 용산",
-        description: "가족과 함께하는 영화 관람 모임.",
-        meetingPrice: "12,000원",
-        attendingCount: 5,
-        type: 2,
-        updDate: DateTime(2025, 4, 9),
-      ),
-    ],
-    DateTime(2025, 4, 20): [
-      AnnounceVo(
-        title: "요가 클래스",
-        date: "2025.04.20 (일)",
-        time: "오전 10시",
-        location: "동네 체육관",
-        description: "어르신을 위한 요가 클래스.",
-        meetingPrice: "3,000원",
-        attendingCount: 10,
-        type: 1,
-        updDate: DateTime(2025, 4, 11),
-      ),
-    ],
-    DateTime(2025, 4, 22): [
-      AnnounceVo(
-        title: "가족 나들이",
-        date: "2025.04.22 (화)",
-        time: "오전 11시",
-        location: "서울숲",
-        description: "가족 봄 소풍입니다.",
-        meetingPrice: "도시락 지참",
-        attendingCount: 6,
-        type: 2,
-        updDate: DateTime(2025, 4, 15),
-      ),
-    ],
-  };
 
   List<AnnounceVo> selectedSchedules = [];
 
@@ -119,6 +55,7 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
     userGroupUrl = "http://$ec2IpAddress:$ec2Port/api/usergroup";
     joinedClubsUrl = "http://$ec2IpAddress:$ec2Port/api/club";
     purchaseUrl = "http://$ec2IpAddress:$ec2Port/api/purchase";
+    announcementUrl = "http://$ec2IpAddress:$ec2Port/api/announcement";
 
     _initDio().then((_) => _fetchAllData());
   }
@@ -138,6 +75,7 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
       await _fetchAllClubs();
       await _fetchFamilyMembers();
       await _fetchJoinedClubs();
+      await _fetchAnnouncements();
     } catch (e) {
       debugPrint("오류 발생: $e");
     } finally {
@@ -200,17 +138,28 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
     }
   }
 
+  Future<void> _fetchAnnouncements() async {
+    try {
+      final response = await dio.get(announcementUrl);
+      if (response.statusCode == 200 && response.data is List) {
+        final list = response.data as List;
+        allAnnouncements = list.map((e) => AnnounceVo.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint("공지/일정 정보 호출 실패: $e");
+    }
+  }
+
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
     setState(() {
       _selectedDay = selectedDay;
       _focusedDay = focusedDay;
       selectedSchedules =
-          dummySchedules.entries
-              .firstWhere(
-                (entry) => isSameDay(entry.key, selectedDay),
-                orElse: () => MapEntry(DateTime(2000), <AnnounceVo>[]),
-              )
-              .value;
+          allAnnouncements.where((a) {
+            return DateTime.parse(a.date).year == selectedDay.year &&
+                DateTime.parse(a.date).month == selectedDay.month &&
+                DateTime.parse(a.date).day == selectedDay.day;
+          }).toList();
     });
   }
 
@@ -304,16 +253,47 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children:
           selectedSchedules.map((schedule) {
+            final bool isPaid =
+                purchaseData != null && purchaseData!['is_paid'] == true;
             return Card(
               elevation: 2,
               margin: const EdgeInsets.symmetric(vertical: 8),
-              child: ListTile(
-                title: Text(schedule.title),
-                subtitle: Text(
-                  "${schedule.date} | ${schedule.time}\n${schedule.location}",
-                ),
-                trailing: Text(schedule.meetingPrice),
-                isThreeLine: true,
+              child: Column(
+                children: [
+                  ListTile(
+                    title: Text(schedule.title),
+                    subtitle: Text(
+                      "${schedule.date} | ${schedule.time}\n${schedule.location}",
+                    ),
+                    trailing: Text(schedule.meetingPrice),
+                    isThreeLine: true,
+                  ),
+                  if (!isPaid)
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 12.0, right: 12.0),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => PaymentPage(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.green,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ),
+                          ),
+                          child: const Text("결제하기"),
+                        ),
+                      ),
+                    ),
+                ],
               ),
             );
           }).toList(),
