@@ -30,6 +30,7 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
   List<ClubVo> joinedClubs = [];
   Map<String, dynamic>? purchaseData;
   List<AnnounceVo> allAnnouncements = [];
+  Set<DateTime> markedDates = {}; // ✅ 달력에 표시할 날짜
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
@@ -144,6 +145,15 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
       if (response.statusCode == 200 && response.data is List) {
         final list = response.data as List;
         allAnnouncements = list.map((e) => AnnounceVo.fromJson(e)).toList();
+        // ✅ 참석한 일정만 달력에 표시될 날짜로 저장
+        markedDates =
+            allAnnouncements
+                .where(
+                  (a) =>
+                      a.memberList.contains(widget.currentUser.uid.toString()),
+                )
+                .map((a) => DateTime.parse(a.date))
+                .toSet();
       }
     } catch (e) {
       debugPrint("공지/일정 정보 호출 실패: $e");
@@ -158,7 +168,8 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
           allAnnouncements.where((a) {
             return DateTime.parse(a.date).year == selectedDay.year &&
                 DateTime.parse(a.date).month == selectedDay.month &&
-                DateTime.parse(a.date).day == selectedDay.day;
+                DateTime.parse(a.date).day == selectedDay.day &&
+                a.memberList.contains(widget.currentUser.uid.toString());
           }).toList();
     });
   }
@@ -227,20 +238,32 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
         formatButtonVisible: true,
         titleCentered: true,
       ),
-      calendarStyle: const CalendarStyle(
-        markerDecoration: BoxDecoration(
+      calendarStyle: CalendarStyle(
+        markerDecoration: const BoxDecoration(
           color: Colors.green,
           shape: BoxShape.circle,
         ),
-        weekendTextStyle: TextStyle(color: Colors.red),
-        selectedDecoration: BoxDecoration(
-          color: Colors.green,
-          shape: BoxShape.circle,
-        ),
-        todayDecoration: BoxDecoration(
+        markersMaxCount: 1,
+        markersAlignment: Alignment.bottomCenter,
+        todayDecoration: const BoxDecoration(
           color: Colors.orange,
           shape: BoxShape.circle,
         ),
+        selectedDecoration: const BoxDecoration(
+          color: Colors.green,
+          shape: BoxShape.circle,
+        ),
+      ),
+      calendarBuilders: CalendarBuilders(
+        markerBuilder: (context, day, events) {
+          if (markedDates.any((d) => isSameDay(d, day))) {
+            return const Positioned(
+              bottom: 1,
+              child: Icon(Icons.circle, size: 8, color: Colors.green),
+            );
+          }
+          return null;
+        },
       ),
     );
   }
@@ -254,13 +277,14 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
       children:
           selectedSchedules.map((schedule) {
             final bool isPaid =
-                purchaseData != null && purchaseData!['is_paid'] == true;
+                purchaseData != null && purchaseData!["is_paid"] == true;
             return Card(
               elevation: 2,
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: Column(
                 children: [
                   ListTile(
+                    leading: const Icon(Icons.group),
                     title: Text(schedule.title),
                     subtitle: Text(
                       "${schedule.date} | ${schedule.time}\n${schedule.location}",
@@ -285,11 +309,17 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.green,
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
+                              horizontal: 20,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
                             ),
                           ),
-                          child: const Text("결제하기"),
+                          child: const Text(
+                            "결제하기",
+                            style: TextStyle(fontSize: 16),
+                          ),
                         ),
                       ),
                     ),

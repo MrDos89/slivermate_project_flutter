@@ -26,6 +26,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "5,000원",
       attendingCount: 12,
       type: 2,
+      memberList: ["10", "15"],
       updDate: DateTime.parse("2025-04-01"),
     ),
     AnnounceVo(
@@ -37,6 +38,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "무료",
       attendingCount: 5,
       type: 2,
+      memberList: ["10", "11"],
       updDate: DateTime.parse("2025-04-02"),
     ),
     AnnounceVo(
@@ -48,6 +50,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      memberList: [],
       updDate: DateTime.parse("2025-04-03"),
     ),
     AnnounceVo(
@@ -59,9 +62,9 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      memberList: [],
       updDate: DateTime.parse("2025-04-05"),
     ),
-
     AnnounceVo(
       title: "신규 멤버 모집 안내",
       date: "2025.05.05 (일)",
@@ -71,9 +74,9 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      memberList: [],
       updDate: DateTime.parse("2025-04-06"),
     ),
-
     AnnounceVo(
       title: "회비 납부 안내",
       date: "2025.05.10 (금)",
@@ -83,9 +86,9 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      memberList: [],
       updDate: DateTime.parse("2025-04-07"),
     ),
-
     AnnounceVo(
       title: "안전 수칙 안내",
       date: "2025.05.12 (일)",
@@ -95,9 +98,9 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      memberList: [],
       updDate: DateTime.parse("2025-04-08"),
     ),
-
     AnnounceVo(
       title: "장비 대여 관련 공지",
       date: "2025.05.15 (수)",
@@ -107,6 +110,7 @@ final Map<int, List<AnnounceVo>> dummyClubSchedules = {
       meetingPrice: "",
       attendingCount: 0,
       type: 1,
+      memberList: [],
       updDate: DateTime.parse("2025-04-09"),
     ),
   ],
@@ -201,9 +205,10 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 
       final allPosts = await PostService.fetchPostData(userId);
 
-      final filtered = allPosts
-          .where((post) => post.clubId == widget.clubVo.clubId)
-          .toList();
+      final filtered =
+          allPosts
+              .where((post) => post.clubId == widget.clubVo.clubId)
+              .toList();
 
       setState(() {
         clubPosts = filtered;
@@ -214,7 +219,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       setState(() => _isLoading = false);
     }
   }
-
 
   Future<void> _refreshClubPosts() async {
     await fetchClubPosts(); // 게시글 다시 불러오기
@@ -323,7 +327,6 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
     );
   }
 
-
   Widget _buildTabButton(String title, int index) {
     final isSelected = _selectedTabIndex == index;
 
@@ -385,7 +388,8 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         );
       case 2:
         // final clubId = widget.clubVo.clubId;
-        final imagePosts = clubPosts.where((p) => p.postImages!.isNotEmpty).toList();
+        final imagePosts =
+            clubPosts.where((p) => p.postImages!.isNotEmpty).toList();
 
         if (imagePosts.isEmpty) {
           return SizedBox(
@@ -631,7 +635,11 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
 }
 
 // 일정 탭 위젯
-Widget _buildScheduleSection({required int clubId, required int clubLeaderId, required int currentUserId}) {
+Widget _buildScheduleSection({
+  required int clubId,
+  required int clubLeaderId,
+  required int currentUserId,
+}) {
   final schedules = dummyClubSchedules[clubId] ?? [];
   final List<AnnounceVo> announcements =
       schedules.where((s) => s.isAnnounce).toList();
@@ -749,6 +757,7 @@ Widget _buildScheduleSection({required int clubId, required int clubLeaderId, re
                                         time: event.time,
                                         location: event.location,
                                         description: event.description,
+                                        memberList: event.memberList,
                                         meetingPrice: event.meetingPrice,
                                         attendingCount:
                                             event.attendingCount + 1,
@@ -810,6 +819,7 @@ Widget _buildScheduleSection({required int clubId, required int clubLeaderId, re
                                         time: event.time,
                                         location: event.location,
                                         description: event.description,
+                                        memberList: event.memberList,
                                         meetingPrice: event.meetingPrice,
                                         attendingCount:
                                             (event.attendingCount > 0)
@@ -1114,5 +1124,3 @@ Widget _buildScheduleSection({required int clubId, required int clubLeaderId, re
     },
   );
 }
-
-
