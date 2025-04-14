@@ -94,7 +94,7 @@ class _PostPageState extends State<PostPage> {
       return;
     }
 
-    final fetchPostList = await PostService.fetchPostData(userVo.uid);
+    final fetchPostList = await PostService.fetchPostsWithLikes(userVo.uid);
 
     debugPrint(fetchPostList.toString());
     await Future.delayed(const Duration(seconds: 1)); // 리프레시 느낌
