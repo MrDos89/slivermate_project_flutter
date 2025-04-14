@@ -4,6 +4,8 @@ import 'package:slivermate_project_flutter/vo/commentVo.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
 import 'package:dio/dio.dart';
 
 // const String defaultUserThumbnail = "https://yourdomain.com/default_profile.png"; // 기본 이미지 URL
@@ -106,22 +108,41 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
 
-  void _addComment() {
+  void _addComment() async {
     final text = _commentController.text.trim();
-    if (text.isNotEmpty) {
-      setState(() {
-        widget.Post.comments.add(
-          CommentVo(
-            userThumbnail: "", // 기본 이미지로 처리
-            userNickname: "현재 사용자",
-            commentText: text,
-            commentDate: DateTime.now(),
-          ),
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+
+    if (text.isNotEmpty && userVo != null) {
+      final success = await CommentService.addComment(
+        postId: widget.Post.postId,
+        userId: userVo.uid,
+        clubId: widget.Post.clubId,
+        commentText: text,
+      );
+
+      if (success) {
+        setState(() {
+          widget.Post.comments.add(
+            CommentVo(
+              userThumbnail: userVo.thumbnail.trim().isEmpty
+                  ? defaultUserThumbnail
+                  : userVo.thumbnail,
+              userNickname: userVo.nickname,
+              commentText: text,
+              commentDate: DateTime.now(),
+            ),
+          );
+          _commentController.clear();
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("❌ 댓글 등록 실패")),
         );
-        _commentController.clear();
-      });
+      }
     }
   }
+
+
 
   // String defaultUserThumbnail = "https://cdn.pixabay.com/photo/2023/09/13/07/29/ghost-8250317_640.png";
 

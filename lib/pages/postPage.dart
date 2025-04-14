@@ -109,8 +109,12 @@ class _PostPageState extends State<PostPage> {
   }
 
 
-  void _showCommentModal(BuildContext context, PostVo post) {
+  void _showCommentModal(BuildContext context, PostVo post) async {
     final TextEditingController commentController = TextEditingController();
+
+    // ✅ 댓글 새로 불러오기
+    final updatedComments = await CommentService.fetchComments(post.postId);
+    post.comments = updatedComments;
 
     showModalBottomSheet(
       context: context,
@@ -129,52 +133,37 @@ class _PostPageState extends State<PostPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '댓글',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                    const Text("댓글", style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                    const Divider(),
+                    Expanded(
+                      child: (post.comments ?? []).isEmpty
+                          ? const Center(child: Text("아직 등록된 댓글이 없습니다."))
+                          : ListView.builder(
+                        itemCount: post.comments.length,
+                        itemBuilder: (context, index) {
+                          final comment = post.comments[index];
+                          return ListTile(
+                            leading: CircleAvatar(
+                              radius: 16,
+                              backgroundImage: NetworkImage(
+                                comment.userThumbnail.trim().isEmpty
+                                    ? defaultUserThumbnail
+                                    : comment.userThumbnail,
+                              ),
+                            ),
+                            title: Text(
+                              comment.userNickname,
+                              style: const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            subtitle: Text(comment.commentText),
+                            trailing: Text(
+                              "${comment.commentDate.hour}:${comment.commentDate.minute.toString().padLeft(2, '0')}",
+                              style: const TextStyle(fontSize: 12, color: Colors.grey),
+                            ),
+                          );
+                        },
                       ),
                     ),
-                    const Divider(),
-
-                    Expanded(
-                      child:
-                          post.comments.isEmpty
-                              ? const Center(child: Text("아직 등록된 댓글이 없습니다."))
-                              : ListView.builder(
-                                itemCount: post.comments.length,
-                                itemBuilder: (context, index) {
-                                  final comment = post.comments[index];
-                                  return ListTile(
-                                    leading: CircleAvatar(
-                                      radius: 16,
-                                      backgroundImage: NetworkImage(
-                                        comment.userThumbnail.trim().isEmpty
-                                            ? defaultUserThumbnail
-                                            : comment.userThumbnail,
-                                      ),
-                                    ),
-                                    title: Text(
-                                      comment.userNickname,
-                                      style: const TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    subtitle: Text(comment.commentText),
-                                    trailing: Text(
-                                      "${comment.commentDate.hour}:${comment.commentDate.minute.toString().padLeft(2, '0')}",
-                                      style: const TextStyle(
-                                        fontSize: 12,
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                  );
-                                },
-                              ),
-                    ),
-
-                    // 댓글 입력 필드
                     TextField(
                       controller: commentController,
                       decoration: InputDecoration(
@@ -193,19 +182,17 @@ class _PostPageState extends State<PostPage> {
                               );
 
                               if (success) {
-                                final updatedComments = await CommentService.fetchComments(post.postId);
+                                final newComments = await CommentService.fetchComments(post.postId);
 
                                 setModalState(() {
-                                  post.comments.clear();
-                                  post.comments.addAll(updatedComments);
+                                  post.comments = newComments;
                                   commentController.clear();
                                 });
 
-                                setState(() {}); // 외부 리스트도 갱신
+                                setState(() {}); // 외부 리스트 갱신
                               } else {
-                                debugPrint('❌ 댓글 등록 실패');
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('댓글 등록에 실패했습니다.')),
+                                  const SnackBar(content: Text("댓글 등록에 실패했습니다.")),
                                 );
                               }
                             }
@@ -396,10 +383,6 @@ class _PostPageState extends State<PostPage> {
 String getTimeAgo(DateTime date) {
   final now = DateTime.now().toLocal();
   final diff = now.difference(date);
-
-  debugPrint("🕓 현재 시간: $now");
-  debugPrint("🕒 등록 시간: $date");
-  debugPrint("⏱️ 차이: ${diff.inMinutes}분");
 
   if (diff.inMinutes < 0) return "방금 전";
 

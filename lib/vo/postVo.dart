@@ -17,7 +17,7 @@ class PostVo {
   final bool isHidden;
   final int postReportCount;
   final DateTime registerDate;
-  final List<CommentVo> comments;
+  List<CommentVo> comments;
 
   final String userNickname;
   final String userThumbnail;
@@ -47,9 +47,7 @@ class PostVo {
 
   //  JSON → LessonVO 변환
   factory PostVo.fromJson(Map<String, dynamic> json) {
-    debugPrint('📦 서버에서 받은 register_date: ${json['register_date']}');
     final parsedRegisterDate = DateTime.parse(json['register_date']).toUtc().toLocal();
-    debugPrint('🕓 최종 파싱된 registerDate (Local): $parsedRegisterDate');
 
     return PostVo(
       postId: json['post_id'] ?? 0,
@@ -63,9 +61,11 @@ class PostVo {
       postLikeCount: json['post_like_count'] ?? 0,
       postCommentCount: json['post_comment_count'] ?? 0,
       registerDate: parsedRegisterDate,
-      comments: (json['comments'] as List<dynamic>?)
-          ?.map((e) => CommentVo.fromJson(e))
-          .toList() ?? [],
+      comments: (json['post_comments'] != null && json['post_comments'] is List)
+          ? (json['post_comments'] as List)
+          .map((e) => CommentVo.fromJson(e))
+          .toList()
+          : [],
       isHidden: json['is_hidden'] ?? false,
       postReportCount: json['post_report_count'] ?? 0,
       updDate: DateTime.parse(json['upd_date']).toLocal(),
@@ -111,7 +111,7 @@ class PostService {
 
   static Future<List<PostVo>> fetchPostData(int userId) async {
     try {
-      final response = await dio.get(apiEndpoint, queryParameters: {'user_id': userId});  // userId를 쿼리 파라미터로 전달
+      final response = await dio.get('$apiEndpoint/with-like', queryParameters: {'user_id': userId}); // userId를 쿼리 파라미터로 전달
 
       debugPrint(' [API 응답 성공] 상태 코드: ${response.statusCode}');
       debugPrint(' [API 응답 데이터]: ${response.data}');

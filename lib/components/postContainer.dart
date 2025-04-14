@@ -112,7 +112,7 @@ Widget postContainer(
                 ),
               );
 
-              // ✅ 상세 페이지에서 좋아요 변경이 일어났다면 새로고침
+              // 상세 페이지에서 좋아요 변경이 일어났다면 새로고침
               if (result == true) {
                 await onRefresh();
                 setState(() {});
@@ -226,7 +226,7 @@ Widget postContainer(
                           ),
                         ),
                         const SizedBox(width: 4),
-                        Text("${post.comments.length}"),
+                        Text("${post.postCommentCount ?? 0}"),
 
                         const Spacer(), // 왼쪽 요소들 다 밀기
 

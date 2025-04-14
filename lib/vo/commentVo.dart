@@ -69,17 +69,28 @@ class CommentService {
 
   /// ✅ 댓글 불러오기
   static Future<List<CommentVo>> fetchComments(int postId) async {
+    debugPrint("🟡 fetchComments 호출됨: postId = $postId");
+
     try {
       final response = await _dio.get(
         '/by-post',
         queryParameters: {'post_id': postId},
       );
 
+      debugPrint("🟢 서버 응답 상태 코드: ${response.statusCode}");
+      debugPrint("🟢 응답 바디: ${response.data}");
+
       if (response.statusCode == 200) {
         final List data = response.data;
-        return data.map((e) => CommentVo.fromJson(e)).toList();
+
+        final comments = data.map((e) => CommentVo.fromJson(e)).toList();
+
+        debugPrint("🟢 파싱 완료. 댓글 수: ${comments.length}");
+
+        return comments;
       } else {
-        throw Exception('댓글 불러오기 실패: ${response.statusCode}');
+        debugPrint("🔴 비정상 응답: ${response.statusCode}");
+        return [];
       }
     } catch (e) {
       debugPrint('❌ fetchComments error: $e');
