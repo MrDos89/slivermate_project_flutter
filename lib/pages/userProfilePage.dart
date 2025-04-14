@@ -17,6 +17,7 @@ import 'package:slivermate_project_flutter/components/lessonPage.dart';
 import 'package:slivermate_project_flutter/components/classPage.dart';
 import 'package:slivermate_project_flutter/components/myPostPage.dart';
 import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
+import 'package:slivermate_project_flutter/components/meetingSchedulePage.dart';
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
@@ -56,37 +57,13 @@ class _UserProfilePageState extends State<_UserProfilePage> {
   static String sessionCheckUrl =
       "http://$ec2IpAddress:$ec2Port/api/user/session";
 
-  // 로그아웃 API 엔드포인트 (실제 주소 필요에 따라 변경)
+  // 로그아웃 API 엔드포인트
   static String logoutUrl = "http://$ec2IpAddress:$ec2Port/api/user/logout";
 
   @override
   void initState() {
     super.initState();
     _initDioAndCheckLogin();
-    // If you wish to use dummy data for testing, you can uncomment the block below.
-    /*
-    setState(() {
-      currentUser = UserVo(
-        uid: 1,
-        groupId: 1,
-        userType: 1,
-        userName: "홍길동",
-        nickname: "더미 사용자",
-        userId: "dummyUser123",
-        userPassword: "password",
-        pinPassword: "0000",
-        telNumber: "010-1234-5678",
-        email: "dummy@example.com",
-        thumbnail: "",
-        regionId: 1,
-        registerDate: DateTime.now(),
-        isDeleted: false,
-        isAdmin: false,
-        updDate: DateTime.now(),
-      );
-      isLoading = false;
-    });
-    */
   }
 
   Future<void> _initDioAndCheckLogin() async {
@@ -95,7 +72,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
       storage: FileStorage("${appDocDir.path}/.cookies/"),
     );
     dio.interceptors.add(CookieManager(cookieJar));
-    await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
+    await checkLoginStatus();
   }
 
   Future<void> checkLoginStatus() async {
@@ -118,7 +95,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     }
   }
 
-  // 로그아웃 시 API 호출 및 쿠키 삭제 구현 (GET 방식)
+  // 로그아웃 (GET 방식)
   Future<void> logout() async {
     try {
       final response = await dio.get(logoutUrl);
@@ -135,10 +112,10 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           (route) => false,
         );
       } else {
-        debugPrint("로그아웃 API 호출 실패: ${response.statusCode}");
+        debugPrint("로그아웃 API 실패: ${response.statusCode}");
       }
     } catch (e) {
-      debugPrint("로그아웃 중 오류 발생: $e");
+      debugPrint("로그아웃 중 오류: $e");
     }
   }
 
@@ -159,7 +136,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     );
   }
 
-  // _handleMenuButtonTap: 해당 버튼 별로 동작 정의 (회원정보, 강의, 모임 등)
+  // 각 버튼 클릭 시 동작
   void _handleMenuButtonTap(String text, BuildContext context) {
     Map<String, VoidCallback> actions = {
       "가족구성원": () {
@@ -199,9 +176,8 @@ class _UserProfilePageState extends State<_UserProfilePage> {
         );
       },
       "모임": () {
-        // Updated: Instead of creating a dummy club, we now navigate
-        // to the ClassPage by passing the currentUser.
-        // Note: currentUser is guaranteed non-null if the user is logged in.
+        // 실제 currentUser 로 모임 페이지로
+        if (currentUser == null) return;
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -209,17 +185,28 @@ class _UserProfilePageState extends State<_UserProfilePage> {
           ),
         );
       },
-      // "문의" can be handled separately (for example, a modal for contacting support)
+      "모임 일정": () {
+        // 새로 만든 "모임 일정" 페이지로 이동
+        if (currentUser == null) return;
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) => MeetingSchedulePage(currentUser: currentUser!),
+          ),
+        );
+      },
     };
 
-    (actions[text] ?? () => _showComingSoonDialog(context))();
-  }
-
-  // _buildMenuButton: Builds individual menu buttons.
-  Widget _buildMenuButton(String text) {
-    return InkWell(
-      onTap: () {
-        if (text == "내 글보기") {
+    // 나머지 (문의, 내 글보기, 등)는 아래에서 분기
+    if (actions.containsKey(text)) {
+      actions[text]!();
+    } else {
+      switch (text) {
+        case "문의":
+          showDialog(context: context, builder: (context) => CallStaffPage());
+          break;
+        case "내 글보기":
           Navigator.push(
             context,
             MaterialPageRoute(
@@ -228,13 +215,22 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                       MyPostPage(myfeed: MyPostPage.generateDummyPosts()),
             ),
           );
-        } else if (text == "문의") {
-          // For 문의, show a modal (CallStaffPage)
-          showDialog(context: context, builder: (context) => CallStaffPage());
-        } else {
-          _handleMenuButtonTap(text, context);
-        }
-      },
+          break;
+        case "내 호스트":
+        case "오늘의 운세":
+          _showComingSoonDialog(context);
+          break;
+        default:
+          _showComingSoonDialog(context);
+          break;
+      }
+    }
+  }
+
+  // 메뉴 버튼 빌드
+  Widget _buildMenuButton(String text) {
+    return InkWell(
+      onTap: () => _handleMenuButtonTap(text, context),
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
@@ -269,7 +265,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // (1) Profile header: Thumbnail + Nickname + Logout button
+          // 썸네일 + 닉네임 + 로그아웃
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -312,7 +308,8 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             ),
           ),
           const SizedBox(height: 16),
-          // (2) Subscription status, period, number of clubs joined (UI Box)
+
+          // 구독상태, 구독기간, 가입된 동아리
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
@@ -385,7 +382,8 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             ),
           ),
           const SizedBox(height: 16),
-          // (3) 8 buttons (가족구성원, 강의, 모임, 문의, 내 글보기, 내 호스트, 내 모임장, 오늘의 운세)
+
+          // 기존 8개 버튼 중 "내 모임장" → "모임 일정" 으로 변경
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: GridView.count(
@@ -401,7 +399,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                 _buildMenuButton("문의"),
                 _buildMenuButton("내 글보기"),
                 _buildMenuButton("내 호스트"),
-                _buildMenuButton("내 모임장"),
+                _buildMenuButton("모임 일정"),
                 _buildMenuButton("오늘의 운세"),
               ],
             ),
