@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
+
 class ClubVo {
   final int clubId;
   final String clubName;
@@ -67,5 +70,36 @@ class ClubVo {
       'is_deleted': isDeleted,
       'upd_date': updDate.toIso8601String(),
     };
+  }
+}
+
+final Dio dio = Dio(
+  BaseOptions(
+    baseUrl: 'http://43.201.50.194:18090/api',
+    connectTimeout: const Duration(seconds: 5),
+    receiveTimeout: const Duration(seconds: 3),
+    contentType: 'application/json',
+  ),
+);
+
+Future<List<ClubVo>> fetchClubsFromServer() async {
+  debugPrint("🚀 클럽 데이터 요청 중...");
+
+  try {
+    final response = await dio.get('/club');
+    debugPrint("🎯 응답 상태: ${response.statusCode}");
+
+    final raw = response.data;
+    debugPrint("📦 응답 원본: $raw");
+
+    final List<ClubVo> clubs = (raw as List)
+        .map((json) => ClubVo.fromJson(json))
+        .toList();
+
+    return clubs;
+  } catch (e, st) {
+    debugPrint("❌ 오류 발생: $e");
+    debugPrint("🧱 스택: $st");
+    return [];
   }
 }
