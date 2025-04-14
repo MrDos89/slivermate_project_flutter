@@ -55,7 +55,6 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
     _scaleAnimation = Tween<double>(begin: 1.0, end: 1.4).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeOut),
     );
-    debugPrint("🧡 초기 하트 상태: postId ${widget.postId}, liked: $_isLiked");
     // 좋아요 상태 최신화 (선택적)
     // _fetchLikeStatus();
 
@@ -98,15 +97,31 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
       );
 
       if (response.statusCode == 200) {
-        // 서버에서는 단순 메시지 ("좋아요 완료")만 내려주므로 별도 파싱 불필요
-
         if (_isLiked) {
           _controller.forward().then((_) => _controller.reverse());
         }
 
         widget.onLikeChanged?.call(_isLiked);
+
+        // 좋아요 수 서버 반영 (post_like_count 수정용)
+        try {
+          final patchResponse = await Dio().patch(
+            'http://43.201.50.194:18090/api/post/updateCount',
+            queryParameters: {
+              'post_id': widget.postId,
+              'user_id': widget.userId,
+              'liked_by_me': _isLiked,
+            },
+          );
+
+          if (patchResponse.statusCode != 200) {
+            debugPrint("❗ 좋아요 수 서버 반영 실패");
+          }
+        } catch (e) {
+          debugPrint("❌ 좋아요 수 업데이트 예외: $e");
+        }
+
       } else {
-        // 실패 시 롤백
         setState(() {
           _isLiked = prevLiked;
           _likes = prevLikes;
@@ -117,9 +132,10 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
         _isLiked = prevLiked;
         _likes = prevLikes;
       });
-      print('❌ 좋아요 토글 실패: $e');
+      debugPrint('❌ 좋아요 토글 실패: $e');
     }
   }
+
 
 
   @override

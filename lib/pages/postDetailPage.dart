@@ -69,6 +69,22 @@ class _PostDetailPageState extends State<PostDetailPage> {
     super.initState();
     likeCount = widget.Post.postLikeCount;
     isLiked = widget.Post.likedByMe;
+
+    _fetchComments();
+  }
+
+  Future<void> _fetchComments() async {
+    try {
+      final comments = await CommentService.fetchComments(widget.Post.postId);
+
+      setState(() {
+        widget.Post.comments = comments;
+      });
+
+      debugPrint("댓글 ${comments.length}개 불러옴");
+    } catch (e) {
+      debugPrint("댓글 불러오기 실패: $e");
+    }
   }
 
   Future<void> _toggleLike() async {
