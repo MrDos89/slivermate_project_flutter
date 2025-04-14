@@ -33,9 +33,7 @@ void main() async {
   await dotenv.load(fileName: ".env");
   runApp(
     MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => UserProvider()),
-      ],
+      providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
       child: const MyApp(),
     ),
   );
@@ -96,8 +94,7 @@ class MyApp extends StatelessWidget {
             (context) => ConfigPage(),
         "/purchase": (context) => PurchasePage(),
         "/call": (context) => CallStaffPage(),
-        "/notifications":
-            (context) => NotificationPage(isEditing: false),
+        "/notifications": (context) => NotificationPage(isEditing: false),
         "/config": (context) => ConfigPage(),
         "/userprofile": (context) => UserProfilePage(),
         // "/main":

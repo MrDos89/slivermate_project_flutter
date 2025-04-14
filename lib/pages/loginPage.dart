@@ -129,7 +129,11 @@ class _LoginPageState extends State<LoginPage> {
                   .map((e) => UserVo.fromJson(e as Map<String, dynamic>))
                   .toList();
           debugPrint("유저 그룹 파싱 완료 - ${userList.length}명"); //  준일로그추가
-          Navigator.pushReplacementNamed(context, '/selectAccount', arguments: userList);
+          Navigator.pushReplacementNamed(
+            context,
+            '/selectAccount',
+            arguments: userList,
+          );
           // Navigator.pushNamed(context, '/selectAccountPage', arguments: userList,);
         } else {
           debugPrint("서버 응답이 리스트가 아님"); //  준일 로그추가

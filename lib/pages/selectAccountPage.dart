@@ -84,7 +84,6 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
