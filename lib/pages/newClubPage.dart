@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
+import 'package:slivermate_project_flutter/service/clubApiService.dart';
+import 'package:provider/provider.dart';
+import 'package:slivermate_project_flutter/components/userProvider.dart';
+import 'package:slivermate_project_flutter/vo/clubVo.dart';
+import 'package:slivermate_project_flutter/components/uploadClubThumbnail.dart';
 
 class NewClubPage extends StatefulWidget {
   const NewClubPage({super.key});
@@ -166,35 +171,35 @@ class _NewClubPageState extends State<NewClubPage> {
           spacing: 15,
           runSpacing: 25,
           children:
-              interests.map((interest) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedInterests.clear(); // 선택된 값이 있으면 초기화
-                      selectedInterests.add(interest); // 하나만 선택 가능
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    decoration: BoxDecoration(
-                      color:
-                          selectedInterests.contains(interest)
-                              ? Colors.black
-                              : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      interest,
-                      style: TextStyle(
-                        color:
-                            selectedInterests.contains(interest)
-                                ? Colors.white
-                                : Colors.black,
-                      ),
-                    ),
+          interests.map((interest) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedInterests.clear(); // 선택된 값이 있으면 초기화
+                  selectedInterests.add(interest); // 하나만 선택 가능
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                decoration: BoxDecoration(
+                  color:
+                  selectedInterests.contains(interest)
+                      ? Colors.black
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  interest,
+                  style: TextStyle(
+                    color:
+                    selectedInterests.contains(interest)
+                        ? Colors.white
+                        : Colors.black,
                   ),
-                );
-              }).toList(),
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -215,44 +220,44 @@ class _NewClubPageState extends State<NewClubPage> {
           spacing: 15,
           runSpacing: 25,
           children:
-              [
-                '매일',
-                '주 1회',
-                '주 2~3회',
-                '주 5회이상',
-                '월 1회',
-                '월 2~3회',
-                '매월 주말마다',
-                '매월 토요일마다',
-                '매월 일요일마다',
-              ].map((frequency) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedMeetingFrequency = frequency; // 선택
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    decoration: BoxDecoration(
-                      color:
-                          selectedMeetingFrequency == frequency
-                              ? Colors.black
-                              : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      frequency,
-                      style: TextStyle(
-                        color:
-                            selectedMeetingFrequency == frequency
-                                ? Colors.white
-                                : Colors.black,
-                      ),
-                    ),
+          [
+            '매일',
+            '주 1회',
+            '주 2~3회',
+            '주 5회이상',
+            '월 1회',
+            '월 2~3회',
+            '매월 주말마다',
+            '매월 토요일마다',
+            '매월 일요일마다',
+          ].map((frequency) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedMeetingFrequency = frequency; // 선택
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                decoration: BoxDecoration(
+                  color:
+                  selectedMeetingFrequency == frequency
+                      ? Colors.black
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  frequency,
+                  style: TextStyle(
+                    color:
+                    selectedMeetingFrequency == frequency
+                        ? Colors.white
+                        : Colors.black,
                   ),
-                );
-              }).toList(),
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -273,34 +278,34 @@ class _NewClubPageState extends State<NewClubPage> {
           spacing: 50,
           runSpacing: 25,
           children:
-              ['~10명', '~20명', '~30명', '~50명', '~100명'].map((capacity) {
-                return GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      selectedCapacity = capacity; // 선택
-                    });
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-                    decoration: BoxDecoration(
-                      color:
-                          selectedCapacity == capacity
-                              ? Colors.black
-                              : Colors.grey.shade300,
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Text(
-                      capacity,
-                      style: TextStyle(
-                        color:
-                            selectedCapacity == capacity
-                                ? Colors.white
-                                : Colors.black,
-                      ),
-                    ),
+          ['~10명', '~20명', '~30명', '~50명', '~100명'].map((capacity) {
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedCapacity = capacity; // 선택
+                });
+              },
+              child: Container(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+                decoration: BoxDecoration(
+                  color:
+                  selectedCapacity == capacity
+                      ? Colors.black
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                child: Text(
+                  capacity,
+                  style: TextStyle(
+                    color:
+                    selectedCapacity == capacity
+                        ? Colors.white
+                        : Colors.black,
                   ),
-                );
-              }).toList(),
+                ),
+              ),
+            );
+          }).toList(),
         ),
       ],
     );
@@ -338,20 +343,17 @@ class _NewClubPageState extends State<NewClubPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(height: 10), // 텍스트와 입력창 사이의 틈
-        Text(
+        const Text(
           "모임 썸네일",
           style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 20), // 텍스트와 입력창 사이의 틈
-        Container(
-          color: Colors.grey.shade300,
-          height: 150,
-          width: double.infinity,
-          child:
-              thumbnailURL.isEmpty
-                  ? Icon(Icons.camera_alt, color: Colors.grey.shade700)
-                  : Image.network(thumbnailURL, fit: BoxFit.cover),
+        const SizedBox(height: 20),
+        UploadClubThumbnail(
+          onUpload: (url) {
+            setState(() {
+              thumbnailURL = url;
+            });
+          },
         ),
       ],
     );
@@ -369,8 +371,8 @@ class _NewClubPageState extends State<NewClubPage> {
                 onPressed: () {
                   showDialog(
                     context: context,
-                    builder:
-                        (context) => AlertDialog(
+                    builder: (context) =>
+                        AlertDialog(
                           title: Text('모임 가입이 취소되었습니다'),
                           actions: [
                             TextButton(
@@ -402,22 +404,81 @@ class _NewClubPageState extends State<NewClubPage> {
             SizedBox(width: 5),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder:
-                        (context) => AlertDialog(
-                          title: Text('모임 만들기에 성공하였습니다'),
+                onPressed: () async {
+                  try {
+                    final userProvider = Provider.of<UserProvider>(context, listen: false);
+                    final user = userProvider.user;
+
+                    if (user == null) {
+                      // 로그인 정보가 없을 때 예외 처리
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text('로그인이 필요합니다'),
                           actions: [
                             TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
+                              onPressed: () => Navigator.pop(context),
                               child: Text('확인'),
                             ),
                           ],
                         ),
-                  );
+                      );
+                      return;
+                    }
+
+                    final newClub = ClubVo(
+                      clubId: 0,
+                      clubName: clubName,
+                      clubUserId: user.uid,
+                      clubCategoryId: _getMainCategoryId(
+                          selectedInterests.first),
+                      clubSubCategoryId: _getSubCategoryId(
+                          selectedInterests.first),
+                      clubThumbnail: thumbnailURL,
+                      clubMovie: '',
+                      clubDesc: description,
+                      clubMemberNumber: 1,
+                      clubMemberMax: _getMaxCapacity(selectedCapacity),
+                      clubReportCnt: 0,
+                      clubRegisterDate: DateTime.now(),
+                      isDeleted: false,
+                      updDate: DateTime.now(),
+                    );
+
+                    await createClub(newClub); // POST 요청
+
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          AlertDialog(
+                            title: Text('모임 만들기에 성공하였습니다'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context); // 다이얼로그 닫기
+                                  Navigator.pop(context); // 페이지 닫기
+                                },
+                                child: Text('확인'),
+                              ),
+                            ],
+                          ),
+                    );
+                  } catch (e) {
+                    showDialog(
+                      context: context,
+                      builder: (context) =>
+                          AlertDialog(
+                            title: Text('모임 만들기 실패'),
+                            content: Text('$e'),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: Text('닫기'),
+                              ),
+                            ],
+                          ),
+                    );
+                  }
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.green,
@@ -441,3 +502,33 @@ class _NewClubPageState extends State<NewClubPage> {
     );
   }
 }
+
+int _getMainCategoryId(String hobby) {
+  const indoor = ['뜨개질', '그림', '독서', '영화감상', '퍼즐', '요리', '통기타', '당구', '바둑'];
+  return indoor.contains(hobby) ? 1 : 2;
+}
+
+int _getSubCategoryId(String hobby) {
+  final indoor = {
+    1: "뜨개질", 2: "그림", 3: "독서", 4: "영화감상", 5: "퍼즐",
+    6: "요리", 7: "통기타", 8: "당구", 9: "바둑",
+  };
+  final outdoor = {
+    1: "등산", 2: "자전거", 3: "캠핑", 4: "낚시", 5: "러닝/마라톤",
+    6: "수영", 7: "골프", 8: "테니스", 9: "족구",
+  };
+  final all = {...indoor, ...outdoor};
+  return all.entries.firstWhere((e) => e.value == hobby, orElse: () => MapEntry(0, '기타')).key;
+}
+
+int _getMaxCapacity(String label) {
+  switch (label) {
+    case '~10명': return 10;
+    case '~20명': return 20;
+    case '~30명': return 30;
+    case '~50명': return 50;
+    case '~100명': return 100;
+    default: return 10;
+  }
+}
+
