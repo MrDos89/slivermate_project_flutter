@@ -371,6 +371,7 @@ class _MyPostPageState extends State<MyPostPage> {
                     },
                     onCommentTap: _showCommentModal,
                     currentUserId: 1,
+                    setState: setState,
                   ),
                 ),
               ],

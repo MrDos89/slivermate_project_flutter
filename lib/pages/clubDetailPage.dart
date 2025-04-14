@@ -380,6 +380,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
             onCommentTap: _showCommentModal,
             currentUserId: 1,
             isClubPage: true,
+            setState: setState,
           ),
         );
       case 2:

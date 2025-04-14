@@ -37,71 +37,62 @@ class LikeService {
     baseUrl: 'http://43.201.50.194:18090/api/like',
     connectTimeout: const Duration(seconds: 5),
     receiveTimeout: const Duration(seconds: 5),
-    sendTimeout: const Duration(seconds: 5),
-    contentType: 'application/json',
   ));
 
-  /// ✅ 좋아요 토글
-  static Future<Map<String, dynamic>> toggleLike({required int postId, required int userId}) async {
+  /// 1. 좋아요 토글
+  static Future<bool> toggleLike(int postId, int userId) async {
     try {
-      final response = await _dio.post(
-        '/toggle',
-        data: {
-          'post_id': postId,
-          'user_id': userId,
-        },
-      );
-
-      return Map<String, dynamic>.from(response.data);
-    } catch (e) {
-      debugPrint('❌ toggleLike 에러: $e');
-      rethrow;
-    }
-  }
-
-
-  /// ✅ 유저가 누른 postId 리스트 조회
-  static Future<List<int>> getLikedPostIds(int userId) async {
-    try {
-      final response = await _dio.get(
-        '/checkAll',
-        queryParameters: {
-          'user_id': userId,
-        },
-      );
-      final data = response.data;
-      if (data is Map && data.containsKey('likedPostIds')) {
-        return List<int>.from(data['likedPostIds']);
-      }
-      return [];
-    } catch (e) {
-      print('❌ getLikedPostIds 에러: $e');
-      rethrow;
-    }
-  }
-
-  /// ✅ 좋아요 여부 + 총 좋아요 수 가져오기
-  static Future<Map<String, dynamic>> getLikeStatus({
-    required int postId,
-    required int userId,
-  }) async {
-    try {
-      final isLikedRes = await _dio.get('/is-liked', queryParameters: {
+      final response = await _dio.post('/toggle', data: {
         'post_id': postId,
         'user_id': userId,
       });
+      return response.statusCode == 200;
+    } catch (e) {
+      print('❌ toggleLike error: $e');
+      return false;
+    }
+  }
 
-      final countRes = await _dio.get('/count', queryParameters: {
+  /// 2. 해당 게시글을 좋아요 눌렀는지
+  static Future<bool> isLiked(int postId, int userId) async {
+    try {
+      final response = await _dio.get('/is-liked', queryParameters: {
+        'post_id': postId,
+        'user_id': userId,
+      });
+      return response.data == true;
+    } catch (e) {
+      print('❌ isLiked error: $e');
+      return false;
+    }
+  }
+
+  /// 3. 유저가 좋아요 누른 게시글 ID 리스트
+  static Future<List<int>> getLikedPostIds(int userId) async {
+    try {
+      final response = await _dio.get('/checkAll', queryParameters: {
+        'user_id': userId,
+      });
+      final List<dynamic> data = response.data["likedPostIds"];
+      return data.cast<int>();
+    } catch (e) {
+      print('❌ getLikedPostIds error: $e');
+      return [];
+    }
+  }
+
+  /// 4. 특정 게시글의 좋아요 수
+  static Future<int> getLikeCount(int postId) async {
+    try {
+      final response = await _dio.get('/count', queryParameters: {
         'post_id': postId,
       });
-
-      return {
-        'isLiked': isLikedRes.data == true ? 1 : 0,
-        'totalLikes': countRes.data ?? 0,
-      };
+      return response.data;
     } catch (e) {
-      print('❌ getLikeStatus 에러: $e');
-      rethrow;
+      print('❌ getLikeCount error: $e');
+      return 0;
     }
   }
 }
+
+

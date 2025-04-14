@@ -66,18 +66,18 @@ class _LikeHeartState extends State<LikeHeart> with SingleTickerProviderStateMix
 
   Future<void> _fetchLikeStatus() async {
     try {
-      final result = await LikeService.getLikeStatus(
-        postId: widget.postId,
-        userId: widget.userId,
-      );
+      final isLiked = await LikeService.isLiked(widget.postId, widget.userId);
+      final likeCount = await LikeService.getLikeCount(widget.postId);
+
       setState(() {
-        _isLiked = result['isLiked'] == 1;
-        _likes = result['totalLikes'] ?? _likes;
+        _isLiked = isLiked;
+        _likes = likeCount;
       });
     } catch (e) {
-      print('❌ 초기 좋아요 상태 불러오기 실패: $e');
+      debugPrint('❌ 초기 좋아요 상태 불러오기 실패: $e');
     }
   }
+
 
   Future<void> _onTapLike() async {
     final prevLiked = _isLiked;

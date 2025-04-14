@@ -10,6 +10,7 @@ import 'package:dio/dio.dart';
 import 'package:provider/provider.dart';
 import 'package:slivermate_project_flutter/components/userProvider.dart';
 
+
 //  카테고리 ID를 문자열로 변환
 const Map<int, String> postCategoryId = {1: "실내", 2: "실외"};
 
@@ -180,21 +181,33 @@ class _PostPageState extends State<PostPage> {
                         hintText: '댓글을 입력하세요',
                         suffixIcon: IconButton(
                           icon: const Icon(Icons.send),
-                          onPressed: () {
-                            if (commentController.text.trim().isNotEmpty) {
-                              setModalState(() {
-                                post.comments.add(
-                                  CommentVo(
-                                    userThumbnail: "", // 현재 사용자 프로필 이미지
-                                    userNickname: "현재 사용자", // 현재 사용자 닉네임
-                                    commentText: commentController.text.trim(),
-                                    commentDate: DateTime.now(),
-                                  ),
-                                );
-                                commentController.clear();
-                              });
+                          onPressed: () async {
+                            final userVo = Provider.of<UserProvider>(context, listen: false).user;
 
-                              setState(() {}); // 메인 화면 업데이트
+                            if (commentController.text.trim().isNotEmpty && userVo != null) {
+                              final success = await CommentService.addComment(
+                                postId: post.postId,
+                                userId: userVo.uid,
+                                clubId: post.clubId,
+                                commentText: commentController.text.trim(),
+                              );
+
+                              if (success) {
+                                final updatedComments = await CommentService.fetchComments(post.postId);
+
+                                setModalState(() {
+                                  post.comments.clear();
+                                  post.comments.addAll(updatedComments);
+                                  commentController.clear();
+                                });
+
+                                setState(() {}); // 외부 리스트도 갱신
+                              } else {
+                                debugPrint('❌ 댓글 등록 실패');
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text('댓글 등록에 실패했습니다.')),
+                                );
+                              }
                             }
                           },
                         ),
@@ -342,6 +355,7 @@ class _PostPageState extends State<PostPage> {
                     },
                     onCommentTap: _showCommentModal,
                     currentUserId: userVo?.uid ?? 0,
+                    setState: setState,
                   ),
                 ),
               ],
@@ -380,12 +394,14 @@ class _PostPageState extends State<PostPage> {
 }
 
 String getTimeAgo(DateTime date) {
-  final now = DateTime.now();
+  final now = DateTime.now().toLocal();
   final diff = now.difference(date);
 
   debugPrint("🕓 현재 시간: $now");
   debugPrint("🕒 등록 시간: $date");
   debugPrint("⏱️ 차이: ${diff.inMinutes}분");
+
+  if (diff.inMinutes < 0) return "방금 전";
 
   final minutes = diff.inMinutes;
   final hours = diff.inHours;
@@ -399,6 +415,7 @@ String getTimeAgo(DateTime date) {
   if (days < 365) return '$months달 전';
   return '$years년 전';
 }
+
 
 // final postUserThumbnail =
 //     (dummyPostList[0].userThumbnail.trim().isEmpty)

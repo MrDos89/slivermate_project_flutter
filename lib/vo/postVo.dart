@@ -48,8 +48,8 @@ class PostVo {
   //  JSON → LessonVO 변환
   factory PostVo.fromJson(Map<String, dynamic> json) {
     debugPrint('📦 서버에서 받은 register_date: ${json['register_date']}');
-    final parsedRegisterDate = DateTime.parse(json['register_date']).toUtc();  // UTC 기준으로 파싱
-    debugPrint('🕓 최종 파싱된 registerDate (UTC): $parsedRegisterDate');  // UTC로 확인
+    final parsedRegisterDate = DateTime.parse(json['register_date']).toUtc().toLocal();
+    debugPrint('🕓 최종 파싱된 registerDate (Local): $parsedRegisterDate');
 
     return PostVo(
       postId: json['post_id'] ?? 0,
@@ -62,7 +62,7 @@ class PostVo {
       postImages: (json['post_images'] != null) ? List<String>.from(json['post_images']) : [],
       postLikeCount: json['post_like_count'] ?? 0,
       postCommentCount: json['post_comment_count'] ?? 0,
-      registerDate: parsedRegisterDate.toLocal(),
+      registerDate: parsedRegisterDate,
       comments: (json['comments'] as List<dynamic>?)
           ?.map((e) => CommentVo.fromJson(e))
           .toList() ?? [],
@@ -97,7 +97,7 @@ class PostVo {
       'nickname': userNickname,
       'user_thumbnail': userThumbnail,
       'liked_by_me': likedByMe,
-      // 'upd_date': updDate.toIso8601String(),
+      'upd_date': updDate.toIso8601String(),
     };
   }
 }
@@ -152,7 +152,7 @@ class PostService {
         throw Exception('Failed to load posts with likes');
       }
     } catch (e) {
-      print('Error fetching posts with likes: $e');
+      debugPrint('Error fetching posts with likes: $e');
       rethrow;
     }
   }
@@ -160,18 +160,19 @@ class PostService {
   // 좋아요 토글하기
   static Future<bool> toggleLike({required int postId, required int userId}) async {
     try {
-      final response = await dio.patch(
-        '/updateCount',
+      final response = await dio.post(
+        'http://$ec2IpAddress:$ec2Port/api/like/toggle',
         data: {'post_id': postId, 'user_id': userId},
       );
+
       if (response.statusCode == 200) {
-        return response.data['liked'] == true;
+        return true;
       } else {
-        throw Exception('Failed to toggle like');
+        return false;
       }
     } catch (e) {
-      print('Error toggling like: $e');
-      rethrow;
+      debugPrint('Error toggling like: $e');
+      return false;
     }
   }
 }

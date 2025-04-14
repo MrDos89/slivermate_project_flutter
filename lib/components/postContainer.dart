@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:readmore/readmore.dart';
 import 'package:slivermate_project_flutter/vo/postVo.dart';
+import 'package:slivermate_project_flutter/vo/likeVo.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:slivermate_project_flutter/pages/postPage.dart';
 import 'package:slivermate_project_flutter/components/likeHeart.dart';
@@ -61,6 +62,7 @@ Widget postContainer(
   required void Function(PostVo post) onLikeTap,
   required void Function(BuildContext context, PostVo post) onCommentTap,
   required int currentUserId,
+  required void Function(VoidCallback fn) setState,
   bool isClubPage = false,
 }) {
   final filteredList =
@@ -102,13 +104,19 @@ Widget postContainer(
         children:
         filteredList.map((post) {
           return GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (_) => PostDetailPage(Post: post),
                 ),
               );
+
+              // ✅ 상세 페이지에서 좋아요 변경이 일어났다면 새로고침
+              if (result == true) {
+                await onRefresh();
+                setState(() {});
+              }
             },
             child: Card(
               margin: const EdgeInsets.symmetric(vertical: 8),
@@ -196,9 +204,17 @@ Widget postContainer(
                       children: [
                         LikeHeart(
                           postId: post.postId,
-                          userId: currentUserId, // 로그인 유저 ID
+                          userId: currentUserId,
                           initialLikes: post.postLikeCount,
-                          initiallyLiked: post.likedByMe, // 서버에서 받아온 좋아요 여부
+                          initiallyLiked: post.likedByMe,
+                          onLikeChanged: (liked) async {
+                            setState(() {
+                              post.likedByMe = liked;
+                              post.postLikeCount += liked ? 1 : -1;
+                            });
+
+                            await LikeService.toggleLike(post.postId, currentUserId);
+                          },
                         ),
                         const SizedBox(width: 16),
                         GestureDetector(
