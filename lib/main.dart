@@ -76,7 +76,7 @@ class MyApp extends StatelessWidget {
         return null;
       },
       routes: {
-        "/": (context) => ConfigPage(),
+        "/": (context) => MainPage(),
         "/purchase": (context) => PurchasePage(),
         "/call": (context) => CallStaffPage(),
         "/notifications": (context) => NotificationPage(isEditing: false),
