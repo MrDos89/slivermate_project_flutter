@@ -20,6 +20,8 @@ class SelectAccountPage extends StatefulWidget {
 
 class _SelectAccountPageState extends State<SelectAccountPage> {
   late List<UserVo> _accounts;
+  UserVo? _selectedUser;
+  String _pinInput = "";
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
@@ -34,7 +36,6 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
   void initState() {
     super.initState();
     _accounts = widget.userList;
-
     _initDioAndCheckLogin();
   }
 
@@ -44,14 +45,12 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
       storage: FileStorage("${appDocDir.path}/.cookies/"),
     );
     dio.interceptors.add(CookieManager(cookieJar));
-
-    await checkLoginStatus(); // 앱 시작 시 로그인 상태 확인
+    await checkLoginStatus();
   }
 
   Future<void> checkLoginStatus() async {
     try {
       final response = await dio.get(sessionCheckUrl);
-
       if (response.statusCode == 200) {
         print("로그인 유지됨 - 사용자: ${UserVo.fromJson(response.data)}");
       } else {
@@ -62,26 +61,69 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
     }
   }
 
-  Future<void> selectUserFromUserGroup(UserVo user) async {
+  void _showPinDialog(UserVo user) {
+    setState(() {
+      _selectedUser = user;
+      _pinInput = "";
+    });
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("${user.nickname}님의 비밀번호"),
+          content: TextField(
+            obscureText: true,
+            keyboardType: TextInputType.number,
+            decoration: const InputDecoration(labelText: 'PIN을 입력하세요'),
+            onChanged: (value) {
+              _pinInput = value;
+            },
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('취소'),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                await _submitPinPassword(user);
+              },
+              child: const Text('확인'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _submitPinPassword(UserVo user) async {
     try {
-      final response = await dio.get(
+      final response = await dio.post(
         "$userGroupUrl/login/${user.groupId}/${user.uid}",
+        data: {"pin_password": _pinInput},
+        options: Options(headers: {"Content-Type": "application/json"}),
       );
 
       if (response.statusCode == 200) {
         final userData = UserVo.fromJson(response.data);
-
-        // 로그인 유저 Provider에 저장
         Provider.of<UserProvider>(context, listen: false).setUser(userData);
-
-        //이후 페이지로 이동
         Navigator.pushReplacementNamed(context, '/userprofile');
       } else {
-        debugPrint('로그인에 실패하였습니다.: ${response.statusCode} 에러 발생');
+        _showErrorSnackbar("PIN이 올바르지 않습니다.");
       }
-    } catch (error) {
-      debugPrint('유저 그룹 로그인 중 오류 발생: $error');
+    } catch (e) {
+      debugPrint("로그인 오류: $e");
+      _showErrorSnackbar("서버와의 통신에 실패했습니다.");
     }
+  }
+
+  void _showErrorSnackbar(String message) {
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(message)));
   }
 
   @override
@@ -109,7 +151,6 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
                     arguments: _accounts,
                   );
 
-                  // 새로 추가된 계정이 있다면 갱신
                   if (result is List<UserVo>) {
                     setState(() {
                       _accounts = result;
@@ -137,9 +178,8 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
 
             final user = _accounts[index];
             return GestureDetector(
-              onTap: () async {
-                debugPrint("탭이 눌렸습니다.");
-                await selectUserFromUserGroup(user);
+              onTap: () {
+                _showPinDialog(user);
               },
               child: Card(
                 elevation: 2,
@@ -162,22 +202,3 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
     );
   }
 }
-
-// [yj] '준비중입니다' 함수
-// void _showComingSoonDialog(BuildContext context) {
-//   showDialog(
-//     context: context,
-//     builder:
-//         (context) =>
-//         AlertDialog(
-//           title: const Text("준비중"),
-//           content: const Text("해당 기능은 아직 준비중입니다."),
-//           actions: [
-//             TextButton(
-//               onPressed: () => Navigator.pop(context),
-//               child: const Text("확인"),
-//             ),
-//           ],
-//         ),
-//   );
-// }

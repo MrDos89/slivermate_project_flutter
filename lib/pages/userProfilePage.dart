@@ -326,33 +326,14 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                     child: Column(
                       children: const [
                         Text(
-                          "구독상태",
+                          "가족정보",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 14,
                           ),
                         ),
                         SizedBox(height: 4),
-                        Text("O/X"),
-                      ],
-                    ),
-                  ),
-                  Container(width: 1, height: 40, color: Colors.grey[300]),
-                  Expanded(
-                    child: Column(
-                      children: const [
-                        Text(
-                          "구독기간",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "2023.08.01\n~ 2023.09.01",
-                          textAlign: TextAlign.center,
-                        ),
+                        Text("부모님"),
                       ],
                     ),
                   ),
