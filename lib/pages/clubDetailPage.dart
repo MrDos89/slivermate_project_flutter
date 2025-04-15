@@ -6,180 +6,16 @@ import 'package:slivermate_project_flutter/pages/postPage.dart';
 import 'package:slivermate_project_flutter/components/postContainer.dart';
 import 'package:slivermate_project_flutter/pages/postDetailPage.dart';
 import 'package:slivermate_project_flutter/pages/newClubPostPage.dart';
-import 'package:table_calendar/table_calendar.dart';
 import 'package:slivermate_project_flutter/vo/commentVo.dart';
-import 'package:slivermate_project_flutter/vo/announceVo.dart';
-import 'package:slivermate_project_flutter/pages/announcementListPage.dart';
 import 'package:slivermate_project_flutter/vo/clubVo.dart';
-import 'package:slivermate_project_flutter/pages/addMeetingPage.dart';
 import 'package:provider/provider.dart';
 import 'package:slivermate_project_flutter/components/userProvider.dart';
+import 'package:slivermate_project_flutter/components/scheduleSection.dart';
 import 'package:intl/intl.dart';
-import 'package:dio/dio.dart';
 
-// final Map<int, List<AnnounceVo>> dummyClubSchedules = {
-//   1: [
-//     AnnounceVo(
-//       title: "4월 정기 등산",
-//       date: "2025.04.10 (토)",
-//       time: "오전 9시",
-//       location: "북한산 입구",
-//       description: "서울 등산 동호회 4월 정기 모임입니다.",
-//       meetingPrice: "5,000원",
-//       attendingCount: 12,
-//       type: 2,
-//       memberList: ["10", "15"],
-//       updDate: DateTime.parse("2025-04-01"),
-//     ),
-//     AnnounceVo(
-//       title: "번개 산책 모임",
-//       date: "2025.04.15 (수)",
-//       time: "오후 7시",
-//       location: "한강 반포공원",
-//       description: "가볍게 산책하며 이야기 나눠요.",
-//       meetingPrice: "무료",
-//       attendingCount: 5,
-//       type: 2,
-//       memberList: ["10", "11"],
-//       updDate: DateTime.parse("2025-04-02"),
-//     ),
-//     AnnounceVo(
-//       title: "다음 달 등산 일정 사전 안내",
-//       date: "2025.04.20 (일)",
-//       time: "오전 10시",
-//       location: "온라인",
-//       description: "다음 달 정기 모임 일정을 미리 안내드립니다.",
-//       meetingPrice: "",
-//       attendingCount: 0,
-//       type: 1,
-//       memberList: [],
-//       updDate: DateTime.parse("2025-04-03"),
-//     ),
-//     AnnounceVo(
-//       title: "5월 모임 일정 공지",
-//       date: "2025.05.01 (수)",
-//       time: "오후 3시",
-//       location: "온라인",
-//       description: "5월 모임 일정을 공지드립니다. 참여 여부는 추후 안내 예정입니다.",
-//       meetingPrice: "",
-//       attendingCount: 0,
-//       type: 1,
-//       memberList: [],
-//       updDate: DateTime.parse("2025-04-05"),
-//     ),
-//     AnnounceVo(
-//       title: "신규 멤버 모집 안내",
-//       date: "2025.05.05 (일)",
-//       time: "오전 11시",
-//       location: "온라인",
-//       description: "서울 등산 동호회 신규 멤버를 모집합니다. 자세한 사항은 공지 내용을 확인하세요.",
-//       meetingPrice: "",
-//       attendingCount: 0,
-//       type: 1,
-//       memberList: [],
-//       updDate: DateTime.parse("2025-04-06"),
-//     ),
-//     AnnounceVo(
-//       title: "회비 납부 안내",
-//       date: "2025.05.10 (금)",
-//       time: "오전 9시",
-//       location: "온라인",
-//       description: "이번 달 회비 납부 안내입니다. 계좌정보 및 납부기한은 공지를 확인해주세요.",
-//       meetingPrice: "",
-//       attendingCount: 0,
-//       type: 1,
-//       memberList: [],
-//       updDate: DateTime.parse("2025-04-07"),
-//     ),
-//     AnnounceVo(
-//       title: "안전 수칙 안내",
-//       date: "2025.05.12 (일)",
-//       time: "오후 5시",
-//       location: "온라인",
-//       description: "등산 시 유의사항 및 안전 수칙을 안내드립니다. 반드시 숙지해주세요.",
-//       meetingPrice: "",
-//       attendingCount: 0,
-//       type: 1,
-//       memberList: [],
-//       updDate: DateTime.parse("2025-04-08"),
-//     ),
-//     AnnounceVo(
-//       title: "장비 대여 관련 공지",
-//       date: "2025.05.15 (수)",
-//       time: "오후 2시",
-//       location: "온라인",
-//       description: "등산 장비 대여 신청 방법 및 주의사항을 공지합니다.",
-//       meetingPrice: "",
-//       attendingCount: 0,
-//       type: 1,
-//       memberList: [],
-//       updDate: DateTime.parse("2025-04-09"),
-//     ),
-//   ],
-// };
-
-// const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
-
-// List<PostVo> dummyPostList = [
-//   PostVo(
-//     postId: 2,
-//     postUserId: 1,
-//     userThumbnail:
-//         "https://image.dongascience.com/Photo/2020/03/5bddba7b6574b95d37b6079c199d7101.jpg",
-//     userNickname: "라이언",
-//     regionId: 1,
-//     postCategoryId: 1,
-//     postSubCategoryId: 8,
-//     postNote:
-//         "오랜만에 바둑 뒀어요. 재미있네요. 함께 바둑 공부할 사람 모집합니다. 테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트테스트",
-//     postLikeCount: 2,
-//     postCommentCount: 3,
-//     postImages: [],
-//     registerDate: DateTime.now(),
-//     clubId: 0,
-//     postReportCount: 0,
-//     isHidden: false,
-//     updDate: DateTime.now(),
-//     comments: [
-//       CommentVo(
-//         userThumbnail: "",
-//         userNickname: "철수",
-//         commentText: "저도 참여할 수 있을까요?",
-//         commentDate: DateTime.now().subtract(Duration(minutes: 15)),
-//       ),
-//       CommentVo(
-//         userThumbnail: "",
-//         userNickname: "영희",
-//         commentText: "실력은 초보지만 같이해요!",
-//         commentDate: DateTime.now().subtract(Duration(minutes: 30)),
-//       ),
-//       CommentVo(
-//         userThumbnail: "",
-//         userNickname: "민수",
-//         commentText: "몇 시에 모이나요?",
-//         commentDate: DateTime.now().subtract(Duration(hours: 1)),
-//       ),
-//     ],
-//   ),
-// ];
-
-// void _handleAttend(Map<String, dynamic> schedule) {
-//   if (!schedule.containsKey("attendingUsers")) {
-//     schedule["attendingUsers"] = <String>[];
-//   }
-//   if (!schedule["attendingUsers"].contains(currentUser)) {
-//     schedule["attendingUsers"].add(currentUser);
-//   }
-// }
-//
-// void _handleDecline(Map<String, dynamic> schedule) {
-//   schedule["attendingUsers"]?.remove(currentUser);
-// }
-// const int currentUserId = 101; // 임시 모임장
 
 class ClubDetailPage extends StatefulWidget {
   final ClubVo clubVo;
-  // final List<PostVo> postList;
   const ClubDetailPage({super.key, required this.clubVo});
 
   @override
@@ -195,23 +31,16 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   @override
   void initState() {
     super.initState();
-    fetchClubPosts(); // ✅ 페이지 진입 시 게시글 불러오기
+    fetchClubPosts();
   }
 
   Future<void> fetchClubPosts() async {
     setState(() => _isLoading = true);
-
     try {
       final userVo = Provider.of<UserProvider>(context, listen: false).user;
       final userId = userVo?.uid ?? 0;
-
       final allPosts = await PostService.fetchPostData(userId);
-
-      final filtered =
-          allPosts
-              .where((post) => post.clubId == widget.clubVo.clubId)
-              .toList();
-
+      final filtered = allPosts.where((post) => post.clubId == widget.clubVo.clubId).toList();
       setState(() {
         clubPosts = filtered;
         _isLoading = false;
@@ -223,7 +52,91 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   }
 
   Future<void> _refreshClubPosts() async {
-    await fetchClubPosts(); // 게시글 다시 불러오기
+    await fetchClubPosts();
+  }
+
+  Widget _buildTabContent() {
+    final userVo = Provider.of<UserProvider>(context, listen: false).user;
+    final currentUserId = userVo?.uid ?? 0;
+    switch (_selectedTabIndex) {
+      case 0:
+        return _buildIntroSection();
+      case 1:
+        return SizedBox(
+          height: 400,
+          child: postContainer(
+            context,
+            postList: clubPosts,
+            onRefresh: _refreshClubPosts,
+            onLikeTap: (post) {
+              setState(() => post.postLikeCount += 1);
+            },
+            onCommentTap: _showCommentModal,
+            currentUserId: currentUserId,
+            isClubPage: true,
+            setState: setState,
+          ),
+        );
+      case 2:
+        final imagePosts = clubPosts.where((p) => p.postImages!.isNotEmpty).toList();
+        if (imagePosts.isEmpty) {
+          return SizedBox(
+            height: 300,
+            child: Center(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  Icon(Icons.photo_library_outlined, size: 60, color: Colors.grey),
+                  SizedBox(height: 12),
+                  Text("등록된 사진이 없습니다.", style: TextStyle(fontSize: 16, color: Colors.grey)),
+                  SizedBox(height: 6),
+                  Text("사진이 포함된 게시물을 올려주세요.", style: TextStyle(fontSize: 14, color: Colors.grey)),
+                ],
+              ),
+            ),
+          );
+        }
+        return Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: GridView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 8,
+              childAspectRatio: 1,
+            ),
+            itemCount: imagePosts.length,
+            itemBuilder: (context, index) {
+              final post = imagePosts[index];
+              return GestureDetector(
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => PostDetailPage(Post: post)),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.network(
+                    post.postImages!.first,
+                    width: double.infinity,
+                    height: 250,
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              );
+            },
+          ),
+        );
+      case 3:
+        return ScheduleSection(
+          clubId: widget.clubVo.clubId,
+          clubLeaderId: widget.clubVo.clubUserId,
+          currentUserId: currentUserId,
+        );
+      default:
+        return const SizedBox.shrink();
+    }
   }
 
   // [yj] 댓글 모달
@@ -359,114 +272,114 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
     );
   }
 
-  Widget _buildTabContent() {
-    final userVo = Provider.of<UserProvider>(context, listen: false).user;
-    final currentUserId = userVo?.uid ?? 0;
-
-    switch (_selectedTabIndex) {
-      case 0:
-        return _buildIntroSection();
-      case 1:
-        // final clubId = widget.clubVo.clubId;
-        // final clubPosts =
-        // widget.postList.where((p) => p.clubId == clubId).toList();
-
-        return SizedBox(
-          height: 400,
-          child: postContainer(
-            context,
-            postList: clubPosts,
-            onRefresh: _refreshClubPosts,
-            onLikeTap: (post) {
-              setState(() {
-                post.postLikeCount += 1;
-              });
-            },
-            onCommentTap: _showCommentModal,
-            currentUserId: 1,
-            isClubPage: true,
-            setState: setState,
-          ),
-        );
-      case 2:
-        // final clubId = widget.clubVo.clubId;
-        final imagePosts =
-            clubPosts.where((p) => p.postImages!.isNotEmpty).toList();
-
-        if (imagePosts.isEmpty) {
-          return SizedBox(
-            height: 300,
-            child: Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Icon(
-                    Icons.photo_library_outlined,
-                    size: 60,
-                    color: Colors.grey,
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    "등록된 사진이 없습니다.",
-                    style: TextStyle(fontSize: 16, color: Colors.grey[700]),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    "사진이 포함된 게시물을 올려주세요.",
-                    style: TextStyle(fontSize: 14, color: Colors.grey),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }
-
-        return Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: GridView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3, // 3개씩 한 줄
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 8,
-              childAspectRatio: 1,
-            ),
-            itemCount: imagePosts.length,
-            itemBuilder: (context, index) {
-              final post = imagePosts[index];
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => PostDetailPage(Post: post),
-                    ),
-                  );
-                },
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
-                  child: Image.network(
-                    post.postImages!.first,
-                    width: double.infinity,
-                    height: 250,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              );
-            },
-          ),
-        );
-      case 3:
-        return _buildScheduleSection(
-          clubId: widget.clubVo.clubId,
-          clubLeaderId: widget.clubVo.clubUserId,
-          currentUserId: currentUserId,
-        );
-      default:
-        return const SizedBox.shrink();
-    }
-  }
+  // Widget _buildTabContent() {
+  //   final userVo = Provider.of<UserProvider>(context, listen: false).user;
+  //   final currentUserId = userVo?.uid ?? 0;
+  //
+  //   switch (_selectedTabIndex) {
+  //     case 0:
+  //       return _buildIntroSection();
+  //     case 1:
+  //       // final clubId = widget.clubVo.clubId;
+  //       // final clubPosts =
+  //       // widget.postList.where((p) => p.clubId == clubId).toList();
+  //
+  //       return SizedBox(
+  //         height: 400,
+  //         child: postContainer(
+  //           context,
+  //           postList: clubPosts,
+  //           onRefresh: _refreshClubPosts,
+  //           onLikeTap: (post) {
+  //             setState(() {
+  //               post.postLikeCount += 1;
+  //             });
+  //           },
+  //           onCommentTap: _showCommentModal,
+  //           currentUserId: 1,
+  //           isClubPage: true,
+  //           setState: setState,
+  //         ),
+  //       );
+  //     case 2:
+  //       // final clubId = widget.clubVo.clubId;
+  //       final imagePosts =
+  //           clubPosts.where((p) => p.postImages!.isNotEmpty).toList();
+  //
+  //       if (imagePosts.isEmpty) {
+  //         return SizedBox(
+  //           height: 300,
+  //           child: Center(
+  //             child: Column(
+  //               mainAxisSize: MainAxisSize.min,
+  //               children: [
+  //                 const Icon(
+  //                   Icons.photo_library_outlined,
+  //                   size: 60,
+  //                   color: Colors.grey,
+  //                 ),
+  //                 const SizedBox(height: 12),
+  //                 Text(
+  //                   "등록된 사진이 없습니다.",
+  //                   style: TextStyle(fontSize: 16, color: Colors.grey[700]),
+  //                 ),
+  //                 const SizedBox(height: 6),
+  //                 Text(
+  //                   "사진이 포함된 게시물을 올려주세요.",
+  //                   style: TextStyle(fontSize: 14, color: Colors.grey),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         );
+  //       }
+  //
+  //       return Padding(
+  //         padding: const EdgeInsets.all(16.0),
+  //         child: GridView.builder(
+  //           shrinkWrap: true,
+  //           physics: const NeverScrollableScrollPhysics(),
+  //           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+  //             crossAxisCount: 3, // 3개씩 한 줄
+  //             mainAxisSpacing: 8,
+  //             crossAxisSpacing: 8,
+  //             childAspectRatio: 1,
+  //           ),
+  //           itemCount: imagePosts.length,
+  //           itemBuilder: (context, index) {
+  //             final post = imagePosts[index];
+  //             return GestureDetector(
+  //               onTap: () {
+  //                 Navigator.push(
+  //                   context,
+  //                   MaterialPageRoute(
+  //                     builder: (_) => PostDetailPage(Post: post),
+  //                   ),
+  //                 );
+  //               },
+  //               child: ClipRRect(
+  //                 borderRadius: BorderRadius.circular(8),
+  //                 child: Image.network(
+  //                   post.postImages!.first,
+  //                   width: double.infinity,
+  //                   height: 250,
+  //                   fit: BoxFit.cover,
+  //                 ),
+  //               ),
+  //             );
+  //           },
+  //         ),
+  //       );
+  //     case 3:
+  //       return _buildScheduleSection(
+  //         clubId: widget.clubVo.clubId,
+  //         clubLeaderId: widget.clubVo.clubUserId,
+  //         currentUserId: currentUserId,
+  //       );
+  //     default:
+  //       return const SizedBox.shrink();
+  //   }
+  // }
 
   Widget _buildIntroSection() {
     final String name = widget.clubVo.clubName.toString();
@@ -634,507 +547,4 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
       ],
     );
   }
-}
-
-// 일정 탭 위젯
-Widget _buildScheduleSection({
-  required int clubId,
-  required int clubLeaderId,
-  required int currentUserId,
-}) {
-  List<AnnounceVo> clubSchedules = [];
-  final List<AnnounceVo> announcements =
-  clubSchedules.where((s) => s.isAnnounce).toList();
-
-  announcements.sort((a, b) {
-    DateTime dateA = DateTime.parse(
-      a.date.split(' ').first.replaceAll('.', '-'),
-    );
-    DateTime dateB = DateTime.parse(
-      b.date.split(' ').first.replaceAll('.', '-'),
-    );
-    return dateB.compareTo(dateA); // 최신 먼저
-  });
-
-  final latestNotice = announcements.isNotEmpty ? announcements.first : null;
-  Future<List<AnnounceVo>> fetchSchedules(int clubId) async {
-    final dio = Dio(BaseOptions(baseUrl: 'http://43.201.50.194:18090/api'));
-
-    try {
-      final response = await dio.get('/announcement/club/$clubId');
-      final data = response.data as List;
-      return data.map((json) => AnnounceVo.fromJson(json)).toList();
-    } catch (e) {
-      debugPrint('❌ 일정 불러오기 실패: $e');
-      return [];
-    }
-  }
-
-  // 날짜별로 일정 맵핑
-  final Map<DateTime, List<AnnounceVo>> scheduleMap = {};
-  for (var item in clubSchedules) {
-    if (!item.isMeeting) continue; // [yj] 달력에 공지는 안 뜨게 설정
-
-    final parts = item.date.split('.');
-    final year = int.parse(parts[0]);
-    final month = int.parse(parts[1]);
-    final day = int.parse(parts[2].split(' ')[0]);
-    final date = DateTime.utc(year, month, day);
-
-    scheduleMap.putIfAbsent(date, () => []).add(item);
-  }
-
-  DateTime _focusedDay = DateTime.now();
-  DateTime? _selectedDay;
-  bool _showSchedule = false;
-
-  void _showScheduleDialog({
-    required BuildContext context,
-    required DateTime selectedDay,
-    required List<AnnounceVo> events,
-    required List<AnnounceVo> schedules,
-    required Map<DateTime, List<AnnounceVo>> scheduleMap,
-    required VoidCallback rebuildParent,
-  }) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setModalState) {
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "${selectedDay.year}년 ${selectedDay.month}월 ${selectedDay.day}일 일정",
-                    style: const TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.close),
-                    onPressed: () => Navigator.pop(context),
-                  ),
-                ],
-              ),
-              content: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children:
-                      events.map((event) {
-                        return Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              event.title,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 4),
-                            Text("${event.time} · ${event.location}"),
-                            const SizedBox(height: 4),
-                            Text("회비: ${event.meetingPrice}"),
-                            const SizedBox(height: 4),
-                            Text(event.description),
-                            const SizedBox(height: 10),
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.people,
-                                  size: 16,
-                                  color: Colors.grey,
-                                ),
-                                const SizedBox(width: 4),
-                                Text(
-                                  "참석 ${event.attendingCount}명",
-                                  style: const TextStyle(
-                                    fontSize: 12,
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                            Row(
-                              children: [
-                                ElevatedButton(
-                                  onPressed: () {
-                                    setModalState(() {
-                                      final updated = AnnounceVo(
-                                        title: event.title,
-                                        date: event.date,
-                                        time: event.time,
-                                        location: event.location,
-                                        description: event.description,
-                                        memberList: event.memberList,
-                                        meetingPrice: event.meetingPrice,
-                                        attendingCount:
-                                            event.attendingCount + 1,
-                                        type: event.type,
-                                        updDate: event.updDate,
-                                      );
-                                      final index = schedules.indexOf(event);
-                                      if (index != -1) {
-                                        schedules[index] = updated;
-                                        final dateKey = DateTime.utc(
-                                          selectedDay.year,
-                                          selectedDay.month,
-                                          selectedDay.day,
-                                        );
-                                        scheduleMap[dateKey] =
-                                            schedules
-                                                .where(
-                                                  (e) => e.date == event.date,
-                                                )
-                                                .toList();
-                                      }
-                                      showDialog(
-                                        context: context,
-                                        builder:
-                                            (_) => AlertDialog(
-                                              title: const Text("참석 확인"),
-                                              content: Text(
-                                                "회비는 '${event.meetingPrice}' 입니다.\n결제 페이지는 준비 중입니다.",
-                                              ),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed:
-                                                      () => Navigator.pop(
-                                                        context,
-                                                      ),
-                                                  child: const Text("확인"),
-                                                ),
-                                              ],
-                                            ),
-                                      );
-                                    });
-                                    rebuildParent();
-                                  },
-                                  style: ElevatedButton.styleFrom(
-                                    minimumSize: const Size(100, 40),
-                                  ),
-                                  child: const Text(
-                                    "참석",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                                const SizedBox(width: 30),
-                                OutlinedButton(
-                                  onPressed: () {
-                                    setModalState(() {
-                                      final updated = AnnounceVo(
-                                        title: event.title,
-                                        date: event.date,
-                                        time: event.time,
-                                        location: event.location,
-                                        description: event.description,
-                                        memberList: event.memberList,
-                                        meetingPrice: event.meetingPrice,
-                                        attendingCount:
-                                            (event.attendingCount > 0)
-                                                ? event.attendingCount - 1
-                                                : 0,
-                                        type: event.type,
-                                        updDate: event.updDate,
-                                      );
-                                      final index = schedules.indexOf(event);
-                                      if (index != -1) {
-                                        schedules[index] = updated;
-                                        final dateKey = DateTime.utc(
-                                          selectedDay.year,
-                                          selectedDay.month,
-                                          selectedDay.day,
-                                        );
-                                        scheduleMap[dateKey] =
-                                            schedules
-                                                .where(
-                                                  (e) => e.date == event.date,
-                                                )
-                                                .toList();
-                                      }
-                                    });
-                                    rebuildParent();
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    minimumSize: const Size(100, 40),
-                                  ),
-                                  child: const Text(
-                                    "불참",
-                                    style: TextStyle(fontSize: 12),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            if (clubLeaderId == currentUserId)
-                              const SizedBox(width: 10),
-                            if (clubLeaderId == currentUserId)
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder:
-                                          (_) => AddMeetingPage(
-                                            selectedDate: selectedDay,
-                                            existingSchedule:
-                                                event, // 수정할 일정 넘기기
-                                          ),
-                                    ),
-                                  );
-                                },
-                                child: const Text("일정 수정하기"),
-                              ),
-                            const SizedBox(height: 12),
-                          ],
-                        );
-                      }).toList(),
-                ),
-              ),
-            );
-          },
-        );
-      },
-    );
-  }
-
-  return StatefulBuilder(
-    builder: (context, setState) {
-      return Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Column(
-          children: [
-            if (latestNotice != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 12.0),
-                child: GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder:
-                            (_) => AnnouncementListPage(
-                              announcements: announcements,
-                            ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 14,
-                    ),
-                    decoration: BoxDecoration(
-                      color: Colors.yellow[100],
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Text(
-                      "📢 ${latestNotice.title}",
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-
-            TableCalendar(
-              firstDay: DateTime.utc(2020, 1, 1),
-              lastDay: DateTime.utc(2030, 12, 31),
-              focusedDay: _focusedDay,
-              selectedDayPredicate: (day) => isSameDay(_selectedDay, day),
-              eventLoader: (day) {
-                final dateKey = DateTime.utc(day.year, day.month, day.day);
-                return scheduleMap[dateKey]
-                        ?.where((e) => e.isMeeting)
-                        .toList() ??
-                    [];
-              },
-              onDaySelected: (selectedDay, focusedDay) {
-                setState(() {
-                  _selectedDay = selectedDay;
-                  _focusedDay = focusedDay;
-                  _showSchedule = false;
-                });
-              },
-              onDayLongPressed: (selectedDay, focusedDay) {
-                final dateKey = DateTime.utc(
-                  selectedDay.year,
-                  selectedDay.month,
-                  selectedDay.day,
-                );
-                final events = scheduleMap[dateKey] ?? [];
-
-                if (events.isNotEmpty) {
-                  _showScheduleDialog(
-                    context: context,
-                    selectedDay: selectedDay,
-                    events: events,
-                    schedules: clubSchedules,
-                    scheduleMap: scheduleMap,
-                    rebuildParent: () => (context as Element).markNeedsBuild(),
-                  );
-                }
-              },
-
-              calendarFormat: CalendarFormat.month,
-              onFormatChanged: (_) {},
-              headerStyle: const HeaderStyle(
-                formatButtonVisible: false,
-                titleCentered: true,
-              ),
-              calendarStyle: const CalendarStyle(
-                markersMaxCount: 0,
-                selectedDecoration: BoxDecoration(),
-              ),
-              calendarBuilders: CalendarBuilders(
-                selectedBuilder: (context, day, focusedDay) {
-                  return Container(
-                    width: 40, // 원하는 값으로 줄이기 (기본 약 36~40 정도)
-                    height: 40,
-                    alignment: Alignment.center,
-                    decoration: const BoxDecoration(
-                      color: Colors.green,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Text(
-                      '${day.day}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  );
-                },
-                defaultBuilder: (context, day, focusedDay) {
-                  final dateKey = DateTime.utc(day.year, day.month, day.day);
-                  final hasEvents = scheduleMap[dateKey]?.isNotEmpty ?? false;
-
-                  if (hasEvents) {
-                    return Container(
-                      width: 45, // 원하는 값으로 줄이기 (기본 약 36~40 정도)
-                      height: 45,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: Colors.green.shade100,
-                        shape: BoxShape.circle,
-                      ),
-                      child: Text(
-                        '${day.day}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  }
-                  return null;
-                },
-              ),
-            ),
-            const SizedBox(height: 12),
-            if (_selectedDay != null && scheduleMap[_selectedDay] != null)
-              Column(
-                children: [
-                  if (!_showSchedule)
-                    ElevatedButton(
-                      onPressed: () {
-                        setState(() {
-                          _showSchedule = true;
-                        });
-                      },
-                      child: const Text("일정보기"),
-                    )
-                  else
-                    ...scheduleMap[_selectedDay]!.map((schedule) {
-                      final dateKey = DateTime.utc(
-                        _selectedDay!.year,
-                        _selectedDay!.month,
-                        _selectedDay!.day,
-                      );
-                      final events = scheduleMap[dateKey] ?? [];
-
-                      return GestureDetector(
-                        onTap: () {
-                          _showScheduleDialog(
-                            context: context,
-                            selectedDay: _selectedDay!,
-                            events: events,
-                            schedules: clubSchedules,
-                            scheduleMap: scheduleMap,
-                            rebuildParent:
-                                () => (context as Element).markNeedsBuild(),
-                          );
-                        },
-                        child: SizedBox(
-                          width: double.infinity,
-                          child: Card(
-                            margin: const EdgeInsets.symmetric(
-                              horizontal: 16,
-                              vertical: 8,
-                            ),
-                            elevation: 2,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    schedule.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text("${schedule.date} / ${schedule.time}"),
-                                  Text("장소: ${schedule.location}"),
-                                  const SizedBox(height: 6),
-                                  Text(schedule.description),
-                                  Text("회비: ${schedule.meetingPrice}"),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                ],
-              ),
-            if (_selectedDay == null)
-              Column(children: const [Text("날짜를 선택해 주세요")])
-            else if (scheduleMap[_selectedDay] == null)
-              Column(
-                children: [
-                  const Text("해당 날짜에 일정이 없습니다."),
-                  if (clubLeaderId == currentUserId)
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder:
-                                (context) =>
-                                    AddMeetingPage(selectedDate: _selectedDay!),
-                          ),
-                        );
-                      },
-                      child: const Text('일정 추가하기'),
-                    ),
-                ],
-              ),
-          ],
-        ),
-      );
-    },
-  );
 }
