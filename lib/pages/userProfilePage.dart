@@ -18,6 +18,7 @@ import 'package:slivermate_project_flutter/components/classPage.dart';
 import 'package:slivermate_project_flutter/components/myPostPage.dart';
 import 'package:slivermate_project_flutter/pages/callStaffPage.dart';
 import 'package:slivermate_project_flutter/components/meetingSchedulePage.dart';
+import 'package:slivermate_project_flutter/components/paymentListPage.dart'; //
 
 class UserProfilePage extends StatelessWidget {
   const UserProfilePage({super.key});
@@ -49,15 +50,13 @@ class _UserProfilePage extends StatefulWidget {
 class _UserProfilePageState extends State<_UserProfilePage> {
   late PersistCookieJar cookieJar;
   bool isLoading = true;
-  UserVo? currentUser; // 로그인한 유저 정보를 저장할 변수
+  UserVo? currentUser;
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
   static final Dio dio = Dio();
   static String sessionCheckUrl =
       "http://$ec2IpAddress:$ec2Port/api/user/session";
-
-  // 로그아웃 API 엔드포인트
   static String logoutUrl = "http://$ec2IpAddress:$ec2Port/api/user/logout";
 
   @override
@@ -95,7 +94,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     }
   }
 
-  // 로그아웃 (GET 방식)
   Future<void> logout() async {
     try {
       final response = await dio.get(logoutUrl);
@@ -136,7 +134,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     );
   }
 
-  // 각 버튼 클릭 시 동작
   void _handleMenuButtonTap(String text, BuildContext context) {
     Map<String, VoidCallback> actions = {
       "가족구성원": () {
@@ -176,7 +173,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
         );
       },
       "모임": () {
-        // 실제 currentUser 로 모임 페이지로
         if (currentUser == null) return;
         Navigator.push(
           context,
@@ -186,7 +182,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
         );
       },
       "모임 일정": () {
-        // 새로 만든 "모임 일정" 페이지로 이동
         if (currentUser == null) return;
         Navigator.push(
           context,
@@ -198,7 +193,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
       },
     };
 
-    // 나머지 (문의, 내 글보기, 등)는 아래에서 분기
     if (actions.containsKey(text)) {
       actions[text]!();
     } else {
@@ -216,10 +210,13 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             ),
           );
           break;
-        case "내 호스트":
-        case "오늘의 운세":
-          _showComingSoonDialog(context);
+        case "결제": // ✅ 여기 수정됨
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PaymentListPage()),
+          );
           break;
+        case "내 호스트":
         default:
           _showComingSoonDialog(context);
           break;
@@ -227,7 +224,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     }
   }
 
-  // 메뉴 버튼 빌드
   Widget _buildMenuButton(String text) {
     return InkWell(
       onTap: () => _handleMenuButtonTap(text, context),
@@ -265,7 +261,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
     return SingleChildScrollView(
       child: Column(
         children: [
-          // 썸네일 + 닉네임 + 로그아웃
           const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -308,8 +303,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             ),
           ),
           const SizedBox(height: 16),
-
-          // 구독상태, 구독기간, 가입된 동아리
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Container(
@@ -382,8 +375,6 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             ),
           ),
           const SizedBox(height: 16),
-
-          // 기존 8개 버튼 중 "내 모임장" → "모임 일정" 으로 변경
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: GridView.count(
@@ -400,7 +391,7 @@ class _UserProfilePageState extends State<_UserProfilePage> {
                 _buildMenuButton("내 글보기"),
                 _buildMenuButton("내 호스트"),
                 _buildMenuButton("모임 일정"),
-                _buildMenuButton("오늘의 운세"),
+                _buildMenuButton("결제"), // ✅ 유지
               ],
             ),
           ),

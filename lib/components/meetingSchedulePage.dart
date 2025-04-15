@@ -282,48 +282,49 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
               elevation: 2,
               margin: const EdgeInsets.symmetric(vertical: 8),
               child: Column(
-                children: [
-                  ListTile(
-                    leading: const Icon(Icons.group),
-                    title: Text(schedule.title),
-                    subtitle: Text(
-                      "${schedule.date} | ${schedule.time}\n${schedule.location}",
-                    ),
-                    trailing: Text(schedule.meetingPrice),
-                    isThreeLine: true,
-                  ),
-                  if (!isPaid)
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 12.0, right: 12.0),
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: ElevatedButton(
-                          onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => PaymentPage(),
-                              ),
-                            );
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.green,
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 20,
-                              vertical: 12,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
-                            ),
-                          ),
-                          child: const Text(
-                            "결제하기",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                        ),
-                      ),
-                    ),
-                ],
+                // 결제하기버튼 클릭 (is_paid 결제여부 확인)
+                // children: [
+                //   ListTile(
+                //     leading: const Icon(Icons.group),
+                //     title: Text(schedule.title),
+                //     subtitle: Text(
+                //       "${schedule.date} | ${schedule.time}\n${schedule.location}",
+                //     ),
+                //     trailing: Text(schedule.meetingPrice),
+                //     isThreeLine: true,
+                //   ),
+                //   if (!isPaid)
+                //     // Padding(
+                //     //   padding: const EdgeInsets.only(bottom: 12.0, right: 12.0),
+                //     //   child: Align(
+                //     //     alignment: Alignment.centerRight,
+                //     //     child: ElevatedButton(
+                //     //       onPressed: () {
+                //     //         Navigator.push(
+                //     //           context,
+                //     //           MaterialPageRoute(
+                //     //             builder: (context) => PaymentPage(),
+                //     //           ),
+                //     //         );
+                //     //       },
+                //     //       style: ElevatedButton.styleFrom(
+                //     //         backgroundColor: Colors.green,
+                //     //         padding: const EdgeInsets.symmetric(
+                //     //           horizontal: 20,
+                //     //           vertical: 12,
+                //     //         ),
+                //     //         shape: RoundedRectangleBorder(
+                //     //           borderRadius: BorderRadius.circular(6),
+                //     //         ),
+                //     //       ),
+                //     //       child: const Text(
+                //     //         "결제하기",
+                //     //         style: TextStyle(fontSize: 16),
+                //     //       ),
+                //     //     ),
+                //     //   ),
+                //     // ),
+                // ],
               ),
             );
           }).toList(),

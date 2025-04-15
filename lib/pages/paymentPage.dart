@@ -3,7 +3,18 @@ import 'package:slivermate_project_flutter/components/mainLayout.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 
 class PaymentPage extends StatefulWidget {
-  const PaymentPage({super.key});
+  final String meetingTitle;
+  final String meetingDesc;
+  final int meetingFee;
+  final String meetingTime;
+
+  const PaymentPage({
+    super.key,
+    required this.meetingTitle,
+    required this.meetingDesc,
+    required this.meetingFee,
+    required this.meetingTime,
+  });
 
   @override
   _PaymentPageState createState() => _PaymentPageState();
