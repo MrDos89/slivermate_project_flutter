@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:slivermate_project_flutter/vo/announceVo.dart';
+import 'package:dio/dio.dart';
 
 class AddMeetingForm extends StatefulWidget {
   final DateTime selectedDate;
@@ -14,7 +15,6 @@ class AddMeetingForm extends StatefulWidget {
 }
 final List<int> hourOptions = List.generate(13, (i) => i);
 final List<int> minuteOptions = [0, 10, 15, 30, 45]; // 원하는 분 단위만
-
 
 class _AddMeetingFormState extends State<AddMeetingForm> {
   final TextEditingController _titleController = TextEditingController();
@@ -47,23 +47,60 @@ class _AddMeetingFormState extends State<AddMeetingForm> {
     }
   }
 
+  Future<void> _postMeetingToServer(AnnounceVo announce) async {
+    final dio = Dio(BaseOptions(
+      baseUrl: 'http://43.201.50.194:18090/api',
+      connectTimeout: const Duration(seconds: 5),
+      receiveTimeout: const Duration(seconds: 3),
+      contentType: 'application/json',
+    ));
+
+    try {
+      final response = await dio.post('/announcement', data: announce.toJson());
+      debugPrint('✅ 등록 성공: ${response.data}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('모임 일정 등록 완료')),
+      );
+      Navigator.pop(context, true); // 등록 성공 후 이전 화면으로 돌아가기
+    } catch (e) {
+      debugPrint('❌ 등록 실패: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('등록 실패. 다시 시도해주세요')),
+      );
+    }
+  }
+
+
   void _handleSubmit() {
     final title = _titleController.text.trim();
     final content = _contentController.text.trim();
     final location = _locationController.text.trim();
     final fee = _feeController.text.trim();
 
-    if (title.isEmpty || content.isEmpty || location.isEmpty || fee.isEmpty) {
+    if (title.isEmpty || content.isEmpty || location.isEmpty || fee.isEmpty || _selectedHour == null || _selectedMinute == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('모임 제목, 내용, 장소, 회비를 모두 입력해주세요')),
+        const SnackBar(content: Text('모든 항목을 입력해주세요')),
       );
       return;
     }
 
-    // 정상 등록 처리
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('모임 일정 등록 완료')),
+    final String formattedDate = DateFormat('yyyy.MM.dd (E)', 'ko_KR').format(widget.selectedDate);
+    final String timeString = '${_selectedHour!.toString().padLeft(2, '0')}:${_selectedMinute!.toString().padLeft(2, '0')}';
+
+    final announce = AnnounceVo(
+      title: title,
+      date: formattedDate,
+      time: timeString,
+      location: location,
+      description: content,
+      meetingPrice: fee,
+      attendingCount: 0,
+      type: 2,
+      memberList: [],
+      updDate: DateTime.now(),
     );
+
+    _postMeetingToServer(announce);
   }
 
   @override

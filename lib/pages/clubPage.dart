@@ -426,50 +426,61 @@ class _ClubPageState extends State<_ClubPage> {
 
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                child: Container(
-                  height: 140,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      image: club.clubThumbnail.isNotEmpty
-                          ? NetworkImage(club.clubThumbnail)
-                          : const AssetImage('lib/images/club.avif') as ImageProvider,
-                      fit: BoxFit.cover,
-                      colorFilter: ColorFilter.mode(
-                        Color.fromRGBO(0, 0, 0, 0.4),
-                        BlendMode.darken,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => ClubDetailPage(clubVo: club),
                       ),
-                    ),
-                  ),
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(16),
                   child: Container(
-                    padding: const EdgeInsets.all(16),
+                    height: 140,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(16),
+                      image: DecorationImage(
+                        image: club.clubThumbnail.isNotEmpty
+                            ? NetworkImage(club.clubThumbnail)
+                            : const AssetImage('lib/images/club.avif') as ImageProvider,
+                        fit: BoxFit.cover,
+                        colorFilter: const ColorFilter.mode(
+                          Color.fromRGBO(0, 0, 0, 0.4),
+                          BlendMode.darken,
+                        ),
+                      ),
                     ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          club.clubName,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                    child: Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            club.clubName,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          club.clubDesc,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            color: Colors.white70,
+                          const SizedBox(height: 4),
+                          Text(
+                            club.clubDesc,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: Colors.white70,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 2,
                           ),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

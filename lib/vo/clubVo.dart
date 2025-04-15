@@ -5,6 +5,7 @@ class ClubVo {
   final int clubId;
   final String clubName;
   final int clubUserId;
+  final String clubUserNickname;
   final int clubCategoryId;
   final int clubSubCategoryId;
   final String clubThumbnail;
@@ -21,6 +22,7 @@ class ClubVo {
     required this.clubId,
     required this.clubName,
     required this.clubUserId,
+    required this.clubUserNickname,
     required this.clubCategoryId,
     required this.clubSubCategoryId,
     required this.clubThumbnail,
@@ -39,6 +41,7 @@ class ClubVo {
       clubId: json['club_id'],
       clubName: json['club_name'],
       clubUserId: json['club_user_id'],
+      clubUserNickname: json['user_name'],
       clubCategoryId: json['club_category_id'],
       clubSubCategoryId: json['club_sub_category_id'],
       clubThumbnail: json['club_thumbnail'] ?? '',
@@ -58,6 +61,7 @@ class ClubVo {
       'club_id': clubId,
       'club_name': clubName,
       'club_user_id': clubUserId,
+      'club_user_nickname': clubUserNickname,
       'club_category_id': clubCategoryId,
       'club_sub_category_id': clubSubCategoryId,
       'club_thumbnail': clubThumbnail,

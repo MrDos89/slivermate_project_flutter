@@ -430,6 +430,7 @@ class _NewClubPageState extends State<NewClubPage> {
                       clubId: 0,
                       clubName: clubName,
                       clubUserId: user.uid,
+                      clubUserNickname: user.nickname,
                       clubCategoryId: _getMainCategoryId(
                           selectedInterests.first),
                       clubSubCategoryId: _getSubCategoryId(

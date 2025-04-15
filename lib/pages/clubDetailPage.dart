@@ -14,107 +14,109 @@ import 'package:slivermate_project_flutter/vo/clubVo.dart';
 import 'package:slivermate_project_flutter/pages/addMeetingPage.dart';
 import 'package:provider/provider.dart';
 import 'package:slivermate_project_flutter/components/userProvider.dart';
+import 'package:intl/intl.dart';
+import 'package:dio/dio.dart';
 
-final Map<int, List<AnnounceVo>> dummyClubSchedules = {
-  1: [
-    AnnounceVo(
-      title: "4월 정기 등산",
-      date: "2025.04.10 (토)",
-      time: "오전 9시",
-      location: "북한산 입구",
-      description: "서울 등산 동호회 4월 정기 모임입니다.",
-      meetingPrice: "5,000원",
-      attendingCount: 12,
-      type: 2,
-      memberList: ["10", "15"],
-      updDate: DateTime.parse("2025-04-01"),
-    ),
-    AnnounceVo(
-      title: "번개 산책 모임",
-      date: "2025.04.15 (수)",
-      time: "오후 7시",
-      location: "한강 반포공원",
-      description: "가볍게 산책하며 이야기 나눠요.",
-      meetingPrice: "무료",
-      attendingCount: 5,
-      type: 2,
-      memberList: ["10", "11"],
-      updDate: DateTime.parse("2025-04-02"),
-    ),
-    AnnounceVo(
-      title: "다음 달 등산 일정 사전 안내",
-      date: "2025.04.20 (일)",
-      time: "오전 10시",
-      location: "온라인",
-      description: "다음 달 정기 모임 일정을 미리 안내드립니다.",
-      meetingPrice: "",
-      attendingCount: 0,
-      type: 1,
-      memberList: [],
-      updDate: DateTime.parse("2025-04-03"),
-    ),
-    AnnounceVo(
-      title: "5월 모임 일정 공지",
-      date: "2025.05.01 (수)",
-      time: "오후 3시",
-      location: "온라인",
-      description: "5월 모임 일정을 공지드립니다. 참여 여부는 추후 안내 예정입니다.",
-      meetingPrice: "",
-      attendingCount: 0,
-      type: 1,
-      memberList: [],
-      updDate: DateTime.parse("2025-04-05"),
-    ),
-    AnnounceVo(
-      title: "신규 멤버 모집 안내",
-      date: "2025.05.05 (일)",
-      time: "오전 11시",
-      location: "온라인",
-      description: "서울 등산 동호회 신규 멤버를 모집합니다. 자세한 사항은 공지 내용을 확인하세요.",
-      meetingPrice: "",
-      attendingCount: 0,
-      type: 1,
-      memberList: [],
-      updDate: DateTime.parse("2025-04-06"),
-    ),
-    AnnounceVo(
-      title: "회비 납부 안내",
-      date: "2025.05.10 (금)",
-      time: "오전 9시",
-      location: "온라인",
-      description: "이번 달 회비 납부 안내입니다. 계좌정보 및 납부기한은 공지를 확인해주세요.",
-      meetingPrice: "",
-      attendingCount: 0,
-      type: 1,
-      memberList: [],
-      updDate: DateTime.parse("2025-04-07"),
-    ),
-    AnnounceVo(
-      title: "안전 수칙 안내",
-      date: "2025.05.12 (일)",
-      time: "오후 5시",
-      location: "온라인",
-      description: "등산 시 유의사항 및 안전 수칙을 안내드립니다. 반드시 숙지해주세요.",
-      meetingPrice: "",
-      attendingCount: 0,
-      type: 1,
-      memberList: [],
-      updDate: DateTime.parse("2025-04-08"),
-    ),
-    AnnounceVo(
-      title: "장비 대여 관련 공지",
-      date: "2025.05.15 (수)",
-      time: "오후 2시",
-      location: "온라인",
-      description: "등산 장비 대여 신청 방법 및 주의사항을 공지합니다.",
-      meetingPrice: "",
-      attendingCount: 0,
-      type: 1,
-      memberList: [],
-      updDate: DateTime.parse("2025-04-09"),
-    ),
-  ],
-};
+// final Map<int, List<AnnounceVo>> dummyClubSchedules = {
+//   1: [
+//     AnnounceVo(
+//       title: "4월 정기 등산",
+//       date: "2025.04.10 (토)",
+//       time: "오전 9시",
+//       location: "북한산 입구",
+//       description: "서울 등산 동호회 4월 정기 모임입니다.",
+//       meetingPrice: "5,000원",
+//       attendingCount: 12,
+//       type: 2,
+//       memberList: ["10", "15"],
+//       updDate: DateTime.parse("2025-04-01"),
+//     ),
+//     AnnounceVo(
+//       title: "번개 산책 모임",
+//       date: "2025.04.15 (수)",
+//       time: "오후 7시",
+//       location: "한강 반포공원",
+//       description: "가볍게 산책하며 이야기 나눠요.",
+//       meetingPrice: "무료",
+//       attendingCount: 5,
+//       type: 2,
+//       memberList: ["10", "11"],
+//       updDate: DateTime.parse("2025-04-02"),
+//     ),
+//     AnnounceVo(
+//       title: "다음 달 등산 일정 사전 안내",
+//       date: "2025.04.20 (일)",
+//       time: "오전 10시",
+//       location: "온라인",
+//       description: "다음 달 정기 모임 일정을 미리 안내드립니다.",
+//       meetingPrice: "",
+//       attendingCount: 0,
+//       type: 1,
+//       memberList: [],
+//       updDate: DateTime.parse("2025-04-03"),
+//     ),
+//     AnnounceVo(
+//       title: "5월 모임 일정 공지",
+//       date: "2025.05.01 (수)",
+//       time: "오후 3시",
+//       location: "온라인",
+//       description: "5월 모임 일정을 공지드립니다. 참여 여부는 추후 안내 예정입니다.",
+//       meetingPrice: "",
+//       attendingCount: 0,
+//       type: 1,
+//       memberList: [],
+//       updDate: DateTime.parse("2025-04-05"),
+//     ),
+//     AnnounceVo(
+//       title: "신규 멤버 모집 안내",
+//       date: "2025.05.05 (일)",
+//       time: "오전 11시",
+//       location: "온라인",
+//       description: "서울 등산 동호회 신규 멤버를 모집합니다. 자세한 사항은 공지 내용을 확인하세요.",
+//       meetingPrice: "",
+//       attendingCount: 0,
+//       type: 1,
+//       memberList: [],
+//       updDate: DateTime.parse("2025-04-06"),
+//     ),
+//     AnnounceVo(
+//       title: "회비 납부 안내",
+//       date: "2025.05.10 (금)",
+//       time: "오전 9시",
+//       location: "온라인",
+//       description: "이번 달 회비 납부 안내입니다. 계좌정보 및 납부기한은 공지를 확인해주세요.",
+//       meetingPrice: "",
+//       attendingCount: 0,
+//       type: 1,
+//       memberList: [],
+//       updDate: DateTime.parse("2025-04-07"),
+//     ),
+//     AnnounceVo(
+//       title: "안전 수칙 안내",
+//       date: "2025.05.12 (일)",
+//       time: "오후 5시",
+//       location: "온라인",
+//       description: "등산 시 유의사항 및 안전 수칙을 안내드립니다. 반드시 숙지해주세요.",
+//       meetingPrice: "",
+//       attendingCount: 0,
+//       type: 1,
+//       memberList: [],
+//       updDate: DateTime.parse("2025-04-08"),
+//     ),
+//     AnnounceVo(
+//       title: "장비 대여 관련 공지",
+//       date: "2025.05.15 (수)",
+//       time: "오후 2시",
+//       location: "온라인",
+//       description: "등산 장비 대여 신청 방법 및 주의사항을 공지합니다.",
+//       meetingPrice: "",
+//       attendingCount: 0,
+//       type: 1,
+//       memberList: [],
+//       updDate: DateTime.parse("2025-04-09"),
+//     ),
+//   ],
+// };
 
 // const String currentUser = "홍길동"; // 로그인된 사용자 (임시)
 
@@ -469,10 +471,13 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   Widget _buildIntroSection() {
     final String name = widget.clubVo.clubName.toString();
     final DateTime createdAt = widget.clubVo.clubRegisterDate;
+    final String formattedDate = DateFormat('yyyy.MM.dd').format(createdAt);
     final int clubUserId = widget.clubVo.clubUserId as int? ?? 0;
+    final String clubUserNickname = widget.clubVo.clubUserNickname ?? "알 수 없음";
     final int memberCount = widget.clubVo.clubMemberNumber as int? ?? 0;
     final int maxCount = widget.clubVo.clubMemberMax as int? ?? 0;
     final String description = widget.clubVo.clubDesc.toString();
+
 
     return Padding(
       padding: const EdgeInsets.all(16),
@@ -490,7 +495,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
                 ),
               ),
               Text(
-                "개설일: $createdAt",
+                "개설일: $formattedDate",
                 style: const TextStyle(fontSize: 14, color: Colors.grey),
               ),
             ],
@@ -503,7 +508,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
                 children: [
                   const SizedBox(width: 4),
                   Text(
-                    "모임장: $clubUserId",
+                    "모임장: ${widget.clubVo.clubUserNickname ?? "알 수 없음"}",
                     style: const TextStyle(fontSize: 16),
                   ),
                   const Icon(
@@ -527,17 +532,18 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   }
 
   Widget _buildThumbnail() {
-    final String thumbnailUrl = widget.clubVo.clubThumbnail.toString();
+    final String thumbnailUrl = widget.clubVo.clubThumbnail.trim();
+
+    final ImageProvider imageProvider = thumbnailUrl.isNotEmpty
+        ? NetworkImage(thumbnailUrl)
+        : const AssetImage('lib/images/club.avif');
 
     return SizedBox(
       width: double.infinity,
       height: 200,
-      child: Image.network(
-        thumbnailUrl,
+      child: Image(
+        image: imageProvider,
         fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) {
-          return const Center(child: Text("이미지를 불러올 수 없습니다"));
-        },
       ),
     );
   }
@@ -546,6 +552,7 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
   Widget build(BuildContext context) {
     final userVo = Provider.of<UserProvider>(context).user;
     final currentUserId = userVo?.uid ?? 0;
+    final isLeader = widget.clubVo.clubUserId == currentUserId;
 
     return Stack(
       children: [
@@ -584,50 +591,45 @@ class _ClubDetailPageState extends State<ClubDetailPage> {
         Positioned(
           bottom: 80,
           right: 16,
-          child:
-              _isJoined
-                  ? FloatingActionButton(
-                    onPressed: () async {
-                      final result = await Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (_) =>
-                                  NewClubPostPage(clubId: widget.clubVo.clubId),
-                        ),
-                      );
-
-                      if (result == true) {
-                        await _refreshClubPosts();
-                      }
-                    },
-                    backgroundColor: Colors.green,
-                    child: const Icon(Icons.edit, color: Colors.white),
-                  )
-                  : SizedBox(
-                    width: 70,
-                    height: 70,
-                    child: FloatingActionButton(
-                      onPressed: () {
-                        setState(() {
-                          _isJoined = true;
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text("모임에 가입되었습니다!")),
-                        );
-                      },
-                      backgroundColor: Colors.green,
-                      shape: const CircleBorder(),
-                      child: const Text(
-                        "가입하기",
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  ),
+          child: !_isJoined && !isLeader
+              ? FloatingActionButton(
+            onPressed: () {
+              setState(() {
+                _isJoined = true;
+              });
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text("모임에 가입되었습니다!")),
+              );
+            },
+            backgroundColor: Colors.green,
+            shape: const CircleBorder(),
+            child: const Text(
+              "가입하기",
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.bold,
+                color: Colors.white,
+              ),
+            ),
+          )
+              : isLeader
+              ? FloatingActionButton(
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) =>
+                      NewClubPostPage(clubId: widget.clubVo.clubId),
+                ),
+              );
+              if (result == true) {
+                await _refreshClubPosts();
+              }
+            },
+            backgroundColor: Colors.green,
+            child: const Icon(Icons.edit, color: Colors.white),
+          )
+              : const SizedBox.shrink(),
         ),
       ],
     );
@@ -640,9 +642,9 @@ Widget _buildScheduleSection({
   required int clubLeaderId,
   required int currentUserId,
 }) {
-  final schedules = dummyClubSchedules[clubId] ?? [];
+  List<AnnounceVo> clubSchedules = [];
   final List<AnnounceVo> announcements =
-      schedules.where((s) => s.isAnnounce).toList();
+  clubSchedules.where((s) => s.isAnnounce).toList();
 
   announcements.sort((a, b) {
     DateTime dateA = DateTime.parse(
@@ -655,10 +657,22 @@ Widget _buildScheduleSection({
   });
 
   final latestNotice = announcements.isNotEmpty ? announcements.first : null;
+  Future<List<AnnounceVo>> fetchSchedules(int clubId) async {
+    final dio = Dio(BaseOptions(baseUrl: 'http://43.201.50.194:18090/api'));
+
+    try {
+      final response = await dio.get('/announcement/club/$clubId');
+      final data = response.data as List;
+      return data.map((json) => AnnounceVo.fromJson(json)).toList();
+    } catch (e) {
+      debugPrint('❌ 일정 불러오기 실패: $e');
+      return [];
+    }
+  }
 
   // 날짜별로 일정 맵핑
   final Map<DateTime, List<AnnounceVo>> scheduleMap = {};
-  for (var item in schedules) {
+  for (var item in clubSchedules) {
     if (!item.isMeeting) continue; // [yj] 달력에 공지는 안 뜨게 설정
 
     final parts = item.date.split('.');
@@ -963,7 +977,7 @@ Widget _buildScheduleSection({
                     context: context,
                     selectedDay: selectedDay,
                     events: events,
-                    schedules: schedules,
+                    schedules: clubSchedules,
                     scheduleMap: scheduleMap,
                     rebuildParent: () => (context as Element).markNeedsBuild(),
                   );
@@ -1053,7 +1067,7 @@ Widget _buildScheduleSection({
                             context: context,
                             selectedDay: _selectedDay!,
                             events: events,
-                            schedules: schedules,
+                            schedules: clubSchedules,
                             scheduleMap: scheduleMap,
                             rebuildParent:
                                 () => (context as Element).markNeedsBuild(),
