@@ -30,7 +30,7 @@ class _MeetingSchedulePageState extends State<MeetingSchedulePage> {
   List<ClubVo> joinedClubs = [];
   Map<String, dynamic>? purchaseData;
   List<AnnounceVo> allAnnouncements = [];
-  Set<DateTime> markedDates = {}; // ✅ 달력에 표시할 날짜
+  Set<DateTime> markedDates = {}; //  달력에 표시할 날짜
 
   static String ec2IpAddress = dotenv.get("EC2_IP_ADDRESS");
   static String ec2Port = dotenv.get("EC2_PORT");
