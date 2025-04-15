@@ -141,6 +141,7 @@ flutter:
     - lib/images/요리.jpg
     - lib/images/통기타.jpg
     - lib/images/퍼즐맞추기.jpg
+    - lib/images/club.avif
     - .env
   # To add assets to your application, add an assets section, like this:
   # assets:

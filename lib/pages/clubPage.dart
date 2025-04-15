@@ -189,9 +189,12 @@ class _ClubPageState extends State<_ClubPage> {
             ? indoorHobbies[subCategoryId] ?? "기타"
             : outdoorHobbies[subCategoryId] ?? "기타";
 
+        final String categoryType = categoryId == 1 ? "실내" : "실외";
+
         return {
           "vo": club,
           "id": club.clubId,
+          "categoryType": categoryType,
           "category": hobby,
           "name": club.clubName,
           "description": club.clubDesc,
@@ -424,50 +427,55 @@ class _ClubPageState extends State<_ClubPage> {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0),
                 child: Container(
-                  width: MediaQuery.of(context).size.width,
+                  height: 140,
                   decoration: BoxDecoration(
-                    color: Colors.white,
                     borderRadius: BorderRadius.circular(16),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                        offset: Offset(0, 2),
+                    image: DecorationImage(
+                      image: club.clubThumbnail.isNotEmpty
+                          ? NetworkImage(club.clubThumbnail)
+                          : const AssetImage('lib/images/club.avif') as ImageProvider,
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Color.fromRGBO(0, 0, 0, 0.4),
+                        BlendMode.darken,
                       ),
-                    ],
+                    ),
                   ),
-                  padding: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // 썸네일 or 아이콘
-                      club.clubThumbnail.isNotEmpty
-                          ? Image.network(
-                        club.clubThumbnail,
-                        height: 40,
-                        errorBuilder: (context, error, stackTrace) =>
-                            Icon(Icons.image_not_supported),
-                      )
-                          : Icon(Icons.group, size: 40, color: Colors.grey[400]),
-
-                      const SizedBox(height: 8),
-
-                      Text(
-                        club.clubName,
-                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                      Text(
-                        club.clubDesc,
-                        style: const TextStyle(color: Colors.grey),
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                      ),
-                    ],
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          club.clubName,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          club.clubDesc,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            color: Colors.white70,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );
             },
+
           ),
         ),
         const SizedBox(height: 5),
@@ -550,19 +558,26 @@ class _ClubPageState extends State<_ClubPage> {
                             // 썸네일 이미지
                             ClipRRect(
                               borderRadius: BorderRadius.circular(8),
-                              child: Image.network(
-                                club["thumbnailUrl"] as String? ?? "",
+                              child: club["thumbnailUrl"] != null && (club["thumbnailUrl"] as String).isNotEmpty
+                                  ? Image.network(
+                                club["thumbnailUrl"] as String,
                                 width: 80,
                                 height: 80,
                                 fit: BoxFit.cover,
                                 errorBuilder: (context, error, stackTrace) {
-                                  return Container(
+                                  return Image.asset(
+                                    'lib/images/club.avif',
                                     width: 80,
                                     height: 80,
-                                    color: Colors.grey[300],
-                                    child: const Icon(Icons.broken_image, color: Colors.grey),
+                                    fit: BoxFit.cover,
                                   );
                                 },
+                              )
+                                  : Image.asset(
+                                'lib/images/club.avif',
+                                width: 80,
+                                height: 80,
+                                fit: BoxFit.cover,
                               ),
                             ),
                             const SizedBox(width: 16),

@@ -75,7 +75,7 @@ class _SelectAccountPageState extends State<SelectAccountPage> {
         Provider.of<UserProvider>(context, listen: false).setUser(userData);
 
         //이후 페이지로 이동
-        Navigator.pushReplacementNamed(context, '/post');
+        Navigator.pushReplacementNamed(context, '/userprofile');
       } else {
         debugPrint('로그인에 실패하였습니다.: ${response.statusCode} 에러 발생');
       }
