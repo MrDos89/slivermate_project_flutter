@@ -1,94 +1,180 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:cookie_jar/cookie_jar.dart';
+import 'package:dio_cookie_manager/dio_cookie_manager.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:slivermate_project_flutter/components/headerPage.dart';
 import 'package:slivermate_project_flutter/components/mainLayout.dart';
+import 'package:slivermate_project_flutter/vo/userVo.dart';
+import 'package:slivermate_project_flutter/vo/announceVo.dart';
+import 'package:slivermate_project_flutter/vo/purchaseVo.dart';
+import 'package:slivermate_project_flutter/vo/clubVo.dart';
 import 'package:slivermate_project_flutter/pages/paymentPage.dart';
 
-/// 결제 리스트에 표시할 더미 모델 (예: 모임 정보)
-class PaymentItem {
-  final String thumbnailUrl;
-  final String meetingName;
-  final String meetingDesc;
-  final String meetingLocationTime; // 예: "한강 / 19:00"
-  final int meetingFee; // 예: 10000
-  final bool isPaid; // 결제 완료 여부
-  final DateTime dateJoined; // 참석 버튼을 누른 시점
-  final DateTime? paidAt; // 결제 완료 시점 (null이면 결제 전)
-
-  PaymentItem({
-    required this.thumbnailUrl,
-    required this.meetingName,
-    required this.meetingDesc,
-    required this.meetingLocationTime,
-    required this.meetingFee,
-    required this.isPaid,
-    required this.dateJoined,
-    this.paidAt,
-  });
-}
-
 class PaymentListPage extends StatefulWidget {
-  const PaymentListPage({Key? key}) : super(key: key);
+  final UserVo currentUser;
+  const PaymentListPage({Key? key, required this.currentUser})
+    : super(key: key);
 
   @override
   State<PaymentListPage> createState() => _PaymentListPageState();
 }
 
 class _PaymentListPageState extends State<PaymentListPage> {
-  /// 더미데이터: 실제로는 서버(백엔드)에서 받아온 데이터를 사용
-  final List<PaymentItem> _paymentItems = [
-    PaymentItem(
-      thumbnailUrl:
-          "https://image.shutterstock.com/image-photo/group-people-running-260nw-463291649.jpg",
-      meetingName: "한강 야간 러닝",
-      meetingDesc: "한강에서 함께 달려봐요! 초보 환영",
-      meetingLocationTime: "한강 반포 / 19:00",
-      meetingFee: 5000,
-      isPaid: false,
-      dateJoined: DateTime(2025, 4, 1),
-      paidAt: null,
-    ),
-    PaymentItem(
-      thumbnailUrl:
-          "https://image.shutterstock.com/image-photo/mountain-hikers-260nw-368237157.jpg",
-      meetingName: "청계산 등산 모임",
-      meetingDesc: "초보 등산러도 완등 가능, 함께가요!",
-      meetingLocationTime: "청계산 입구 / 08:00",
-      meetingFee: 10000,
-      isPaid: true,
-      dateJoined: DateTime(2025, 3, 30),
-      paidAt: DateTime(2025, 3, 31, 14, 20),
-    ),
-    PaymentItem(
-      thumbnailUrl:
-          "https://image.shutterstock.com/image-photo/music-concert-party-lights-260nw-140238709.jpg",
-      meetingName: "라이브 콘서트 관람",
-      meetingDesc: "음악 좋아하는 사람 모여!",
-      meetingLocationTime: "홍대 공연장 / 20:00",
-      meetingFee: 30000,
-      isPaid: false,
-      dateJoined: DateTime(2025, 4, 2),
-      paidAt: null,
-    ),
-  ];
+  // List to store fetched announcements (real data; only those where the current user's UID is in the memberList)
+  List<AnnounceVo> _announcements = [];
+  // List to store purchase records for the current user (from sliver_purchase)
+  List<dynamic> _purchaseRecords = [];
+  // List of clubs (used to get a thumbnail from the club's data)
+  List<ClubVo> _clubs = [];
+
+  bool _isLoading = false;
+  Map<String, dynamic>? purchaseData; // (if needed for extra info)
+
+  late PersistCookieJar cookieJar;
+  static final Dio dio = Dio();
+
+  // API endpoints – adjust these URLs as needed (they're derived from your .env settings)
+  late String announcementUrl; // GET /api/announcement
+  late String purchaseUrl; // GET /api/purchase?uid=xxx (returns a list)
+  late String clubUrl; // GET /api/club
 
   @override
-  Widget build(BuildContext context) {
-    return MainLayout(
-      child: Scaffold(
-        appBar: const HeaderPage(pageTitle: "결제 목록", showBackButton: true),
-        body: ListView.builder(
-          itemCount: _paymentItems.length,
-          itemBuilder: (context, index) {
-            final item = _paymentItems[index];
-            return _buildPaymentItemCard(item);
-          },
-        ),
-      ),
-    );
+  void initState() {
+    super.initState();
+    announcementUrl =
+        "http://${dotenv.get("EC2_IP_ADDRESS")}:${dotenv.get("EC2_PORT")}/api/announcement";
+    purchaseUrl =
+        "http://${dotenv.get("EC2_IP_ADDRESS")}:${dotenv.get("EC2_PORT")}/api/purchase";
+    clubUrl =
+        "http://${dotenv.get("EC2_IP_ADDRESS")}:${dotenv.get("EC2_PORT")}/api/club";
+    _initDioAndFetchData();
   }
 
-  /// 각 모임(결제 아이템)을 표시하는 Card
-  Widget _buildPaymentItemCard(PaymentItem item) {
+  Future<void> _initDioAndFetchData() async {
+    final appDocDir = await getApplicationDocumentsDirectory();
+    cookieJar = PersistCookieJar(
+      storage: FileStorage("${appDocDir.path}/.cookies/"),
+    );
+    dio.interceptors.add(CookieManager(cookieJar));
+    await _fetchAllData();
+  }
+
+  Future<void> _fetchAllData() async {
+    setState(() => _isLoading = true);
+    try {
+      await Future.wait([
+        _fetchPurchaseRecords(),
+        _fetchAnnouncementData(),
+        _fetchClubs(),
+      ]);
+      // Optionally, you can process the fetched data here if needed.
+    } catch (e) {
+      debugPrint("Error fetching data: $e");
+    } finally {
+      setState(() => _isLoading = false);
+    }
+  }
+
+  /// (1) Fetch purchase records for the current user via GET.
+  Future<void> _fetchPurchaseRecords() async {
+    try {
+      final response = await dio.get(
+        purchaseUrl,
+        queryParameters: {"uid": widget.currentUser.uid},
+      );
+      if (response.statusCode == 200 && response.data is List) {
+        _purchaseRecords = response.data as List;
+      }
+    } catch (e) {
+      debugPrint("Purchase records fetch error: $e");
+    }
+  }
+
+  /// (2) Fetch announcements (only those where the current user's UID is contained in member_list)
+  Future<void> _fetchAnnouncementData() async {
+    try {
+      final response = await dio.get(announcementUrl);
+      if (response.statusCode == 200 && response.data is List) {
+        final list = response.data as List;
+        _announcements =
+            list
+                .map((e) => AnnounceVo.fromJson(e))
+                .where(
+                  (ann) => ann.memberList.contains(
+                    widget.currentUser.uid.toString(),
+                  ),
+                )
+                .toList();
+      }
+    } catch (e) {
+      debugPrint("Announcement data fetch error: $e");
+    }
+  }
+
+  /// (3) Fetch all clubs (used to get the thumbnail for an announcement via club_id)
+  Future<void> _fetchClubs() async {
+    try {
+      final response = await dio.get(clubUrl);
+      if (response.statusCode == 200 && response.data is List) {
+        final list = response.data as List;
+        _clubs = list.map((e) => ClubVo.fromJson(e)).toList();
+      }
+    } catch (e) {
+      debugPrint("Clubs fetch error: $e");
+    }
+  }
+
+  /// Helper to get purchase info for a given announcement.
+  Map<String, dynamic>? _getPurchaseInfoForAnnouncement(AnnounceVo ann) {
+    try {
+      return _purchaseRecords.firstWhere(
+        (record) =>
+            record["announce_id"].toString() ==
+                ann.toJson()['announce_id'].toString() &&
+            record["uid"].toString() == widget.currentUser.uid.toString(),
+      );
+    } catch (e) {
+      return null;
+    }
+  }
+
+  /// Helper to format a date string (expects ISO8601 parsable string) to yyyy-MM-dd.
+  String _formattedDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return "";
+    try {
+      final dt = DateTime.parse(dateStr);
+      return "${dt.year}-${dt.month.toString().padLeft(2, '0')}-${dt.day.toString().padLeft(2, '0')}";
+    } catch (e) {
+      return dateStr;
+    }
+  }
+
+  /// Build the UI for each announcement (payment item) card.
+  Widget _buildAnnouncementCard(AnnounceVo ann) {
+    // Retrieve purchase info for this announcement.
+    final purchaseInfo = _getPurchaseInfoForAnnouncement(ann);
+    final bool isPaid =
+        purchaseInfo != null && (purchaseInfo["is_paid"] ?? false);
+    final String? paidAt =
+        purchaseInfo != null ? purchaseInfo["purchase_date"] : null;
+
+    // Determine thumbnail from club data (without modifying AnnounceVo).
+    String thumbnail = "";
+    final annJson = ann.toJson();
+    if (annJson.containsKey('club_id') && annJson['club_id'] != null) {
+      try {
+        // Find the club where clubId matches the announcement's club_id
+        final club = _clubs.firstWhere((c) => c.clubId == annJson['club_id']);
+        if (club.clubThumbnail.isNotEmpty) {
+          thumbnail = club.clubThumbnail;
+        }
+      } catch (e) {
+        debugPrint("No matching club found for announcement: $e");
+      }
+    }
+
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       elevation: 2,
@@ -97,11 +183,11 @@ class _PaymentListPageState extends State<PaymentListPage> {
         padding: const EdgeInsets.all(10),
         child: Row(
           children: [
-            /// 왼쪽 썸네일
+            // Left: Thumbnail image (from club if available)
             ClipRRect(
               borderRadius: BorderRadius.circular(8),
               child: Image.network(
-                item.thumbnailUrl,
+                thumbnail,
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
@@ -111,14 +197,13 @@ class _PaymentListPageState extends State<PaymentListPage> {
               ),
             ),
             const SizedBox(width: 12),
-
-            /// 오른쪽 정보
+            // Right: Announcement details (meeting information)
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    item.meetingName,
+                    ann.title,
                     style: const TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 16,
@@ -126,49 +211,47 @@ class _PaymentListPageState extends State<PaymentListPage> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    item.meetingDesc,
+                    ann.description,
                     style: const TextStyle(fontSize: 14, color: Colors.grey),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    item.meetingLocationTime,
+                    "${ann.location} / ${ann.time}",
                     style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    "회비: ${item.meetingFee}원",
+                    "회비: ${ann.meetingPrice}원",
                     style: const TextStyle(fontSize: 14),
                   ),
                   const SizedBox(height: 6),
-                  if (item.isPaid)
-                    // 결제 완료
+                  if (isPaid)
                     Text(
-                      "결제 완료 (${_formattedDate(item.paidAt)})",
+                      "결제 완료 (${_formattedDate(paidAt)})",
                       style: const TextStyle(fontSize: 13, color: Colors.green),
                     )
                   else
-                    // 결제 전
                     Text(
-                      "참석일: ${_formattedDate(item.dateJoined)} (결제 필요)",
+                      "참석일: ${_formattedDate(ann.date)} (결제 필요)",
                       style: const TextStyle(fontSize: 13, color: Colors.red),
                     ),
                 ],
               ),
             ),
-            if (!item.isPaid) ...[
+            if (!isPaid) ...[
               const SizedBox(width: 8),
               ElevatedButton(
                 onPressed: () {
-                  /// 결제하기 페이지로 이동
+                  // Navigate to PaymentPage, passing announcement details.
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder:
                           (_) => PaymentPage(
-                            meetingTitle: item.meetingName,
-                            meetingDesc: item.meetingDesc,
-                            meetingFee: item.meetingFee,
-                            meetingTime: item.meetingLocationTime,
+                            meetingTitle: ann.title,
+                            meetingDesc: ann.description,
+                            meetingFee: int.tryParse(ann.meetingPrice) ?? 0,
+                            meetingTime: "${ann.location} / ${ann.time}",
                           ),
                     ),
                   );
@@ -183,11 +266,22 @@ class _PaymentListPageState extends State<PaymentListPage> {
     );
   }
 
-  /// 포매팅 함수 (DateTime → yyyy-MM-dd)
-  String _formattedDate(DateTime? dateTime) {
-    if (dateTime == null) return "";
-    return "${dateTime.year}-${_padZero(dateTime.month)}-${_padZero(dateTime.day)}";
+  @override
+  Widget build(BuildContext context) {
+    return MainLayout(
+      child: Scaffold(
+        appBar: const HeaderPage(pageTitle: "결제 리스트", showBackButton: true),
+        body:
+            _isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : ListView.builder(
+                  itemCount: _announcements.length,
+                  itemBuilder: (context, index) {
+                    final ann = _announcements[index];
+                    return _buildAnnouncementCard(ann);
+                  },
+                ),
+      ),
+    );
   }
-
-  String _padZero(int value) => value.toString().padLeft(2, '0');
 }

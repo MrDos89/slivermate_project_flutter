@@ -210,10 +210,12 @@ class _UserProfilePageState extends State<_UserProfilePage> {
             ),
           );
           break;
-        case "결제": // ✅ 여기 수정됨
+        case "결제": //  여기 수정됨
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const PaymentListPage()),
+            MaterialPageRoute(
+              builder: (context) => PaymentListPage(currentUser: currentUser!),
+            ),
           );
           break;
         case "내 호스트":
