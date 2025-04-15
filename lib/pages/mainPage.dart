@@ -37,27 +37,27 @@ class _MainPageState extends State<MainPage> {
     _startTextAnimation(); //  "터치해주세요" 애니메이션 시작
   }
 
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (_hasNavigated) return;
-
-    final userVo = Provider.of<UserProvider>(context, listen: false).user;
-    debugPrint('[DEBUG] 현재 로그인 상태: ${userVo == null ? '로그인 안됨' : '로그인됨'}');
-
-    Future.microtask(() {
-      if (userVo == null) {
-        debugPrint('[DEBUG] /loginPage 페이지로 이동');
-        Navigator.of(context).pushReplacementNamed('/loginPage');
-      } else {
-        debugPrint('[DEBUG] /selectAccount 페이지로 이동 - 전달 데이터: ${userVo.userName}');
-        Navigator.of(context).pushReplacementNamed('/selectAccount', arguments: [userVo]);
-      }
-    });
-
-    _hasNavigated = true;
-  }
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //
+  //   if (_hasNavigated) return;
+  //
+  //   final userVo = Provider.of<UserProvider>(context, listen: false).user;
+  //   debugPrint('[DEBUG] 현재 로그인 상태: ${userVo == null ? '로그인 안됨' : '로그인됨'}');
+  //
+  //   Future.microtask(() {
+  //     if (userVo == null) {
+  //       debugPrint('[DEBUG] /loginPage 페이지로 이동');
+  //       Navigator.of(context).pushReplacementNamed('/loginPage');
+  //     } else {
+  //       debugPrint('[DEBUG] /selectAccount 페이지로 이동 - 전달 데이터: ${userVo.userName}');
+  //       Navigator.of(context).pushReplacementNamed('/selectAccount', arguments: [userVo]);
+  //     }
+  //   });
+  //
+  //   _hasNavigated = true;
+  // }
 
   ///  "터치해주세요" 텍스트 깜빡이는 애니메이션
   void _startTextAnimation() {
